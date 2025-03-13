@@ -1,21 +1,12 @@
-import { useState } from "react";
-import { io } from "socket.io-client";
+import { socket } from "../utils/socket";
 
-const socket = io();
-
-function GameBoard() {
-  const [hp, setHp] = useState(100);
+function GameBoard({hp}: {hp: number}) {
 
   const handleAction = (action: "hit" | "heal") => {
-    const newHp = action === "hit" ? hp - 10 : hp + 10;
-    socket.emit("action", {hp: newHp});
+    const effect = action === "hit" ? 10 : -10;
+    socket.emit("action", effect);
   }
 
-  socket.on("update", ({hp}) => {
-    console.log(hp);
-    setHp(hp);
-  });
-  
   return (
     <div className="grid grid-cols-12 gap-1">
       <div className="col-span-12">

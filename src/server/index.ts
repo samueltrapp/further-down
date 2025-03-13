@@ -1,27 +1,38 @@
 import * as http from "http";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import cors from "cors";
 import express from "express";
 import { Server } from "socket.io";
 
 // Initializations
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 const port = 8080;
 const app = express();
 
-app.use(express.static(`${__dirname}/../client`));
+app.use(cors());
+
+let x = 100;
 
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server,{
+    cors: {
+        origin:"http://localhost:5173"
+    }
+});
 
-io.on("connection", client => {
+io.on("connection", socket => {
+    console.log("OK");
+    function updateAll() {
+        socket.emit("update", x);
+    }
 
-    client.on("action", () => ({hp}: {"hp": number}) => {
-        console.log(hp);
-        io.emit("update", {hp});
+    socket.on("action", (hp: number) => {
+        x -= hp;
+        console.log(x);
+        updateAll();
     });
-    client.on("disconnect", () => { console.log("Bye") });
+
+    socket.on("disconnect", () => {
+        console.log("Disconnected");
+    });
 });
 
 server.on("error", (e) => {
