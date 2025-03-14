@@ -1,36 +1,35 @@
 import { useEffect, useState } from "react";
 import GameBoard from "./client/pages/GameBoard";
 import { socket } from "./client/utils/socket";
+import { GameState } from "./types";
+import "./App.css"
 
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const [hp, setHp] = useState(100);
+  const [gameState, setGameState] = useState<GameState>(null);
 
   useEffect(() => {
-    const updateHp = (hp: number) => {
-      setHp(hp);
-    };
-    
     function onConnect() {
-      console.log("Connected");
-      setIsConnected(true);
+      socket.emit("get_game_state", gameState)
+    }
+
+    function onUpdateGameState(updatedGameState: GameState) {
+      setGameState(updatedGameState)
     }
 
     socket.connect();
     socket.on("connect", onConnect);
-    socket.on("update", updateHp);
+    socket.on("update_game_state", onUpdateGameState);
 
     return () => {
       socket.off("connect", onConnect);
-      socket.off("update", updateHp);
+      socket.off("update_game_state", onUpdateGameState);
       socket.disconnect();
     }
   }, []);
 
-
   return (
-    <div className="container flex justify-center mx-auto">
-      <GameBoard hp={hp} />
+    <div className="container">
+      <GameBoard gameState={gameState} />
     </div>
   )
 }

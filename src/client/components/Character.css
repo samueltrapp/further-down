@@ -1,0 +1,14 @@
+.char-box {
+    border: 2px solid black;
+    padding: 16px;
+}
+
+.active-char {
+    border: 2px solid orange;
+}
+
+.hit-box {
+    margin-top: 24px;
+    background-color: transparent;
+    border: 1px solid rgb(37, 37, 210);
+}

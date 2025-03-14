@@ -1,28 +1,37 @@
-import { socket } from "../utils/socket";
+import { useState, MouseEvent } from "react";
+import { GameState } from "../../types";
+import Character from "../components/Character";
+import Enemy from "../components/Enemy";
+import "./GameBoard.css";
 
-function GameBoard({hp}: {hp: number}) {
+function GameBoard({gameState}: {gameState: GameState}) {
+  const [selectedEnemyId, setSelectedEnemyId] = useState("");
+  const [playerTurnId, setPlayerTurnId] = useState("");
 
-  const handleAction = (action: "hit" | "heal") => {
-    const effect = action === "hit" ? 10 : -10;
-    socket.emit("action", effect);
+  if (gameState === null) return;
+
+  const { characters, enemies } = gameState;
+
+  function handleSelect(evt: MouseEvent<HTMLDivElement, globalThis.MouseEvent>, id: string) {
+    evt.preventDefault();
+    setSelectedEnemyId(id !== selectedEnemyId ? id : "");
   }
 
   return (
-    <div className="grid grid-cols-12 gap-1">
-      <div className="col-span-12">
-        {hp}
+    <div className="board">
+      <div className="board-grid board-gap">
+        {enemies.map((enemy) => (
+          <div onClick={(evt) => handleSelect(evt, enemy.id)}>
+            <Enemy key={enemy.id} enemy={enemy} selected={enemy.id === selectedEnemyId} />
+          </div>
+        ))}
       </div>
-      <div className="col-span-12">
-        <button
-          onClick={() => handleAction("hit")}
-        >
-          Hit
-        </button>
-        <button
-        onClick={() => handleAction("heal")}
-        >
-          Heal
-        </button>
+      <div className="board-grid">
+        {characters.map((character) => (
+          <div className="char-stat-container">
+            <Character key={character.id} character={character} isUp={character.id === playerTurnId} />
+          </div>
+        ))}
       </div>
     </div>
   );
