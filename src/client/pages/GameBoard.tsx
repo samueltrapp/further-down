@@ -12,9 +12,7 @@ function GameBoard() {
   const dispatcher = useContext(GameDispatchContext);
 
   if (!state || !state.characterData) return;
-  const { players: playerObj, enemies: enemyObj } = state?.characterData;
-  const players = readCharacters(playerObj);
-  const enemies = readCharacters(enemyObj);
+  const { players, enemies } = state?.characterData;
 
   function handleSelect(evt: MouseEvent<HTMLDivElement, globalThis.MouseEvent>, id: string) {
     evt.preventDefault();

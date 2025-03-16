@@ -15,11 +15,14 @@ export type CombatStats = {
     targets: StatsType[]
 }
 
-export type UniqueStatsType = Record<string, StatsType>;
+export type UniqueStatsType = {
+    id: string;
+    stats: StatsType;
+};
 
 export type GuaranteedCharacterDataType = {
-    players: UniqueStatsType,
-    enemies: UniqueStatsType
+    players: UniqueStatsType[],
+    enemies: UniqueStatsType[]
 }
 
 export type CharacterDataType = GuaranteedCharacterDataType | null

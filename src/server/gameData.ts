@@ -17,7 +17,7 @@ export const samplePlayers = [
     {
         name: "Guy 3",
         hitPoints: 85,
-        physical: 24,
+        physical: 30,
         speed: 90
     },
 ];
@@ -41,12 +41,12 @@ function generateEnemies(): StatsType[] {
 }
 
 function buildStats(statsArray: StatsType[]) {
-    const data = {};
-    statsArray.forEach((stat) => {
+    const data = [] as UniqueStatsType[];
+    statsArray.forEach((stats) => {
         const id = uuidv4();
-        Object.assign(data, { [id]: stat});
+        data.push({ id, stats });
     });
-    return data as UniqueStatsType;
+    return data;
 }
 
 export function initializeGame(players: StatsType[]): CharacterDataType {
