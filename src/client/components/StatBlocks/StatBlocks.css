@@ -1,0 +1,38 @@
+.char-box {
+    background-color: var(--tan);
+    border: 2px solid var(--gray);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.active-char {
+    border: 2px solid var(--blue);
+}
+
+.hit-box {
+    background-color: var(--orange);
+    border: 1px solid var(--eggshell);
+    margin-top: 24px;
+    width: 100%;
+}
+
+.name {
+    text-align: center;
+    font-size: 2rem;
+    border-bottom: 1px solid var(--eggshell);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+.enemy-box {
+    border: 2px solid var(--gray);
+    background-color: var(--brown);
+    
+    border-radius: 32px;
+    padding: 16px;
+}
+
+.active-enemy {
+    background-color: var(--claret);
+    border: 2px solid var(--rose);
+}

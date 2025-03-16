@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
-import GameBoard from "./client/pages/GameBoard";
+import { useEffect, useReducer } from "react";
 import { socket } from "./client/utils/socket";
-import { GameState } from "./types";
+import { GameContext, GameDispatchContext } from "./client/contexts/GameContext";
+import { CharacterDataType } from "./types";
+import { GameActions, gameReducer } from "./client/reducers";
+import GameBoard from "./client/pages/GameBoard";
 import "./App.css"
 
 function App() {
-  const [gameState, setGameState] = useState<GameState>(null);
+  const [game, dispatch] = useReducer(gameReducer, {characterData: null, selectedEnemyId: ""});
 
   useEffect(() => {
     function onConnect() {
-      socket.emit("get_game_state", gameState)
+      socket.emit("load_new_game")
     }
 
-    function onUpdateGameState(updatedGameState: GameState) {
-      setGameState(updatedGameState)
+    function onUpdateGameState(updatedGame: CharacterDataType) {
+      dispatch({
+        type: GameActions.SYNC,
+        payload: updatedGame
+      })
     }
 
     socket.connect();
@@ -29,7 +34,11 @@ function App() {
 
   return (
     <div className="container">
-      <GameBoard gameState={gameState} />
+      <GameContext.Provider value={game}>
+        <GameDispatchContext.Provider value={dispatch}>
+          <GameBoard />
+        </GameDispatchContext.Provider>
+      </GameContext.Provider>
     </div>
   )
 }

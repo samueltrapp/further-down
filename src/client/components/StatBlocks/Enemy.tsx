@@ -1,12 +1,12 @@
-import { CharacterState } from "../../types";
-import "./Enemy.css";
+import { StatsType } from "../../../types";
+import "./StatBlocks.css";
 
-function Enemy({enemy, selected}: {enemy: CharacterState, selected: boolean}) {
+function Enemy({id, enemy, selected}: {id: string, enemy: StatsType, selected: boolean}) {
     const { name, hitPoints, physical, speed } = enemy;
 
     return (
-        <div className={`enemy-box ${selected ? "active-enemy-box" : "inactive-enemy-box"}`}>
-            <div>
+        <div className={`enemy-box ${selected && "active-enemy"}`}>
+            <div className="name">
                 {name}
             </div>
             <div>

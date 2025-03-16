@@ -1,35 +1,43 @@
-import { useState, MouseEvent } from "react";
-import { GameState } from "../../types";
-import Character from "../components/Character";
-import Enemy from "../components/Enemy";
+import { useState, MouseEvent, useContext } from "react";
+import { GameContext, GameDispatchContext } from "../contexts/GameContext";
+import { GameActions } from "../reducers";
+import { readCharacters } from "../utils/data";
+import Character from "../components/StatBlocks/Player";
+import Enemy from "../components/StatBlocks/Enemy";
 import "./GameBoard.css";
 
-function GameBoard({gameState}: {gameState: GameState}) {
-  const [selectedEnemyId, setSelectedEnemyId] = useState("");
+function GameBoard() {
   const [playerTurnId, setPlayerTurnId] = useState("");
+  const state = useContext(GameContext);
+  const dispatcher = useContext(GameDispatchContext);
 
-  if (gameState === null) return;
-
-  const { characters, enemies } = gameState;
+  if (!state || !state.characterData) return;
+  const { players: playerObj, enemies: enemyObj } = state?.characterData;
+  const players = readCharacters(playerObj);
+  const enemies = readCharacters(enemyObj);
 
   function handleSelect(evt: MouseEvent<HTMLDivElement, globalThis.MouseEvent>, id: string) {
     evt.preventDefault();
-    setSelectedEnemyId(id !== selectedEnemyId ? id : "");
+    const checkedId = state.selectedEnemyId !== id ? id : "";
+    dispatcher({
+      type: GameActions.SELECT,
+      payload: checkedId
+    });
   }
 
   return (
     <div className="board">
       <div className="board-grid board-gap">
         {enemies.map((enemy) => (
-          <div onClick={(evt) => handleSelect(evt, enemy.id)}>
-            <Enemy key={enemy.id} enemy={enemy} selected={enemy.id === selectedEnemyId} />
+          <div key={enemy.id} onClick={(evt) => handleSelect(evt, enemy.id)}>
+            <Enemy id={enemy.id} enemy={enemy.stats} selected={enemy.id === state.selectedEnemyId} />
           </div>
         ))}
       </div>
       <div className="board-grid">
-        {characters.map((character) => (
-          <div className="char-stat-container">
-            <Character key={character.id} character={character} isUp={character.id === playerTurnId} />
+        {players.map((player) => (
+          <div key={player.id}>
+            <Character id={player.id} player={player.stats} isUp={player.id === playerTurnId} />
           </div>
         ))}
       </div>

@@ -2,8 +2,9 @@ import * as http from "http";
 import cors from "cors";
 import express from "express";
 import { Server } from "socket.io";
-import { GameState } from "../types";
-import { initialGameState } from "./gameState.js";
+import { CharacterDataType, TurnType } from "../types.ts";
+import { initializeGame, samplePlayers } from "./gameData.ts";
+import { resolveTurn } from "./actions.ts";
 
 const port = 8080;
 const app = express();
@@ -17,12 +18,18 @@ const io = new Server(server, {
     }
 });
 
-io.on("connection", socket => {
-    const gameState: GameState = initialGameState;
+io.on("connection", (socket) => {
+    let characterData: CharacterDataType = initializeGame(samplePlayers);
 
-    socket.on("get_game_state", () => {
-        console.log("Retrieved game state");
-        io.emit("update_game_state", gameState);
+    function updateGameState() {
+        io.emit("update_game_state", characterData);
+    }
+
+    socket.on("load_new_game", updateGameState);
+
+    socket.on("turn", (turn: TurnType) => {
+        characterData = resolveTurn(turn, characterData);
+        updateGameState();
     });
 
     socket.on("disconnect", () => {

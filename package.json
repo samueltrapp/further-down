@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "client": "vite",
+    "server": "node --loader ts-node/esm --watch src/server/index.ts",
     "dev": "concurrently \"vite\" \"node --loader ts-node/esm --watch src/server/index.ts\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -20,7 +22,8 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.0.12",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

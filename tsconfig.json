@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "target": "ES2022",
     "module": "ES2022",
@@ -12,6 +13,8 @@
     { "path": "./tsconfig.node.json" }
   ],
   "ts-node": {
+    "experimentalSpecifierResolution": "node",
     "esm": true,
+    "logError": true
   }
 }

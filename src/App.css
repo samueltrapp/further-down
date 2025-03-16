@@ -1,5 +1,5 @@
 .container {
-    background-color: #0b090c;
+    background-color: var(--eggshell);
     height: 100%;
     margin: auto;
     max-width:70%;
