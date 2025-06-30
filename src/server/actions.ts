@@ -1,4 +1,4 @@
-import { CharacterDataType, CombatStats, GuaranteedCharacterDataType, TurnActions, TurnType } from "../types.ts";
+import { CharacterDataType, TurnActions, TurnType } from "../types.ts";
 
 const alliedActions = [
     TurnActions.HEAL

@@ -1,62 +1,145 @@
-import { CharacterDataType, StatsType, UniqueStatsType } from "../types";
+import { CharType, GameType, StatsType, TeamType } from "../types";
 import { v4 as uuidv4 } from 'uuid';
 
-export const samplePlayers = [
+const samplePlayers: StatsType[] = [
     {
         name: "Guy 1",
         hitPoints: 100,
         physical: 15,
+        blunt: 0,
+        sharp: 0,
+        armor: 2,
+        padding: 0,
+        plating: 0,
+        magical: 10,
+        elemental: 0,
+        psychic: 0,
+        resistance: 2,
+        dampening: 0,
+        shielding: 0,
+        martial: 50,
+        accuracy: 0,
+        evasion: 0,
+        mystic: 50,
+        potency: 0,
+        absorption: 0,
         speed: 95
     },
     {
         name: "Guy 2",
-        hitPoints: 85,
-        physical: 24,
-        speed: 80
+        hitPoints: 100,
+        physical: 15,
+        blunt: 0,
+        sharp: 0,
+        armor: 2,
+        padding: 0,
+        plating: 0,
+        magical: 10,
+        elemental: 0,
+        psychic: 0,
+        resistance: 2,
+        dampening: 0,
+        shielding: 0,
+        martial: 50,
+        accuracy: 0,
+        evasion: 0,
+        mystic: 50,
+        potency: 0,
+        absorption: 0,
+        speed: 95
     },
     {
         name: "Guy 3",
-        hitPoints: 85,
-        physical: 30,
-        speed: 90
+        hitPoints: 100,
+        physical: 15,
+        blunt: 0,
+        sharp: 0,
+        armor: 2,
+        padding: 0,
+        plating: 0,
+        magical: 10,
+        elemental: 0,
+        psychic: 0,
+        resistance: 2,
+        dampening: 0,
+        shielding: 0,
+        martial: 50,
+        accuracy: 0,
+        evasion: 0,
+        mystic: 50,
+        potency: 0,
+        absorption: 0,
+        speed: 95
     },
 ];
 
+const sampleEnemies: StatsType[] = [
+    {
+        name: "Villain 1",
+        hitPoints: 100,
+        physical: 15,
+        blunt: 0,
+        sharp: 0,
+        armor: 2,
+        padding: 0,
+        plating: 0,
+        magical: 10,
+        elemental: 0,
+        psychic: 0,
+        resistance: 2,
+        dampening: 0,
+        shielding: 0,
+        martial: 50,
+        accuracy: 0,
+        evasion: 0,
+        mystic: 50,
+        potency: 0,
+        absorption: 0,
+        speed: 95
+    },
+    {
+        name: "Villain 2",
+        hitPoints: 100,
+        physical: 15,
+        blunt: 0,
+        sharp: 0,
+        armor: 2,
+        padding: 0,
+        plating: 0,
+        magical: 10,
+        elemental: 0,
+        psychic: 0,
+        resistance: 2,
+        dampening: 0,
+        shielding: 0,
+        martial: 50,
+        accuracy: 0,
+        evasion: 0,
+        mystic: 50,
+        potency: 0,
+        absorption: 0,
+        speed: 95
+    }
+];
 
-function generateEnemies(): StatsType[] {
-    return [
-        {
-            name: "Villain 1",
-            hitPoints: 500,
-            physical: 12,
-            speed: 70
-        },
-        {
-            name: "Villain 2",
-            hitPoints: 400,
-            physical: 14,
-            speed: 82
-        }
-    ];
-}
-
-function buildStats(statsArray: StatsType[]) {
-    const data = [] as UniqueStatsType[];
+function buildStats(statsArray: StatsType[], team: TeamType) {
+    const data = [] as CharType[];
     statsArray.forEach((stats) => {
         const id = uuidv4();
-        data.push({ id, stats });
+        data.push({ id, team, stats });
     });
     return data;
 }
 
-export function initializeGame(players: StatsType[]): CharacterDataType {
-    const playerData = buildStats(players);
+export function initializeGame(gameId: string): GameType {
+    const players = buildStats(samplePlayers, "player");
+    const enemies = buildStats(sampleEnemies, "enemy");
+    const characters = players.concat(enemies);
 
-    const enemies = generateEnemies();
-    const enemyData = buildStats(enemies);
-    
     return {
-        players: playerData,
-        enemies: enemyData
+        gameId: gameId,
+        gameState: {
+            characters
+        },
     };
-};
+}

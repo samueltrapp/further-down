@@ -1,22 +1,24 @@
 import { useState, MouseEvent, useContext } from "react";
 import { GameContext, GameDispatchContext } from "../contexts/GameContext";
-import { GameActions } from "../reducers";
-import { readCharacters } from "../utils/data";
+// import { readCharacters } from "../utils/data";
 import Character from "../components/StatBlocks/Player";
 import Enemy from "../components/StatBlocks/Enemy";
 import "./GameBoard.css";
+import { GameActions } from "../../types";
 
 function GameBoard() {
   const [playerTurnId, setPlayerTurnId] = useState("");
   const state = useContext(GameContext);
   const dispatcher = useContext(GameDispatchContext);
 
-  if (!state || !state.characterData) return;
-  const { players, enemies } = state?.characterData;
+  if (!state || !state.characters) return;
+  // const { players, enemies } = state.characters;
+  const players = state.characters.slice(0, 3);
+  const enemies = state.characters.slice(3);
 
   function handleSelect(evt: MouseEvent<HTMLDivElement, globalThis.MouseEvent>, id: string) {
     evt.preventDefault();
-    const checkedId = state.selectedEnemyId !== id ? id : "";
+    const checkedId = state?.selectedEnemyId !== id ? id : "";
     dispatcher({
       type: GameActions.SELECT,
       payload: checkedId
