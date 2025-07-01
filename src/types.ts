@@ -43,9 +43,7 @@ export type CharType = {
 
 export type GameType = {
     gameId: string,
-    gameState: {
-        characters: CharType[]
-    },
+    characters: CharType[]
 };
 
 export type GameMetaType = {

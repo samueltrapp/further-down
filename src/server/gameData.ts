@@ -23,7 +23,7 @@ const samplePlayers: StatsType[] = [
         mystic: 50,
         potency: 0,
         absorption: 0,
-        speed: 95
+        speed: 96
     },
     {
         name: "Guy 2",
@@ -46,7 +46,7 @@ const samplePlayers: StatsType[] = [
         mystic: 50,
         potency: 0,
         absorption: 0,
-        speed: 95
+        speed: 97
     },
     {
         name: "Guy 3",
@@ -69,7 +69,7 @@ const samplePlayers: StatsType[] = [
         mystic: 50,
         potency: 0,
         absorption: 0,
-        speed: 95
+        speed: 98
     },
 ];
 
@@ -118,7 +118,7 @@ const sampleEnemies: StatsType[] = [
         mystic: 50,
         potency: 0,
         absorption: 0,
-        speed: 95
+        speed: 94
     }
 ];
 
@@ -138,8 +138,6 @@ export function initializeGame(gameId: string): GameType {
 
     return {
         gameId: gameId,
-        gameState: {
-            characters
-        },
+        characters
     };
 }

@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
 import { socket } from "./utils/socket";
-import { GameContext, GameDispatchContext, GameProvider } from "./contexts/GameContext";
+import { GameContext, GameDispatchContext } from "./contexts/GameContext";
 import { GameActions, GameType } from "../types";
 import GameBoard from "./pages/GameBoard";
-import "./App.css"
+import "./App.css";
 
 function App() {
   const game = useContext(GameContext);
@@ -30,10 +30,13 @@ function App() {
         localStorage.setItem("game_id", updatedGame.gameId)
       }
 
-      dispatch({
-        type: GameActions.SYNC,
-        payload: updatedGame
+      if (dispatch) {
+        dispatch({
+          type: GameActions.SYNC,
+          payload: updatedGame.characters
       });
+      }
+      
     }
 
     socket.connect();
@@ -55,9 +58,7 @@ function App() {
 
   return (
     <div className="container">
-      <GameProvider>
-        <GameBoard />
-      </GameProvider>
+      <GameBoard />
     </div>
   );
 }
