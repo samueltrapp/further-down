@@ -1,22 +1,27 @@
-import { StatsType } from "../../../types";
+import { useContext } from "react";
+import { CharType } from "../../../types";
+import { GameContext } from "../../contexts/GameContext";
 import "./StatBlocks.css";
 
-function Enemy({id, enemy, selected}: {id: string, enemy: StatsType, selected: boolean}) {
-    const { name, hitPoints, physical, speed } = enemy;
+function Enemy(props: CharType) {
+    const { id, stats } = props;
+
+    const game = useContext(GameContext);
+    const activeTurn = game?.currentTurn === id;
 
     return (
-        <div className={`enemy-box ${selected && "active-enemy"}`}>
+        <div className={`enemy-box ${activeTurn && "active-enemy"}`}>
             <div className="name">
-                {name}
+                {stats?.name}
             </div>
             <div>
-                Hit Points: { hitPoints }
+                Hit Points: {stats?.hitPoints}
             </div>
             <div>
-                Physical: { physical }
+                Physical: {stats?.physical}
             </div>
             <div>
-                Speed: { speed }
+                Speed: {stats?.speed}
             </div>
         </div>
     );

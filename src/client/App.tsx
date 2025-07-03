@@ -10,8 +10,8 @@ function App() {
   const dispatch = useContext(GameDispatchContext);
 
   useEffect(() => {
+    // Load existing or create new game
     function onConnect() {
-      // Load existing or create new game
       const existingGame = localStorage.getItem("gameId");
       if (existingGame) {
         socket.emit("load", existingGame);
@@ -22,7 +22,6 @@ function App() {
     }
 
     function onUpdateGameState(updatedGame: GameType) {
-      // Manage lapsed game ID and set new game ID
       if (updatedGame === undefined) {
         localStorage.removeItem("game_id");
       }
@@ -48,8 +47,9 @@ function App() {
       socket.off("update", (game) => onUpdateGameState(game));
       socket.disconnect();
     }
-  }, []);
+  }, [dispatch]);
 
+  // Start new game if no game exists
   useEffect(() => {
     if (!game) {
       socket.emit("create");

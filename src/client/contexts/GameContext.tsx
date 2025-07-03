@@ -3,7 +3,7 @@ import { GameType } from "../../types";
 import { ActionTypes } from "./GameProvider";
 
 export type GameStateType = GameType & {
-    selectedEnemyId: string;
+    selectedEnemyIds: string[];
 };
 
 export const GameContext = createContext<GameStateType | null>(null);

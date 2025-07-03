@@ -1,5 +1,6 @@
 import { CharType, GameType, StatsType, TeamType } from "../types";
 import { v4 as uuidv4 } from 'uuid';
+import { createInitialTurnOrder } from "./utils";
 
 const samplePlayers: StatsType[] = [
     {
@@ -126,7 +127,7 @@ function buildStats(statsArray: StatsType[], team: TeamType) {
     const data = [] as CharType[];
     statsArray.forEach((stats) => {
         const id = uuidv4();
-        data.push({ id, team, stats });
+        data.push({ id, team, stats, lastTurn: 0 });
     });
     return data;
 }
@@ -135,9 +136,13 @@ export function initializeGame(gameId: string): GameType {
     const players = buildStats(samplePlayers, "player");
     const enemies = buildStats(sampleEnemies, "enemy");
     const characters = players.concat(enemies);
+    const turnOrder = createInitialTurnOrder(characters);
 
     return {
-        gameId: gameId,
-        characters
+        characters,
+        currentTurn: turnOrder[0],
+        gameId,
+        turnNumber: 1,
+        turnOrder
     };
 }

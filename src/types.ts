@@ -4,11 +4,6 @@ export enum GameActions {
     SYNC = "SYNC"
 }
 
-export enum TurnActions {
-    ATTACK = "ATTACK",
-    HEAL = "HEAL"
-}
-
 export type TeamType = "player" | "enemy";
 
 export type StatsType = {
@@ -37,13 +32,18 @@ export type StatsType = {
 
 export type CharType = {
     id: string;
-    team: TeamType; 
+    playerId?: string;
+    team: TeamType;
     stats: StatsType;
-};
+    lastTurn: number;
+}
 
 export type GameType = {
+    characters: CharType[],
+    currentTurn: string;
     gameId: string,
-    characters: CharType[]
+    turnNumber: number;
+    turnOrder: string[],
 };
 
 export type GameMetaType = {
@@ -52,7 +52,6 @@ export type GameMetaType = {
 };
 
 export type TurnType = {
-    action: TurnActions,
     issuerId: string,
     targetIds: string[];
 };

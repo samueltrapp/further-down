@@ -36,7 +36,6 @@ io.on("connection", (socket) => {
 
     function retrieveGame(gameId: string) {
         const selectedGame = gameMeta.findGame(gameId);
-        console.log(selectedGame);
         io.emit("update", selectedGame);
     }
 
