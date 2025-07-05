@@ -7,7 +7,6 @@ export enum GameActions {
 export type TeamType = "player" | "enemy";
 
 export type StatsType = {
-    name: string, 
     hitPoints: number,  // Hp
     physical: number,   // Ph
     blunt: number,      // Blt
@@ -32,6 +31,7 @@ export type StatsType = {
 
 export type CharType = {
     id: string;
+    name: string,
     playerId?: string;
     team: TeamType;
     stats: StatsType;
@@ -40,7 +40,6 @@ export type CharType = {
 
 export type GameType = {
     characters: CharType[],
-    currentTurn: string;
     gameId: string,
     turnNumber: number;
     turnOrder: string[],
@@ -48,10 +47,13 @@ export type GameType = {
 
 export type GameMetaType = {
     games: GameType[],
-    findGame: (gameId: string) => GameType | undefined
+    findGame: (gameId: string) => GameType | undefined,
+    findGameIndex: (gameId: string) => number | undefined
 };
 
 export type TurnType = {
-    issuerId: string,
-    targetIds: string[];
+    gameId: string,
+    maneuver: string,
+    targetIds: string[],
+    issuerId: string;
 };

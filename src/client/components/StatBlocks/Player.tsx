@@ -1,25 +1,14 @@
 import { useContext } from "react";
-import { CharType, StatsType } from "../../../types";
+import { CharType } from "../../../types/game.ts";
 import { GameContext } from "../../contexts/GameContext";
-import { socket } from "../../utils/socket";
 import "./StatBlocks.css";
 
 function Player(props: CharType) {
-    const {id, stats} = props;
-    const { name, hitPoints, physical, speed } = stats;
+    const {id, name, stats} = props;
+    const { hitPoints, physical, speed } = stats;
 
     const game = useContext(GameContext);
-    const activeTurn = game?.currentTurn === id;
-
-    // const handleAttack = () => {
-    //     if (selectedEnemyIds.length === 0) {
-    //         socket.emit("turn", {
-    //             action: "ATTACK",
-    //             issuerId: id,
-    //             targetIds: [selectedEnemyIds]
-    //         });
-    //     }
-    // }
+    const activeTurn = game?.turnOrder[0] === id;
 
     return (
         <div className={`char-box ${activeTurn && "active-char"}`}>
@@ -36,6 +25,7 @@ function Player(props: CharType) {
                 Speed: {speed}
             </div>
             <button className="hit-box"
+                    disabled={!activeTurn}
             //onClick={handleAttack}
             >
                 Hit

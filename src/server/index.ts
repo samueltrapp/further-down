@@ -1,12 +1,11 @@
 import * as http from "http";
 import cors from "cors";
 import express from "express";
-import { Server } from "socket.io";
-// import { CharacterDataType, TurnType } from "../types.ts";
-import { initializeGame } from "./gameData.ts";
-// import { resolveTurn } from "./actions.ts";
-import { v4 as uuidv4 } from 'uuid';
-import { GameMetaType } from "../types.ts";
+import {Server} from "socket.io";
+import {initializeGame} from "./gameData.ts";
+import {v4 as uuidv4} from 'uuid';
+import {GameMetaType, TurnType} from "../types/game.ts";
+import {resolveTurn} from "./actions/maneuvers.ts";
 
 const port = 8080;
 const app = express();
@@ -24,6 +23,9 @@ const gameMeta: GameMetaType = {
     games: [],
     findGame(gameId: string) {
         return this?.games?.find((game) => game.gameId === gameId)
+    },
+    findGameIndex(gameId: string) {
+        return this?.games?.findIndex((game) => game.gameId === gameId)
     }
 };
 
@@ -34,6 +36,14 @@ io.on("connection", (socket) => {
         retrieveGame(newGameId);
     }
 
+    function takeTurn(turn: TurnType) {
+        const gameId = turn.gameId;
+        const game = gameMeta.findGame(gameId);
+        const gameIndex = gameMeta.findGameIndex(gameId);
+        gameMeta[gameIndex] = resolveTurn(turn, game);
+        retrieveGame(gameId);
+    }
+
     function retrieveGame(gameId: string) {
         const selectedGame = gameMeta.findGame(gameId);
         io.emit("update", selectedGame);
@@ -41,9 +51,7 @@ io.on("connection", (socket) => {
 
     socket.on("create", createGame);
     socket.on("load", (gameId) => retrieveGame(gameId));
-    // socket.on("turn", (turn: TurnType) => {
-    //      = resolveTurn(turn, gameMeta);
-    // });
+    socket.on("turn", (turn) => takeTurn(turn));
 });
 
 server.on("error", (e) => {

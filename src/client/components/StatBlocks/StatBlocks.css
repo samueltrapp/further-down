@@ -6,7 +6,8 @@
 }
 
 .active-char {
-    border: 2px solid var(--blue);
+    background-color: var(--blue);
+    border: 2px solid var(--eggshell);
 }
 
 .hit-box {
@@ -14,6 +15,11 @@
     border: 1px solid var(--eggshell);
     margin-top: 24px;
     width: 100%;
+
+    &[disabled] {
+        background-color: var(--gray);
+        pointer-events: none;
+    }
 }
 
 .name {

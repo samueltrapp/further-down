@@ -1,16 +1,15 @@
 import { ReactNode, useReducer } from "react";
-import { CharType, GameActions } from "../../types";
+import {CharType, GameActions, GameType} from "../../types/game.ts";
 import { GameContext, GameDispatchContext, GameStateType } from "./GameContext";
 
 export type ActionTypes
     = { type: GameActions.ATTACK, payload: CharType[] }
     | { type: GameActions.SELECT, payload: string[] }
-    | { type: GameActions.SYNC, payload: CharType[] }
+    | { type: GameActions.SYNC, payload: GameType }
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [game, dispatch] = useReducer(gameReducer, {
         characters: [],
-        currentTurn: "",
         gameId: "",
         selectedEnemyIds: [],
         turnNumber: 0,
@@ -42,9 +41,8 @@ function gameReducer(game: GameStateType, action: ActionTypes) {
         }
         case GameActions.SYNC: {
             return {
-                ...game,
-                currentTurn: action.payload.reduce((a, b) => a.stats.speed > b.stats.speed ? a : b),
-                characters: action.payload
+                selectedEnemyIds: game.selectedEnemyIds,
+                ...action.payload
             }
         }
     }

@@ -1,10 +1,9 @@
-import { CharType, GameType, StatsType, TeamType } from "../types";
+import { CharType, GameType, StatsType, TeamType } from "../types/game.ts";
 import { v4 as uuidv4 } from 'uuid';
-import { createInitialTurnOrder } from "./utils";
+import { resolveTurnOrder } from "./utils";
 
 const samplePlayers: StatsType[] = [
     {
-        name: "Guy 1",
         hitPoints: 100,
         physical: 15,
         blunt: 0,
@@ -27,7 +26,6 @@ const samplePlayers: StatsType[] = [
         speed: 96
     },
     {
-        name: "Guy 2",
         hitPoints: 100,
         physical: 15,
         blunt: 0,
@@ -50,7 +48,6 @@ const samplePlayers: StatsType[] = [
         speed: 97
     },
     {
-        name: "Guy 3",
         hitPoints: 100,
         physical: 15,
         blunt: 0,
@@ -76,7 +73,6 @@ const samplePlayers: StatsType[] = [
 
 const sampleEnemies: StatsType[] = [
     {
-        name: "Villain 1",
         hitPoints: 100,
         physical: 15,
         blunt: 0,
@@ -99,7 +95,6 @@ const sampleEnemies: StatsType[] = [
         speed: 95
     },
     {
-        name: "Villain 2",
         hitPoints: 100,
         physical: 15,
         blunt: 0,
@@ -123,11 +118,19 @@ const sampleEnemies: StatsType[] = [
     }
 ];
 
+const names = ["Guy 1", "Guy 2", "Guy 3", "Villain 1", "Villain 2"];
+
 function buildStats(statsArray: StatsType[], team: TeamType) {
     const data = [] as CharType[];
-    statsArray.forEach((stats) => {
+    statsArray.forEach((stats, index) => {
         const id = uuidv4();
-        data.push({ id, team, stats, lastTurn: 0 });
+        data.push({
+            id,
+            team,
+            name: names[(team !== "enemy" ? 0 : 3) + index],
+            stats,
+            lastTurn: 0
+        });
     });
     return data;
 }
@@ -136,11 +139,10 @@ export function initializeGame(gameId: string): GameType {
     const players = buildStats(samplePlayers, "player");
     const enemies = buildStats(sampleEnemies, "enemy");
     const characters = players.concat(enemies);
-    const turnOrder = createInitialTurnOrder(characters);
+    const turnOrder = resolveTurnOrder(characters);
 
     return {
         characters,
-        currentTurn: turnOrder[0],
         gameId,
         turnNumber: 1,
         turnOrder

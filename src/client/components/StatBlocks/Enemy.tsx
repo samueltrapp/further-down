@@ -1,18 +1,38 @@
-import { useContext } from "react";
-import { CharType } from "../../../types";
+import { useContext, useEffect } from "react";
+import { CharType } from "../../../types/game.ts";
 import { GameContext } from "../../contexts/GameContext";
 import "./StatBlocks.css";
+import { turn } from "../../actions/turn.ts";
+
+const lowestHpPlayer = (players: CharType[]) => {
+    const lowestHpChar = players.reduce((prev, next) =>
+        next.stats.hitPoints < prev.stats.hitPoints ? next : prev
+    );
+    return [lowestHpChar.id];
+};
 
 function Enemy(props: CharType) {
-    const { id, stats } = props;
+    const { id, name, stats } = props;
 
     const game = useContext(GameContext);
-    const activeTurn = game?.currentTurn === id;
+    const activeTurn = game?.turnOrder[0] === id;
+    
+    useEffect(() => {
+        if (activeTurn) {
+            setTimeout(() => {
+                turn({
+                    gameId: game?.gameId,
+                    maneuver: "slap",
+                    targets: lowestHpPlayer(game.characters.filter((character) => character.team === "player"))
+                })
+            }, 1500);
+        }
+    }, [activeTurn, game?.characters, game?.gameId]);
 
     return (
         <div className={`enemy-box ${activeTurn && "active-enemy"}`}>
             <div className="name">
-                {stats?.name}
+                {name}
             </div>
             <div>
                 Hit Points: {stats?.hitPoints}

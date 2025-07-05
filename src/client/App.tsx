@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { socket } from "./utils/socket";
 import { GameContext, GameDispatchContext } from "./contexts/GameContext";
-import { GameActions, GameType } from "../types";
+import { GameActions, GameType } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard";
 import "./App.css";
 
@@ -22,17 +22,17 @@ function App() {
     }
 
     function onUpdateGameState(updatedGame: GameType) {
-      if (updatedGame === undefined) {
-        localStorage.removeItem("game_id");
-      }
-      if (!localStorage.getItem("game_id")) {
-        localStorage.setItem("game_id", updatedGame.gameId)
-      }
+      // if (updatedGame === undefined) {
+      //   localStorage.removeItem("game_id");
+      // }
+      // if (!localStorage.getItem("game_id")) {
+      //   localStorage.setItem("game_id", updatedGame.gameId)
+      // }
 
       if (dispatch) {
         dispatch({
           type: GameActions.SYNC,
-          payload: updatedGame.characters
+          payload: updatedGame
       });
       }
       

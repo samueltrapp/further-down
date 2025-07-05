@@ -1,5 +1,5 @@
 import { ActionDispatch, createContext } from "react";
-import { GameType } from "../../types";
+import { GameType } from "../../types/game.ts";
 import { ActionTypes } from "./GameProvider";
 
 export type GameStateType = GameType & {
