@@ -42,3 +42,7 @@
     background-color: var(--claret);
     border: 2px solid var(--rose);
 }
+
+.selected-enemy {
+    background-color: var(--darkBlue);
+}

@@ -1,14 +1,23 @@
 import { useContext } from "react";
-import { CharType } from "../../../types/game.ts";
-import { GameContext } from "../../contexts/GameContext";
+import {CharType, GameActions} from "../../../types/game.ts";
+import {GameContext, GameDispatchContext} from "../../contexts/GameContext";
 import "./StatBlocks.css";
 
 function Player(props: CharType) {
-    const {id, name, stats} = props;
+    const { id, name, stats } = props;
     const { hitPoints, physical, speed } = stats;
-
     const game = useContext(GameContext);
+    const dispatch = useContext(GameDispatchContext);
     const activeTurn = game?.turnOrder[0] === id;
+
+    const handleAttack = () => {
+        if (dispatch) {
+            dispatch({
+                type: GameActions.SELECT_ACTION,
+                payload: {allow: true, max: 2}
+            });
+        }
+    }
 
     return (
         <div className={`char-box ${activeTurn && "active-char"}`}>
@@ -25,8 +34,8 @@ function Player(props: CharType) {
                 Speed: {speed}
             </div>
             <button className="hit-box"
-                    disabled={!activeTurn}
-            //onClick={handleAttack}
+                disabled={!activeTurn}
+                onClick={handleAttack}
             >
                 Hit
             </button>

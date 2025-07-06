@@ -115,10 +115,32 @@ const sampleEnemies: StatsType[] = [
         potency: 0,
         absorption: 0,
         speed: 94
+    },
+    {
+        hitPoints: 100,
+        physical: 15,
+        blunt: 0,
+        sharp: 0,
+        armor: 2,
+        padding: 0,
+        plating: 0,
+        magical: 10,
+        elemental: 0,
+        psychic: 0,
+        resistance: 2,
+        dampening: 0,
+        shielding: 0,
+        martial: 50,
+        accuracy: 0,
+        evasion: 0,
+        mystic: 50,
+        potency: 0,
+        absorption: 0,
+        speed: 93
     }
 ];
 
-const names = ["Guy 1", "Guy 2", "Guy 3", "Villain 1", "Villain 2"];
+const names = ["Guy 1", "Guy 2", "Guy 3", "Villain 1", "Villain 2", "Villain 3"];
 
 function buildStats(statsArray: StatsType[], team: TeamType) {
     const data = [] as CharType[];

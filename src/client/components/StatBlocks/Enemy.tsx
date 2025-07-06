@@ -16,6 +16,7 @@ function Enemy(props: CharType) {
 
     const game = useContext(GameContext);
     const activeTurn = game?.turnOrder[0] === id;
+    const isSelected = game?.selectedEnemyIds.includes(id);
     
     useEffect(() => {
         if (activeTurn) {
@@ -30,7 +31,7 @@ function Enemy(props: CharType) {
     }, [activeTurn, game?.characters, game?.gameId]);
 
     return (
-        <div className={`enemy-box ${activeTurn && "active-enemy"}`}>
+        <div className={`enemy-box ${activeTurn && "active-enemy"} ${isSelected && "selected-enemy"}`}>
             <div className="name">
                 {name}
             </div>

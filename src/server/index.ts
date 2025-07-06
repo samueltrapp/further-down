@@ -40,8 +40,10 @@ io.on("connection", (socket) => {
         const gameId = turn.gameId;
         const game = gameMeta.findGame(gameId);
         const gameIndex = gameMeta.findGameIndex(gameId);
-        gameMeta[gameIndex] = resolveTurn(turn, game);
-        retrieveGame(gameId);
+        if (gameMeta && gameIndex && game) {
+            gameMeta.games[gameIndex] = resolveTurn(turn, game);
+            retrieveGame(gameId);
+        }
     }
 
     function retrieveGame(gameId: string) {

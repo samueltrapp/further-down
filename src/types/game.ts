@@ -1,6 +1,6 @@
 export enum GameActions {
-    ATTACK = "ATTACK",
-    SELECT = "SELECT",
+    SELECT_ACTION = "SELECT_ACTION",
+    SELECT_ENEMY = "SELECT_ENEMY",
     SYNC = "SYNC"
 }
 
