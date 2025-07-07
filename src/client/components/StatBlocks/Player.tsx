@@ -14,7 +14,7 @@ function Player(props: CharType) {
         if (dispatch) {
             dispatch({
                 type: GameActions.SELECT_ACTION,
-                payload: {allow: true, max: 2}
+                payload: { allow: true, max: 2, mnv: "slap" }
             });
         }
     }

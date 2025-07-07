@@ -6,6 +6,7 @@ type UnitSelectionType = {
     allowSelection: boolean;
     maxEnemySelections: number;
     selectedEnemyIds: string[];
+    selectedManeuver: string;
 }
 
 export type GameStateType = GameType & UnitSelectionType;

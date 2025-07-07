@@ -28,23 +28,26 @@ function GameBoard() {
 
     return (
         <>
-            <TurnTracker />
+            <TurnTracker/>
             <div className="board">
-                <div className="board-grid board-gap">
+                <div className="player-column">
+                    {players.map((player) => (
+                        <div key={player.id}>
+                            <Character {...player}/>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="action-column">
+                    <ConfirmButton/>
+                </div>
+                <div className="enemy-column">
                     {enemies.map((enemy) => (
                         <div
                             key={enemy.id}
                             onClick={() => handleSelect(enemy.id)}
                         >
                             <Enemy {...enemy}/>
-                        </div>
-                    ))}
-                </div>
-                <ConfirmButton />
-                <div className="board-grid">
-                    {players.map((player) => (
-                        <div key={player.id}>
-                            <Character {...player}/>
                         </div>
                     ))}
                 </div>

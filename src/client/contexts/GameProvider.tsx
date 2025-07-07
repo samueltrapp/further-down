@@ -3,7 +3,7 @@ import { GameActions, GameType } from "../../types/game.ts";
 import { GameContext, GameDispatchContext, GameStateType } from "./GameContext";
 
 export type ActionTypes
-    = { type: GameActions.SELECT_ACTION, payload: {allow: boolean, max: number}}
+    = { type: GameActions.SELECT_ACTION, payload: {allow: boolean, max: number, mnv: "slap"}}
     | { type: GameActions.SELECT_ENEMY, payload: string }
     | { type: GameActions.SYNC, payload: GameType }
 
@@ -14,6 +14,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         gameId: "",
         maxEnemySelections: 0,
         selectedEnemyIds: [],
+        selectedManeuver: "",
         turnNumber: 0,
         turnOrder: []
     });
@@ -34,7 +35,8 @@ function gameReducer(game: GameStateType, action: ActionTypes) {
             return {
                 ...game,
                 allowSelection: action.payload.allow,
-                maxEnemySelections: action.payload.max
+                maxEnemySelections: action.payload.max,
+                selectedManeuver: action.payload.mnv
             };
         }
 
