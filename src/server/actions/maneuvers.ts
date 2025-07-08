@@ -23,7 +23,8 @@ function mnvSlap(game: GameType, issuerId: string, targetIds: string[]): GameTyp
     const defenders = defenderIds.map((defenderId) => game?.characters[defenderId]);
 
     defenders.forEach((target) => {
-        target.stats.hitPoints -= damage
+        const reducedDamage = damage - (target.stats.armor + target.stats.padding);
+        target.stats.hitPoints -= reducedDamage;
     });
 
     const updatedCharacters = [...game.characters];

@@ -24,11 +24,12 @@ function Enemy(props: CharType) {
                 turn({
                     gameId: game?.gameId,
                     maneuver: "slap",
-                    targets: lowestHpPlayer(game.characters.filter((character) => character.team === "player"))
+                    targetIds: lowestHpPlayer(game.characters.filter((character) => character.team === "player")),
+                    issuerId: id
                 })
             }, 1500);
         }
-    }, [activeTurn, game?.characters, game?.gameId]);
+    }, [activeTurn, game?.characters, game?.gameId, id]);
 
     return (
         <div className={`enemy-box ${activeTurn && "active-enemy"} ${isSelected && "selected-enemy"}`}>
