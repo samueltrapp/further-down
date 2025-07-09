@@ -142,7 +142,7 @@ const sampleEnemies: StatsType[] = [
 
 const names = ["Guy 1", "Guy 2", "Guy 3", "Villain 1", "Villain 2", "Villain 3"];
 
-function buildStats(statsArray: StatsType[], team: TeamType) {
+function buildStats(statsArray: StatsType[], team: TeamType, tieBreaker: number) {
     const data = [] as CharType[];
     statsArray.forEach((stats, index) => {
         const id = uuidv4();
@@ -151,15 +151,23 @@ function buildStats(statsArray: StatsType[], team: TeamType) {
             team,
             name: names[(team !== "enemy" ? 0 : 3) + index],
             stats,
-            lastTurn: 0
+            lastTurn: -1 * tieBreaker
         });
     });
     return data;
 }
 
 export function initializeGame(gameId: string): GameType {
-    const players = buildStats(samplePlayers, "player");
-    const enemies = buildStats(sampleEnemies, "enemy");
+    const characterCount = 6;
+    const tieBreaker: number[] = [];
+    for (let i = 1; i <= characterCount; i++) {
+        tieBreaker.push(i);
+    }
+    const pullRandomSeed = () =>
+        tieBreaker.splice(Math.round(Math.random() * characterCount), 1)[0];
+
+    const players = buildStats(samplePlayers, "player", pullRandomSeed());
+    const enemies = buildStats(sampleEnemies, "enemy", pullRandomSeed());
     const characters = players.concat(enemies);
     const turnOrder = resolveTurnOrder(characters);
 

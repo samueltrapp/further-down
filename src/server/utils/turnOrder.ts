@@ -14,22 +14,11 @@ export const resolveTurnOrder = (characters: CharType[]): string[] => {
     }));
 
     charTurns.sort((a: CharTurnType, b: CharTurnType) => {
-        const relation = b.speed - a.speed;
-        if (relation > 1) {
-            return 1;
-        }
-        else if (relation < 1) {
-            return -1;
-        }
+        const relation = -1 * (a.speed - b.speed);
+        if (relation !== 0) return relation;
         else {
-            // Break tie randomly if neither player has gone
-            if (a.lastTurn === 0 && b.lastTurn === 0) {
-                return Math.random() - 0.5;
-            }
-            // Break other ties by picking the player who went longest ago
-            else {
-                return b.lastTurn > a.lastTurn ? -1 : 1;
-            }
+            // Break ties by picking the player who went longest ago
+            return -1 * (a.lastTurn - b.lastTurn)
         }
     });
 
