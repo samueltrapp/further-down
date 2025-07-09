@@ -1,3 +1,5 @@
+import {ManeuverName} from "./maneuvers.ts";
+
 export enum GameActions {
     SELECT_ACTION = "SELECT_ACTION",
     SELECT_ENEMY = "SELECT_ENEMY",
@@ -53,7 +55,7 @@ export type GameMetaType = {
 
 export type TurnType = {
     gameId: string,
-    maneuver: string,
+    maneuver: ManeuverName,
     targetIds: string[],
     issuerId: string;
 };

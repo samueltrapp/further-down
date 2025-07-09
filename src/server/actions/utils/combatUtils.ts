@@ -37,5 +37,5 @@ export const calcRawMitigation = (stats: StatsType, damageType: DamageType) => {
     }
 }
 
-export const calcMitigatedDamage = (damage: number, mitigation: number) =>
-    Math.max(Math.floor(damage - mitigation), 0);
+export const limitToZero = (value: number) => Math.max(value, 0);
+export const truncate = (value: number) => Math.trunc(value);

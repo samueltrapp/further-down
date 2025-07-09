@@ -163,6 +163,7 @@ export function initializeGame(gameId: string): GameType {
     for (let i = 1; i <= characterCount; i++) {
         tieBreaker.push(i);
     }
+
     const pullRandomSeed = () =>
         tieBreaker.splice(Math.round(Math.random() * characterCount), 1)[0];
 
