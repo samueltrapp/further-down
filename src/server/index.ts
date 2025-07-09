@@ -2,10 +2,10 @@ import * as http from "http";
 import cors from "cors";
 import express from "express";
 import {Server} from "socket.io";
-import {initializeGame} from "./gameData.ts";
+import {initializeGame} from "./utils/initialData.ts";
 import {v4 as uuidv4} from 'uuid';
 import {GameMetaType, TurnType} from "../types/game.ts";
-import {resolveTurn} from "./actions/maneuvers.ts";
+import {resolveTurn} from "./actions/turn.ts";
 
 const port = 8080;
 const app = express();

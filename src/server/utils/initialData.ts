@@ -1,6 +1,6 @@
-import { CharType, GameType, StatsType, TeamType } from "../types/game.ts";
+import { CharType, GameType, StatsType, TeamType } from "../../types/game.ts";
 import { v4 as uuidv4 } from 'uuid';
-import { resolveTurnOrder } from "./utils";
+import { resolveTurnOrder } from "./turnOrder.ts";
 
 const samplePlayers: StatsType[] = [
     {
@@ -21,7 +21,7 @@ const samplePlayers: StatsType[] = [
         accuracy: 0,
         evasion: 0,
         mystic: 50,
-        potency: 0,
+        discipline: 0,
         absorption: 0,
         speed: 96
     },
@@ -43,7 +43,7 @@ const samplePlayers: StatsType[] = [
         accuracy: 0,
         evasion: 0,
         mystic: 50,
-        potency: 0,
+        discipline: 0,
         absorption: 0,
         speed: 97
     },
@@ -65,7 +65,7 @@ const samplePlayers: StatsType[] = [
         accuracy: 0,
         evasion: 0,
         mystic: 50,
-        potency: 0,
+        discipline: 0,
         absorption: 0,
         speed: 98
     },
@@ -73,11 +73,11 @@ const samplePlayers: StatsType[] = [
 
 const sampleEnemies: StatsType[] = [
     {
-        hitPoints: 100,
-        physical: 15,
+        hitPoints: 80,
+        physical: 6,
         blunt: 0,
         sharp: 0,
-        armor: 2,
+        armor: 10,
         padding: 0,
         plating: 0,
         magical: 10,
@@ -90,16 +90,16 @@ const sampleEnemies: StatsType[] = [
         accuracy: 0,
         evasion: 0,
         mystic: 50,
-        potency: 0,
+        discipline: 0,
         absorption: 0,
         speed: 95
     },
     {
-        hitPoints: 100,
+        hitPoints: 80,
         physical: 15,
         blunt: 0,
         sharp: 0,
-        armor: 2,
+        armor: 5,
         padding: 0,
         plating: 0,
         magical: 10,
@@ -112,16 +112,16 @@ const sampleEnemies: StatsType[] = [
         accuracy: 0,
         evasion: 0,
         mystic: 50,
-        potency: 0,
+        discipline: 0,
         absorption: 0,
         speed: 94
     },
     {
-        hitPoints: 100,
-        physical: 15,
+        hitPoints: 80,
+        physical: 30,
         blunt: 0,
         sharp: 0,
-        armor: 2,
+        armor: 0,
         padding: 0,
         plating: 0,
         magical: 10,
@@ -134,7 +134,7 @@ const sampleEnemies: StatsType[] = [
         accuracy: 0,
         evasion: 0,
         mystic: 50,
-        potency: 0,
+        discipline: 0,
         absorption: 0,
         speed: 93
     }

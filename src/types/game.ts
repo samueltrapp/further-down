@@ -8,6 +8,7 @@ export type TeamType = "player" | "enemy";
 
 export type StatsType = {
     hitPoints: number,  // Hp
+    speed: number       // Spd
     physical: number,   // Ph
     blunt: number,      // Blt
     sharp: number,      // Shp
@@ -17,16 +18,15 @@ export type StatsType = {
     magical: number,    // Mg
     elemental: number,  // Elm
     psychic: number,    // Psy
-    absorption: number, // Ab
+    resistance: number, // Rs
     dampening: number,  // Dmp
     shielding: number,  // Shl
     martial: number,    // Mr
     accuracy: number,   // Acc
     evasion: number,    // Evn
     mystic: number,     // My
-    potency: number,    // Ptn
-    resistance: number, // Rst
-    speed: number       // Spd
+    discipline: number, // Dsp
+    absorption: number, // Abs
 };
 
 export type CharType = {

@@ -1,4 +1,4 @@
-import { CharType } from "../types/game.ts";
+import { CharType } from "../../types/game.ts";
 
 type CharTurnType = {
     id: string,
