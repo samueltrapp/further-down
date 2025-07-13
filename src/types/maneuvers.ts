@@ -1,4 +1,4 @@
-import {StatsType} from "./game.ts";
+import {StatsType} from "./stats.ts";
 
 export type ManeuverName =
     "slap" |
@@ -11,7 +11,7 @@ type AttackType = {
     damageType: DamageType
 }
 
-export type DamageType = "blunt" | "sharp" | "elemental" | "psychic";
+export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 export type OtherManeuverFnType = (stats: StatsType, influence: AttackType) => StatsType;
 export type SelfManeuverFnType = (stats: StatsType, details: number) => StatsType;
 export type ManeuverType = {

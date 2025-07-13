@@ -1,0 +1,61 @@
+.char-box {
+    border: 2px solid var(--gray);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 36px;
+    div:last-of-type {
+        margin-bottom: 0;
+    }
+}
+
+.enemy-box {
+    background-color: var(--maroon);
+}
+
+.player-box {
+    background-color: var(--dark-green);
+}
+
+.id-bar {
+    border-bottom: 1px solid var(--off-white);
+    display: flex;
+    flex-direction: row;
+    font-size: 2rem;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    width: 100%;
+}
+
+.name {
+
+}
+
+.speed-display {
+    color: var(--blue);
+}
+
+.hit-box {
+    background-color: var(--sunset);
+    border: 1px solid var(--black);
+    margin-top: 24px;
+    width: 100%;
+
+    &[disabled] {
+        background-color: var(--gray);
+        pointer-events: none;
+    }
+}
+
+.active-char {
+    border-color: var(--blue);
+}
+
+.active-enemy {
+    background-color: var(--red);
+}
+
+.selected-enemy {
+    background-color: var(--deep-maroon);
+    border-color: var(--sunrise);
+}

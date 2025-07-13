@@ -1,13 +1,14 @@
-import { CharType, GameType, StatsType, TeamType } from "../../types/game.ts";
+import { CharType, GameType } from "../../types/game.ts";
 import { v4 as uuidv4 } from 'uuid';
 import { resolveTurnOrder } from "./turnOrder.ts";
+import {StatsType, TeamType} from "../../types/stats.ts";
 
 const samplePlayers: StatsType[] = [
     {
         hitPoints: 100,
         physical: 15,
         blunt: 0,
-        sharp: 0,
+        bladed: 0,
         armor: 2,
         padding: 0,
         plating: 0,
@@ -29,7 +30,7 @@ const samplePlayers: StatsType[] = [
         hitPoints: 100,
         physical: 15,
         blunt: 0,
-        sharp: 0,
+        bladed: 0,
         armor: 2,
         padding: 0,
         plating: 0,
@@ -51,7 +52,7 @@ const samplePlayers: StatsType[] = [
         hitPoints: 100,
         physical: 15,
         blunt: 0,
-        sharp: 0,
+        bladed: 0,
         armor: 2,
         padding: 0,
         plating: 0,
@@ -76,7 +77,7 @@ const sampleEnemies: StatsType[] = [
         hitPoints: 80,
         physical: 6,
         blunt: 0,
-        sharp: 0,
+        bladed: 0,
         armor: 10,
         padding: 0,
         plating: 0,
@@ -98,7 +99,7 @@ const sampleEnemies: StatsType[] = [
         hitPoints: 80,
         physical: 15,
         blunt: 0,
-        sharp: 0,
+        bladed: 0,
         armor: 5,
         padding: 0,
         plating: 0,
@@ -120,7 +121,7 @@ const sampleEnemies: StatsType[] = [
         hitPoints: 80,
         physical: 30,
         blunt: 0,
-        sharp: 0,
+        bladed: 0,
         armor: 0,
         padding: 0,
         plating: 0,

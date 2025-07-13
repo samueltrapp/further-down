@@ -1,6 +1,6 @@
-import {StatsType} from "../../../types/game.ts";
 import {calcRawMitigation, limitToZero, truncate} from "../utils/combatUtils.ts";
 import {DamageType} from "../../../types/maneuvers.ts";
+import {StatsType} from "../../../types/stats.ts";
 
 export function slapOther(defenderStats: StatsType, {damage, damageType}: {damage: number, damageType: DamageType}): StatsType {
     const rawMitigation = calcRawMitigation(defenderStats, damageType);

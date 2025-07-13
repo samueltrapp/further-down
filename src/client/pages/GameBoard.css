@@ -10,10 +10,14 @@
     width: 20%;
 }
 
+.filler-column {
+    width: 16%;
+}
+
 .player-column {
-    width: 40%;
+    width: 24%;
 }
 
 .enemy-column {
-    width: 40%;
+    width: 24%;
 }

@@ -17,7 +17,7 @@ export default function TurnTracker() {
     return (
         <div className="turn-tracker-container">
             {turnTracker?.map((turn, index) => (
-                <div className="turn-tracker" key={game?.turnOrder[index]}>
+                <div className="turn-tracker-row" key={game?.turnOrder[index]}>
                     <div className="name-label">{turn.name}</div>
                     <div className="speed-label">{turn.speed}</div>
                 </div>

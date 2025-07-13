@@ -58,6 +58,7 @@ function App() {
 
   return (
     <div className="container">
+      <h1 className="title">FURTHER DOWN</h1>
       <GameBoard />
     </div>
   );

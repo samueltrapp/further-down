@@ -1,11 +1,11 @@
 import {useContext} from "react";
 import {GameContext, GameDispatchContext} from "../contexts/GameContext";
-import Character from "../components/StatBlocks/Player";
-import Enemy from "../components/StatBlocks/Enemy";
+import Character from "../components/statBlocks/Player";
+import Enemy from "../components/statBlocks/Enemy";
 import "./GameBoard.css";
 import {CharType, GameActions} from "../../types/game.ts";
-import TurnTracker from "../components/Hud/TurnTracker.tsx";
-import ConfirmButton from "../components/Hud/ConfirmButton.tsx";
+import TurnTracker from "../components/hud/TurnTracker.tsx";
+import ConfirmButton from "../components/hud/ConfirmButton.tsx";
 
 function GameBoard() {
     const game = useContext(GameContext);
@@ -28,8 +28,9 @@ function GameBoard() {
 
     return (
         <>
-            <TurnTracker/>
+            <TurnTracker />
             <div className="board">
+                <div className="filler-column" />
                 <div className="player-column">
                     {players.map((player) => (
                         <div key={player.id}>
@@ -51,6 +52,7 @@ function GameBoard() {
                         </div>
                     ))}
                 </div>
+                <div className="filler-column" />
             </div>
         </>
     );

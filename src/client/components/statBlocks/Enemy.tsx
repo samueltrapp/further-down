@@ -32,7 +32,7 @@ function Enemy(props: CharType) {
     }, [activeTurn, game?.characters, game?.gameId, id]);
 
     return (
-        <div className={`enemy-box ${activeTurn && "active-enemy"} ${isSelected && "selected-enemy"}`}>
+        <div className={`char-box enemy-box ${activeTurn && "active-enemy"} ${isSelected && "selected-enemy"}`}>
             <div className="name">
                 {name}
             </div>

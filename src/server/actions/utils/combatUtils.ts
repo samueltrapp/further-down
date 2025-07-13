@@ -1,5 +1,6 @@
 import { DamageType } from "../../../types/maneuvers.ts";
-import {CharType, StatsType} from "../../../types/game.ts";
+import {CharType} from "../../../types/game.ts";
+import {StatsType} from "../../../types/stats.ts";
 
 export const findCharacter = (characters: CharType[], charId: string): [CharType, number] => {
     const attackerId = characters.findIndex((character) => character.id === charId);
@@ -11,8 +12,8 @@ export const calcRawDamage = (stats: StatsType, damageType: DamageType) => {
     switch (damageType) {
         case "blunt":
             return stats.physical + stats.blunt;
-        case "sharp":
-            return stats.physical + stats.sharp;
+        case "bladed":
+            return stats.physical + stats.bladed;
         case "elemental":
             return stats.magical + stats.elemental;
         case "psychic":
@@ -26,7 +27,7 @@ export const calcRawMitigation = (stats: StatsType, damageType: DamageType) => {
     switch (damageType) {
         case "blunt":
             return stats.armor + stats.plating;
-        case "sharp":
+        case "bladed":
             return stats.armor + stats.padding;
         case "elemental":
             return stats.resistance + stats.dampening;
