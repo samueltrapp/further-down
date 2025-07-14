@@ -5,30 +5,31 @@
   --brown: #1E0B12;
   --off-white: #f1f1e2;
   --gray: #A4AA9D;
+  --silver: #C0C0C0;
 
   /* Greens */
-  --black-green: #121812;
-  --dark-green: #183c2b;
   --bright-green: #50AF53;
+  --black-green: #121812;
   --chartreuse: #BEDF43;
+  --dark-green: #183c2b;
 
   /* Reds and Purples */
-  --red: #BA2626;
-  --maroon: #451828;
-  --deep-maroon: #3c1523;
   --aubergine: #3E154C;
+  --deep-maroon: #3C1523;
+  --maroon: #451828;
   --plum: #524059;
+  --red: #BA2626;
 
   /* Yellows and Oranges */
-  --yellow: #FFBC42;
-  --sunset: #CC8500;
+  --bronze: #CD7F32;
+  --gold: #FFD700;
   --sunrise: #F5A000;
+  --sunset: #CC8500;
+  --yellow: #FFBC42;
 
   /* Blues */
   --blue: #24507F;
   --teal: #142C2F;
-
-
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

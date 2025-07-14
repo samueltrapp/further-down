@@ -3,6 +3,7 @@ import { ManeuverName, ManeuverType } from "../../types/maneuvers.ts";
 export const maneuvers: Record<ManeuverName, ManeuverType> = {
     "slap": {
         speedCost: 12,
+        maxTargets: 1,
         actions: [
             {
                 damageType: "blunt",
@@ -12,6 +13,7 @@ export const maneuvers: Record<ManeuverName, ManeuverType> = {
     },
     "quicksilver": {
         speedCost: 4,
+        maxTargets: 1,
         actions: [
             {
                 damageType: "blunt",
@@ -33,19 +35,21 @@ export const maneuvers: Record<ManeuverName, ManeuverType> = {
     },
     "fireburst": {
         speedCost: 8,
+        maxTargets: 3,
         actions: [
             {
                 damageType: "elemental",
-                strength: 0.25
+                strength: 0.15
             },
             {
                 damageType: "elemental",
-                strength: 0.75
+                strength: 0.50
             }
         ]
     },
     "ache": {
         speedCost: 15,
+        maxTargets: 1,
         actions: [
             {
                 damageType: "psychic",

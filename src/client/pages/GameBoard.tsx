@@ -6,6 +6,7 @@ import "./GameBoard.css";
 import {CharType, GameActions} from "../../types/game.ts";
 import TurnTracker from "../components/hud/TurnTracker.tsx";
 import ConfirmButton from "../components/hud/ConfirmButton.tsx";
+import {CombatLog} from "../components/hud/CombatLog.tsx";
 
 function GameBoard() {
     const game = useContext(GameContext);
@@ -39,8 +40,9 @@ function GameBoard() {
                     ))}
                 </div>
 
-                <div className="action-column">
-                    <ConfirmButton/>
+                <div className="hub-column">
+                    <CombatLog />
+                    <ConfirmButton />
                 </div>
                 <div className="enemy-column">
                     {enemies.map((enemy) => (

@@ -1,0 +1,43 @@
+.turn-tracker-container {
+    background-color: var(--black);
+    border: 2px solid var(--chartreuse);
+    border-radius: 4px;
+    display: flex;
+    width: 14%;
+    position: relative;
+    top: -7.5rem;
+    flex-direction: column;
+    padding: 8px;
+}
+
+.name-label {
+    padding-left: 0.5rem;
+    padding-right: 1rem;
+    text-align: start;
+}
+
+.confirm-button {
+    background-color: var(--sunrise);
+    border: none;
+    border-radius: 1.5rem;
+    display: block;
+    font-size: 2rem;
+    margin: auto;
+    padding: 0.5rem;
+}
+
+.combat-log {
+    background-color: var(--off-white);
+    border: 1px solid var(--gray);
+    color: var(--black);
+    height: 400px;
+    margin: 0 1rem 1rem;
+    width: calc(100% - 2rem);
+}
+
+.combat-log-header {
+    background-color: var(--white);
+    color: var(--black);
+    margin: 0 0 1rem;
+    padding: 0.125rem 0.5rem;
+}

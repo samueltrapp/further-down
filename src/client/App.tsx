@@ -4,6 +4,7 @@ import { GameContext, GameDispatchContext } from "./contexts/GameContext";
 import { GameActions, GameType } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard";
 import "./App.css";
+import "animate.css";
 
 function App() {
   const game = useContext(GameContext);
@@ -58,7 +59,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1 className="title">FURTHER DOWN</h1>
+      <h1 className="title animate__animated animate__fadeIn">FURTHER DOWN</h1>
       <GameBoard />
     </div>
   );

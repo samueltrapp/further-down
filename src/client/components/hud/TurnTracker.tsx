@@ -1,7 +1,30 @@
 import {GameContext} from "../../contexts/GameContext.tsx";
 import {useContext} from "react";
-import "./TurnTracker.css";
+import "./Hud.css";
+import styled from "styled-components";
 
+type RangeThree = 0 | 1 | 2;
+
+const mapColor = (position: RangeThree) => {
+    switch (position) {
+        case 0:
+            return "var(--gold)";
+        case 1:
+            return "var(--silver)";
+        case 2:
+            return "var(--bronze)";
+        default:
+            return "var(--white)";
+    }
+}
+
+const TurnTrackerRow = styled.div<{ $position: RangeThree }>`
+    color: ${props => mapColor(props.$position)};
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.25rem 0.5rem;
+`;
 
 export default function TurnTracker() {
     const game = useContext(GameContext);
@@ -16,11 +39,11 @@ export default function TurnTracker() {
 
     return (
         <div className="turn-tracker-container">
-            {turnTracker?.map((turn, index) => (
-                <div className="turn-tracker-row" key={game?.turnOrder[index]}>
+            {turnTracker?.slice(0, 3)?.map((turn, index) => (
+                <TurnTrackerRow key={game?.turnOrder[index]} $position={index as RangeThree}>
                     <div className="name-label">{turn.name}</div>
                     <div className="speed-label">{turn.speed}</div>
-                </div>
+                </TurnTrackerRow>
             ))}
         </div>
     );

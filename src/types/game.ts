@@ -14,6 +14,7 @@ export type CharType = {
     team: TeamType;
     stats: StatsType;
     lastTurn: number;
+    knownManeuvers: ManeuverName[];
 }
 
 export type GameType = {

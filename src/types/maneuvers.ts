@@ -16,6 +16,7 @@ export type OtherManeuverFnType = (stats: StatsType, influence: AttackType) => S
 export type SelfManeuverFnType = (stats: StatsType, details: number) => StatsType;
 export type ManeuverType = {
     speedCost: number;
+    maxTargets: number;
     actions: {
         damageType: DamageType,
         strength: number

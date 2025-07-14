@@ -152,7 +152,8 @@ function buildStats(statsArray: StatsType[], team: TeamType, tieBreaker: number)
             team,
             name: names[(team !== "enemy" ? 0 : 3) + index],
             stats,
-            lastTurn: -1 * tieBreaker
+            lastTurn: -1 * tieBreaker,
+            knownManeuvers: ["slap", "quicksilver", "fireburst", "ache"]
         });
     });
     return data;

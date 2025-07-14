@@ -1,10 +1,11 @@
 import { ReactNode, useReducer } from "react";
 import { GameActions, GameType } from "../../types/game.ts";
 import { GameContext, GameDispatchContext, GameStateType } from "./GameContext";
+import {ManeuverName} from "../../types/maneuvers.ts";
 
 export type ActionTypes
-    = { type: GameActions.SELECT_ACTION, payload: {allow: boolean, max: number, mnv: "slap"}}
-    | { type: GameActions.SELECT_ENEMY, payload: string }
+    = { type: GameActions.SELECT_ACTION, payload: {allow: boolean, max: number, mnv: ManeuverName | ""}}
+    | { type: GameActions.SELECT_ENEMY, payload: string | null }
     | { type: GameActions.SYNC, payload: GameType }
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
@@ -41,7 +42,8 @@ function gameReducer(game: GameStateType, action: ActionTypes) {
         }
 
         case GameActions.SELECT_ENEMY: {
-            const addOrRemove = (newSelection: string) => {
+            const addOrRemove = (newSelection: string | null) => {
+                if (!newSelection) return [];
                 const pivot = game.selectedEnemyIds.findIndex((enemyId) => enemyId === newSelection);
                 if (pivot >= 0) {
                     return game.selectedEnemyIds.slice(0, pivot).concat(game.selectedEnemyIds.slice(pivot + 1));
