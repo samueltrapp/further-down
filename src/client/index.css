@@ -4,14 +4,15 @@
   --black: #060906;
   --brown: #1E0B12;
   --off-white: #f1f1e2;
-  --gray: #A4AA9D;
+  --gray: #424342;
   --silver: #C0C0C0;
 
   /* Greens */
   --bright-green: #50AF53;
   --black-green: #121812;
   --chartreuse: #BEDF43;
-  --dark-green: #183c2b;
+  --dark-green: #183C2B;
+  --highlight-green: #112e23;
 
   /* Reds and Purples */
   --aubergine: #3E154C;
@@ -23,7 +24,7 @@
   /* Yellows and Oranges */
   --bronze: #CD7F32;
   --gold: #FFD700;
-  --sunrise: #F5A000;
+  --sunrise: #f4a305;
   --sunset: #CC8500;
   --yellow: #FFBC42;
 
@@ -31,7 +32,8 @@
   --blue: #24507F;
   --teal: #142C2F;
 
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+ /* system-ui, Avenir, Helvetica, Arial, sans-serif */
+  font-family: "Courier New", Courier, monospace;
   line-height: 1.5;
   font-weight: 400;
 

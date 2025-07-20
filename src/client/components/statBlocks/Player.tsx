@@ -3,9 +3,7 @@ import {CharType, GameActions} from "../../../types/game.ts";
 import {ManeuverName} from "../../../types/maneuvers.ts";
 import {GameContext, GameDispatchContext} from "../../contexts/GameContext";
 import "./StatBlocks.css";
-import {formatCaps} from "../../utils/data.ts";
 import {maneuvers} from "../../../server/actions/mnvDetails.ts";
-
 
 function Player(props: CharType) {
     const { id, name, stats, knownManeuvers } = props;
@@ -40,17 +38,23 @@ function Player(props: CharType) {
 
             <div className="stat-body">
                 <div className="action-column">
-                    ok
+                    <input type="radio" id="tech1" name="technique" value="technique1" />
+                    <label htmlFor="technique1">Technique 1</label>
+                    <input type="radio" id="tech2" name="technique" value="technique2" />
+                    <label htmlFor="technique2">Technique 2</label>
+                    <input type="radio" id="tech3" name="technique" value="technique3" />
+                    <label htmlFor="technique3">Technique 3</label>
                 </div>
                 <div className="action-column">
                     {knownManeuvers.map((knownManeuver) => (
                         <button
-                            className="maneuver-box"
+                            className={`maneuver-button ${activeTurn && game?.selectedManeuver === knownManeuver ? "selected-maneuver" : ""}`}
                             disabled={!activeTurn}
+                            key={knownManeuver}
                             onClick={handleManeuver}
                             value={knownManeuver}
                         >
-                            {">"} {formatCaps(knownManeuver)}
+                            {">"} {knownManeuver.toUpperCase()}
                         </button>
                     ))}
                 </div>

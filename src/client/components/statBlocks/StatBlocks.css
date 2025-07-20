@@ -54,10 +54,15 @@
     color: var(--blue);
 }
 
-.hit-box {
-    background-color: var(--sunset);
-    border: 1px solid var(--black);
-    margin-top: 24px;
+.maneuver-button {
+    background-color: var(--black);
+    border-bottom: 1px solid var(--gray);
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    color: var(--sunset);
+    font-family: var(--monospace);
+    padding: 4px;
     width: 100%;
 
     &[disabled] {
@@ -66,8 +71,25 @@
     }
 }
 
+.maneuver-button:hover {
+    background-color: var(--sunrise);
+    border-bottom: 1px solid transparent;
+    color: var(--white);
+    transition: background-color 0.3s ease-in-out;
+}
+
+.selected-maneuver {
+    background-color: var(--sunset);
+    border-bottom: 1px solid transparent;
+    color: var(--white);
+    font-style: italic;
+    outline: 1px dashed var(--white);
+    transition: background-color 0.3s ease-out;
+}
+
 .active-char {
-    border-color: var(--blue);
+    background-color: var(--highlight-green);
+    border-color: var(--plum);
 }
 
 .active-enemy {
