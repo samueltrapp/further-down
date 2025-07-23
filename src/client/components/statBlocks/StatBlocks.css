@@ -51,7 +51,7 @@
 }
 
 .speed-display {
-    color: var(--blue);
+    color: var(--white);
 }
 
 .maneuver-button {
@@ -61,7 +61,7 @@
     border-right: none;
     border-top: none;
     color: var(--sunset);
-    font-family: var(--monospace);
+    margin: 0 0 0 4px;
     padding: 4px;
     width: 100%;
 
@@ -78,6 +78,23 @@
     transition: background-color 0.3s ease-in-out;
 }
 
+.technique-button {
+    background-color: var(--off-white);
+    border-bottom: 1px solid var(--deep-maroon);
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    color: var(--black);
+    margin: 0 4px 0 0;
+    padding: 4px;
+    width: 100%;
+
+    &[disabled] {
+        background-color: var(--gray);
+        pointer-events: none;
+    }
+}
+
 .selected-maneuver {
     background-color: var(--sunset);
     border-bottom: 1px solid transparent;
@@ -88,7 +105,7 @@
 }
 
 .active-char {
-    background-color: var(--highlight-green);
+    background-color: var(--blue);
     border-color: var(--plum);
 }
 

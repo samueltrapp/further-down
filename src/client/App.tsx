@@ -59,7 +59,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1 className="title animate__animated animate__fadeIn">FURTHER DOWN</h1>
+      <h1 className="title animate__animated animate__fadeIn">Further Down</h1>
       <GameBoard />
     </div>
   );

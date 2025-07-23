@@ -2,9 +2,12 @@ import { ReactNode, useReducer } from "react";
 import { GameActions, GameType } from "../../types/game.ts";
 import { GameContext, GameDispatchContext, GameStateType } from "./GameContext";
 import {ManeuverName} from "../../types/maneuvers.ts";
+import {TechniqueName} from "../../types/techniques.ts";
+import {selectEnemies} from "./contextActions.ts";
 
 export type ActionTypes
-    = { type: GameActions.SELECT_ACTION, payload: {allow: boolean, max: number, mnv: ManeuverName | ""}}
+    = { type: GameActions.SELECT_MANEUVER, payload: {allowManeuverSelect: boolean, maxTargets: number, maneuver: ManeuverName | ""}}
+    | { type: GameActions.SELECT_TECHNIQUE, payload: {allowTechniqueSelect: boolean, technique: TechniqueName | ""}}
     | { type: GameActions.SELECT_ENEMY, payload: string | null }
     | { type: GameActions.SYNC, payload: GameType }
 
@@ -15,7 +18,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         gameId: "",
         maxEnemySelections: 0,
         selectedEnemyIds: [],
-        selectedManeuver: "",
+        selectedManeuver: undefined,
+        selectedTechnique: "none",
         turnNumber: 0,
         turnOrder: []
     });
@@ -32,34 +36,27 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 function gameReducer(game: GameStateType, action: ActionTypes) {
     switch (action.type) {
 
-        case GameActions.SELECT_ACTION: {
+        case GameActions.SELECT_MANEUVER: {
             return {
                 ...game,
-                allowSelection: action.payload.allow,
-                maxEnemySelections: action.payload.max,
-                selectedManeuver: action.payload.mnv
+                allowSelection: action.payload.allowManeuverSelect,
+                maxEnemySelections: action.payload.maxTargets,
+                selectedManeuver: action.payload.maneuver
             };
         }
 
-        case GameActions.SELECT_ENEMY: {
-            const addOrRemove = (newSelection: string | null) => {
-                if (!newSelection) return [];
-                const pivot = game.selectedEnemyIds.findIndex((enemyId) => enemyId === newSelection);
-                if (pivot >= 0) {
-                    return game.selectedEnemyIds.slice(0, pivot).concat(game.selectedEnemyIds.slice(pivot + 1));
-                }
-                else {
-                    const overwriteIndex = game.maxEnemySelections > 1 ? -(game.maxEnemySelections - 1) : game.selectedEnemyIds.length;
-                    const needsOverwrite = game.selectedEnemyIds.length >= game.maxEnemySelections;
-                    const limitedEnemyIds = game.selectedEnemyIds.slice(needsOverwrite ? overwriteIndex : 0);
-                    limitedEnemyIds.push(newSelection);
-                    return limitedEnemyIds;
-                }
-            }
-
+        case GameActions.SELECT_TECHNIQUE: {
             return {
                 ...game,
-                selectedEnemyIds: addOrRemove(action.payload)
+                allowSelection: action.payload.allowTechniqueSelect,
+                selectedTechnique: action.payload.technique
+            }
+        }
+
+        case GameActions.SELECT_ENEMY: {
+            return {
+                ...game,
+                selectedEnemyIds: selectEnemies(action.payload, game)
             };
         }
 

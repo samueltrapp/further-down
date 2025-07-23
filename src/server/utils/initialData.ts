@@ -5,6 +5,7 @@ import {StatsType, TeamType} from "../../types/stats.ts";
 
 const samplePlayers: StatsType[] = [
     {
+        maxHitPoints: 100,
         hitPoints: 100,
         physical: 15,
         blunt: 0,
@@ -27,6 +28,7 @@ const samplePlayers: StatsType[] = [
         speed: 96
     },
     {
+        maxHitPoints: 100,
         hitPoints: 100,
         physical: 15,
         blunt: 0,
@@ -49,6 +51,7 @@ const samplePlayers: StatsType[] = [
         speed: 97
     },
     {
+        maxHitPoints: 100,
         hitPoints: 100,
         physical: 15,
         blunt: 0,
@@ -74,6 +77,7 @@ const samplePlayers: StatsType[] = [
 
 const sampleEnemies: StatsType[] = [
     {
+        maxHitPoints: 80,
         hitPoints: 80,
         physical: 6,
         blunt: 0,
@@ -96,6 +100,7 @@ const sampleEnemies: StatsType[] = [
         speed: 95
     },
     {
+        maxHitPoints: 80,
         hitPoints: 80,
         physical: 15,
         blunt: 0,
@@ -118,6 +123,7 @@ const sampleEnemies: StatsType[] = [
         speed: 94
     },
     {
+        maxHitPoints: 80,
         hitPoints: 80,
         physical: 30,
         blunt: 0,
@@ -152,8 +158,10 @@ function buildStats(statsArray: StatsType[], team: TeamType, tieBreaker: number)
             team,
             name: names[(team !== "enemy" ? 0 : 3) + index],
             stats,
+            statsHistory: stats,
             lastTurn: -1 * tieBreaker,
-            knownManeuvers: ["slap", "quicksilver", "fireburst", "ache"]
+            knownManeuvers: ["slap", "quicksilver", "fireburst", "ache"],
+            knownTechniques: ["reckless", "patient", "livewire"]
         });
     });
     return data;

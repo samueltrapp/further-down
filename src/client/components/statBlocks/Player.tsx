@@ -4,9 +4,10 @@ import {ManeuverName} from "../../../types/maneuvers.ts";
 import {GameContext, GameDispatchContext} from "../../contexts/GameContext";
 import "./StatBlocks.css";
 import {maneuvers} from "../../../server/actions/mnvDetails.ts";
+import {TechniqueName} from "../../../types/techniques.ts";
 
 function Player(props: CharType) {
-    const { id, name, stats, knownManeuvers } = props;
+    const { id, name, stats, knownManeuvers, knownTechniques } = props;
     const game = useContext(GameContext);
     const dispatch = useContext(GameDispatchContext);
     const activeTurn = game?.turnOrder[0] === id;
@@ -16,11 +17,22 @@ function Player(props: CharType) {
         const value = target.value as ManeuverName;
         if (dispatch && target.value) {
             dispatch({
-                type: GameActions.SELECT_ACTION,
-                payload: { allow: true, max: maneuvers[value].maxTargets, mnv: value }
+                type: GameActions.SELECT_MANEUVER,
+                payload: { allowManeuverSelect: true, maxTargets: maneuvers[value].maxTargets, maneuver: value }
             });
         }
-    }
+    };
+
+    const handleTechnique = (event: MouseEvent<HTMLButtonElement>) => {
+        const target = event.target as HTMLButtonElement;
+        const value = target.value as TechniqueName;
+        if (dispatch && target.value) {
+            dispatch({
+                type: GameActions.SELECT_TECHNIQUE,
+                payload: { allowTechniqueSelect: true, technique: value }
+            });
+        }
+    };
 
     return (
         <div className={`char-box player-box ${activeTurn && "active-char"}`}>
@@ -38,12 +50,26 @@ function Player(props: CharType) {
 
             <div className="stat-body">
                 <div className="action-column">
-                    <input type="radio" id="tech1" name="technique" value="technique1" />
-                    <label htmlFor="technique1">Technique 1</label>
-                    <input type="radio" id="tech2" name="technique" value="technique2" />
-                    <label htmlFor="technique2">Technique 2</label>
-                    <input type="radio" id="tech3" name="technique" value="technique3" />
-                    <label htmlFor="technique3">Technique 3</label>
+                    <button
+                        className={`technique-button ${activeTurn && game?.selectedTechnique === "none" ? "selected-technique" : ""}`}
+                        disabled={!activeTurn}
+                        key="none"
+                        onClick={handleTechnique}
+                        value="none"
+                    >
+                        {`+ NONE`}
+                    </button>
+                    {knownTechniques.map((knownTechnique) => (
+                        <button
+                            className={`technique-button ${activeTurn && game?.selectedTechnique === knownTechnique ? "selected-technique" : ""}`}
+                            disabled={!activeTurn}
+                            key={knownTechnique}
+                            onClick={handleTechnique}
+                            value={knownTechnique}
+                        >
+                            {`+ ${knownTechnique.toUpperCase()}`}
+                        </button>
+                    ))}
                 </div>
                 <div className="action-column">
                     {knownManeuvers.map((knownManeuver) => (
@@ -54,7 +80,7 @@ function Player(props: CharType) {
                             onClick={handleManeuver}
                             value={knownManeuver}
                         >
-                            {">"} {knownManeuver.toUpperCase()}
+                            {`> ${knownManeuver.toUpperCase()}`}
                         </button>
                     ))}
                 </div>

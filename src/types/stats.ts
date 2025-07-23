@@ -1,6 +1,7 @@
 export type TeamType = "player" | "enemy";
 
 export type StatsType = {
+    maxHitPoints: number;
     hitPoints: number,  // Hp
     speed: number       // Spd
     physical: number,   // Ph
