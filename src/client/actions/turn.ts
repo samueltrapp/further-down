@@ -1,6 +1,6 @@
-import {socket} from "../utils/socket.ts";
-import {TurnType} from "../../types/game.ts";
+import { socket } from "../utils/socket.ts";
+import { TurnType } from "../../types/game.ts";
 
 export const turn = (turn: TurnType) => {
-  socket.emit('turn', turn);
+  socket.emit("turn", turn);
 };

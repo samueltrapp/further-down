@@ -1,31 +1,31 @@
 .container {
-    background-color: var(--black-green);
-    height: 100%;
-    margin: auto;
-    max-width: 100%;
-    padding: 24px;
+  background-color: var(--black-green);
+  height: 100%;
+  margin: auto;
+  max-width: 100%;
+  padding: 24px;
 
-    @media (min-width: 576px) {
-        max-width: 540px;
-    }
-    @media (min-width: 768px) {
-        max-width: 720px;
-    }
-    @media (min-width: 992px) {
-        max-width: 960px;
-    }
-    @media (min-width: 1200px) {
-        max-width: 1140px;
-    }
-    @media (min-width: 1400px) {
-        max-width: 1320px;
-    }
-    @media (min-width: 2000px) {
-        max-width: 1880px;
-    }
+  @media (min-width: 576px) {
+    max-width: 540px;
+  }
+  @media (min-width: 768px) {
+    max-width: 720px;
+  }
+  @media (min-width: 992px) {
+    max-width: 960px;
+  }
+  @media (min-width: 1200px) {
+    max-width: 1140px;
+  }
+  @media (min-width: 1400px) {
+    max-width: 1320px;
+  }
+  @media (min-width: 2000px) {
+    max-width: 1880px;
+  }
 }
 
 .title {
-    text-align: center;
-    color: var(--off-white);
+  text-align: center;
+  color: var(--off-white);
 }

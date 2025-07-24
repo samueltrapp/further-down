@@ -1,34 +1,34 @@
 :root {
   /* Neutrals */
-  --white: #FFFFFF;
+  --white: #ffffff;
   --black: #060906;
-  --brown: #1E0B12;
+  --brown: #1e0b12;
   --off-white: #f1f1e2;
   --gray: #424342;
-  --silver: #C0C0C0;
+  --silver: #c0c0c0;
 
   /* Greens */
   --black-green: #121812;
-  --chartreuse: #BEDF43;
-  --dark-green: #183C2B;
+  --chartreuse: #bedf43;
+  --dark-green: #183c2b;
 
   /* Reds and Purples */
-  --aubergine: #3E154C;
-  --deep-maroon: #3C1523;
+  --aubergine: #3e154c;
+  --deep-maroon: #3c1523;
   --maroon: #451828;
   --plum: #524059;
-  --red: #BA2626;
+  --red: #ba2626;
 
   /* Yellows and Oranges */
-  --bronze: #CD7F32;
-  --gold: #FFD700;
+  --bronze: #cd7f32;
+  --gold: #ffd700;
   --sunrise: #f4a305;
-  --sunset: #CC8500;
-  --yellow: #FFBC42;
+  --sunset: #cc8500;
+  --yellow: #ffbc42;
 
   /* Blues */
-  --blue: #24507F;
-  --teal: #142C2F;
+  --blue: #24507f;
+  --teal: #142c2f;
 
   font-family: "Courier New", Courier, monospace;
   line-height: 1.5;

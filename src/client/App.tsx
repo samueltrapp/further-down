@@ -16,8 +16,7 @@ function App() {
       const existingGame = localStorage.getItem("gameId");
       if (existingGame) {
         socket.emit("load", existingGame);
-      }
-      else {
+      } else {
         socket.emit("create");
       }
     }
@@ -33,10 +32,9 @@ function App() {
       if (dispatch) {
         dispatch({
           type: GameActions.SYNC,
-          payload: updatedGame
-      });
+          payload: updatedGame,
+        });
       }
-      
     }
 
     socket.connect();
@@ -47,7 +45,7 @@ function App() {
       socket.off("connect", onConnect);
       socket.off("update", (game) => onUpdateGameState(game));
       socket.disconnect();
-    }
+    };
   }, [dispatch]);
 
   // Start new game if no game exists

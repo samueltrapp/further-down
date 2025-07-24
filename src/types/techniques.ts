@@ -1,5 +1,1 @@
-export type TechniqueName =
-    "none" |
-    "reckless" |
-    "patient" |
-    "livewire";
+export type TechniqueName = "none" | "reckless" | "patient" | "livewire";
