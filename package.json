@@ -9,7 +9,8 @@
     "dev": "concurrently \"vite\" \"node --loader ts-node/esm --watch src/server/index.ts\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@types/express": "^5.0.0",
@@ -17,7 +18,6 @@
     "concurrently": "^9.1.2",
     "express": "^4.21.2",
     "nodemon": "^3.1.9",
-    "prettier": "^3.6.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.89.2",
@@ -38,8 +38,13 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "prettier": "^3.6.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": "eslint --cache --fix",
+    "*.{js,ts,tsx,css,md}": "prettier --write"
   }
 }
