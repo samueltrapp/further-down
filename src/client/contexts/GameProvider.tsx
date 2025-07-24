@@ -6,8 +6,8 @@ import {TechniqueName} from "../../types/techniques.ts";
 import {selectEnemies} from "./contextActions.ts";
 
 export type ActionTypes
-    = { type: GameActions.SELECT_MANEUVER, payload: {allowManeuverSelect: boolean, maxTargets: number, maneuver: ManeuverName | ""}}
-    | { type: GameActions.SELECT_TECHNIQUE, payload: {allowTechniqueSelect: boolean, technique: TechniqueName | ""}}
+    = { type: GameActions.SELECT_MANEUVER, payload: { allowManeuverSelect: boolean, maxTargets: number, maneuver: ManeuverName | undefined }}
+    | { type: GameActions.SELECT_TECHNIQUE, payload: { allowTechniqueSelect: boolean, technique: TechniqueName | "none" }}
     | { type: GameActions.SELECT_ENEMY, payload: string | null }
     | { type: GameActions.SYNC, payload: GameType }
 
