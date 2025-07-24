@@ -1,3 +1,14 @@
+.central-column {
+  margin: 0 1rem 1rem;
+  width: calc(100% - 2rem);
+}
+
+.advisor-bar {
+  background-color: var(--black);
+  color: var(--sunrise);
+  padding: 6px;
+}
+
 .turn-tracker-container {
   background-color: var(--black);
   border: 2px solid var(--chartreuse);
@@ -30,8 +41,6 @@
   border: 1px solid var(--gray);
   color: var(--black);
   height: 400px;
-  margin: 0 1rem 1rem;
-  width: calc(100% - 2rem);
 }
 
 .combat-log-header {

@@ -173,6 +173,7 @@ function buildStats(
       lastTurn: -1 * tieBreaker,
       knownManeuvers: ["slap", "quicksilver", "fireburst", "ache"],
       knownTechniques: ["reckless", "patient", "livewire"],
+      playerId: "1234",
     });
   });
   return data;

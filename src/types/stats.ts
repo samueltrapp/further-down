@@ -20,6 +20,7 @@ export type StatsType = {
   accuracy: number; // Acc
   evasion: number; // Evn
   mystic: number; // My
-  discipline: number; // Dsp
+  control: number; // Ctl
   absorption: number; // Abs
+  luck: number; // Lck
 };

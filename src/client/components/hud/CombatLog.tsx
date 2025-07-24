@@ -1,6 +1,6 @@
-export function CombatLog() {
+export default function CombatLog() {
   return (
-    <div className="combat-log">
+    <div className="central-column combat-log">
       <h3 className="combat-log-header">Combat Log</h3>
       <div style={{ display: "inline-block", verticalAlign: "bottom" }}>
         <p>Log line 1</p>

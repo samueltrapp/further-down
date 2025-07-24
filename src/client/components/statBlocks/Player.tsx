@@ -6,7 +6,7 @@ import "./StatBlocks.css";
 import { maneuvers } from "../../../server/actions/mnvDetails.ts";
 import { TechniqueName } from "../../../types/techniques.ts";
 
-function Player(props: CharType) {
+export default function Player(props: CharType) {
   const { id, name, stats, knownManeuvers, knownTechniques } = props;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
@@ -86,5 +86,3 @@ function Player(props: CharType) {
     </div>
   );
 }
-
-export default Player;
