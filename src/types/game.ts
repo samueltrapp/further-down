@@ -1,6 +1,5 @@
 import { ManeuverName } from "./maneuvers.ts";
-import { StatsType, TeamType } from "./stats.ts";
-import { TechniqueName } from "./techniques.ts";
+import { EnemyType, PlayerType } from "./characters.ts";
 
 export enum GameActions {
   SELECT_MANEUVER = "SELECT_MANEUVER",
@@ -9,21 +8,10 @@ export enum GameActions {
   SYNC = "SYNC",
 }
 
-export type CharType = {
-  id: string;
-  name: string;
-  playerId?: string;
-  team: TeamType;
-  stats: StatsType;
-  statsHistory: StatsType;
-  lastTurn: number;
-  knownManeuvers: ManeuverName[];
-  knownTechniques: TechniqueName[];
-};
-
 export type GameType = {
-  characters: CharType[];
+  characters: (PlayerType | EnemyType)[];
   gameId: string;
+  roundNumber: number;
   turnNumber: number;
   turnOrder: string[];
 };

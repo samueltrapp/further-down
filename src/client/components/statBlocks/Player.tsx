@@ -1,12 +1,13 @@
 import { MouseEvent, useContext } from "react";
-import { CharType, GameActions } from "../../../types/game.ts";
+import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/maneuvers.ts";
 import { GameContext, GameDispatchContext } from "../../contexts/GameContext";
 import "./StatBlocks.css";
 import { maneuvers } from "../../../server/actions/mnvDetails.ts";
 import { TechniqueName } from "../../../types/techniques.ts";
+import { PlayerType } from "../../../types/characters.ts";
 
-export default function Player(props: CharType) {
+export default function Player(props: PlayerType) {
   const { id, name, stats, knownManeuvers, knownTechniques } = props;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);

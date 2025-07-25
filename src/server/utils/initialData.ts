@@ -1,7 +1,8 @@
-import { CharType, GameType } from "../../types/game.ts";
+import { GameType } from "../../types/game.ts";
 import { v4 as uuidv4 } from "uuid";
 import { resolveTurnOrder } from "./turnOrder.ts";
 import { StatsType, TeamType } from "../../types/stats.ts";
+import { CharType } from "../../types/characters.ts";
 
 const samplePlayers: StatsType[] = [
   {
@@ -23,9 +24,10 @@ const samplePlayers: StatsType[] = [
     accuracy: 0,
     evasion: 0,
     mystic: 50,
-    discipline: 0,
+    control: 0,
     absorption: 0,
     speed: 96,
+    luck: 15,
   },
   {
     maxHitPoints: 100,
@@ -46,9 +48,10 @@ const samplePlayers: StatsType[] = [
     accuracy: 0,
     evasion: 0,
     mystic: 50,
-    discipline: 0,
+    control: 0,
     absorption: 0,
     speed: 97,
+    luck: 15,
   },
   {
     maxHitPoints: 100,
@@ -69,9 +72,10 @@ const samplePlayers: StatsType[] = [
     accuracy: 0,
     evasion: 0,
     mystic: 50,
-    discipline: 0,
+    control: 0,
     absorption: 0,
     speed: 98,
+    luck: 15,
   },
 ];
 
@@ -95,9 +99,10 @@ const sampleEnemies: StatsType[] = [
     accuracy: 0,
     evasion: 0,
     mystic: 50,
-    discipline: 0,
+    control: 0,
     absorption: 0,
     speed: 95,
+    luck: 0,
   },
   {
     maxHitPoints: 80,
@@ -118,9 +123,10 @@ const sampleEnemies: StatsType[] = [
     accuracy: 0,
     evasion: 0,
     mystic: 50,
-    discipline: 0,
+    control: 0,
     absorption: 0,
     speed: 94,
+    luck: 0,
   },
   {
     maxHitPoints: 80,
@@ -141,9 +147,10 @@ const sampleEnemies: StatsType[] = [
     accuracy: 0,
     evasion: 0,
     mystic: 50,
-    discipline: 0,
+    control: 0,
     absorption: 0,
     speed: 93,
+    luck: 0,
   },
 ];
 
@@ -174,6 +181,8 @@ function buildStats(
       knownManeuvers: ["slap", "quicksilver", "fireburst", "ache"],
       knownTechniques: ["reckless", "patient", "livewire"],
       playerId: "1234",
+      buffs: [],
+      debuffs: [],
     });
   });
   return data;
@@ -197,6 +206,7 @@ export function initializeGame(gameId: string): GameType {
   return {
     characters,
     gameId,
+    roundNumber: 1,
     turnNumber: 1,
     turnOrder,
   };

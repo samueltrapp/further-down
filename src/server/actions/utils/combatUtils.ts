@@ -1,6 +1,6 @@
 import { DamageType } from "../../../types/maneuvers.ts";
-import { CharType } from "../../../types/game.ts";
 import { StatsType } from "../../../types/stats.ts";
+import { CharType } from "../../../types/characters.ts";
 
 export const findCharacter = (
   characters: CharType[],

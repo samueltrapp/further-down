@@ -1,17 +1,17 @@
 import { useContext, useEffect } from "react";
-import { CharType } from "../../../types/game.ts";
 import { GameContext } from "../../contexts/GameContext";
 import "./StatBlocks.css";
 import { turn } from "../../actions/turn.ts";
+import { EnemyType, PlayerType } from "../../../types/characters.ts";
 
-const lowestHpPlayer = (players: CharType[]) => {
+const lowestHpPlayer = (players: PlayerType[]) => {
   const lowestHpChar = players.reduce((prev, next) =>
     next.stats.hitPoints < prev.stats.hitPoints ? next : prev,
   );
   return [lowestHpChar.id];
 };
 
-function Enemy(props: CharType) {
+function Enemy(props: EnemyType) {
   const { id, name, stats } = props;
 
   const game = useContext(GameContext);

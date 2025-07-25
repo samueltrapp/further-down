@@ -3,11 +3,12 @@ import { GameContext, GameDispatchContext } from "../contexts/GameContext";
 import Character from "../components/statBlocks/Player";
 import Enemy from "../components/statBlocks/Enemy";
 import "./GameBoard.css";
-import { CharType, GameActions } from "../../types/game.ts";
+import { GameActions } from "../../types/game.ts";
 import TurnTracker from "../components/hud/TurnTracker.tsx";
 import ConfirmButton from "../components/hud/ConfirmButton.tsx";
 import CombatLog from "../components/hud/CombatLog.tsx";
 import Advisor from "../components/hud/Advisor.tsx";
+import { EnemyType, PlayerType } from "../../types/characters.ts";
 
 function GameBoard() {
   const game = useContext(GameContext);
@@ -16,10 +17,11 @@ function GameBoard() {
   if (!game || !game.characters) return;
   const [players, enemies] = game.characters.reduce(
     (characterArr, character) => {
+      // @ts-ignore
       characterArr[character.team === "player" ? 0 : 1].push(character);
       return characterArr;
     },
-    [[] as CharType[], [] as CharType[]],
+    [[] as PlayerType[], [] as EnemyType[]],
   );
 
   const handleSelect = (enemyId: string) => {
