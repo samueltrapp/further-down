@@ -33,26 +33,27 @@ io.on("connection", (socket) => {
   function createGame() {
     const newGameId = uuidv4();
     gameMeta.games.push(initializeGame(newGameId));
-    retrieveGame(newGameId);
+    sendGame(newGameId);
   }
 
   function takeTurn(turn: TurnType) {
     const gameId = turn.gameId;
-    const game = gameMeta.findGame(gameId);
     const gameIndex = gameMeta.findGameIndex(gameId);
+    const game = gameIndex && gameMeta.games[gameIndex];
     if (gameMeta && gameIndex && game) {
-      gameMeta.games[gameIndex] = resolveTurn(turn, game);
-      retrieveGame(gameId);
+      const { game: updatedGame, logMessages } = resolveTurn(turn, game);
+      gameMeta.games[gameIndex] = updatedGame;
+      sendGame(gameId, logMessages);
     }
   }
 
-  function retrieveGame(gameId: string) {
+  function sendGame(gameId: string, logMessages?: string[]) {
     const selectedGame = gameMeta.findGame(gameId);
-    io.emit("update", selectedGame);
+    io.emit("update", { game: selectedGame, logMessages });
   }
 
   socket.on("create", createGame);
-  socket.on("load", (gameId) => retrieveGame(gameId));
+  socket.on("load", (gameId) => sendGame(gameId));
   socket.on("turn", (turn) => takeTurn(turn));
 });
 

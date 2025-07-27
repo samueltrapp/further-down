@@ -11,7 +11,7 @@ export enum GameActions {
 export type GameType = {
   characters: (PlayerType | EnemyType)[];
   gameId: string;
-  roundNumber: number;
+  round: number;
   turnNumber: number;
   turnOrder: string[];
 };

@@ -37,11 +37,11 @@ export const calcRawMitigation = (stats: StatsType, damageType: DamageType) => {
     case "elemental":
       return stats.resistance + stats.dampening;
     case "psychic":
-      return stats.resistance + stats.shielding;
+      return stats.resistance + stats.warding;
     default:
       return 0;
   }
 };
 
 export const limitToZero = (value: number) => Math.max(value, 0);
-export const truncate = (value: number) => Math.trunc(value);
+export const trunc = (value: number) => Math.trunc(value);

@@ -1,6 +1,6 @@
 import { ManeuverName, ManeuverType } from "../../types/maneuvers.ts";
 
-export const maneuvers: Record<ManeuverName, ManeuverType> = {
+export const mnvDetails: Record<ManeuverName, ManeuverType> = {
   slap: {
     speedCost: 12,
     maxTargets: 1,

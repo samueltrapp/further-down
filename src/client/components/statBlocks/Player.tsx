@@ -3,7 +3,7 @@ import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/maneuvers.ts";
 import { GameContext, GameDispatchContext } from "../../contexts/GameContext";
 import "./StatBlocks.css";
-import { maneuvers } from "../../../server/actions/mnvDetails.ts";
+import { mnvDetails } from "../../../server/actions/mnvDetails.ts";
 import { TechniqueName } from "../../../types/techniques.ts";
 import { PlayerType } from "../../../types/characters.ts";
 
@@ -21,7 +21,7 @@ export default function Player(props: PlayerType) {
         type: GameActions.SELECT_MANEUVER,
         payload: {
           allowManeuverSelect: true,
-          maxTargets: maneuvers[value].maxTargets,
+          maxTargets: mnvDetails[value].maxTargets,
           maneuver: value,
         },
       });

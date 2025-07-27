@@ -1,26 +1,32 @@
 export type TeamType = "player" | "enemy";
 
 export type StatsType = {
+  // Core
   maxHitPoints: number;
-  hitPoints: number; // Hp
-  speed: number; // Spd
-  physical: number; // Ph
-  blunt: number; // Blt
-  bladed: number; // Bld
-  armor: number; // Ar
-  padding: number; // Pdd
-  plating: number; // Plt
-  magical: number; // Mg
-  elemental: number; // Elm
-  psychic: number; // Psy
-  resistance: number; // Rs
-  dampening: number; // Dmp
-  shielding: number; // Shl
-  martial: number; // Mr
-  accuracy: number; // Acc
-  evasion: number; // Evn
-  mystic: number; // My
-  control: number; // Ctl
-  absorption: number; // Abs
-  luck: number; // Lck
+  hitPoints: number;
+  maxSpeed: number;
+  speed: number;
+  luck: number;
+
+  // Primary
+  physical: number;
+  armor: number;
+  magical: number;
+  resistance: number;
+  martial: number;
+  mystic: number;
+
+  // Specialty
+  bladed: number;
+  blunt: number;
+  elemental: number;
+  psychic: number;
+  padding: number;
+  plating: number;
+  dampening: number;
+  warding: number;
+  accuracy: number;
+  evasion: number;
+  control: number;
+  absorption: number;
 };

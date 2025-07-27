@@ -21,7 +21,10 @@ function App() {
       }
     }
 
-    function onUpdateGameState(updatedGame: GameType) {
+    function onUpdateGameState(update: {
+      game: GameType;
+      logMessages: string[];
+    }) {
       // if (updatedGame === undefined) {
       //   localStorage.removeItem("game_id");
       // }
@@ -32,18 +35,18 @@ function App() {
       if (dispatch) {
         dispatch({
           type: GameActions.SYNC,
-          payload: updatedGame,
+          payload: update.game,
         });
       }
     }
 
     socket.connect();
     socket.on("connect", onConnect);
-    socket.on("update", (game) => onUpdateGameState(game));
+    socket.on("update", (update) => onUpdateGameState(update));
 
     return () => {
       socket.off("connect", onConnect);
-      socket.off("update", (game) => onUpdateGameState(game));
+      socket.off("update", (update) => onUpdateGameState(update));
       socket.disconnect();
     };
   }, [dispatch]);
