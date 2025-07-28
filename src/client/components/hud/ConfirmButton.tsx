@@ -26,8 +26,17 @@ export default function ConfirmButton() {
           targetIds: game.selectedEnemyIds,
           issuerId: game.turnOrder[0],
         });
-        if (dispatch)
+        if (dispatch) {
           dispatch({ type: GameActions.SELECT_ENEMY, payload: null });
+          dispatch({
+            type: GameActions.SELECT_MANEUVER,
+            payload: {
+              allowManeuverSelect: false,
+              maxTargets: 0,
+              maneuver: undefined,
+            },
+          });
+        }
       }}
     >
       Confirm

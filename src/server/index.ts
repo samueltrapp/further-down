@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 import { initializeGame } from "./utils/initialData.ts";
 import { v4 as uuidv4 } from "uuid";
 import { GameMetaType, TurnType } from "../types/game.ts";
-import { resolveTurn } from "./actions/turn.ts";
+import { resolveTurn } from "./turn/turn.ts";
 
 const port = 8080;
 const app = express();

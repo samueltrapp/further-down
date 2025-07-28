@@ -36,14 +36,14 @@
   padding: 0.5rem;
 }
 
-.combat-log {
+.battle-log {
   background-color: var(--off-white);
   border: 1px solid var(--gray);
   color: var(--black);
   height: 400px;
 }
 
-.combat-log-header {
+.battle-log-header {
   background-color: var(--white);
   color: var(--black);
   margin: 0 0 1rem;

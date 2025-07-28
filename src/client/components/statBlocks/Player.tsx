@@ -3,7 +3,7 @@ import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/maneuvers.ts";
 import { GameContext, GameDispatchContext } from "../../contexts/GameContext";
 import "./StatBlocks.css";
-import { mnvDetails } from "../../../server/actions/mnvDetails.ts";
+import { mnvDetails } from "../../../server/turn/mnvDetails.ts";
 import { TechniqueName } from "../../../types/techniques.ts";
 import { PlayerType } from "../../../types/characters.ts";
 

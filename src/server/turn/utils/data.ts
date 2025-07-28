@@ -1,6 +1,6 @@
 import { CharType } from "../../../types/characters.ts";
 import { TurnType } from "../../../types/game.ts";
-import { findCharacter } from "./combatUtils.ts";
+import { findCharacter } from "./battle.ts";
 
 export function getCharacterDetails(characters: CharType[], turn: TurnType) {
   const actor = findCharacter(characters, turn.issuerId);

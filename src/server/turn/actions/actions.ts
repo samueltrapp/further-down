@@ -1,5 +1,5 @@
 import { CharType } from "../../../types/characters.ts";
-import { getCharacterDetails } from "../utils/dataUtils.ts";
+import { getCharacterDetails } from "../utils/data.ts";
 import { TurnType } from "../../../types/game.ts";
 import { getMnvFns } from "../mnvFnMap.ts";
 
@@ -15,7 +15,7 @@ export function resolveAction(
 
   // Process updates to and logs from the issuer
   const [actorValue, actorIndex] = actor;
-  const selfResults = mnvFns?.self(actorValue, maneuver);
+  const selfResults = mnvFns?.self({ self: actorValue, maneuver });
   const updatedSelf = {
     value: selfResults?.character || actorValue,
     index: actorIndex,
@@ -24,7 +24,11 @@ export function resolveAction(
   // Process updates and
   const updatedRecipients = recipients.map((recipient) => {
     const [recipientValue, recipientIndex] = recipient;
-    const recipientResult = mnvFns?.other(recipientValue, actorValue, maneuver);
+    const recipientResult = mnvFns?.other({
+      recipient: recipientValue,
+      actor: actorValue,
+      maneuver,
+    });
 
     if (
       recipientResult?.logMessages &&

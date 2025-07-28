@@ -6,7 +6,7 @@ import "./GameBoard.css";
 import { GameActions } from "../../types/game.ts";
 import TurnTracker from "../components/hud/TurnTracker.tsx";
 import ConfirmButton from "../components/hud/ConfirmButton.tsx";
-import CombatLog from "../components/hud/CombatLog.tsx";
+import BattleLog from "../components/hud/BattleLog.tsx";
 import Advisor from "../components/hud/Advisor.tsx";
 import { EnemyType, PlayerType } from "../../types/characters.ts";
 
@@ -48,7 +48,7 @@ function GameBoard() {
 
         <div className="hub-column">
           <Advisor />
-          <CombatLog />
+          <BattleLog />
           <ConfirmButton />
         </div>
         <div className="enemy-column">

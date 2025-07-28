@@ -33,6 +33,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     selectedEnemyIds: [],
     selectedManeuver: undefined,
     selectedTechnique: "none",
+    round: 1,
     turnNumber: 0,
     turnOrder: [],
   });
