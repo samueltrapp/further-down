@@ -185,10 +185,25 @@ function buildStats(
       statsHistory: stats,
       lastTurn: -1 * tieBreaker,
       knownManeuvers: ["slap", "quicksilver", "fireburst", "ache"],
-      knownTechniques: ["reckless", "patient", "livewire"],
+      ownedWeapons: [
+        {
+          name: "sword",
+          power: 6,
+          spread: 2,
+          level: 1,
+          rarity: 0,
+        },
+        {
+          power: 5,
+          spread: 4,
+          name: "bow",
+          level: 1,
+          rarity: 0,
+        },
+      ],
       playerId: "1234",
-      buffs: [],
-      debuffs: [],
+      favors: [],
+      burdens: [],
     });
   });
   return data;

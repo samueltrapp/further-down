@@ -12,7 +12,7 @@ export default function ConfirmButton() {
   const dispatch = useContext(GameDispatchContext);
 
   return game &&
-    game.allowSelection &&
+    game.enableConfirmation &&
     game.selectedManeuver &&
     game.gameId &&
     game.selectedEnemyIds &&
@@ -31,7 +31,7 @@ export default function ConfirmButton() {
           dispatch({
             type: GameActions.SELECT_MANEUVER,
             payload: {
-              allowManeuverSelect: false,
+              maneuverSelected: false,
               maxTargets: 0,
               maneuver: undefined,
             },

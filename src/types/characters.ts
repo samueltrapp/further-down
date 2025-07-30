@@ -1,6 +1,6 @@
 import { StatsType } from "./stats.ts";
 import { ManeuverName } from "./maneuvers.ts";
-import { TechniqueName } from "./techniques.ts";
+import { WeaponType } from "./weapons.ts";
 
 export type PlayerType = {
   id: string;
@@ -11,9 +11,9 @@ export type PlayerType = {
   statsHistory: StatsType;
   lastTurn: number;
   knownManeuvers: ManeuverName[];
-  knownTechniques: TechniqueName[];
-  buffs: string[];
-  debuffs: string[];
+  ownedWeapons: WeaponType[];
+  favors: string[];
+  burdens: string[];
 };
 
 export type EnemyType = {
@@ -23,9 +23,8 @@ export type EnemyType = {
   stats: StatsType;
   lastTurn: number;
   knownManeuvers: ManeuverName[];
-  knownTechniques: TechniqueName[];
-  buffs: string[];
-  debuffs: string[];
+  favors: string[];
+  burdens: string[];
 };
 
 export type CharType = PlayerType | EnemyType;

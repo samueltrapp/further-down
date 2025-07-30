@@ -25,7 +25,7 @@ function GameBoard() {
   );
 
   const handleSelect = (enemyId: string) => {
-    if (dispatch && game.allowSelection) {
+    if (dispatch && game.enableConfirmation) {
       dispatch({
         type: GameActions.SELECT_ENEMY,
         payload: enemyId,

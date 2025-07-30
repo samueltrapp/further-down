@@ -4,11 +4,11 @@ import { ManeuverName } from "../../../types/maneuvers.ts";
 import { GameContext, GameDispatchContext } from "../../contexts/GameContext";
 import "./StatBlocks.css";
 import { mnvDetails } from "../../../server/turn/mnvDetails.ts";
-import { TechniqueName } from "../../../types/techniques.ts";
 import { PlayerType } from "../../../types/characters.ts";
+import { toCaps } from "../../utils/formatting.ts";
 
 export default function Player(props: PlayerType) {
-  const { id, name, stats, knownManeuvers, knownTechniques } = props;
+  const { id, name, stats, knownManeuvers, ownedWeapons } = props;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const activeTurn = game?.turnOrder[0] === id;
@@ -20,21 +20,10 @@ export default function Player(props: PlayerType) {
       dispatch({
         type: GameActions.SELECT_MANEUVER,
         payload: {
-          allowManeuverSelect: true,
+          maneuverSelected: true,
           maxTargets: mnvDetails[value].maxTargets,
           maneuver: value,
         },
-      });
-    }
-  };
-
-  const handleTechnique = (event: MouseEvent<HTMLButtonElement>) => {
-    const target = event.target as HTMLButtonElement;
-    const value = target.value as TechniqueName;
-    if (dispatch && target.value) {
-      dispatch({
-        type: GameActions.SELECT_TECHNIQUE,
-        payload: { allowTechniqueSelect: true, technique: value },
       });
     }
   };
@@ -49,26 +38,13 @@ export default function Player(props: PlayerType) {
 
       <div className="stat-body">
         <div className="action-column">
-          <button
-            className={`technique-button ${activeTurn && game?.selectedTechnique === "none" ? "selected-technique" : ""}`}
-            disabled={!activeTurn}
-            key="none"
-            onClick={handleTechnique}
-            value="none"
-          >
-            {`+ NONE`}
-          </button>
-          {knownTechniques.map((knownTechnique) => (
-            <button
-              className={`technique-button ${activeTurn && game?.selectedTechnique === knownTechnique ? "selected-technique" : ""}`}
-              disabled={!activeTurn}
-              key={knownTechnique}
-              onClick={handleTechnique}
-              value={knownTechnique}
-            >
-              {`+ ${knownTechnique.toUpperCase()}`}
-            </button>
-          ))}
+          <select>
+            {ownedWeapons.map((ownedWeapon) => (
+              <option value={ownedWeapon.name}>
+                {toCaps(ownedWeapon.name)}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="action-column">
           {knownManeuvers.map((knownManeuver) => (

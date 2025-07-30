@@ -2,23 +2,23 @@ import { ReactNode, useReducer } from "react";
 import { GameActions, GameType } from "../../types/game.ts";
 import { GameContext, GameDispatchContext, GameStateType } from "./GameContext";
 import { ManeuverName } from "../../types/maneuvers.ts";
-import { TechniqueName } from "../../types/techniques.ts";
 import { selectEnemies } from "./contextActions.ts";
+import { WeaponName } from "../../types/weapons.ts";
 
 export type ActionTypes =
   | {
       type: GameActions.SELECT_MANEUVER;
       payload: {
-        allowManeuverSelect: boolean;
+        maneuverSelected: boolean;
         maxTargets: number;
         maneuver: ManeuverName | undefined;
       };
     }
   | {
-      type: GameActions.SELECT_TECHNIQUE;
+      type: GameActions.SELECT_WEAPON;
       payload: {
-        allowTechniqueSelect: boolean;
-        technique: TechniqueName | "none";
+        allowWeapon: boolean;
+        weapon: WeaponName | undefined;
       };
     }
   | { type: GameActions.SELECT_ENEMY; payload: string | null }
@@ -26,13 +26,13 @@ export type ActionTypes =
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(gameReducer, {
-    allowSelection: false,
+    enableConfirmation: false,
     characters: [],
     gameId: "",
     maxEnemySelections: 0,
     selectedEnemyIds: [],
     selectedManeuver: undefined,
-    selectedTechnique: "none",
+    selectedWeapon: undefined,
     round: 1,
     turnNumber: 0,
     turnOrder: [],
@@ -52,17 +52,16 @@ function gameReducer(game: GameStateType, action: ActionTypes) {
     case GameActions.SELECT_MANEUVER: {
       return {
         ...game,
-        allowSelection: action.payload.allowManeuverSelect,
+        enableConfirmation: action.payload.maneuverSelected,
         maxEnemySelections: action.payload.maxTargets,
         selectedManeuver: action.payload.maneuver,
       };
     }
 
-    case GameActions.SELECT_TECHNIQUE: {
+    case GameActions.SELECT_WEAPON: {
       return {
         ...game,
-        allowSelection: action.payload.allowTechniqueSelect,
-        selectedTechnique: action.payload.technique,
+        selectedTechnique: action.payload.weapon,
       };
     }
 

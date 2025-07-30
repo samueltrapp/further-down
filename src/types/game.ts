@@ -3,7 +3,7 @@ import { EnemyType, PlayerType } from "./characters.ts";
 
 export enum GameActions {
   SELECT_MANEUVER = "SELECT_MANEUVER",
-  SELECT_TECHNIQUE = "SELECT_TECHNIQUE",
+  SELECT_WEAPON = "SELECT_TECHNIQUE",
   SELECT_ENEMY = "SELECT_ENEMY",
   SYNC = "SYNC",
 }

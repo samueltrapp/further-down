@@ -2,14 +2,14 @@ import { ActionDispatch, createContext } from "react";
 import { GameType } from "../../types/game.ts";
 import { ActionTypes } from "./GameProvider";
 import { ManeuverName } from "../../types/maneuvers.ts";
-import { TechniqueName } from "../../types/techniques.ts";
+import { WeaponType } from "../../types/weapons.ts";
 
 type UnitSelectionType = {
-  allowSelection: boolean;
+  enableConfirmation: boolean;
   maxEnemySelections: number;
   selectedEnemyIds: string[];
   selectedManeuver: ManeuverName | undefined;
-  selectedTechnique: TechniqueName | "none";
+  selectedWeapon: WeaponType | undefined;
 };
 
 export type GameStateType = GameType & UnitSelectionType;
