@@ -1,15 +1,15 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext";
 import "./StatBlocks.css";
-import { turn } from "../../actions/turn.ts";
-import { EnemyType, PlayerType } from "../../../types/characters.ts";
+import "./Enemy.css";
+import { EnemyType } from "../../../types/characters.ts";
 
-const lowestHpPlayer = (players: PlayerType[]) => {
-  const lowestHpChar = players.reduce((prev, next) =>
-    next.stats.hitPoints < prev.stats.hitPoints ? next : prev,
-  );
-  return [lowestHpChar.id];
-};
+// const lowestHpPlayer = (players: PlayerType[]) => {
+//   const lowestHpChar = players.reduce((prev, next) =>
+//     next.stats.hitPoints < prev.stats.hitPoints ? next : prev,
+//   );
+//   return [lowestHpChar.id];
+// };
 
 function Enemy(props: EnemyType) {
   const { id, name, stats } = props;
@@ -18,20 +18,21 @@ function Enemy(props: EnemyType) {
   const activeTurn = game?.turnOrder[0] === id;
   const isSelected = game?.selectedEnemyIds.includes(id);
 
-  useEffect(() => {
-    if (activeTurn) {
-      setTimeout(() => {
-        turn({
-          gameId: game?.gameId,
-          maneuver: "slap",
-          targetIds: lowestHpPlayer(
-            game.characters.filter((character) => character.team === "player"),
-          ),
-          issuerId: id,
-        });
-      }, 1500);
-    }
-  }, [activeTurn, game?.characters, game?.gameId, id]);
+  // useEffect(() => {
+  //   if (activeTurn) {
+  //     setTimeout(() => {
+  //       enemyTurn({
+  //         gameId: game?.gameId,
+  //         tactic: "punch",
+  //         team: "enemy",
+  //         targetIds: lowestHpPlayer(
+  //           game.characters.filter((character) => character.team === "player"),
+  //         ),
+  //         issuerId: id,
+  //       });
+  //     }, 1500);
+  //   }
+  // }, [activeTurn, game?.characters, game?.gameId, id]);
 
   return (
     <div

@@ -1,6 +1,8 @@
 import { DamageType } from "../../../types/maneuvers.ts";
 import { StatsType } from "../../../types/stats.ts";
 import { CharType } from "../../../types/characters.ts";
+import { WeaponType } from "../../../types/weapons.ts";
+import { createSpread } from "../../utils/helpers.ts";
 
 export const findCharacter = (
   characters: CharType[],
@@ -13,16 +15,30 @@ export const findCharacter = (
   return [attacker, attackerId];
 };
 
-export const calcRawDamage = (stats: StatsType, damageType: DamageType) => {
+export const calcRawDamage = (
+  weapon: WeaponType,
+  stats: StatsType,
+  damageType: DamageType,
+) => {
+  const baseDamage = weapon.power + createSpread(weapon.spread);
+  const {
+    physical: phAff,
+    magical: mgAff,
+    bladed: bldAff,
+    blunt: bltAff,
+    elemental: eleAff,
+    psychic: psyAff,
+  } = weapon.affinities;
+
   switch (damageType) {
-    case "blunt":
-      return stats.physical + stats.blunt;
     case "bladed":
-      return stats.physical + stats.bladed;
+      return baseDamage + phAff * stats.physical + bltAff * stats.bladed;
+    case "blunt":
+      return baseDamage + phAff * stats.physical + bldAff * stats.blunt;
     case "elemental":
-      return stats.magical + stats.elemental;
+      return baseDamage + mgAff * stats.magical + eleAff * stats.elemental;
     case "psychic":
-      return stats.magical + stats.psychic;
+      return baseDamage + mgAff * stats.magical + psyAff * stats.psychic;
     default:
       return 0;
   }

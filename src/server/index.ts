@@ -4,7 +4,7 @@ import express from "express";
 import { Server } from "socket.io";
 import { initializeGame } from "./utils/initialData.ts";
 import { v4 as uuidv4 } from "uuid";
-import { GameMetaType, TurnType } from "../types/game.ts";
+import { GameMetaType, PlayerTurnType } from "../types/game.ts";
 import { resolveTurn } from "./turn/turn.ts";
 
 const port = 8080;
@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
     sendGame(newGameId);
   }
 
-  function takeTurn(turn: TurnType) {
+  function takeTurn(turn: PlayerTurnType) {
     const gameId = turn.gameId;
     const gameIndex = gameMeta.findGameIndex(gameId);
     const game = gameIndex && gameMeta.games[gameIndex];

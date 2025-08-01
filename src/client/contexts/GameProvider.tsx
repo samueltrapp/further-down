@@ -17,7 +17,6 @@ export type ActionTypes =
   | {
       type: GameActions.SELECT_WEAPON;
       payload: {
-        allowWeapon: boolean;
         weapon: WeaponName | undefined;
       };
     }
@@ -61,7 +60,7 @@ function gameReducer(game: GameStateType, action: ActionTypes) {
     case GameActions.SELECT_WEAPON: {
       return {
         ...game,
-        selectedTechnique: action.payload.weapon,
+        selectedWeapon: action.payload.weapon,
       };
     }
 

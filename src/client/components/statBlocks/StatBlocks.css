@@ -8,18 +8,10 @@
   }
 }
 
-.enemy-box {
-  background-color: var(--maroon);
-}
-
-.player-box {
-  background-color: var(--dark-green);
-}
-
 .id-bar {
   border-bottom: 1px solid var(--off-white);
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   font-size: 2rem;
   justify-content: space-between;
   margin-bottom: 16px;
@@ -51,104 +43,4 @@
 
 .speed-display {
   color: var(--white);
-}
-
-.maneuver-button {
-  background-color: var(--black);
-  border-bottom: 1px solid var(--gray);
-  border-left: none;
-  border-right: none;
-  border-top: none;
-  color: var(--sunset);
-  margin: 0 0 0 4px;
-  padding: 4px;
-  width: 100%;
-
-  &[disabled] {
-    background-color: var(--gray);
-    pointer-events: none;
-  }
-}
-
-.maneuver-button:hover {
-  background-color: var(--sunrise);
-  border-bottom: 1px solid transparent;
-  color: var(--white);
-  transition: background-color 0.3s ease-in-out;
-}
-
-.technique-button {
-  background-color: var(--off-white);
-  border-bottom: 1px solid var(--deep-maroon);
-  border-left: none;
-  border-right: none;
-  border-top: none;
-  color: var(--black);
-  margin: 0 4px 0 0;
-  padding: 4px;
-  transition: background-color 0.3s ease-in-out;
-  width: 100%;
-
-  &[disabled] {
-    background-color: var(--gray);
-    pointer-events: none;
-  }
-}
-
-.selected-maneuver {
-  background-color: var(--sunrise);
-  border-bottom: 1px solid transparent;
-  color: var(--white);
-  font-style: italic;
-  outline: 1px dashed var(--white);
-  transition: background-color 0.3s ease-out;
-}
-
-.selected-technique {
-  background-color: var(--sunrise);
-  transition: background-color 0.3s ease-in-out;
-}
-
-.active-char {
-  background-color: var(--blue);
-  border-color: var(--plum);
-}
-
-.active-enemy {
-  background-color: var(--red);
-}
-
-.selected-enemy {
-  background-color: var(--deep-maroon);
-  border-color: var(--sunrise);
-}
-
-.meter > span {
-  display: block;
-  height: 100%;
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  background-color: rgb(43, 194, 83);
-  background-image: linear-gradient(
-    center bottom,
-    rgb(43, 194, 83) 37%,
-    rgb(84, 240, 84) 69%
-  );
-  box-shadow:
-    inset 0 2px 9px rgba(255, 255, 255, 0.3),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.4);
-  position: relative;
-  overflow: hidden;
-}
-
-.orange > span {
-  background-color: #f1a165;
-  background-image: linear-gradient(to bottom, #f1a165, #f36d0a);
-}
-
-.red > span {
-  background-color: #f0a3a3;
-  background-image: linear-gradient(to bottom, #f0a3a3, #f42323);
 }

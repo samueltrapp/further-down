@@ -1,0 +1,41 @@
+.player-box {
+  background-color: var(--dark-green);
+}
+
+.maneuver-button {
+  background-color: var(--black);
+  border-bottom: 1px solid var(--gray);
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  color: var(--sunset);
+  margin: 0 0 0 4px;
+  padding: 4px;
+  width: 100%;
+
+  &[disabled] {
+    background-color: var(--gray);
+    pointer-events: none;
+  }
+}
+
+.maneuver-button:hover {
+  background-color: var(--sunrise);
+  border-bottom: 1px solid transparent;
+  color: var(--white);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.selected-maneuver {
+  background-color: var(--sunrise);
+  border-bottom: 1px solid transparent;
+  color: var(--white);
+  font-style: italic;
+  outline: 1px dashed var(--white);
+  transition: background-color 0.3s ease-out;
+}
+
+.active-char {
+  background-color: var(--blue);
+  border-color: var(--plum);
+}

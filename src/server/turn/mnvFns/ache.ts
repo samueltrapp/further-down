@@ -9,13 +9,20 @@ import {
   OtherManeuverFnArgsType,
   SelfManeuverFnArgsType,
 } from "../../../types/maneuvers.ts";
+import { WeaponType } from "../../../types/weapons.ts";
 
 export function acheOther(fnArgs: OtherManeuverFnArgsType) {
-  const { actor, recipient, maneuver } = fnArgs;
+  const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;
   const mnvDetail = mnvDetails[maneuver];
 
+  const weapon = actor.ownedWeapons.find(
+    (ownedWeapon) => ownedWeapon.name === weaponName,
+  ) as WeaponType;
+  console.log(weapon, weapon.name);
+
   const raw = mnvDetail.actions.map((action) => ({
-    damage: calcRawDamage(actor.stats, action.damageType) * action.strength,
+    damage:
+      calcRawDamage(weapon, actor.stats, action.damageType) * action.strength,
     mitigation: calcRawMitigation(actor.stats, action.damageType),
   }));
   const mitigatedDamage = limitToZero(

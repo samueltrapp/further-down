@@ -1,21 +1,21 @@
 import { CharType } from "../../../types/characters.ts";
 import { getCharacterDetails } from "../utils/data.ts";
-import { TurnType } from "../../../types/game.ts";
+import { PlayerTurnType } from "../../../types/game.ts";
 import { getMnvFns } from "../mnvFnMap.ts";
 
 export function resolveAction(
   characters: CharType[],
   logMessages: string[],
-  turn: TurnType,
+  turn: PlayerTurnType,
 ) {
-  const { maneuver } = turn;
+  const { maneuver, weapon } = turn;
   const mnvFns = getMnvFns(maneuver);
   const { actor, recipients } = getCharacterDetails(characters, turn);
   const characterResults = [...characters];
 
   // Process updates to and logs from the issuer
   const [actorValue, actorIndex] = actor;
-  const selfResults = mnvFns?.self({ self: actorValue, maneuver });
+  const selfResults = mnvFns?.self({ self: actorValue, maneuver, weapon });
   const updatedSelf = {
     value: selfResults?.character || actorValue,
     index: actorIndex,
@@ -28,6 +28,7 @@ export function resolveAction(
       recipient: recipientValue,
       actor: actorValue,
       maneuver,
+      weapon,
     });
 
     if (

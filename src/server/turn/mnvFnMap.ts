@@ -4,18 +4,18 @@ import {
   SelfManeuverFnArgsType,
 } from "../../types/maneuvers.ts";
 import { slapOther, slapSelf } from "./mnvFns/slap.ts";
-import { CharType } from "../../types/characters.ts";
+import { EnemyType, PlayerType } from "../../types/characters.ts";
 import { quicksilverOther, quicksilverSelf } from "./mnvFns/quicksilver.ts";
 import { acheOther, acheSelf } from "./mnvFns/ache.ts";
 import { fireburstOther, fireburstSelf } from "./mnvFns/fireburst.ts";
 
 type OtherManeuverFnType = (fnArgs: OtherManeuverFnArgsType) => {
-  character: CharType;
+  character: EnemyType;
   logMessages: string[];
 };
 
 type SelfManeuverFnType = (fnArgs: SelfManeuverFnArgsType) => {
-  character: CharType;
+  character: PlayerType;
   logMessages?: string[];
 };
 

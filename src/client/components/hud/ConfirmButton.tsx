@@ -3,9 +3,10 @@ import {
   GameContext,
   GameDispatchContext,
 } from "../../contexts/GameContext.tsx";
-import { turn } from "../../actions/turn.ts";
+import { playerTurn } from "../../actions/turn.ts";
 import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/maneuvers.ts";
+import { WeaponName } from "../../../types/weapons.ts";
 
 export default function ConfirmButton() {
   const game = useContext(GameContext);
@@ -15,13 +16,16 @@ export default function ConfirmButton() {
     game.enableConfirmation &&
     game.selectedManeuver &&
     game.gameId &&
+    game.selectedWeapon &&
     game.selectedEnemyIds &&
     game.turnOrder[0] ? (
     <button
       className="confirm-button"
       onClick={() => {
-        turn({
+        playerTurn({
           maneuver: game.selectedManeuver as ManeuverName,
+          weapon: game?.selectedWeapon as WeaponName,
+          team: "player",
           gameId: game.gameId,
           targetIds: game.selectedEnemyIds,
           issuerId: game.turnOrder[0],

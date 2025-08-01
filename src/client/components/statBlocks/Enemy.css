@@ -1,0 +1,12 @@
+.enemy-box {
+  background-color: var(--maroon);
+}
+
+.active-enemy {
+  background-color: var(--red);
+}
+
+.selected-enemy {
+  background-color: var(--deep-maroon);
+  border-color: var(--sunrise);
+}

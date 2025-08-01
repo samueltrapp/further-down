@@ -9,13 +9,19 @@ import {
   OtherManeuverFnArgsType,
   SelfManeuverFnArgsType,
 } from "../../../types/maneuvers.ts";
+import { WeaponType } from "../../../types/weapons.ts";
 
 export function slapOther(fnArgs: OtherManeuverFnArgsType) {
-  const { actor, recipient, maneuver } = fnArgs;
+  const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;
   const mnvDetail = mnvDetails[maneuver];
 
+  const weapon = actor.ownedWeapons.find(
+    (ownedWeapon) => ownedWeapon.name === weaponName,
+  ) as WeaponType;
+
   const raw = mnvDetail.actions.map((action) => ({
-    damage: calcRawDamage(actor.stats, action.damageType) * action.strength,
+    damage:
+      calcRawDamage(weapon, actor.stats, action.damageType) * action.strength,
     mitigation: calcRawMitigation(actor.stats, action.damageType),
   }));
   const mitigatedDamage = limitToZero(
@@ -32,6 +38,8 @@ export function slapOther(fnArgs: OtherManeuverFnArgsType) {
     `${actor.name.toUpperCase()} hit ${recipient.name.toUpperCase()} with ${maneuver.toUpperCase()} for ${mitigatedDamage} damage!}
   (${recipient.stats.hitPoints} -> ${updatedHp})`,
   ];
+
+  console.log(updatedHp);
 
   return {
     character: {

@@ -1,11 +1,11 @@
-import { GameType, TurnType } from "../../types/game.ts";
+import { GameType, PlayerTurnType } from "../../types/game.ts";
 import { resolvePreActions } from "./actions/preActions.ts";
 import { resolveAction } from "./actions/actions.ts";
 import { resolvePostActions } from "./actions/postActions.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
 
 export function resolveTurn(
-  turn: TurnType,
+  turn: PlayerTurnType,
   game: GameType,
 ): { game: GameType; logMessages: string[] } {
   let { characters, logMessages } = resolvePreActions(game.characters);
