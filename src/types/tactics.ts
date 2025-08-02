@@ -1,1 +1,1 @@
-export type TacticName = "punch";
+export type TacticName = "sporeBurst" | "gentleSlap";

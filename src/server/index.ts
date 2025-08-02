@@ -4,8 +4,8 @@ import express from "express";
 import { Server } from "socket.io";
 import { initializeGame } from "./utils/initialData.ts";
 import { v4 as uuidv4 } from "uuid";
-import { GameMetaType, PlayerTurnType } from "../types/game.ts";
-import { resolveTurn } from "./turn/turn.ts";
+import { EnemyTurnType, GameMetaType, PlayerTurnType } from "../types/game.ts";
+import { resolveEnemyTurn, resolvePlayerTurn } from "./turn/turn.ts";
 
 const port = 8080;
 const app = express();
@@ -36,12 +36,23 @@ io.on("connection", (socket) => {
     sendGame(newGameId);
   }
 
-  function takeTurn(turn: PlayerTurnType) {
+  function playerTurn(turn: PlayerTurnType) {
     const gameId = turn.gameId;
     const gameIndex = gameMeta.findGameIndex(gameId);
     const game = gameIndex && gameMeta.games[gameIndex];
     if (gameMeta && gameIndex && game) {
-      const { game: updatedGame, logMessages } = resolveTurn(turn, game);
+      const { game: updatedGame, logMessages } = resolvePlayerTurn(turn, game);
+      gameMeta.games[gameIndex] = updatedGame;
+      sendGame(gameId, logMessages);
+    }
+  }
+
+  function enemyTurn(turn: EnemyTurnType) {
+    const gameId = turn.gameId;
+    const gameIndex = gameMeta.findGameIndex(gameId);
+    const game = gameIndex && gameMeta.games[gameIndex];
+    if (gameMeta && gameIndex && game) {
+      const { game: updatedGame, logMessages } = resolveEnemyTurn(turn, game);
       gameMeta.games[gameIndex] = updatedGame;
       sendGame(gameId, logMessages);
     }
@@ -54,7 +65,8 @@ io.on("connection", (socket) => {
 
   socket.on("create", createGame);
   socket.on("load", (gameId) => sendGame(gameId));
-  socket.on("turn", (turn) => takeTurn(turn));
+  socket.on("playerTurn", (turn) => playerTurn(turn));
+  socket.on("enemyTurn", (turn) => enemyTurn(turn));
 });
 
 server.on("error", (e) => {

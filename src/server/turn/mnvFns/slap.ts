@@ -39,8 +39,6 @@ export function slapOther(fnArgs: OtherManeuverFnArgsType) {
   (${recipient.stats.hitPoints} -> ${updatedHp})`,
   ];
 
-  console.log(updatedHp);
-
   return {
     character: {
       ...recipient,

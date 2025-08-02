@@ -1,8 +1,8 @@
-import { DamageType } from "../../../types/maneuvers.ts";
 import { StatsType } from "../../../types/stats.ts";
 import { CharType } from "../../../types/characters.ts";
 import { WeaponType } from "../../../types/weapons.ts";
 import { createSpread } from "../../utils/helpers.ts";
+import { DamageType } from "../../../types/turns.ts";
 
 export const findCharacter = (
   characters: CharType[],

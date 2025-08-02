@@ -3,7 +3,7 @@ import {
   GameContext,
   GameDispatchContext,
 } from "../../contexts/GameContext.tsx";
-import { playerTurn } from "../../actions/turn.ts";
+import { playerTurn } from "../../utils/turn.ts";
 import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/maneuvers.ts";
 import { WeaponName } from "../../../types/weapons.ts";

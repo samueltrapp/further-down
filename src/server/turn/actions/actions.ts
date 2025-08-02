@@ -1,9 +1,9 @@
 import { CharType } from "../../../types/characters.ts";
 import { getCharacterDetails } from "../utils/data.ts";
-import { PlayerTurnType } from "../../../types/game.ts";
+import { EnemyTurnType, PlayerTurnType } from "../../../types/game.ts";
 import { getMnvFns } from "../mnvFnMap.ts";
 
-export function resolveAction(
+export function resolveManeuver(
   characters: CharType[],
   logMessages: string[],
   turn: PlayerTurnType,
@@ -58,4 +58,17 @@ export function resolveAction(
   }
 
   return { characters: characterResults, logMessages };
+}
+
+export function resolveTactic(
+  characters: CharType[],
+  logMessages: string[],
+  turn: EnemyTurnType,
+) {
+  console.log(turn);
+
+  return {
+    characters,
+    logMessages,
+  };
 }
