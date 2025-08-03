@@ -1,8 +1,9 @@
-import { useContext } from "react";
-import { GameContext } from "../../contexts/GameContext";
+import { useContext, useEffect } from "react";
+import { BattleContext } from "../../contexts/BattleContext.tsx";
 import "./StatBlocks.css";
 import "./Enemy.css";
 import { EnemyType } from "../../../types/characters.ts";
+import { enemyTurn } from "../../utils/turn.ts";
 
 // const lowestHpPlayer = (players: PlayerType[]) => {
 //   const lowestHpChar = players.reduce((prev, next) =>
@@ -14,25 +15,21 @@ import { EnemyType } from "../../../types/characters.ts";
 function Enemy(props: EnemyType) {
   const { id, name, stats } = props;
 
-  const game = useContext(GameContext);
+  const game = useContext(BattleContext);
   const activeTurn = game?.turnOrder[0] === id;
   const isSelected = game?.selectedEnemyIds.includes(id);
 
-  // useEffect(() => {
-  //   if (activeTurn) {
-  //     setTimeout(() => {
-  //       enemyTurn({
-  //         gameId: game?.gameId,
-  //         tactic: "punch",
-  //         team: "enemy",
-  //         targetIds: lowestHpPlayer(
-  //           game.characters.filter((character) => character.team === "player"),
-  //         ),
-  //         issuerId: id,
-  //       });
-  //     }, 1500);
-  //   }
-  // }, [activeTurn, game?.characters, game?.gameId, id]);
+  useEffect(() => {
+    if (activeTurn) {
+      setTimeout(() => {
+        enemyTurn({
+          gameId: game?.gameId,
+          team: "enemy",
+          issuerId: id,
+        });
+      }, 1500);
+    }
+  }, [activeTurn, game?.characters, game?.gameId, id]);
 
   return (
     <div

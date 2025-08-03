@@ -1,5 +1,8 @@
 import { useContext } from "react";
-import { GameContext, GameDispatchContext } from "../contexts/GameContext";
+import {
+  BattleContext,
+  BattleDispatchContext,
+} from "../contexts/BattleContext.tsx";
 import Character from "../components/statBlocks/Player";
 import Enemy from "../components/statBlocks/Enemy";
 import "./GameBoard.css";
@@ -11,8 +14,8 @@ import Advisor from "../components/hud/Advisor.tsx";
 import { EnemyType, PlayerType } from "../../types/characters.ts";
 
 function GameBoard() {
-  const game = useContext(GameContext);
-  const dispatch = useContext(GameDispatchContext);
+  const game = useContext(BattleContext);
+  const dispatch = useContext(BattleDispatchContext);
 
   if (!game || !game.characters) return;
   const [players, enemies] = game.characters.reduce(

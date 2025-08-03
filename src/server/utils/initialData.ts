@@ -1,8 +1,8 @@
 import { GameType } from "../../types/game.ts";
-import { v4 as uuidv4 } from "uuid";
 import { resolveTurnOrder } from "./turnOrder.ts";
 import { StatsType, TeamType } from "../../types/stats.ts";
 import { CharType } from "../../types/characters.ts";
+import { randomId } from "./data.ts";
 
 const samplePlayers: StatsType[] = [
   {
@@ -10,11 +10,10 @@ const samplePlayers: StatsType[] = [
     hitPoints: 100,
     maxSpeed: 96,
     speed: 96,
-    luck: 15,
     physical: 15,
     blunt: 0,
     bladed: 0,
-    armor: 2,
+    defense: 2,
     padding: 0,
     plating: 0,
     magical: 10,
@@ -35,11 +34,10 @@ const samplePlayers: StatsType[] = [
     hitPoints: 100,
     maxSpeed: 97,
     speed: 97,
-    luck: 15,
     physical: 15,
     blunt: 0,
     bladed: 0,
-    armor: 2,
+    defense: 2,
     padding: 0,
     plating: 0,
     magical: 10,
@@ -60,11 +58,10 @@ const samplePlayers: StatsType[] = [
     hitPoints: 100,
     maxSpeed: 98,
     speed: 98,
-    luck: 15,
     physical: 15,
     blunt: 0,
     bladed: 0,
-    armor: 2,
+    defense: 2,
     padding: 0,
     plating: 0,
     magical: 10,
@@ -88,11 +85,10 @@ const sampleEnemies: StatsType[] = [
     hitPoints: 80,
     maxSpeed: 95,
     speed: 95,
-    luck: 0,
     physical: 6,
     blunt: 0,
     bladed: 0,
-    armor: 10,
+    defense: 10,
     padding: 0,
     plating: 0,
     magical: 10,
@@ -113,11 +109,10 @@ const sampleEnemies: StatsType[] = [
     hitPoints: 80,
     maxSpeed: 94,
     speed: 94,
-    luck: 0,
     physical: 15,
     blunt: 0,
     bladed: 0,
-    armor: 5,
+    defense: 5,
     padding: 0,
     plating: 0,
     magical: 10,
@@ -138,11 +133,10 @@ const sampleEnemies: StatsType[] = [
     hitPoints: 80,
     maxSpeed: 93,
     speed: 93,
-    luck: 0,
     physical: 30,
     blunt: 0,
     bladed: 0,
-    armor: 0,
+    defense: 0,
     padding: 0,
     plating: 0,
     magical: 10,
@@ -176,7 +170,7 @@ function buildStats(
 ) {
   const data = [] as CharType[];
   statsArray.forEach((stats, index) => {
-    const id = uuidv4();
+    const id = randomId(8);
     data.push({
       id,
       team,
@@ -245,6 +239,8 @@ export function initializeGame(gameId: string): GameType {
   return {
     characters,
     gameId,
+    hasStarted: true,
+    playerCount: 1,
     round: 1,
     turnNumber: 1,
     turnOrder,

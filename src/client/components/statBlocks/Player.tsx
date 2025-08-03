@@ -1,7 +1,10 @@
 import { ChangeEvent, MouseEvent, useContext } from "react";
 import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/maneuvers.ts";
-import { GameContext, GameDispatchContext } from "../../contexts/GameContext";
+import {
+  BattleContext,
+  BattleDispatchContext,
+} from "../../contexts/BattleContext.tsx";
 import "./StatBlocks.css";
 import "./Player.css";
 import { mnvDetails } from "../../../server/turn/mnvDetails.ts";
@@ -25,8 +28,8 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
 
 export default function Player(props: PlayerType) {
   const { id, name, stats, knownManeuvers, ownedWeapons } = props;
-  const game = useContext(GameContext);
-  const dispatch = useContext(GameDispatchContext);
+  const game = useContext(BattleContext);
+  const dispatch = useContext(BattleDispatchContext);
   const activeTurn = game?.turnOrder[0] === id;
 
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {

@@ -1,8 +1,12 @@
 import { StatsType } from "../../../types/stats.ts";
 import { CharType } from "../../../types/characters.ts";
 import { WeaponType } from "../../../types/weapons.ts";
-import { createSpread } from "../../utils/helpers.ts";
 import { DamageType } from "../../../types/turns.ts";
+
+const createSpread = (spread: number) => {
+  const rand = Math.random();
+  return (Math.floor(rand * 10) % 2 === 0 ? 1 : -1) * Math.round(rand * spread);
+};
 
 export const findCharacter = (
   characters: CharType[],
@@ -47,9 +51,9 @@ export const calcRawDamage = (
 export const calcRawMitigation = (stats: StatsType, damageType: DamageType) => {
   switch (damageType) {
     case "blunt":
-      return stats.armor + stats.plating;
+      return stats.defense + stats.plating;
     case "bladed":
-      return stats.armor + stats.padding;
+      return stats.defense + stats.padding;
     case "elemental":
       return stats.resistance + stats.dampening;
     case "psychic":

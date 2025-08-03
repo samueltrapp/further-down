@@ -1,4 +1,4 @@
-import { GameContext } from "../../contexts/GameContext.tsx";
+import { BattleContext } from "../../contexts/BattleContext.tsx";
 import { useContext } from "react";
 import "./Hud.css";
 import styled from "styled-components";
@@ -27,7 +27,7 @@ const TurnTrackerRow = styled.div<{ $position: RangeThree }>`
 `;
 
 export default function TurnTracker() {
-  const game = useContext(GameContext);
+  const game = useContext(BattleContext);
 
   const turnTracker = game?.turnOrder.map((turnId) => {
     const turnChar = game?.characters?.find(

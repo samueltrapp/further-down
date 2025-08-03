@@ -1,16 +1,16 @@
 import { useContext } from "react";
 import {
-  GameContext,
-  GameDispatchContext,
-} from "../../contexts/GameContext.tsx";
+  BattleContext,
+  BattleDispatchContext,
+} from "../../contexts/BattleContext.tsx";
 import { playerTurn } from "../../utils/turn.ts";
 import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/maneuvers.ts";
 import { WeaponName } from "../../../types/weapons.ts";
 
 export default function ConfirmButton() {
-  const game = useContext(GameContext);
-  const dispatch = useContext(GameDispatchContext);
+  const game = useContext(BattleContext);
+  const dispatch = useContext(BattleDispatchContext);
 
   return game &&
     game.enableConfirmation &&

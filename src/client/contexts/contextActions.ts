@@ -1,8 +1,8 @@
-import { GameStateType } from "./GameContext.tsx";
+import { BattleStateType } from "./BattleContext.tsx";
 
 export const selectEnemies = (
   newSelection: string | null,
-  game: GameStateType,
+  game: BattleStateType,
 ) => {
   if (!newSelection) return [];
   const pivot = game.selectedEnemyIds.findIndex(

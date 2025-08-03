@@ -1,10 +1,10 @@
 import { ActionDispatch, createContext } from "react";
 import { GameType } from "../../types/game.ts";
-import { ActionTypes } from "./GameProvider";
+import { BattleActionTypes } from "./BattleProvider.tsx";
 import { ManeuverName } from "../../types/maneuvers.ts";
 import { WeaponName } from "../../types/weapons.ts";
 
-type UnitSelectionType = {
+export type BattleStateType = Omit<GameType, "hasStarted" | "playerCount"> & {
   enableConfirmation: boolean;
   maxEnemySelections: number;
   selectedEnemyIds: string[];
@@ -12,9 +12,7 @@ type UnitSelectionType = {
   selectedWeapon: WeaponName | undefined;
 };
 
-export type GameStateType = GameType & UnitSelectionType;
-
-export const GameContext = createContext<GameStateType | null>(null);
-export const GameDispatchContext = createContext<ActionDispatch<
-  [action: ActionTypes]
+export const BattleContext = createContext<BattleStateType | null>(null);
+export const BattleDispatchContext = createContext<ActionDispatch<
+  [action: BattleActionTypes]
 > | null>(null);

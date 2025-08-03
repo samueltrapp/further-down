@@ -1,14 +1,18 @@
 import { useContext, useEffect } from "react";
 import { socket } from "./utils/socket";
-import { GameContext, GameDispatchContext } from "./contexts/GameContext";
+import {
+  BattleContext,
+  BattleDispatchContext,
+} from "./contexts/BattleContext.tsx";
 import { GameActions, GameType } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard";
 import "./App.css";
 import "animate.css";
+import { Lobby } from "./pages/Lobby.tsx";
 
 function App() {
-  const game = useContext(GameContext);
-  const dispatch = useContext(GameDispatchContext);
+  const game = useContext(BattleContext);
+  const dispatch = useContext(BattleDispatchContext);
 
   useEffect(() => {
     // Load existing or create new game
@@ -19,6 +23,10 @@ function App() {
       } else {
         socket.emit("create");
       }
+    }
+
+    function onFailedJoin(msg: string) {
+      alert(msg);
     }
 
     function onUpdateGameState(update: {
@@ -42,10 +50,12 @@ function App() {
 
     socket.connect();
     socket.on("connect", onConnect);
+    socket.on("rejectPlayer", (msg) => onFailedJoin(msg));
     socket.on("update", (update) => onUpdateGameState(update));
 
     return () => {
       socket.off("connect", onConnect);
+      socket.off("rejectPlayer", (msg) => onFailedJoin(msg));
       socket.off("update", (update) => onUpdateGameState(update));
       socket.disconnect();
     };
@@ -60,8 +70,8 @@ function App() {
 
   return (
     <div className="container">
-      <h1 className="title animate__animated animate__fadeIn">Further Down</h1>
-      <GameBoard />
+      {!game?.hasStarted && <Lobby />}
+      {game?.hasStarted && <GameBoard />}
     </div>
   );
 }

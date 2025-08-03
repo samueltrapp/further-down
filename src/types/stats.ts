@@ -6,11 +6,10 @@ export type StatsType = {
   hitPoints: number;
   maxSpeed: number;
   speed: number;
-  luck: number;
 
   // Primary
   physical: number;
-  armor: number;
+  defense: number;
   magical: number;
   resistance: number;
   martial: number;
