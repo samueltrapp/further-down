@@ -7,28 +7,31 @@ import { playerTurn } from "../../utils/turn.ts";
 import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/maneuvers.ts";
 import { WeaponName } from "../../../types/weapons.ts";
+import { LobbyContext } from "../../contexts/LobbyContext.tsx";
 
 export default function ConfirmButton() {
-  const game = useContext(BattleContext);
+  const battle = useContext(BattleContext);
+  const lobby = useContext(LobbyContext);
   const dispatch = useContext(BattleDispatchContext);
 
-  return game &&
-    game.enableConfirmation &&
-    game.selectedManeuver &&
-    game.gameId &&
-    game.selectedWeapon &&
-    game.selectedEnemyIds &&
-    game.turnOrder[0] ? (
+  return battle &&
+    battle.enableConfirmation &&
+    battle.selectedManeuver &&
+    battle.selectedWeapon &&
+    battle.selectedEnemyIds &&
+    battle.battle &&
+    battle.battle.turnOrder &&
+    lobby?.gameId ? (
     <button
       className="confirm-button"
       onClick={() => {
         playerTurn({
-          maneuver: game.selectedManeuver as ManeuverName,
-          weapon: game?.selectedWeapon as WeaponName,
+          maneuver: battle.selectedManeuver as ManeuverName,
+          weapon: battle?.selectedWeapon as WeaponName,
           team: "player",
-          gameId: game.gameId,
-          targetIds: game.selectedEnemyIds,
-          issuerId: game.turnOrder[0],
+          gameId: lobby.gameId,
+          targetIds: battle.selectedEnemyIds,
+          issuerId: battle.battle.turnOrder[0],
         });
         if (dispatch) {
           dispatch({ type: GameActions.SELECT_ENEMY, payload: null });

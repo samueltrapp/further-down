@@ -4,7 +4,10 @@ import { BattleActionTypes } from "./BattleProvider.tsx";
 import { ManeuverName } from "../../types/maneuvers.ts";
 import { WeaponName } from "../../types/weapons.ts";
 
-export type BattleStateType = Omit<GameType, "hasStarted" | "playerCount"> & {
+export type BattleStateType = Omit<
+  GameType,
+  "gameId" | "lobbyStatus" | "pastEncounters" | "players"
+> & {
   enableConfirmation: boolean;
   maxEnemySelections: number;
   selectedEnemyIds: string[];

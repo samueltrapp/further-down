@@ -4,7 +4,7 @@ export type StatsType = {
   // Core
   maxHitPoints: number;
   hitPoints: number;
-  maxSpeed: number;
+  speedCapacity: number;
   speed: number;
 
   // Primary

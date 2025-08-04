@@ -29,7 +29,7 @@ const TurnTrackerRow = styled.div<{ $position: RangeThree }>`
 export default function TurnTracker() {
   const game = useContext(BattleContext);
 
-  const turnTracker = game?.turnOrder.map((turnId) => {
+  const turnTracker = game?.battle?.turnOrder.map((turnId) => {
     const turnChar = game?.characters?.find(
       (character) => character.id === turnId,
     );
@@ -43,7 +43,7 @@ export default function TurnTracker() {
     <div className="turn-tracker-container">
       {turnTracker?.slice(0, 3)?.map((turn, index) => (
         <TurnTrackerRow
-          key={game?.turnOrder[index]}
+          key={game?.battle?.turnOrder[index]}
           $position={index as RangeThree}
         >
           <div className="name-label">{turn.name}</div>

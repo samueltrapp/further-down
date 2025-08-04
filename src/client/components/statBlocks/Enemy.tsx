@@ -4,6 +4,7 @@ import "./StatBlocks.css";
 import "./Enemy.css";
 import { EnemyType } from "../../../types/characters.ts";
 import { enemyTurn } from "../../utils/turn.ts";
+import { LobbyContext } from "../../contexts/LobbyContext.tsx";
 
 // const lowestHpPlayer = (players: PlayerType[]) => {
 //   const lowestHpChar = players.reduce((prev, next) =>
@@ -15,21 +16,22 @@ import { enemyTurn } from "../../utils/turn.ts";
 function Enemy(props: EnemyType) {
   const { id, name, stats } = props;
 
-  const game = useContext(BattleContext);
-  const activeTurn = game?.turnOrder[0] === id;
-  const isSelected = game?.selectedEnemyIds.includes(id);
+  const battle = useContext(BattleContext);
+  const lobby = useContext(LobbyContext);
+  const activeTurn = battle?.battle?.turnOrder[0] === id;
+  const isSelected = battle?.selectedEnemyIds.includes(id);
 
   useEffect(() => {
-    if (activeTurn) {
+    if (activeTurn && lobby?.gameId) {
       setTimeout(() => {
         enemyTurn({
-          gameId: game?.gameId,
+          gameId: lobby?.gameId,
           team: "enemy",
           issuerId: id,
         });
       }, 1500);
     }
-  }, [activeTurn, game?.characters, game?.gameId, id]);
+  }, [activeTurn, battle?.characters, lobby?.gameId, id]);
 
   return (
     <div

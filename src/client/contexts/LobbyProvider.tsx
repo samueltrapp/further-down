@@ -4,19 +4,27 @@ import {
   LobbyDispatchContext,
   LobbyStateType,
 } from "./LobbyContext.tsx";
+import { GameActions } from "../../types/game.ts";
 
-export type LobbyActionTypes = {
-  type: "ADD_PLAYER";
-  payload: {
-    playerId: string;
-  };
-};
+export type LobbyActionTypes =
+  | {
+      type: GameActions.SET_ERROR_MESSAGE;
+      payload: {
+        errorMessage: string;
+      };
+    }
+  | {
+      type: GameActions.SYNC;
+      payload: Partial<LobbyStateType>;
+    };
 
 export const LobbyProvider = ({ children }: { children: ReactNode }) => {
   const [lobby, dispatch] = useReducer(lobbyReducer, {
+    errorMsg: "",
     gameId: "",
-    hasStarted: false,
-    playerCount: 0,
+    lobbyStatus: "waiting",
+    pastEncounters: 0,
+    players: [],
   });
 
   return (
@@ -30,11 +38,18 @@ export const LobbyProvider = ({ children }: { children: ReactNode }) => {
 
 function lobbyReducer(lobby: LobbyStateType, action: LobbyActionTypes) {
   switch (action.type) {
-    case "ADD_PLAYER":
+    case GameActions.SET_ERROR_MESSAGE: {
       return {
         ...lobby,
-        playerCount: lobby.playerCount + 1,
+        errorMsg: action.payload.errorMessage,
       };
+    }
+    case GameActions.SYNC: {
+      return {
+        ...lobby,
+        ...action.payload,
+      };
+    }
     default: {
       return lobby;
     }

@@ -30,7 +30,7 @@ export default function Player(props: PlayerType) {
   const { id, name, stats, knownManeuvers, ownedWeapons } = props;
   const game = useContext(BattleContext);
   const dispatch = useContext(BattleDispatchContext);
-  const activeTurn = game?.turnOrder[0] === id;
+  const activeTurn = game?.battle?.turnOrder[0] === id;
 
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;

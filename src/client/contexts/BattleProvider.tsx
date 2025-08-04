@@ -1,5 +1,5 @@
 import { ReactNode, useReducer } from "react";
-import { GameActions, GameType } from "../../types/game.ts";
+import { GameActions } from "../../types/game.ts";
 import {
   BattleContext,
   BattleDispatchContext,
@@ -25,20 +25,21 @@ export type BattleActionTypes =
       };
     }
   | { type: GameActions.SELECT_ENEMY; payload: string | null }
-  | { type: GameActions.SYNC; payload: GameType };
+  | { type: GameActions.SYNC; payload: Partial<BattleStateType> };
 
 export const BattleProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(gameReducer, {
+    battle: {
+      round: 1,
+      turnNumber: 0,
+      turnOrder: [],
+    },
     enableConfirmation: false,
     characters: [],
-    gameId: "",
     maxEnemySelections: 0,
     selectedEnemyIds: [],
     selectedManeuver: undefined,
     selectedWeapon: undefined,
-    round: 1,
-    turnNumber: 0,
-    turnOrder: [],
   });
 
   return (
@@ -50,11 +51,11 @@ export const BattleProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-function gameReducer(game: BattleStateType, action: BattleActionTypes) {
+function gameReducer(battle: BattleStateType, action: BattleActionTypes) {
   switch (action.type) {
     case GameActions.SELECT_MANEUVER: {
       return {
-        ...game,
+        ...battle,
         enableConfirmation: action.payload.maneuverSelected,
         maxEnemySelections: action.payload.maxTargets,
         selectedManeuver: action.payload.maneuver,
@@ -63,23 +64,27 @@ function gameReducer(game: BattleStateType, action: BattleActionTypes) {
 
     case GameActions.SELECT_WEAPON: {
       return {
-        ...game,
+        ...battle,
         selectedWeapon: action.payload.weapon,
       };
     }
 
     case GameActions.SELECT_ENEMY: {
       return {
-        ...game,
-        selectedEnemyIds: selectEnemies(action.payload, game),
+        ...battle,
+        selectedEnemyIds: selectEnemies(action.payload, battle),
       };
     }
 
     case GameActions.SYNC: {
       return {
-        ...game,
+        ...battle,
         ...action.payload,
       };
+    }
+
+    default: {
+      return battle;
     }
   }
 }

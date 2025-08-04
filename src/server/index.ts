@@ -2,11 +2,16 @@ import * as http from "http";
 import cors from "cors";
 import express from "express";
 import { Server } from "socket.io";
-import { initializeGame } from "./utils/initialData.ts";
+import { initializeLobby } from "./utils/initialData.ts";
 import { EnemyTurnType, GameMetaType, PlayerTurnType } from "../types/game.ts";
 import { resolveEnemyTurn, resolvePlayerTurn } from "./turn/turn.ts";
 import { existingLobby } from "./menus/lobby.ts";
 import { randomId } from "./utils/data.ts";
+
+type JoinDataType = {
+  gameId: string;
+  playerId: string;
+};
 
 const port = 8080;
 const app = express();
@@ -23,7 +28,9 @@ const io = new Server(server, {
 const gameMeta: GameMetaType = {
   games: [],
   findGameAndIndex(gameId: string) {
-    const gameIndex = this?.games?.findIndex((game) => game.gameId === gameId);
+    const gameIndex = this?.games?.findIndex((game) => {
+      return game.gameId === gameId;
+    });
     return gameIndex >= 0
       ? [this.games[gameIndex], gameIndex]
       : [undefined, -1];
@@ -31,19 +38,22 @@ const gameMeta: GameMetaType = {
 };
 
 io.on("connection", (socket) => {
-  function createGame() {
+  function createGame(playerId: string) {
     const newGameId = randomId();
     socket.join(newGameId);
-    gameMeta.games.push(initializeGame(newGameId));
+    gameMeta.games.push(initializeLobby(newGameId, playerId));
     sendGame(newGameId);
   }
 
-  function joinGame(roomCode: string) {
-    const [game, gameIndex] = gameMeta.findGameAndIndex(roomCode);
-    const [updatedGame, logMessages] = existingLobby(io, game);
-    if (updatedGame) {
+  function joinGame({ gameId, playerId }: JoinDataType) {
+    const [game, gameIndex] = gameMeta.findGameAndIndex(gameId);
+    socket.join(playerId);
+    const joinResponse = existingLobby(io, game, playerId);
+    if (joinResponse) {
+      const [updatedGame, roomMessages] = joinResponse;
+      socket.join(gameId);
       gameMeta.games[gameIndex] = updatedGame;
-      sendGame(roomCode, logMessages);
+      sendGame(gameId, roomMessages);
     }
   }
 
@@ -77,8 +87,8 @@ io.on("connection", (socket) => {
     }
   }
 
-  socket.on("create", createGame);
-  socket.on("join", (roomCode) => joinGame(roomCode));
+  socket.on("create", (playerId: string) => createGame(playerId));
+  socket.on("join", (joinData: JoinDataType) => joinGame(joinData));
   socket.on("load", (gameId) => sendGame(gameId));
   socket.on("playerTurn", (turn) => playerTurn(turn));
   socket.on("enemyTurn", (turn) => enemyTurn(turn));

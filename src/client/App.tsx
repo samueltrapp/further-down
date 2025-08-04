@@ -1,18 +1,20 @@
 import { useContext, useEffect } from "react";
 import { socket } from "./utils/socket";
-import {
-  BattleContext,
-  BattleDispatchContext,
-} from "./contexts/BattleContext.tsx";
+import { BattleDispatchContext } from "./contexts/BattleContext.tsx";
 import { GameActions, GameType } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard";
 import "./App.css";
-import "animate.css";
 import { Lobby } from "./pages/Lobby.tsx";
+import {
+  LobbyContext,
+  LobbyDispatchContext,
+} from "./contexts/LobbyContext.tsx";
 
 function App() {
-  const game = useContext(BattleContext);
-  const dispatch = useContext(BattleDispatchContext);
+  // const battle = useContext(BattleContext);
+  const battleDispatch = useContext(BattleDispatchContext);
+  const lobby = useContext(LobbyContext);
+  const lobbyDispatch = useContext(LobbyDispatchContext);
 
   useEffect(() => {
     // Load existing or create new game
@@ -20,30 +22,41 @@ function App() {
       const existingGame = localStorage.getItem("gameId");
       if (existingGame) {
         socket.emit("load", existingGame);
-      } else {
-        socket.emit("create");
       }
     }
 
     function onFailedJoin(msg: string) {
-      alert(msg);
+      if (lobbyDispatch) {
+        lobbyDispatch({
+          type: GameActions.SET_ERROR_MESSAGE,
+          payload: {
+            errorMessage: msg,
+          },
+        });
+      }
     }
 
     function onUpdateGameState(update: {
       game: GameType;
       logMessages: string[];
     }) {
-      // if (updatedGame === undefined) {
-      //   localStorage.removeItem("game_id");
-      // }
-      // if (!localStorage.getItem("game_id")) {
-      //   localStorage.setItem("game_id", updatedGame.gameId)
-      // }
-
-      if (dispatch) {
-        dispatch({
+      if (battleDispatch) {
+        battleDispatch({
           type: GameActions.SYNC,
-          payload: update.game,
+          payload: {
+            battle: update.game.battle,
+          },
+        });
+      }
+      if (lobbyDispatch) {
+        lobbyDispatch({
+          type: GameActions.SYNC,
+          payload: {
+            gameId: update.game.gameId,
+            lobbyStatus: update.game.lobbyStatus,
+            pastEncounters: update.game.pastEncounters,
+            players: update.game.players,
+          },
         });
       }
     }
@@ -59,19 +72,11 @@ function App() {
       socket.off("update", (update) => onUpdateGameState(update));
       socket.disconnect();
     };
-  }, [dispatch]);
-
-  // Start new game if no game exists
-  useEffect(() => {
-    if (!game) {
-      socket.emit("create");
-    }
-  }, [game]);
+  }, [battleDispatch, lobbyDispatch]);
 
   return (
     <div className="container">
-      {!game?.hasStarted && <Lobby />}
-      {game?.hasStarted && <GameBoard />}
+      {lobby?.lobbyStatus !== "started" ? <Lobby /> : <GameBoard />}
     </div>
   );
 }

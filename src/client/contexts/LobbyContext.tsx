@@ -4,8 +4,10 @@ import { LobbyActionTypes } from "./LobbyProvider.tsx";
 
 export type LobbyStateType = Pick<
   GameType,
-  "gameId" | "hasStarted" | "playerCount"
->;
+  "gameId" | "lobbyStatus" | "pastEncounters" | "players"
+> & {
+  errorMsg: string;
+};
 
 export const LobbyContext = createContext<LobbyStateType | null>(null);
 export const LobbyDispatchContext = createContext<ActionDispatch<

@@ -21,10 +21,12 @@ export function resolvePlayerTurn(
   return {
     game: {
       ...game,
+      battle: {
+        round: isRoundEnd ? game.battle?.round : game.battle?.round + 1,
+        turnNumber: game.battle?.turnNumber + 1,
+        turnOrder: resolveTurnOrder(characters),
+      },
       characters,
-      round: isRoundEnd ? game.round : game.round + 1,
-      turnNumber: game.turnNumber + 1,
-      turnOrder: resolveTurnOrder(characters),
     },
     logMessages,
   };
@@ -43,10 +45,12 @@ export function resolveEnemyTurn(
   return {
     game: {
       ...game,
+      battle: {
+        round: isRoundEnd ? game.battle?.round : game.battle?.round + 1,
+        turnNumber: game.battle?.turnNumber + 1,
+        turnOrder: resolveTurnOrder(characters),
+      },
       characters,
-      round: isRoundEnd ? game.round : game.round + 1,
-      turnNumber: game.turnNumber + 1,
-      turnOrder: resolveTurnOrder(characters),
     },
     logMessages,
   };
