@@ -22,9 +22,10 @@ export const LobbyProvider = ({ children }: { children: ReactNode }) => {
   const [lobby, dispatch] = useReducer(lobbyReducer, {
     errorMsg: "",
     gameId: "",
-    lobbyStatus: "waiting",
     pastEncounters: 0,
     players: [],
+    startVotes: 0,
+    status: "waiting",
   });
 
   return (

@@ -2,6 +2,7 @@ import { BattleContext } from "../../contexts/BattleContext.tsx";
 import { useContext } from "react";
 import "./Hud.css";
 import styled from "styled-components";
+import { CharacterContext } from "../../contexts/CharacterContext.tsx";
 
 type RangeThree = 0 | 1 | 2;
 
@@ -27,12 +28,11 @@ const TurnTrackerRow = styled.div<{ $position: RangeThree }>`
 `;
 
 export default function TurnTracker() {
-  const game = useContext(BattleContext);
+  const battle = useContext(BattleContext);
+  const characters = useContext(CharacterContext);
 
-  const turnTracker = game?.battle?.turnOrder.map((turnId) => {
-    const turnChar = game?.characters?.find(
-      (character) => character.id === turnId,
-    );
+  const turnTracker = battle?.turnOrder.map((turnId) => {
+    const turnChar = characters?.find((character) => character.id === turnId);
     return {
       name: turnChar?.name,
       speed: turnChar?.stats.speed,
@@ -43,7 +43,7 @@ export default function TurnTracker() {
     <div className="turn-tracker-container">
       {turnTracker?.slice(0, 3)?.map((turn, index) => (
         <TurnTrackerRow
-          key={game?.battle?.turnOrder[index]}
+          key={battle?.turnOrder[index]}
           $position={index as RangeThree}
         >
           <div className="name-label">{turn.name}</div>

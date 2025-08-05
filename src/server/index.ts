@@ -29,7 +29,7 @@ const gameMeta: GameMetaType = {
   games: [],
   findGameAndIndex(gameId: string) {
     const gameIndex = this?.games?.findIndex((game) => {
-      return game.gameId === gameId;
+      return game.lobby.gameId === gameId;
     });
     return gameIndex >= 0
       ? [this.games[gameIndex], gameIndex]
@@ -77,10 +77,15 @@ io.on("connection", (socket) => {
     }
   }
 
+  // function voteToStart(gameId: string){
+  //   const [selectedGame, gameIndex] = gameMeta.findGameAndIndex(gameId);
+  //   // TODO
+  // }
+
   function sendGame(gameId: string, logMessages?: string[]) {
     const [selectedGame] = gameMeta.findGameAndIndex(gameId);
-    if (selectedGame?.gameId) {
-      io.to(selectedGame?.gameId).emit("update", {
+    if (selectedGame?.lobby?.gameId) {
+      io.to(selectedGame?.lobby?.gameId).emit("update", {
         game: selectedGame,
         logMessages,
       });
@@ -92,6 +97,7 @@ io.on("connection", (socket) => {
   socket.on("load", (gameId) => sendGame(gameId));
   socket.on("playerTurn", (turn) => playerTurn(turn));
   socket.on("enemyTurn", (turn) => enemyTurn(turn));
+  //socket.on("start", (gameId) => (gameId));
 });
 
 server.on("error", (e) => {

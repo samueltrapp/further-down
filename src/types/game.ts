@@ -19,19 +19,24 @@ export enum GameActions {
   SYNC = "SYNC",
 }
 
-type BattleType = {
+export type BattleType = {
   round: number;
   turnNumber: number;
   turnOrder: string[];
 };
 
+export type LobbyType = {
+  gameId: string;
+  status: LobbyStatusType;
+  pastEncounters: number;
+  players: string[];
+  startVotes: number;
+};
+
 export type GameType = {
   battle: BattleType | undefined;
   characters: (PlayerType | EnemyType)[];
-  gameId: string;
-  lobbyStatus: LobbyStatusType;
-  pastEncounters: number;
-  players: string[];
+  lobby: LobbyType;
 };
 
 export type GameMetaType = {

@@ -1,5 +1,5 @@
 import { ReactNode, useReducer } from "react";
-import { GameActions } from "../../types/game.ts";
+import { BattleType, GameActions } from "../../types/game.ts";
 import {
   BattleContext,
   BattleDispatchContext,
@@ -25,17 +25,14 @@ export type BattleActionTypes =
       };
     }
   | { type: GameActions.SELECT_ENEMY; payload: string | null }
-  | { type: GameActions.SYNC; payload: Partial<BattleStateType> };
+  | { type: GameActions.SYNC; payload: BattleType };
 
 export const BattleProvider = ({ children }: { children: ReactNode }) => {
-  const [game, dispatch] = useReducer(gameReducer, {
-    battle: {
-      round: 1,
-      turnNumber: 0,
-      turnOrder: [],
-    },
+  const [game, dispatch] = useReducer(battleReducer, {
+    round: 1,
+    turnNumber: 0,
+    turnOrder: [],
     enableConfirmation: false,
-    characters: [],
     maxEnemySelections: 0,
     selectedEnemyIds: [],
     selectedManeuver: undefined,
@@ -51,7 +48,7 @@ export const BattleProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-function gameReducer(battle: BattleStateType, action: BattleActionTypes) {
+function battleReducer(battle: BattleStateType, action: BattleActionTypes) {
   switch (action.type) {
     case GameActions.SELECT_MANEUVER: {
       return {

@@ -13,14 +13,14 @@ export default function ConfirmButton() {
   const battle = useContext(BattleContext);
   const lobby = useContext(LobbyContext);
   const dispatch = useContext(BattleDispatchContext);
+  const currentTurn = battle?.turnOrder[0];
 
   return battle &&
     battle.enableConfirmation &&
     battle.selectedManeuver &&
     battle.selectedWeapon &&
     battle.selectedEnemyIds &&
-    battle.battle &&
-    battle.battle.turnOrder &&
+    currentTurn &&
     lobby?.gameId ? (
     <button
       className="confirm-button"
@@ -31,7 +31,7 @@ export default function ConfirmButton() {
           team: "player",
           gameId: lobby.gameId,
           targetIds: battle.selectedEnemyIds,
-          issuerId: battle.battle.turnOrder[0],
+          issuerId: currentTurn,
         });
         if (dispatch) {
           dispatch({ type: GameActions.SELECT_ENEMY, payload: null });

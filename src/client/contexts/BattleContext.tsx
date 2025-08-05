@@ -1,13 +1,10 @@
 import { ActionDispatch, createContext } from "react";
-import { GameType } from "../../types/game.ts";
+import { BattleType } from "../../types/game.ts";
 import { BattleActionTypes } from "./BattleProvider.tsx";
 import { ManeuverName } from "../../types/maneuvers.ts";
 import { WeaponName } from "../../types/weapons.ts";
 
-export type BattleStateType = Omit<
-  GameType,
-  "gameId" | "lobbyStatus" | "pastEncounters" | "players"
-> & {
+export type BattleStateType = BattleType & {
   enableConfirmation: boolean;
   maxEnemySelections: number;
   selectedEnemyIds: string[];

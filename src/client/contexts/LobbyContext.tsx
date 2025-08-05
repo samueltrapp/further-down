@@ -1,11 +1,8 @@
 import { ActionDispatch, createContext } from "react";
-import { GameType } from "../../types/game.ts";
+import { LobbyType } from "../../types/game.ts";
 import { LobbyActionTypes } from "./LobbyProvider.tsx";
 
-export type LobbyStateType = Pick<
-  GameType,
-  "gameId" | "lobbyStatus" | "pastEncounters" | "players"
-> & {
+export type LobbyStateType = LobbyType & {
   errorMsg: string;
 };
 

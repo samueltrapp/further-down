@@ -12,13 +12,15 @@ import ConfirmButton from "../components/hud/ConfirmButton.tsx";
 import BattleLog from "../components/hud/BattleLog.tsx";
 import Advisor from "../components/hud/Advisor.tsx";
 import { EnemyType, PlayerType } from "../../types/characters.ts";
+import { CharacterContext } from "../contexts/CharacterContext.tsx";
 
 function GameBoard() {
-  const game = useContext(BattleContext);
-  const dispatch = useContext(BattleDispatchContext);
+  const battle = useContext(BattleContext);
+  const battleDispatch = useContext(BattleDispatchContext);
+  const characters = useContext(CharacterContext);
 
-  if (!game || !game.characters) return;
-  const [players, enemies] = game.characters.reduce(
+  if (!battle || !characters) return;
+  const [players, enemies] = characters.reduce(
     (characterArr, character) => {
       // @ts-ignore
       characterArr[character.team === "player" ? 0 : 1].push(character);
@@ -28,8 +30,8 @@ function GameBoard() {
   );
 
   const handleSelect = (enemyId: string) => {
-    if (dispatch && game.enableConfirmation) {
-      dispatch({
+    if (battleDispatch && battle.enableConfirmation) {
+      battleDispatch({
         type: GameActions.SELECT_ENEMY,
         payload: enemyId,
       });

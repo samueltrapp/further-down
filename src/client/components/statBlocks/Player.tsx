@@ -28,15 +28,15 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
 
 export default function Player(props: PlayerType) {
   const { id, name, stats, knownManeuvers, ownedWeapons } = props;
-  const game = useContext(BattleContext);
-  const dispatch = useContext(BattleDispatchContext);
-  const activeTurn = game?.battle?.turnOrder[0] === id;
+  const battle = useContext(BattleContext);
+  const battleDispatch = useContext(BattleDispatchContext);
+  const activeTurn = battle?.turnOrder[0] === id;
 
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
     const value = target.value as ManeuverName;
-    if (dispatch && target.value) {
-      dispatch({
+    if (battleDispatch && target.value) {
+      battleDispatch({
         type: GameActions.SELECT_MANEUVER,
         payload: {
           maneuverSelected: true,
@@ -51,8 +51,8 @@ export default function Player(props: PlayerType) {
     const target = event.target as HTMLSelectElement;
     const value = target.value as WeaponName;
     console.log(value);
-    if (dispatch && target.value) {
-      dispatch({
+    if (battleDispatch && target.value) {
+      battleDispatch({
         type: GameActions.SELECT_WEAPON,
         payload: {
           weapon: value,
@@ -77,7 +77,7 @@ export default function Player(props: PlayerType) {
       </div>
       <div className="stat-body">
         <div className="action-column">
-          <select onChange={handleSelectWeapon} value={game?.selectedWeapon}>
+          <select onChange={handleSelectWeapon} value={battle?.selectedWeapon}>
             {ownedWeapons.map((ownedWeapon) => (
               <option value={ownedWeapon.name}>
                 {toCaps(ownedWeapon.name)}
@@ -88,7 +88,7 @@ export default function Player(props: PlayerType) {
         <div className="action-column">
           {knownManeuvers.map((knownManeuver) => (
             <button
-              className={`maneuver-button ${activeTurn && game?.selectedManeuver === knownManeuver ? "selected-maneuver" : ""}`}
+              className={`maneuver-button ${activeTurn && battle?.selectedManeuver === knownManeuver ? "selected-maneuver" : ""}`}
               disabled={!activeTurn}
               key={knownManeuver}
               onClick={handleClickManeuver}

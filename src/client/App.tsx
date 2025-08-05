@@ -40,23 +40,16 @@ function App() {
       game: GameType;
       logMessages: string[];
     }) {
-      if (battleDispatch) {
+      if (battleDispatch && update.game.battle) {
         battleDispatch({
           type: GameActions.SYNC,
-          payload: {
-            battle: update.game.battle,
-          },
+          payload: update.game.battle,
         });
       }
       if (lobbyDispatch) {
         lobbyDispatch({
           type: GameActions.SYNC,
-          payload: {
-            gameId: update.game.gameId,
-            lobbyStatus: update.game.lobbyStatus,
-            pastEncounters: update.game.pastEncounters,
-            players: update.game.players,
-          },
+          payload: update.game.lobby,
         });
       }
     }
@@ -76,7 +69,7 @@ function App() {
 
   return (
     <div className="container">
-      {lobby?.lobbyStatus !== "started" ? <Lobby /> : <GameBoard />}
+      {lobby?.status !== "started" ? <Lobby /> : <GameBoard />}
     </div>
   );
 }

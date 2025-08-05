@@ -48,13 +48,17 @@ const Unjoined = () => {
 
 const Waiting = () => {
   const lobby = useContext(LobbyContext);
+  const handleStart = () => {
+    socket.emit("start", lobby?.gameId);
+  };
 
   return (
     <div>
-      <div>{`Game ID: ${lobby?.gameId}`}</div>
-      {lobby?.players.map((playerId, index) => (
-        <div key={playerId}>{`Player ${index} ID: ${playerId}`}</div>
-      ))}
+      <div>{`Room Code: ${lobby?.gameId}`}</div>
+      <div>{`${lobby?.players.length}/4 Players`}</div>
+      <div>
+        <button onClick={handleStart}>Start</button>
+      </div>
     </div>
   );
 };

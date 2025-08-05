@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App.tsx";
 import { BattleProvider } from "./contexts/BattleProvider.tsx";
 import { LobbyProvider } from "./contexts/LobbyProvider.tsx";
+import { CharacterProvider } from "./contexts/CharacterProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <LobbyProvider>
-      <BattleProvider>
-        <App />
-      </BattleProvider>
+      <CharacterProvider>
+        <BattleProvider>
+          <App />
+        </BattleProvider>
+      </CharacterProvider>
     </LobbyProvider>
   </StrictMode>,
 );

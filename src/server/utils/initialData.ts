@@ -110,9 +110,12 @@ export function initializeLobby(gameId: string, playerId: string): GameType {
   return {
     battle: undefined,
     characters: [],
-    gameId: gameId,
-    lobbyStatus: "waiting",
-    pastEncounters: 0,
-    players: [playerId],
+    lobby: {
+      gameId: gameId,
+      pastEncounters: 0,
+      players: [playerId],
+      startVotes: 0,
+      status: "waiting",
+    },
   };
 }

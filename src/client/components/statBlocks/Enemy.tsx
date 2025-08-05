@@ -18,7 +18,7 @@ function Enemy(props: EnemyType) {
 
   const battle = useContext(BattleContext);
   const lobby = useContext(LobbyContext);
-  const activeTurn = battle?.battle?.turnOrder[0] === id;
+  const activeTurn = battle?.turnOrder[0] === id;
   const isSelected = battle?.selectedEnemyIds.includes(id);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function Enemy(props: EnemyType) {
         });
       }, 1500);
     }
-  }, [activeTurn, battle?.characters, lobby?.gameId, id]);
+  }, [activeTurn, lobby?.gameId, id]);
 
   return (
     <div
