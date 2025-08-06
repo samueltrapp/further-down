@@ -25,7 +25,7 @@ export const LobbyProvider = ({ children }: { children: ReactNode }) => {
     pastEncounters: 0,
     players: [],
     startVotes: 0,
-    status: "waiting",
+    status: "unjoined",
   });
 
   return (

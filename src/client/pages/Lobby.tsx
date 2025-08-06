@@ -48,8 +48,11 @@ const Unjoined = () => {
 
 const Waiting = () => {
   const lobby = useContext(LobbyContext);
+  const [voteToStart, setVoteToStart] = useState(false);
+
   const handleStart = () => {
-    socket.emit("start", lobby?.gameId);
+    socket.emit("vote", { gameId: lobby?.gameId, voteToStart: !voteToStart });
+    setVoteToStart(!voteToStart);
   };
 
   return (
@@ -57,7 +60,7 @@ const Waiting = () => {
       <div>{`Room Code: ${lobby?.gameId}`}</div>
       <div>{`${lobby?.players.length}/4 Players`}</div>
       <div>
-        <button onClick={handleStart}>Start</button>
+        <button onClick={handleStart}>{!voteToStart ? "Start" : "Wait"}</button>
       </div>
     </div>
   );
@@ -66,5 +69,5 @@ const Waiting = () => {
 export function Lobby() {
   const lobby = useContext(LobbyContext);
 
-  return lobby?.gameId ? <Waiting /> : <Unjoined />;
+  return lobby?.status === "unjoined" ? <Unjoined /> : <Waiting />;
 }

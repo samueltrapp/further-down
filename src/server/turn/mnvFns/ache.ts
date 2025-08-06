@@ -18,7 +18,6 @@ export function acheOther(fnArgs: OtherManeuverFnArgsType) {
   const weapon = actor.ownedWeapons.find(
     (ownedWeapon) => ownedWeapon.name === weaponName,
   ) as WeaponType;
-  console.log(weapon, weapon.name);
 
   const raw = mnvDetail.actions.map((action) => ({
     damage:

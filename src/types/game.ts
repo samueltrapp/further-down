@@ -7,7 +7,12 @@ type BaseTurnType = {
   issuerId: string;
 };
 
-export type LobbyStatusType = "waiting" | "full" | "started";
+export type LobbyStatusType =
+  | "char-create"
+  | "waiting"
+  | "full"
+  | "started"
+  | "unjoined";
 
 export enum GameActions {
   KILL_GAME = "KILL_GAME",

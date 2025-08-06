@@ -50,17 +50,17 @@ io.on("connection", (socket) => {
     socket.join(playerId);
     const joinResponse = existingLobby(io, game, playerId);
     if (joinResponse) {
-      const [updatedGame, roomMessages] = joinResponse;
+      const updatedGame = joinResponse;
       socket.join(gameId);
       gameMeta.games[gameIndex] = updatedGame;
-      sendGame(gameId, roomMessages);
+      sendGame(gameId);
     }
   }
 
   function playerTurn(turn: PlayerTurnType) {
     const gameId = turn.gameId;
     const [game, gameIndex] = gameMeta.findGameAndIndex(gameId);
-    if (gameMeta && gameIndex && game) {
+    if (gameMeta && game) {
       const { game: updatedGame, logMessages } = resolvePlayerTurn(turn, game);
       gameMeta.games[gameIndex] = updatedGame;
       sendGame(gameId, logMessages);
@@ -70,17 +70,37 @@ io.on("connection", (socket) => {
   function enemyTurn(turn: EnemyTurnType) {
     const gameId = turn.gameId;
     const [game, gameIndex] = gameMeta.findGameAndIndex(gameId);
-    if (gameMeta && gameIndex && game) {
+    if (gameMeta && game) {
       const { game: updatedGame, logMessages } = resolveEnemyTurn(turn, game);
       gameMeta.games[gameIndex] = updatedGame;
       sendGame(gameId, logMessages);
     }
   }
 
-  // function voteToStart(gameId: string){
-  //   const [selectedGame, gameIndex] = gameMeta.findGameAndIndex(gameId);
-  //   // TODO
-  // }
+  function vote({
+    gameId,
+    voteToStart,
+  }: {
+    gameId: string;
+    voteToStart: boolean;
+  }) {
+    const [game, gameIndex] = gameMeta.findGameAndIndex(gameId);
+    if (game) {
+      const totalVotes = game.lobby.startVotes + (voteToStart ? 1 : -1);
+      gameMeta.games[gameIndex] = {
+        ...game,
+        lobby: {
+          ...game.lobby,
+          status:
+            totalVotes === game.lobby.players.length
+              ? "char-create"
+              : game.lobby.status,
+          startVotes: totalVotes,
+        },
+      };
+    }
+    sendGame(gameId);
+  }
 
   function sendGame(gameId: string, logMessages?: string[]) {
     const [selectedGame] = gameMeta.findGameAndIndex(gameId);
@@ -94,10 +114,10 @@ io.on("connection", (socket) => {
 
   socket.on("create", (playerId: string) => createGame(playerId));
   socket.on("join", (joinData: JoinDataType) => joinGame(joinData));
-  socket.on("load", (gameId) => sendGame(gameId));
+  socket.on("load", (gameId: string) => sendGame(gameId));
+  socket.on("vote", (startVote) => vote(startVote));
   socket.on("playerTurn", (turn) => playerTurn(turn));
   socket.on("enemyTurn", (turn) => enemyTurn(turn));
-  //socket.on("start", (gameId) => (gameId));
 });
 
 server.on("error", (e) => {

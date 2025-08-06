@@ -50,7 +50,6 @@ export default function Player(props: PlayerType) {
   const handleSelectWeapon = (event: ChangeEvent<HTMLSelectElement>) => {
     const target = event.target as HTMLSelectElement;
     const value = target.value as WeaponName;
-    console.log(value);
     if (battleDispatch && target.value) {
       battleDispatch({
         type: GameActions.SELECT_WEAPON,

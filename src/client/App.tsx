@@ -9,6 +9,7 @@ import {
   LobbyContext,
   LobbyDispatchContext,
 } from "./contexts/LobbyContext.tsx";
+import { CharacterCreator } from "./pages/CharacterCreator.tsx";
 
 function App() {
   // const battle = useContext(BattleContext);
@@ -49,7 +50,12 @@ function App() {
       if (lobbyDispatch) {
         lobbyDispatch({
           type: GameActions.SYNC,
-          payload: update.game.lobby,
+          payload: {
+            gameId: update.game.lobby.gameId,
+            players: update.game.lobby.players,
+            startVotes: update.game.lobby.startVotes,
+            status: update.game.lobby.status,
+          },
         });
       }
     }
@@ -69,7 +75,11 @@ function App() {
 
   return (
     <div className="container">
-      {lobby?.status !== "started" ? <Lobby /> : <GameBoard />}
+      {(lobby?.status === "unjoined" || lobby?.status === "waiting") && (
+        <Lobby />
+      )}
+      {lobby?.status === "char-create" && <CharacterCreator />}
+      {lobby?.status === "started" && <GameBoard />}
     </div>
   );
 }
