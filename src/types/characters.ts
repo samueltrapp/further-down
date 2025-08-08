@@ -1,6 +1,8 @@
 import { StatsType } from "./stats.ts";
 import { ManeuverName } from "./maneuvers.ts";
 import { WeaponType } from "./weapons.ts";
+import { TacticName } from "./tactics.ts";
+import { BlessingType } from "./blessings.ts";
 
 export type PlayerType = {
   id: string;
@@ -10,8 +12,9 @@ export type PlayerType = {
   stats: StatsType;
   statsHistory: StatsType;
   lastTurn: number;
-  knownManeuvers: ManeuverName[];
-  ownedWeapons: WeaponType[];
+  maneuvers: ManeuverName[];
+  weapons: WeaponType[];
+  blessings: BlessingType[];
   favors: string[];
   burdens: string[];
 };
@@ -22,7 +25,7 @@ export type EnemyType = {
   team: "enemy";
   stats: StatsType;
   lastTurn: number;
-  knownManeuvers: ManeuverName[];
+  tactics: TacticName[];
   favors: string[];
   burdens: string[];
 };

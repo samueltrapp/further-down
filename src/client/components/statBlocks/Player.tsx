@@ -7,7 +7,7 @@ import {
 } from "../../contexts/BattleContext.tsx";
 import "./StatBlocks.css";
 import "./Player.css";
-import { mnvDetails } from "../../../server/turn/mnvDetails.ts";
+import { details } from "../../../server/lib/maneuvers/details.ts";
 import { PlayerType } from "../../../types/characters.ts";
 import { toCaps } from "../../utils/formatting.ts";
 import { WeaponName } from "../../../types/weapons.ts";
@@ -27,7 +27,7 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
 `;
 
 export default function Player(props: PlayerType) {
-  const { id, name, stats, knownManeuvers, ownedWeapons } = props;
+  const { id, name, stats, maneuvers, weapons } = props;
   const battle = useContext(BattleContext);
   const battleDispatch = useContext(BattleDispatchContext);
   const activeTurn = battle?.turnOrder[0] === id;
@@ -40,7 +40,7 @@ export default function Player(props: PlayerType) {
         type: GameActions.SELECT_MANEUVER,
         payload: {
           maneuverSelected: true,
-          maxTargets: mnvDetails[value].maxTargets,
+          maxTargets: details[value].maxTargets,
           maneuver: value,
         },
       });
@@ -77,23 +77,21 @@ export default function Player(props: PlayerType) {
       <div className="stat-body">
         <div className="action-column">
           <select onChange={handleSelectWeapon} value={battle?.selectedWeapon}>
-            {ownedWeapons.map((ownedWeapon) => (
-              <option value={ownedWeapon.name}>
-                {toCaps(ownedWeapon.name)}
-              </option>
+            {weapons.map((weapon) => (
+              <option value={weapon.name}>{toCaps(weapon.name)}</option>
             ))}
           </select>
         </div>
         <div className="action-column">
-          {knownManeuvers.map((knownManeuver) => (
+          {maneuvers.map((maneuver) => (
             <button
-              className={`maneuver-button ${activeTurn && battle?.selectedManeuver === knownManeuver ? "selected-maneuver" : ""}`}
+              className={`maneuver-button ${activeTurn && battle?.selectedManeuver === maneuver ? "selected-maneuver" : ""}`}
               disabled={!activeTurn}
-              key={knownManeuver}
+              key={maneuver}
               onClick={handleClickManeuver}
-              value={knownManeuver}
+              value={maneuver}
             >
-              {`> ${knownManeuver.toUpperCase()}`}
+              {`> ${maneuver.toUpperCase()}`}
             </button>
           ))}
         </div>

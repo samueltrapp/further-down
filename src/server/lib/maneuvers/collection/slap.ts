@@ -1,22 +1,22 @@
 import {
-  OtherManeuverFnArgsType,
-  SelfManeuverFnArgsType,
-} from "../../../types/maneuvers.ts";
-import {
   calcRawDamage,
   calcRawMitigation,
   limitToZero,
   trunc,
-} from "../utils/battle.ts";
-import { mnvDetails } from "../mnvDetails.ts";
-import { WeaponType } from "../../../types/weapons.ts";
+} from "../../../turn/utils/battle.ts";
+import { details } from "../details.ts";
+import {
+  OtherManeuverFnArgsType,
+  SelfManeuverFnArgsType,
+} from "../../../../types/maneuvers.ts";
+import { WeaponType } from "../../../../types/weapons.ts";
 
-export function quicksilverOther(fnArgs: OtherManeuverFnArgsType) {
+export function slapOther(fnArgs: OtherManeuverFnArgsType) {
   const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;
-  const mnvDetail = mnvDetails[maneuver];
+  const mnvDetail = details[maneuver];
 
-  const weapon = actor.ownedWeapons.find(
-    (ownedWeapon) => ownedWeapon.name === weaponName,
+  const weapon = actor.weapons.find(
+    (weapon) => weapon.name === weaponName,
   ) as WeaponType;
 
   const raw = mnvDetail.actions.map((action) => ({
@@ -51,9 +51,9 @@ export function quicksilverOther(fnArgs: OtherManeuverFnArgsType) {
   };
 }
 
-export function quicksilverSelf(fnArgs: SelfManeuverFnArgsType) {
+export function slapSelf(fnArgs: SelfManeuverFnArgsType) {
   const { self, maneuver } = fnArgs;
-  const mnvDetail = mnvDetails[maneuver];
+  const mnvDetail = details[maneuver];
   const updatedSpeed = self.stats.speed - mnvDetail.speedCost;
 
   return {

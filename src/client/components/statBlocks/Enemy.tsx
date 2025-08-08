@@ -3,7 +3,7 @@ import { BattleContext } from "../../contexts/BattleContext.tsx";
 import "./StatBlocks.css";
 import "./Enemy.css";
 import { EnemyType } from "../../../types/characters.ts";
-import { enemyTurn } from "../../utils/turn.ts";
+import { enemyTurn } from "../../services/turn.ts";
 import { LobbyContext } from "../../contexts/LobbyContext.tsx";
 
 // const lowestHpPlayer = (players: PlayerType[]) => {

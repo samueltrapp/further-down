@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { LobbyContext } from "../contexts/LobbyContext.tsx";
-import { randomId } from "../../server/utils/data.ts";
-import { socket } from "../utils/socket.ts";
+import { LobbyContext } from "../../contexts/LobbyContext.tsx";
+import { randomId } from "../../../server/utils/data.ts";
+import { socket } from "../../socket.ts";
 
 const Unjoined = () => {
   const lobby = useContext(LobbyContext);

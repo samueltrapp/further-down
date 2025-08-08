@@ -12,8 +12,6 @@ export type StatsType = {
   defense: number;
   magical: number;
   resistance: number;
-  martial: number;
-  mystic: number;
 
   // Specialty
   bladed: number;
@@ -24,8 +22,4 @@ export type StatsType = {
   plating: number;
   dampening: number;
   warding: number;
-  accuracy: number;
-  evasion: number;
-  control: number;
-  absorption: number;
 };

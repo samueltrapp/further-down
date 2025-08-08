@@ -1,15 +1,15 @@
 import { useContext, useEffect } from "react";
-import { socket } from "./utils/socket";
+import { socket } from "./socket.ts";
 import { BattleDispatchContext } from "./contexts/BattleContext.tsx";
 import { GameActions, GameType } from "../types/game.ts";
-import GameBoard from "./pages/GameBoard";
+import GameBoard from "./pages/GameBoard/GameBoard.tsx";
 import "./App.css";
-import { Lobby } from "./pages/Lobby.tsx";
+import { Lobby } from "./pages/Lobby/Lobby.tsx";
 import {
   LobbyContext,
   LobbyDispatchContext,
 } from "./contexts/LobbyContext.tsx";
-import { CharacterCreator } from "./pages/CharacterCreator.tsx";
+import { CharacterCreator } from "./pages/CharacterCreator/CharacterCreator.tsx";
 
 function App() {
   // const battle = useContext(BattleContext);

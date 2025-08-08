@@ -1,7 +1,7 @@
 import { CharType } from "../../../types/characters.ts";
 import { getCharacterDetails } from "../utils/data.ts";
 import { EnemyTurnType, PlayerTurnType } from "../../../types/game.ts";
-import { getMnvFns } from "../mnvFnMap.ts";
+import { getMnvFns } from "../../lib/maneuvers/fnMap.ts";
 
 export function resolveManeuver(
   characters: CharType[],

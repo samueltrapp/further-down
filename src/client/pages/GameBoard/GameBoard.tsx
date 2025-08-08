@@ -2,17 +2,17 @@ import { useContext } from "react";
 import {
   BattleContext,
   BattleDispatchContext,
-} from "../contexts/BattleContext.tsx";
-import Character from "../components/statBlocks/Player";
-import Enemy from "../components/statBlocks/Enemy";
+} from "../../contexts/BattleContext.tsx";
+import Character from "../../components/statBlocks/Player.tsx";
+import Enemy from "../../components/statBlocks/Enemy.tsx";
 import "./GameBoard.css";
-import { GameActions } from "../../types/game.ts";
-import TurnTracker from "../components/hud/TurnTracker.tsx";
-import ConfirmButton from "../components/hud/ConfirmButton.tsx";
-import BattleLog from "../components/hud/BattleLog.tsx";
-import Advisor from "../components/hud/Advisor.tsx";
-import { EnemyType, PlayerType } from "../../types/characters.ts";
-import { CharacterContext } from "../contexts/CharacterContext.tsx";
+import { GameActions } from "../../../types/game.ts";
+import TurnTracker from "../../components/hud/TurnTracker.tsx";
+import ConfirmButton from "../../components/hud/ConfirmButton.tsx";
+import BattleLog from "../../components/hud/BattleLog.tsx";
+import Advisor from "../../components/hud/Advisor.tsx";
+import { EnemyType, PlayerType } from "../../../types/characters.ts";
+import { CharacterContext } from "../../contexts/CharacterContext.tsx";
 
 function GameBoard() {
   const battle = useContext(BattleContext);
