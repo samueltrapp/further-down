@@ -1,0 +1,18 @@
+.controls {
+    display: flex;
+    flex-direction: row;
+}
+
+.option {
+    width: 50%;
+}
+
+.lobby-btn {
+    background: linear-gradient(150deg in hsl, hsl(151, 39%, 17%) 55%, hsl(32, 91%, 41%));
+    font-size: 48px;
+    padding: 1rem;
+
+  &:hover {
+    border-image: linear-gradient(150deg, hsl(100, 20%, 20%), hsl(50, 70%, 50%) 30px);
+  }
+}

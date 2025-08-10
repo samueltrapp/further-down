@@ -1,4 +1,4 @@
-import { CharType } from "../../types/characters.ts";
+import { CharType } from "../../types/individual/characters.ts";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 export type CharacterStateType = CharType[];

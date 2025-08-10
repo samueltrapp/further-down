@@ -23,7 +23,6 @@ export function resolvePlayerTurn(
       ...game,
       battle: {
         round: isRoundEnd ? game.battle?.round : game.battle?.round + 1,
-        turnNumber: game.battle?.turnNumber + 1,
         turnOrder: resolveTurnOrder(characters),
       },
       characters,
@@ -46,8 +45,8 @@ export function resolveEnemyTurn(
     game: {
       ...game,
       battle: {
+        ...game,
         round: isRoundEnd ? game.battle?.round : game.battle?.round + 1,
-        turnNumber: game.battle?.turnNumber + 1,
         turnOrder: resolveTurnOrder(characters),
       },
       characters,

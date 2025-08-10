@@ -1,13 +1,13 @@
 import { StatsType } from "./stats.ts";
-import { ManeuverName } from "./maneuvers.ts";
-import { WeaponType } from "./weapons.ts";
-import { TacticName } from "./tactics.ts";
-import { BlessingType } from "./blessings.ts";
+import { ManeuverName } from "../equipables/maneuvers.ts";
+import { WeaponType } from "../equipables/weapons.ts";
+import { TacticName } from "../equipables/tactics.ts";
+import { BlessingType } from "../equipables/blessings.ts";
 
 export type PlayerType = {
   id: string;
   name: string;
-  playerId?: string;
+  userId?: string;
   team: "player";
   stats: StatsType;
   statsHistory: StatsType;

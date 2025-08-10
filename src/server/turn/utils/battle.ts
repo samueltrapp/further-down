@@ -1,6 +1,6 @@
-import { StatsType } from "../../../types/stats.ts";
-import { CharType } from "../../../types/characters.ts";
-import { WeaponType } from "../../../types/weapons.ts";
+import { StatsType } from "../../../types/individual/stats.ts";
+import { CharType } from "../../../types/individual/characters.ts";
+import { WeaponType } from "../../../types/equipables/weapons.ts";
 import { DamageType } from "../../../types/turns.ts";
 
 const createSpread = (spread: number) => {

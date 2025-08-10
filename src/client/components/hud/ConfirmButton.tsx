@@ -5,8 +5,8 @@ import {
 } from "../../contexts/BattleContext.tsx";
 import { playerTurn } from "../../services/turn.ts";
 import { GameActions } from "../../../types/game.ts";
-import { ManeuverName } from "../../../types/maneuvers.ts";
-import { WeaponName } from "../../../types/weapons.ts";
+import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
+import { WeaponName } from "../../../types/equipables/weapons.ts";
 import { LobbyContext } from "../../contexts/LobbyContext.tsx";
 
 export default function ConfirmButton() {

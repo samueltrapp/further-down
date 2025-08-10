@@ -5,9 +5,9 @@ import {
   BattleDispatchContext,
   BattleStateType,
 } from "./BattleContext.tsx";
-import { ManeuverName } from "../../types/maneuvers.ts";
+import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { selectEnemies } from "./contextActions.ts";
-import { WeaponName } from "../../types/weapons.ts";
+import { WeaponName } from "../../types/equipables/weapons.ts";
 
 export type BattleActionTypes =
   | {
@@ -30,7 +30,7 @@ export type BattleActionTypes =
 export const BattleProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(battleReducer, {
     round: 1,
-    turnNumber: 0,
+    speedElapsed: 0,
     turnOrder: [],
     enableConfirmation: false,
     maxEnemySelections: 0,

@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { BattleContext } from "../../contexts/BattleContext.tsx";
 import "./StatBlocks.css";
 import "./Enemy.css";
-import { EnemyType } from "../../../types/characters.ts";
+import { EnemyType } from "../../../types/individual/characters.ts";
 import { enemyTurn } from "../../services/turn.ts";
 import { LobbyContext } from "../../contexts/LobbyContext.tsx";
 

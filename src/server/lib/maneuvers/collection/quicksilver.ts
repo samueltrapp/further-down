@@ -1,7 +1,7 @@
 import {
   OtherManeuverFnArgsType,
   SelfManeuverFnArgsType,
-} from "../../../../types/maneuvers.ts";
+} from "../../../../types/equipables/maneuvers.ts";
 import {
   calcRawDamage,
   calcRawMitigation,
@@ -9,7 +9,7 @@ import {
   trunc,
 } from "../../../turn/utils/battle.ts";
 import { details } from "../details.ts";
-import { WeaponType } from "../../../../types/weapons.ts";
+import { WeaponType } from "../../../../types/equipables/weapons.ts";
 
 export function quicksilverOther(fnArgs: OtherManeuverFnArgsType) {
   const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;

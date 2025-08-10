@@ -11,7 +11,7 @@ import TurnTracker from "../../components/hud/TurnTracker.tsx";
 import ConfirmButton from "../../components/hud/ConfirmButton.tsx";
 import BattleLog from "../../components/hud/BattleLog.tsx";
 import Advisor from "../../components/hud/Advisor.tsx";
-import { EnemyType, PlayerType } from "../../../types/characters.ts";
+import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
 import { CharacterContext } from "../../contexts/CharacterContext.tsx";
 
 function GameBoard() {

@@ -1,6 +1,6 @@
-import { ManeuverName } from "./maneuvers.ts";
-import { EnemyType, PlayerType } from "./characters.ts";
-import { WeaponName } from "./weapons.ts";
+import { ManeuverName } from "./equipables/maneuvers.ts";
+import { EnemyType, PlayerType } from "./individual/characters.ts";
+import { WeaponName } from "./equipables/weapons.ts";
 
 type BaseTurnType = {
   gameId: string;
@@ -26,7 +26,7 @@ export enum GameActions {
 
 export type BattleType = {
   round: number;
-  turnNumber: number;
+  speedElapsed: number;
   turnOrder: string[];
 };
 

@@ -5,5 +5,7 @@ export default function Advisor() {
   const battle = useContext(BattleContext);
   // const playerId = game?.characters.find(game?.turnOrder)
 
-  return <div className="advisor-bar central-column">{battle?.turnNumber}</div>;
+  return (
+    <div className="advisor-bar central-column">{battle?.speedElapsed}</div>
+  );
 }

@@ -3,7 +3,7 @@ import {
   CharacterContext,
   CharacterStateContext,
 } from "./CharacterContext.tsx";
-import { CharType } from "../../types/characters.ts";
+import { CharType } from "../../types/individual/characters.ts";
 
 export const CharacterProvider = ({ children }: { children: ReactNode }) => {
   const [characters, setCharacters] = useState<CharType[]>([]);

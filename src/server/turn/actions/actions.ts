@@ -1,4 +1,4 @@
-import { CharType } from "../../../types/characters.ts";
+import { CharType } from "../../../types/individual/characters.ts";
 import { getCharacterDetails } from "../utils/data.ts";
 import { EnemyTurnType, PlayerTurnType } from "../../../types/game.ts";
 import { getMnvFns } from "../../lib/maneuvers/fnMap.ts";

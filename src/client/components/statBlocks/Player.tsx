@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, useContext } from "react";
 import { GameActions } from "../../../types/game.ts";
-import { ManeuverName } from "../../../types/maneuvers.ts";
+import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
 import {
   BattleContext,
   BattleDispatchContext,
@@ -8,9 +8,9 @@ import {
 import "./StatBlocks.css";
 import "./Player.css";
 import { details } from "../../../server/lib/maneuvers/details.ts";
-import { PlayerType } from "../../../types/characters.ts";
+import { PlayerType } from "../../../types/individual/characters.ts";
 import { toCaps } from "../../utils/formatting.ts";
-import { WeaponName } from "../../../types/weapons.ts";
+import { WeaponName } from "../../../types/equipables/weapons.ts";
 import styled from "styled-components";
 
 const HealthBar = styled.div<{ $percentHealth: number }>`

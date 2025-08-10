@@ -1,4 +1,8 @@
-import { CharType, EnemyType, PlayerType } from "../../../types/characters.ts";
+import {
+  CharType,
+  EnemyType,
+  PlayerType,
+} from "../../../types/individual/characters.ts";
 import { PlayerTurnType } from "../../../types/game.ts";
 import { findCharacter } from "./battle.ts";
 

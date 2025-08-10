@@ -1,0 +1,31 @@
+.stat-cluster {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  width: 50%;
+}
+
+.stat-section {
+  display: flex;
+  flex-direction: row;
+}
+
+.core {
+  width: 100%;
+}
+
+.stat-splash {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 5rem;
+}
+
+h3 {
+  font-size: 24px;
+  margin: 12px 0;
+}
+
+h4 {
+  font-size: 18px;
+  margin: 8px;
+}

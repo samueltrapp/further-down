@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { LobbyContext } from "../../contexts/LobbyContext.tsx";
 import { randomId } from "../../../server/utils/data.ts";
 import { socket } from "../../socket.ts";
+import "./Lobby.scss";
 
 const Unjoined = () => {
   const lobby = useContext(LobbyContext);
@@ -33,14 +34,23 @@ const Unjoined = () => {
       <div>
         <span>{lobby?.errorMsg}</span>
       </div>
-      <div className="lobby-controls">
-        <button onClick={handleCreateRoom}>Create</button>
-        <input
-          type="text"
-          onChange={(event) => setRoomCode(event.target.value)}
-          value={roomCode}
-        />
-        <button onClick={handleJoinRoom}>Join</button>
+      <div className="controls">
+        <div className="option">
+          <button className="lobby-btn" onClick={handleCreateRoom}>
+            Create a New Game
+          </button>
+        </div>
+        <div className="option">
+          <input
+            type="text"
+            onChange={(event) => setRoomCode(event.target.value)}
+            placeholder="Room Code"
+            value={roomCode}
+          />
+          <button className="lobby-btn" onClick={handleJoinRoom}>
+            Join
+          </button>
+        </div>
       </div>
     </div>
   );
