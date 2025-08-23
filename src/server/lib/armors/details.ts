@@ -1,8 +1,9 @@
-import { ArnorType } from "../../../types/equipables/armors.ts";
+import { ArmorType } from "../../../types/equipables/armors.ts";
 
-export const armDetails: ArnorType[] = [
+export const armDetails: ArmorType[] = [
   {
     name: "leather",
+    constitution: 5,
     protection: 2,
     affinities: {
       defense: 1.8,
@@ -17,6 +18,7 @@ export const armDetails: ArnorType[] = [
   },
   {
     name: "platemail",
+    constitution: 5,
     protection: 4,
     affinities: {
       defense: 2.4,
@@ -31,6 +33,7 @@ export const armDetails: ArnorType[] = [
   },
   {
     name: "robe",
+    constitution: 5,
     protection: 1,
     affinities: {
       defense: 0.4,
@@ -45,6 +48,7 @@ export const armDetails: ArnorType[] = [
   },
   {
     name: "tunic",
+    constitution: 5,
     protection: 3,
     affinities: {
       defense: 0.9,

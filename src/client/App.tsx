@@ -9,7 +9,7 @@ import {
   LobbyContext,
   LobbyDispatchContext,
 } from "./contexts/LobbyContext.tsx";
-import { CharacterCreator } from "./pages/CharacterCreator/CharacterCreator.tsx";
+import { Rewards } from "./components/interstitials/Rewards";
 
 function App() {
   // const battle = useContext(BattleContext);
@@ -78,7 +78,7 @@ function App() {
       {(lobby?.status === "unjoined" || lobby?.status === "waiting") && (
         <Lobby />
       )}
-      {lobby?.status === "char-create" && <CharacterCreator />}
+      {lobby?.status === "char-create" && <Rewards />}
       {lobby?.status === "started" && <GameBoard />}
     </div>
   );

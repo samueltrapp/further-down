@@ -2,7 +2,10 @@ import { StatsType } from "./stats.ts";
 import { ManeuverName } from "../equipables/maneuvers.ts";
 import { WeaponType } from "../equipables/weapons.ts";
 import { TacticName } from "../equipables/tactics.ts";
-import { BlessingType } from "../equipables/blessings.ts";
+import { BlessingName } from "../equipables/blessings.ts";
+import { ArmorType } from "../equipables/armors.ts";
+import { CurseName } from "../equipables/curses.ts";
+import { EnchantmentName } from "../equipables/enchantments.ts";
 
 export type PlayerType = {
   id: string;
@@ -14,7 +17,10 @@ export type PlayerType = {
   lastTurn: number;
   maneuvers: ManeuverName[];
   weapons: WeaponType[];
-  blessings: BlessingType[];
+  armors: ArmorType[];
+  blessings: BlessingName[];
+  curses: CurseName;
+  enchantments: EnchantmentName[];
   favors: string[];
   burdens: string[];
 };

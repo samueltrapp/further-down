@@ -1,7 +1,7 @@
 import { EnemyTurnType, GameType, PlayerTurnType } from "../../types/game.ts";
-import { resolvePreActions } from "./actions/preActions.ts";
-import { resolveManeuver, resolveTactic } from "./actions/actions.ts";
-import { resolvePostActions } from "./actions/postActions.ts";
+import { resolvePreActions } from "../turn/actions/preActions.ts";
+import { resolveManeuver, resolveTactic } from "../turn/actions/actions.ts";
+import { resolvePostActions } from "../turn/actions/postActions.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
 
 export function resolvePlayerTurn(

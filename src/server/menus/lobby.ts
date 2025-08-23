@@ -4,10 +4,10 @@ import { Server } from "socket.io";
 export const existingLobby = (
   io: Server,
   game: GameType | undefined,
-  playerId: string,
+  userId: string,
 ): GameType | undefined => {
   const playerAlreadyInGame = game?.lobby?.players.some(
-    (player) => player === playerId,
+    (player) => player === userId,
   );
 
   if (game && game.lobby.players.length <= 3 && !playerAlreadyInGame) {
@@ -18,13 +18,13 @@ export const existingLobby = (
         status: (game.lobby.players.length === 3
           ? "full"
           : "waiting") as LobbyStatusType,
-        players: [...game.lobby.players, playerId],
+        players: [...game.lobby.players, userId],
       },
     };
   } else if (!game) {
-    io.to(playerId).emit("rejectPlayer", "Couldn't find game.");
+    io.to(userId).emit("rejectPlayer", "Couldn't find game.");
   } else {
-    io.to(playerId).emit("rejectPlayer", "Room is full.");
+    io.to(userId).emit("rejectPlayer", "Room is full.");
   }
 
   return undefined;

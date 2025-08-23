@@ -2,13 +2,14 @@ import { useContext, useState } from "react";
 import { StatName, StatsType } from "../../../types/individual/stats.ts";
 import { CharacterContext } from "../../contexts/CharacterContext.tsx";
 import "./StatGrowth.css";
+import { socket } from "../../socket.ts";
 
 type RemainingPointsType = { core: number; standard: number };
 type StatClickFnType = (stat: StatName, add: boolean, core: boolean) => void;
 
 const initialStats: StatsType = {
-  maxHitPoints: 100,
-  hitPoints: 100,
+  hitPoints: 0,
+  vitality: 20,
   speedCapacity: 20,
   speed: 20,
   physical: 0,
@@ -99,7 +100,9 @@ export function StatGrowth({
     );
   }
 
-  function submitStats() {}
+  function submitStats() {
+    socket.emit("character", stats);
+  }
 
   return (
     <div className="stat-splash">

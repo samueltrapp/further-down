@@ -9,23 +9,23 @@ const Unjoined = () => {
   const [roomCode, setRoomCode] = useState("");
 
   useEffect(() => {
-    if (localStorage.getItem("playerId") === null) {
-      const playerId = randomId(8);
-      localStorage.setItem("playerId", playerId);
+    if (localStorage.getItem("userId") === null) {
+      const userId = randomId(8);
+      localStorage.setItem("userId", userId);
     }
   }, []);
 
   const handleCreateRoom = () => {
-    const playerId = localStorage.getItem("playerId");
-    if (playerId) {
-      socket.emit("create", playerId);
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      socket.emit("create", userId);
     }
   };
 
   const handleJoinRoom = () => {
-    const playerId = localStorage.getItem("playerId");
-    if (playerId) {
-      socket.emit("join", { gameId: roomCode, playerId });
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      socket.emit("join", { gameId: roomCode, userId });
     }
   };
 

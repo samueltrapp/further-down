@@ -1,6 +1,6 @@
 type AspectName = "ghostly" | "flaming";
 
-type EnchantmentName = "lethal" | "silver";
+export type EnchantmentName = "lethal" | "silver";
 
 export type EnchantmentType = {
   enchName: EnchantmentName;
