@@ -1,25 +1,18 @@
 import { useContext, useEffect } from "react";
-import { BattleContext } from "../../contexts/BattleContext.tsx";
+import { EnemyType } from "../../../types/individual/characters.ts";
+import { enemyTurn } from "../../services/turn.ts";
 import "./StatBlocks.css";
 import "./Enemy.css";
-import { EnemyType } from "../../../types/characters.ts";
-import { enemyTurn } from "../../services/turn.ts";
-import { LobbyContext } from "../../contexts/LobbyContext.tsx";
-
-// const lowestHpPlayer = (players: PlayerType[]) => {
-//   const lowestHpChar = players.reduce((prev, next) =>
-//     next.stats.hitPoints < prev.stats.hitPoints ? next : prev,
-//   );
-//   return [lowestHpChar.id];
-// };
+import { GameContext } from "../../contexts/GameContext.tsx";
 
 function Enemy(props: EnemyType) {
   const { id, name, stats } = props;
 
-  const battle = useContext(BattleContext);
-  const lobby = useContext(LobbyContext);
-  const activeTurn = battle?.turnOrder[0] === id;
-  const isSelected = battle?.selectedEnemyIds.includes(id);
+  const game = useContext(GameContext);
+  const client = game?.client;
+  const lobby = game?.data.lobby;
+  const activeTurn = game?.data.battle?.turnOrder[0] === id;
+  const isSelected = client?.selectedEnemyIds.includes(id);
 
   useEffect(() => {
     if (activeTurn && lobby?.gameId) {

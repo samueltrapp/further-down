@@ -1,42 +1,42 @@
 import { useContext } from "react";
-import {
-  BattleContext,
-  BattleDispatchContext,
-} from "../../contexts/BattleContext.tsx";
 import { playerTurn } from "../../services/turn.ts";
-import { GameActions } from "../../../types/game.ts";
-import { ManeuverName } from "../../../types/maneuvers.ts";
-import { WeaponName } from "../../../types/weapons.ts";
-import { LobbyContext } from "../../contexts/LobbyContext.tsx";
+import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
+import { WeaponName } from "../../../types/equipables/weapons.ts";
+import {
+  GameContext,
+  GameDispatchContext,
+} from "../../contexts/GameContext.tsx";
+import { GameAction } from "../../contexts/ContextTypes.ts";
 
 export default function ConfirmButton() {
-  const battle = useContext(BattleContext);
-  const lobby = useContext(LobbyContext);
-  const dispatch = useContext(BattleDispatchContext);
-  const currentTurn = battle?.turnOrder[0];
+  const game = useContext(GameContext);
+  const dispatch = useContext(GameDispatchContext);
+  const client = game?.client;
+  const lobby = game?.data.lobby;
+  const currentTurn = game?.data.battle?.turnOrder[0];
 
-  return battle &&
-    battle.enableConfirmation &&
-    battle.selectedManeuver &&
-    battle.selectedWeapon &&
-    battle.selectedEnemyIds &&
+  return client &&
+    client?.enableConfirmation &&
+    client?.selectedManeuver &&
+    client?.selectedWeapon &&
+    client?.selectedEnemyIds &&
     currentTurn &&
     lobby?.gameId ? (
     <button
       className="confirm-button"
       onClick={() => {
         playerTurn({
-          maneuver: battle.selectedManeuver as ManeuverName,
-          weapon: battle?.selectedWeapon as WeaponName,
+          maneuver: client?.selectedManeuver as ManeuverName,
+          weapon: client?.selectedWeapon as WeaponName,
           team: "player",
           gameId: lobby.gameId,
-          targetIds: battle.selectedEnemyIds,
+          targetIds: client?.selectedEnemyIds,
           issuerId: currentTurn,
         });
         if (dispatch) {
-          dispatch({ type: GameActions.SELECT_ENEMY, payload: null });
+          dispatch({ type: GameAction.SELECT_ENEMY, payload: null });
           dispatch({
-            type: GameActions.SELECT_MANEUVER,
+            type: GameAction.SELECT_MANEUVER,
             payload: {
               maneuverSelected: false,
               maxTargets: 0,

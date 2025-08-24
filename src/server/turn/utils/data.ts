@@ -1,14 +1,15 @@
-import { CharType, EnemyType, PlayerType } from "../../../types/characters.ts";
-import { PlayerTurnType } from "../../../types/game.ts";
+import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
 import { findCharacter } from "./battle.ts";
+import { PlayerTurnType } from "../../../types/turns.ts";
+import { CharactersType } from "../../../types/game.ts";
 
 export function getCharacterDetails(
-  characters: CharType[],
+  characters: CharactersType,
   turn: PlayerTurnType,
 ) {
-  const actor = findCharacter(characters, turn.issuerId);
-  const recipients = turn.targetIds.map((targetId) =>
-    findCharacter(characters, targetId),
+  const actor = findCharacter(characters.players, turn.issuerId);
+  const recipients = turn.targetIds.map((targetId: string) =>
+    findCharacter(characters.enemies, targetId),
   );
   return { actor, recipients } as {
     actor: [PlayerType, number];

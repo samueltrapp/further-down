@@ -8,8 +8,8 @@ import { details } from "../details.ts";
 import {
   OtherManeuverFnArgsType,
   SelfManeuverFnArgsType,
-} from "../../../../types/maneuvers.ts";
-import { WeaponType } from "../../../../types/weapons.ts";
+} from "../../../../types/equipables/maneuvers.ts";
+import { WeaponType } from "../../../../types/equipables/weapons.ts";
 
 export function fireburstOther(fnArgs: OtherManeuverFnArgsType) {
   const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;

@@ -1,5 +1,5 @@
-import { MvnOrTctType } from "../../types/turns.ts";
-import { TacticName } from "../../types/tactics.ts";
+import { MvnOrTctType } from "../../../types/turns.ts";
+import { TacticName } from "../../../types/equipables/tactics.ts";
 
 export const tctDetails: Record<TacticName, MvnOrTctType> = {
   sporeBurst: {

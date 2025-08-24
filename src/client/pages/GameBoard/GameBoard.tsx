@@ -1,38 +1,30 @@
 import { useContext } from "react";
-import {
-  BattleContext,
-  BattleDispatchContext,
-} from "../../contexts/BattleContext.tsx";
 import Character from "../../components/statBlocks/Player.tsx";
 import Enemy from "../../components/statBlocks/Enemy.tsx";
 import "./GameBoard.css";
-import { GameActions } from "../../../types/game.ts";
 import TurnTracker from "../../components/hud/TurnTracker.tsx";
 import ConfirmButton from "../../components/hud/ConfirmButton.tsx";
 import BattleLog from "../../components/hud/BattleLog.tsx";
 import Advisor from "../../components/hud/Advisor.tsx";
-import { EnemyType, PlayerType } from "../../../types/characters.ts";
-import { CharacterContext } from "../../contexts/CharacterContext.tsx";
+import {
+  GameContext,
+  GameDispatchContext,
+} from "../../contexts/GameContext.tsx";
+import { GameAction } from "../../contexts/ContextTypes.ts";
 
 function GameBoard() {
-  const battle = useContext(BattleContext);
-  const battleDispatch = useContext(BattleDispatchContext);
-  const characters = useContext(CharacterContext);
+  const game = useContext(GameContext);
+  const dispatch = useContext(GameDispatchContext);
+  const battle = game?.data.battle;
+  const characters = game?.data.characters;
 
   if (!battle || !characters) return;
-  const [players, enemies] = characters.reduce(
-    (characterArr, character) => {
-      // @ts-ignore
-      characterArr[character.team === "player" ? 0 : 1].push(character);
-      return characterArr;
-    },
-    [[] as PlayerType[], [] as EnemyType[]],
-  );
+  const { players, enemies } = characters;
 
   const handleSelect = (enemyId: string) => {
-    if (battleDispatch && battle.enableConfirmation) {
-      battleDispatch({
-        type: GameActions.SELECT_ENEMY,
+    if (dispatch && game?.client.enableConfirmation) {
+      dispatch({
+        type: GameAction.SELECT_ENEMY,
         payload: enemyId,
       });
     }

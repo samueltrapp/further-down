@@ -1,6 +1,6 @@
-import { StatsType } from "../../../types/stats.ts";
-import { CharType } from "../../../types/characters.ts";
-import { WeaponType } from "../../../types/weapons.ts";
+import { StatsType } from "../../../types/individual/stats.ts";
+import { UnitType } from "../../../types/individual/characters.ts";
+import { WeaponType } from "../../../types/equipables/weapons.ts";
 import { DamageType } from "../../../types/turns.ts";
 
 const createSpread = (spread: number) => {
@@ -9,9 +9,9 @@ const createSpread = (spread: number) => {
 };
 
 export const findCharacter = (
-  characters: CharType[],
+  characters: UnitType[],
   charId: string,
-): [CharType, number] => {
+): [UnitType, number] => {
   const attackerId = characters.findIndex(
     (character) => character.id === charId,
   );

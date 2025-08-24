@@ -1,8 +1,9 @@
-import { EnemyTurnType, GameType, PlayerTurnType } from "../../types/game.ts";
-import { resolvePreActions } from "./actions/preActions.ts";
-import { resolveManeuver, resolveTactic } from "./actions/actions.ts";
-import { resolvePostActions } from "./actions/postActions.ts";
+import { BattleType, GameType } from "../../types/game.ts";
+import { resolvePreActions } from "../turn/actions/preActions.ts";
+import { resolveManeuver, resolveTactic } from "../turn/actions/actions.ts";
+import { resolvePostActions } from "../turn/actions/postActions.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
+import { EnemyTurnType, PlayerTurnType } from "../../types/turns.ts";
 
 export function resolvePlayerTurn(
   turn: PlayerTurnType,
@@ -16,14 +17,20 @@ export function resolvePlayerTurn(
   ));
   ({ characters, logMessages } = resolvePostActions(characters, logMessages));
 
-  const isRoundEnd = !characters.some((character) => character.stats.speed > 0);
+  const arePlayersDone = !characters.players.some(
+    (character) => character.stats.speed > 0,
+  );
+  const areEnemiesDone = !characters.enemies.some(
+    (character) => character.stats.speed > 0,
+  );
+  const isRoundEnd = arePlayersDone && areEnemiesDone;
 
   return {
     game: {
       ...game,
       battle: {
-        round: isRoundEnd ? game.battle?.round : game.battle?.round + 1,
-        turnNumber: game.battle?.turnNumber + 1,
+        ...(game.battle as BattleType),
+        round: isRoundEnd ? game.battle!.round : game.battle!.round + 1,
         turnOrder: resolveTurnOrder(characters),
       },
       characters,
@@ -40,14 +47,20 @@ export function resolveEnemyTurn(
   ({ characters, logMessages } = resolveTactic(characters, logMessages, turn));
   ({ characters, logMessages } = resolvePostActions(characters, logMessages));
 
-  const isRoundEnd = !characters.some((character) => character.stats.speed > 0);
+  const arePlayersDone = !characters.players.some(
+    (character) => character.stats.speed > 0,
+  );
+  const areEnemiesDone = !characters.enemies.some(
+    (character) => character.stats.speed > 0,
+  );
+  const isRoundEnd = arePlayersDone && areEnemiesDone;
 
   return {
     game: {
       ...game,
       battle: {
-        round: isRoundEnd ? game.battle?.round : game.battle?.round + 1,
-        turnNumber: game.battle?.turnNumber + 1,
+        ...(game.battle as BattleType),
+        round: isRoundEnd ? game.battle!.round : game.battle!.round + 1,
         turnOrder: resolveTurnOrder(characters),
       },
       characters,

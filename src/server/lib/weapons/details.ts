@@ -1,0 +1,68 @@
+import { WeaponType } from "../../../types/equipables/weapons.ts";
+
+export const wpnDetails: WeaponType[] = [
+  {
+    name: "cutlass",
+    power: 7,
+    spread: 2,
+    affinities: {
+      physical: 1.2,
+      magical: 0,
+      bladed: 1.8,
+      blunt: 1,
+      elemental: 1,
+      psychic: 0.5,
+    },
+    level: 1,
+    rarity: 0,
+    equipped: false,
+  },
+  {
+    name: "hammer",
+    power: 5,
+    spread: 1,
+    affinities: {
+      physical: 1.7,
+      magical: 1.2,
+      bladed: 0.2,
+      blunt: 2.0,
+      elemental: 1.1,
+      psychic: 1.4,
+    },
+    level: 1,
+    rarity: 0,
+    equipped: false,
+  },
+  {
+    name: "scepter",
+    power: 3,
+    spread: 0,
+    affinities: {
+      physical: 1.1,
+      magical: 1.9,
+      bladed: 0,
+      blunt: 1.5,
+      elemental: 1.9,
+      psychic: 1.4,
+    },
+    level: 1,
+    rarity: 0,
+    equipped: false,
+  },
+  {
+    name: "periapt",
+    power: 9,
+    spread: 4,
+    affinities: {
+      physical: 0.6,
+      magical: 1.8,
+      bladed: 1,
+      blunt: 0.2,
+      elemental: 1,
+      psychic: 1.9,
+    },
+    level: 1,
+    rarity: 0,
+    equipped: false,
+  },
+];

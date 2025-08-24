@@ -1,4 +1,4 @@
-import { EnemyType, PlayerType } from "./characters.ts";
+import { EnemyType, PlayerType } from "../individual/characters.ts";
 import { WeaponName } from "./weapons.ts";
 
 export type ManeuverName = "slap" | "quicksilver" | "fireburst" | "ache";

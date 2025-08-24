@@ -1,4 +1,4 @@
-import { GameType } from "../../types/game.ts";
+import { GameType, LobbyStatus } from "../../types/game.ts";
 
 //   maxHitPoints: 100,
 //   hitPoints: 100,
@@ -73,14 +73,14 @@ import { GameType } from "../../types/game.ts";
 //           rarity: 0,
 //         },
 //       ],
-//       playerId: "1234",
+//       userId: "1234",
 //       favors: [],
 //       burdens: [],
 //     });
 //   });
 //   return data;
 
-// export function initializeGame(gameId: string, playerId: string): GameType {
+// export function initializeGame(gameId: string, userId: string): GameType {
 //   const characterCount = 6;
 //   const tieBreaker: number[] = [];
 //   for (let i = 1; i <= characterCount; i++) {
@@ -106,16 +106,28 @@ import { GameType } from "../../types/game.ts";
 //   };
 // }
 
-export function initializeLobby(gameId: string, playerId: string): GameType {
+export function initializeLobby(gameId: string, userId: string): GameType {
   return {
     battle: undefined,
-    characters: [],
+    characters: {
+      enemies: [],
+      players: [],
+    },
     lobby: {
       gameId: gameId,
       pastEncounters: 0,
-      players: [playerId],
+      players: [userId],
       startVotes: 0,
-      status: "waiting",
+      status: LobbyStatus.WAITING,
+      errorMsg: undefined,
+    },
+    lib: {
+      blessings: ["angelblade", "flow", "pacifist", "predation"],
+      curses: ["weak"],
+      maneuvers: ["ache", "slap", "fireburst", "quicksilver"],
+      weapons: ["cutlass", "hammer", "periapt", "scepter"],
+      armors: ["leather", "platemail", "robe", "tunic"],
+      enchantments: ["lethal", "silver"],
     },
   };
 }

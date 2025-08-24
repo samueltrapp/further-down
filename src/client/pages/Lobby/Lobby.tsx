@@ -1,53 +1,64 @@
 import { useContext, useEffect, useState } from "react";
-import { LobbyContext } from "../../contexts/LobbyContext.tsx";
 import { randomId } from "../../../server/utils/data.ts";
 import { socket } from "../../socket.ts";
+import "./Lobby.scss";
+import { GameContext } from "../../contexts/GameContext.tsx";
 
 const Unjoined = () => {
-  const lobby = useContext(LobbyContext);
+  const game = useContext(GameContext);
   const [roomCode, setRoomCode] = useState("");
 
   useEffect(() => {
-    if (localStorage.getItem("playerId") === null) {
-      const playerId = randomId(8);
-      localStorage.setItem("playerId", playerId);
+    if (localStorage.getItem("userId") === null) {
+      const userId = randomId(8);
+      localStorage.setItem("userId", userId);
     }
   }, []);
 
   const handleCreateRoom = () => {
-    const playerId = localStorage.getItem("playerId");
-    if (playerId) {
-      socket.emit("create", playerId);
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      socket.emit("create", userId);
     }
   };
 
   const handleJoinRoom = () => {
-    const playerId = localStorage.getItem("playerId");
-    if (playerId) {
-      socket.emit("join", { gameId: roomCode, playerId });
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      socket.emit("join", { gameId: roomCode, userId });
     }
   };
 
   return (
     <div>
       <div>
-        <span>{lobby?.errorMsg}</span>
+        <span>{game?.data.lobby?.errorMsg}</span>
       </div>
-      <div className="lobby-controls">
-        <button onClick={handleCreateRoom}>Create</button>
-        <input
-          type="text"
-          onChange={(event) => setRoomCode(event.target.value)}
-          value={roomCode}
-        />
-        <button onClick={handleJoinRoom}>Join</button>
+      <div className="controls">
+        <div className="option">
+          <button className="lobby-btn" onClick={handleCreateRoom}>
+            Create a New Game
+          </button>
+        </div>
+        <div className="option">
+          <input
+            type="text"
+            onChange={(event) => setRoomCode(event.target.value)}
+            placeholder="Room Code"
+            value={roomCode}
+          />
+          <button className="lobby-btn" onClick={handleJoinRoom}>
+            Join
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
 const Waiting = () => {
-  const lobby = useContext(LobbyContext);
+  const game = useContext(GameContext);
+  const lobby = game?.data.lobby;
   const [voteToStart, setVoteToStart] = useState(false);
 
   const handleStart = () => {
@@ -67,7 +78,6 @@ const Waiting = () => {
 };
 
 export function Lobby() {
-  const lobby = useContext(LobbyContext);
-
-  return lobby?.status === "unjoined" ? <Unjoined /> : <Waiting />;
+  const game = useContext(GameContext);
+  return game?.data.lobby.status === "unjoined" ? <Unjoined /> : <Waiting />;
 }

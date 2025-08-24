@@ -2,9 +2,9 @@ import {
   ManeuverName,
   OtherManeuverFnArgsType,
   SelfManeuverFnArgsType,
-} from "../../../types/maneuvers.ts";
+} from "../../../types/equipables/maneuvers.ts";
 import { slapOther, slapSelf } from "./collection/slap.ts";
-import { EnemyType, PlayerType } from "../../../types/characters.ts";
+import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
 import { quicksilverOther, quicksilverSelf } from "./collection/quicksilver.ts";
 import { acheOther, acheSelf } from "./collection/ache.ts";
 import { fireburstOther, fireburstSelf } from "./collection/fireburst.ts";

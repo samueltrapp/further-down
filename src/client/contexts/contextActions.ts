@@ -1,25 +1,25 @@
-import { BattleStateType } from "./BattleContext.tsx";
+import { GameClientType } from "./ContextTypes.ts";
 
 export const selectEnemies = (
   newSelection: string | null,
-  game: BattleStateType,
+  clientState: GameClientType,
 ) => {
   if (!newSelection) return [];
-  const pivot = game.selectedEnemyIds.findIndex(
-    (enemyId) => enemyId === newSelection,
+  const pivot = clientState.selectedEnemyIds.findIndex(
+    (enemyId: string) => enemyId === newSelection,
   );
   if (pivot >= 0) {
-    return game.selectedEnemyIds
+    return clientState.selectedEnemyIds
       .slice(0, pivot)
-      .concat(game.selectedEnemyIds.slice(pivot + 1));
+      .concat(clientState.selectedEnemyIds.slice(pivot + 1));
   }
   const overwriteIndex =
-    game.maxEnemySelections > 1
-      ? -(game.maxEnemySelections - 1)
-      : game.selectedEnemyIds.length;
+    clientState.maxEnemySelections > 1
+      ? -(clientState.maxEnemySelections - 1)
+      : clientState.selectedEnemyIds.length;
   const needsOverwrite =
-    game.selectedEnemyIds.length >= game.maxEnemySelections;
-  const limitedEnemyIds = game.selectedEnemyIds.slice(
+    clientState.selectedEnemyIds.length >= clientState.maxEnemySelections;
+  const limitedEnemyIds = clientState.selectedEnemyIds.slice(
     needsOverwrite ? overwriteIndex : 0,
   );
   limitedEnemyIds.push(newSelection);

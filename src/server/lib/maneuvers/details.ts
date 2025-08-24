@@ -1,4 +1,4 @@
-import { ManeuverName } from "../../../types/maneuvers.ts";
+import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
 import { MvnOrTctType } from "../../../types/turns.ts";
 
 export const details: Record<ManeuverName, MvnOrTctType> = {

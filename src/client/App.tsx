@@ -1,21 +1,17 @@
 import { useContext, useEffect } from "react";
 import { socket } from "./socket.ts";
-import { BattleDispatchContext } from "./contexts/BattleContext.tsx";
-import { GameActions, GameType } from "../types/game.ts";
+import { GameType, LobbyStatus } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard/GameBoard.tsx";
-import "./App.css";
 import { Lobby } from "./pages/Lobby/Lobby.tsx";
-import {
-  LobbyContext,
-  LobbyDispatchContext,
-} from "./contexts/LobbyContext.tsx";
-import { CharacterCreator } from "./pages/CharacterCreator/CharacterCreator.tsx";
+import { Rewards } from "./components/interstitials/Rewards";
+import { GameAction } from "./contexts/ContextTypes.ts";
+import { GameContext, GameDispatchContext } from "./contexts/GameContext.tsx";
+import "./App.css";
 
 function App() {
-  // const battle = useContext(BattleContext);
-  const battleDispatch = useContext(BattleDispatchContext);
-  const lobby = useContext(LobbyContext);
-  const lobbyDispatch = useContext(LobbyDispatchContext);
+  const game = useContext(GameContext);
+  const dispatch = useContext(GameDispatchContext);
+  const lobbyStatus = game?.data.lobby.status;
 
   useEffect(() => {
     // Load existing or create new game
@@ -27,11 +23,11 @@ function App() {
     }
 
     function onFailedJoin(msg: string) {
-      if (lobbyDispatch) {
-        lobbyDispatch({
-          type: GameActions.SET_ERROR_MESSAGE,
+      if (dispatch) {
+        dispatch({
+          type: GameAction.SET_ERROR_MESSAGE,
           payload: {
-            errorMessage: msg,
+            errorMsg: msg,
           },
         });
       }
@@ -41,21 +37,10 @@ function App() {
       game: GameType;
       logMessages: string[];
     }) {
-      if (battleDispatch && update.game.battle) {
-        battleDispatch({
-          type: GameActions.SYNC,
-          payload: update.game.battle,
-        });
-      }
-      if (lobbyDispatch) {
-        lobbyDispatch({
-          type: GameActions.SYNC,
-          payload: {
-            gameId: update.game.lobby.gameId,
-            players: update.game.lobby.players,
-            startVotes: update.game.lobby.startVotes,
-            status: update.game.lobby.status,
-          },
+      if (dispatch && update) {
+        dispatch({
+          type: GameAction.SYNC,
+          payload: update.game,
         });
       }
     }
@@ -71,15 +56,14 @@ function App() {
       socket.off("update", (update) => onUpdateGameState(update));
       socket.disconnect();
     };
-  }, [battleDispatch, lobbyDispatch]);
+  }, [dispatch]);
 
   return (
     <div className="container">
-      {(lobby?.status === "unjoined" || lobby?.status === "waiting") && (
-        <Lobby />
-      )}
-      {lobby?.status === "char-create" && <CharacterCreator />}
-      {lobby?.status === "started" && <GameBoard />}
+      {(lobbyStatus === LobbyStatus.UNJOINED ||
+        lobbyStatus === LobbyStatus.WAITING) && <Lobby />}
+      {lobbyStatus === LobbyStatus.REWARD && <Rewards />}
+      {lobbyStatus === LobbyStatus.BATTLE && <GameBoard />}
     </div>
   );
 }
