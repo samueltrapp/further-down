@@ -1,8 +1,9 @@
 import { useContext } from "react";
-import { BattleContext } from "../../contexts/BattleContext.tsx";
+import { GameContext } from "../../contexts/GameContext.tsx";
 
 export default function Advisor() {
-  const battle = useContext(BattleContext);
+  const game = useContext(GameContext);
+  const battle = game?.data.battle;
   // const userId = game?.characters.find(game?.turnOrder)
 
   return (

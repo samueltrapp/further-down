@@ -3,12 +3,13 @@ import cors from "cors";
 import express from "express";
 import { Server } from "socket.io";
 import { initializeLobby } from "./utils/initialData.ts";
-import { EnemyTurnType, GameMetaType, PlayerTurnType } from "../types/game.ts";
+import { GameMetaType, LobbyStatus } from "../types/game.ts";
 import { resolveEnemyTurn, resolvePlayerTurn } from "./events/turn.ts";
 import { existingLobby } from "./menus/lobby.ts";
 import { randomId } from "./utils/data.ts";
 import { updateCharacter } from "./events/exploration.ts";
-import { CharType } from "../types/individual/characters.ts";
+import { PlayerType, RewardOptions } from "../types/individual/characters.ts";
+import { EnemyTurnType, PlayerTurnType } from "../types/turns.ts";
 
 type JoinDataType = {
   gameId: string;
@@ -75,7 +76,7 @@ io.on("connection", (socket) => {
           ...game.lobby,
           status:
             totalVotes === game.lobby.players.length
-              ? "char-create"
+              ? LobbyStatus.REWARD
               : game.lobby.status,
           startVotes: totalVotes,
         },
@@ -86,14 +87,16 @@ io.on("connection", (socket) => {
 
   function postCharacter({
     gameId,
+    rewardSlot,
     character,
   }: {
     gameId: string;
-    character: CharType;
+    rewardSlot: RewardOptions;
+    character: PlayerType;
   }) {
     const [game, gameIndex] = gameMeta.findGameAndIndex(gameId);
     if (game) {
-      gameMeta.games[gameIndex] = updateCharacter(character, game);
+      gameMeta.games[gameIndex] = updateCharacter(character, rewardSlot, game);
       sendGame(gameId);
     }
   }

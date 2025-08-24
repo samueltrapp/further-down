@@ -6,54 +6,39 @@ import { CurseName } from "./equipables/curses.ts";
 import { ArmorName } from "./equipables/armors.ts";
 import { EnchantmentName } from "./equipables/enchantments.ts";
 
-type BaseTurnType = {
-  gameId: string;
-  issuerId: string;
-};
-
-export type LobbyStatusType =
-  | "char-create"
-  | "waiting"
-  | "full"
-  | "started"
-  | "unjoined";
-
-export enum GameActions {
-  KILL_GAME = "KILL_GAME",
-  SELECT_MANEUVER = "SELECT_MANEUVER",
-  SELECT_WEAPON = "SELECT_TECHNIQUE",
-  SELECT_ENEMY = "SELECT_ENEMY",
-  SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE",
-  START_GAME = "START_GAME",
-  SYNC = "SYNC",
+export enum LobbyStatus {
+  BATTLE = "battle",
+  EXPLORATION = "exploration",
+  FULL = "full",
+  REWARD = "reward",
+  UNJOINED = "unjoined",
+  WAITING = "waiting",
 }
 
 export type BattleType = {
   round: number;
   speedElapsed: number;
   turnOrder: string[];
+  grade: "boss" | "mini" | "major" | "moderate" | "minor";
 };
 
 export type LobbyType = {
   gameId: string;
-  status: LobbyStatusType;
+  status: LobbyStatus;
   pastEncounters: number;
   players: string[];
   startVotes: number;
+  errorMsg: string | undefined;
 };
 
-export type RewardOptions =
-  | "blessings"
-  | "curses"
-  | "maneuvers"
-  | "weapons"
-  | "armors"
-  | "enchantments";
+export type CharactersType = {
+  players: PlayerType[];
+  enemies: EnemyType[];
+};
 
-export type PendingType = Record<RewardOptions, number>;
-
-export type RewardStateType = {
-  pending: PendingType;
+export type GameType = {
+  battle: BattleType | undefined;
+  characters: CharactersType;
   lib: {
     blessings: BlessingName[];
     curses: CurseName[];
@@ -62,27 +47,10 @@ export type RewardStateType = {
     armors: ArmorName[];
     enchantments: EnchantmentName[];
   };
-};
-
-export type GameType = {
-  battle: BattleType | undefined;
-  characters: (PlayerType | EnemyType)[];
   lobby: LobbyType;
-  rewards: RewardStateType;
 };
 
 export type GameMetaType = {
   games: GameType[];
   findGameAndIndex: (gameId: string) => [GameType | undefined, number];
-};
-
-export type PlayerTurnType = BaseTurnType & {
-  maneuver: ManeuverName;
-  targetIds: string[];
-  team: "player";
-  weapon: WeaponName;
-};
-
-export type EnemyTurnType = BaseTurnType & {
-  team: "enemy";
 };

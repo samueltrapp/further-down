@@ -1,10 +1,5 @@
 import { ChangeEvent, MouseEvent, useContext } from "react";
-import { GameActions } from "../../../types/game.ts";
 import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
-import {
-  BattleContext,
-  BattleDispatchContext,
-} from "../../contexts/BattleContext.tsx";
 import "./StatBlocks.css";
 import "./Player.css";
 import { details } from "../../../server/lib/maneuvers/details.ts";
@@ -12,6 +7,11 @@ import { PlayerType } from "../../../types/individual/characters.ts";
 import { toCaps } from "../../utils/formatting.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
 import styled from "styled-components";
+import {
+  GameContext,
+  GameDispatchContext,
+} from "../../contexts/GameContext.tsx";
+import { GameAction } from "../../contexts/ContextTypes.ts";
 
 const HealthBar = styled.div<{ $percentHealth: number }>`
   width: ${(props) => `${props.$percentHealth * 100}%`};
@@ -27,18 +27,18 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
 `;
 
 export default function Player(props: PlayerType) {
-  const { id, name, stats, maneuvers, armor, weapons } = props;
-  const battle = useContext(BattleContext);
-  const battleDispatch = useContext(BattleDispatchContext);
-  const activeTurn = battle?.turnOrder[0] === id;
-  const maxHp = Math.floor(armor.constitution * stats.vitality);
+  const { id, name, stats, maneuvers, armors, weapons } = props;
+  const game = useContext(GameContext);
+  const dispatch = useContext(GameDispatchContext);
+  const activeTurn = game?.data.battle?.turnOrder[0] === id;
+  const maxHp = Math.floor(armors[0].constitution * stats.vitality);
 
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
     const value = target.value as ManeuverName;
-    if (battleDispatch && target.value) {
-      battleDispatch({
-        type: GameActions.SELECT_MANEUVER,
+    if (dispatch && target.value) {
+      dispatch({
+        type: GameAction.SELECT_MANEUVER,
         payload: {
           maneuverSelected: true,
           maxTargets: details[value].maxTargets,
@@ -51,9 +51,9 @@ export default function Player(props: PlayerType) {
   const handleSelectWeapon = (event: ChangeEvent<HTMLSelectElement>) => {
     const target = event.target as HTMLSelectElement;
     const value = target.value as WeaponName;
-    if (battleDispatch && target.value) {
-      battleDispatch({
-        type: GameActions.SELECT_WEAPON,
+    if (dispatch && target.value) {
+      dispatch({
+        type: GameAction.SELECT_WEAPON,
         payload: {
           weapon: value,
         },
@@ -77,7 +77,10 @@ export default function Player(props: PlayerType) {
       </div>
       <div className="stat-body">
         <div className="action-column">
-          <select onChange={handleSelectWeapon} value={battle?.selectedWeapon}>
+          <select
+            onChange={handleSelectWeapon}
+            value={game?.client.selectedWeapon}
+          >
             {weapons.map((weapon) => (
               <option value={weapon.name}>{toCaps(weapon.name)}</option>
             ))}
@@ -86,7 +89,7 @@ export default function Player(props: PlayerType) {
         <div className="action-column">
           {maneuvers.map((maneuver) => (
             <button
-              className={`maneuver-button ${activeTurn && battle?.selectedManeuver === maneuver ? "selected-maneuver" : ""}`}
+              className={`maneuver-button ${activeTurn && game?.client.selectedManeuver === maneuver ? "selected-maneuver" : ""}`}
               disabled={!activeTurn}
               key={maneuver}
               onClick={handleClickManeuver}

@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { StatName, StatsType } from "../../../types/individual/stats.ts";
-import { CharacterContext } from "../../contexts/CharacterContext.tsx";
 import "./StatGrowth.css";
 import { socket } from "../../socket.ts";
+import { GameContext } from "../../contexts/GameContext.tsx";
 
 type RemainingPointsType = { core: number; standard: number };
 type StatClickFnType = (stat: StatName, add: boolean, core: boolean) => void;
@@ -73,9 +73,11 @@ export function StatGrowth({
   corePoints: number;
   standardPoints: number;
 }) {
-  const characters = useContext(CharacterContext);
+  const game = useContext(GameContext);
+  const playerCharacters = game?.data.characters.players;
   const baselineStats =
-    characters.find((character) => character.id === id)?.stats || initialStats;
+    playerCharacters?.find((character) => character.id === id)?.stats ||
+    initialStats;
   const [stats, setStats] = useState(baselineStats);
   const [remainingPoints, setRemainingPoints] = useState<RemainingPointsType>({
     core: corePoints,

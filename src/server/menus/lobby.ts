@@ -1,4 +1,4 @@
-import { GameType, LobbyStatusType } from "../../types/game.ts";
+import { GameType, LobbyStatus } from "../../types/game.ts";
 import { Server } from "socket.io";
 
 export const existingLobby = (
@@ -15,9 +15,10 @@ export const existingLobby = (
       ...game,
       lobby: {
         ...game.lobby,
-        status: (game.lobby.players.length === 3
-          ? "full"
-          : "waiting") as LobbyStatusType,
+        status:
+          game.lobby.players.length === 3
+            ? LobbyStatus.FULL
+            : LobbyStatus.WAITING,
         players: [...game.lobby.players, userId],
       },
     };

@@ -1,4 +1,4 @@
-import { GameType } from "../../types/game.ts";
+import { GameType, LobbyStatus } from "../../types/game.ts";
 
 //   maxHitPoints: 100,
 //   hitPoints: 100,
@@ -109,31 +109,25 @@ import { GameType } from "../../types/game.ts";
 export function initializeLobby(gameId: string, userId: string): GameType {
   return {
     battle: undefined,
-    characters: [],
+    characters: {
+      enemies: [],
+      players: [],
+    },
     lobby: {
       gameId: gameId,
       pastEncounters: 0,
       players: [userId],
       startVotes: 0,
-      status: "waiting",
+      status: LobbyStatus.WAITING,
+      errorMsg: undefined,
     },
-    rewards: {
-      pending: {
-        blessings: 1,
-        curses: 0,
-        weapons: 1,
-        armors: 1,
-        maneuvers: 2,
-        enchantments: 0,
-      },
-      lib: {
-        blessings: ["angelblade", "flow", "pacifist", "predation"],
-        curses: ["weak"],
-        maneuvers: ["ache", "slap", "fireburst", "quicksilver"],
-        weapons: ["cutlass", "hammer", "periapt", "scepter"],
-        armors: ["leather", "platemail", "robe", "tunic"],
-        enchantments: ["lethal", "silver"],
-      },
+    lib: {
+      blessings: ["angelblade", "flow", "pacifist", "predation"],
+      curses: ["weak"],
+      maneuvers: ["ache", "slap", "fireburst", "quicksilver"],
+      weapons: ["cutlass", "hammer", "periapt", "scepter"],
+      armors: ["leather", "platemail", "robe", "tunic"],
+      enchantments: ["lethal", "silver"],
     },
   };
 }

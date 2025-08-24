@@ -1,7 +1,7 @@
-import { CharType } from "../../../types/individual/characters.ts";
+import { CharactersType } from "../../../types/game.ts";
 
 export function resolvePostActions(
-  characters: CharType[],
+  characters: CharactersType,
   logMessages: string[],
 ) {
   return { characters, logMessages };

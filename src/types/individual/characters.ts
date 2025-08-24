@@ -7,13 +7,23 @@ import { ArmorType } from "../equipables/armors.ts";
 import { CurseName } from "../equipables/curses.ts";
 import { EnchantmentName } from "../equipables/enchantments.ts";
 
+export type RewardOptions =
+  | "blessings"
+  | "curses"
+  | "maneuvers"
+  | "weapons"
+  | "armors"
+  | "enchantments";
+
+export type PendingRewardType = Record<RewardOptions, number>;
+
 export type PlayerType = {
   id: string;
   name: string;
-  userId?: string;
+  userId: string;
   team: "player";
   stats: StatsType;
-  statsHistory: StatsType;
+  savedStats: StatsType;
   lastTurn: number;
   maneuvers: ManeuverName[];
   weapons: WeaponType[];
@@ -23,6 +33,7 @@ export type PlayerType = {
   enchantments: EnchantmentName[];
   favors: string[];
   burdens: string[];
+  pendingRewards: PendingRewardType;
 };
 
 export type EnemyType = {
@@ -36,4 +47,4 @@ export type EnemyType = {
   burdens: string[];
 };
 
-export type CharType = PlayerType | EnemyType;
+export type UnitType = PlayerType | EnemyType;

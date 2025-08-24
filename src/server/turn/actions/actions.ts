@@ -1,17 +1,17 @@
-import { CharType } from "../../../types/individual/characters.ts";
 import { getCharacterDetails } from "../utils/data.ts";
-import { EnemyTurnType, PlayerTurnType } from "../../../types/game.ts";
 import { getMnvFns } from "../../lib/maneuvers/fnMap.ts";
+import { EnemyTurnType, PlayerTurnType } from "../../../types/turns.ts";
+import { CharactersType } from "../../../types/game.ts";
 
 export function resolveManeuver(
-  characters: CharType[],
+  characters: CharactersType,
   logMessages: string[],
   turn: PlayerTurnType,
 ) {
   const { maneuver, weapon } = turn;
   const mnvFns = getMnvFns(maneuver);
   const { actor, recipients } = getCharacterDetails(characters, turn);
-  const characterResults = [...characters];
+  const characterResults = { ...characters };
 
   // Process updates to and logs from the issuer
   const [actorValue, actorIndex] = actor;
@@ -46,9 +46,9 @@ export function resolveManeuver(
     };
   });
 
-  characterResults[updatedSelf.index] = updatedSelf.value;
+  characterResults.players[updatedSelf.index] = updatedSelf.value;
   updatedRecipients.forEach((recipient) => {
-    characterResults[recipient.index] = recipient.value;
+    characterResults.enemies[recipient.index] = recipient.value;
   });
 
   if (selfResults?.logMessages && selfResults?.logMessages.length > 0) {
@@ -61,7 +61,7 @@ export function resolveManeuver(
 }
 
 export function resolveTactic(
-  characters: CharType[],
+  characters: CharactersType,
   logMessages: string[],
   turn: EnemyTurnType,
 ) {
