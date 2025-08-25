@@ -6,20 +6,20 @@ export const existingLobby = (
   game: GameType | undefined,
   userId: string,
 ): GameType | undefined => {
-  const playerAlreadyInGame = game?.lobby?.players.some(
+  const playerAlreadyInGame = game?.lobby?.users.some(
     (player) => player === userId,
   );
 
-  if (game && game.lobby.players.length <= 3 && !playerAlreadyInGame) {
+  if (game && game.lobby.users.length <= 3 && !playerAlreadyInGame) {
     return {
       ...game,
       lobby: {
         ...game.lobby,
         status:
-          game.lobby.players.length === 3
+          game.lobby.users.length === 3
             ? LobbyStatus.FULL
             : LobbyStatus.WAITING,
-        players: [...game.lobby.players, userId],
+        users: [...game.lobby.users, userId],
       },
     };
   } else if (!game) {

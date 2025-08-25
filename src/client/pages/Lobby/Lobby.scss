@@ -1,18 +1,32 @@
 .controls {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .option {
-    width: 50%;
+  width: 50%;
 }
 
 .lobby-btn {
-    background: linear-gradient(150deg in hsl, hsl(151, 39%, 17%) 55%, hsl(32, 91%, 41%));
-    font-size: 48px;
-    padding: 1rem;
+  background: var(--dark-green);
+  border: none;
+  border-radius: 2rem;
+  font-size: 3rem;
+  padding: 1rem;
+  transition: color 0.25s ease-out,
+    filter 0.5s ease-out;
 
   &:hover {
-    border-image: linear-gradient(150deg, hsl(100, 20%, 20%), hsl(50, 70%, 50%) 30px);
+    color: rgb(255, 188, 66);
+    filter: drop-shadow(2px 2px 4px rgba(211, 81, 10, 0.3))
+    drop-shadow(-2px 2px 4px rgba(211, 81, 10, 0.3))
+    drop-shadow(-2px -2px 4px rgba(211, 81, 10, 0.3))
+    drop-shadow(2px -2px 4px rgba(211, 81, 10, 0.3));
   }
+}
+
+.room-input {
+  font-size: 3rem;
+  margin-left: 2.5rem;
+  padding: 1rem;
 }

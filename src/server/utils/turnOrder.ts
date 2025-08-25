@@ -13,7 +13,7 @@ export const resolveTurnOrder = (characters: CharactersType): string[] => {
   );
   const charTurns = allCharacters.map((character) => ({
     id: character.id,
-    lastTurn: character.lastTurn,
+    lastTurn: character.effects.lastTurn,
     speed: character.stats.speed,
   }));
 
