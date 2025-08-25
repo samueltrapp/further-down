@@ -50,6 +50,6 @@ type BattleActionType =
 type LobbyActionType = {
   type: GameAction.SET_ERROR_MESSAGE;
   payload: {
-    errorMsg: string;
+    errorMessage: string;
   };
 };

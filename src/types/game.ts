@@ -22,13 +22,22 @@ export type BattleType = {
   grade: "boss" | "mini" | "major" | "moderate" | "minor";
 };
 
+export type LibType = {
+  blessings: BlessingName[];
+  curses: CurseName[];
+  maneuvers: ManeuverName[];
+  weapons: WeaponName[];
+  armors: ArmorName[];
+  enchantments: EnchantmentName[];
+};
+
 export type LobbyType = {
   gameId: string;
   status: LobbyStatus;
   pastEncounters: number;
-  players: string[];
+  users: string[];
   startVotes: number;
-  errorMsg: string | undefined;
+  errorMessage: string | undefined;
 };
 
 export type CharactersType = {
@@ -39,18 +48,6 @@ export type CharactersType = {
 export type GameType = {
   battle: BattleType | undefined;
   characters: CharactersType;
-  lib: {
-    blessings: BlessingName[];
-    curses: CurseName[];
-    maneuvers: ManeuverName[];
-    weapons: WeaponName[];
-    armors: ArmorName[];
-    enchantments: EnchantmentName[];
-  };
+  lib: LibType;
   lobby: LobbyType;
-};
-
-export type GameMetaType = {
-  games: GameType[];
-  findGameAndIndex: (gameId: string) => [GameType | undefined, number];
 };

@@ -1,1 +1,1 @@
-export type CurseName = "weak";
+export type CurseName = "weak" | "cynical";

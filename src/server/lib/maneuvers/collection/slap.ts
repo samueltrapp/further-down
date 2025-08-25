@@ -15,7 +15,7 @@ export function slapOther(fnArgs: OtherManeuverFnArgsType) {
   const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;
   const mnvDetail = details[maneuver];
 
-  const weapon = actor.weapons.find(
+  const weapon = actor.rewards.weapons.find(
     (weapon) => weapon.name === weaponName,
   ) as WeaponType;
 

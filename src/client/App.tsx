@@ -27,7 +27,7 @@ function App() {
         dispatch({
           type: GameAction.SET_ERROR_MESSAGE,
           payload: {
-            errorMsg: msg,
+            errorMessage: msg,
           },
         });
       }

@@ -21,11 +21,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       },
       lobby: {
         gameId: "",
-        players: [],
+        users: [],
         startVotes: 0,
         status: LobbyStatus.UNJOINED,
         pastEncounters: 0,
-        errorMsg: undefined,
+        errorMessage: undefined,
       },
     },
     client: {

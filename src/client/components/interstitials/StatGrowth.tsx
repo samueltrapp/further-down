@@ -8,6 +8,7 @@ type RemainingPointsType = { core: number; standard: number };
 type StatClickFnType = (stat: StatName, add: boolean, core: boolean) => void;
 
 const initialStats: StatsType = {
+  currentHitPoints: 0,
   hitPoints: 0,
   vitality: 20,
   speedCapacity: 20,

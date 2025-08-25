@@ -24,15 +24,19 @@ export type PlayerType = {
   team: "player";
   stats: StatsType;
   savedStats: StatsType;
-  lastTurn: number;
-  maneuvers: ManeuverName[];
-  weapons: WeaponType[];
-  armors: ArmorType[];
-  blessings: BlessingName[];
-  curses: CurseName;
-  enchantments: EnchantmentName[];
-  favors: string[];
-  burdens: string[];
+  effects: {
+    favors: string[];
+    burdens: string[];
+    lastTurn: number;
+  };
+  rewards: {
+    armors: ArmorType[];
+    blessings: BlessingName[];
+    curses: CurseName[];
+    enchantments: EnchantmentName[];
+    maneuvers: ManeuverName[];
+    weapons: WeaponType[];
+  };
   pendingRewards: PendingRewardType;
 };
 
@@ -41,10 +45,12 @@ export type EnemyType = {
   name: string;
   team: "enemy";
   stats: StatsType;
-  lastTurn: number;
+  effects: {
+    burdens: string[];
+    favors: string[];
+    lastTurn: number;
+  };
   tactics: TacticName[];
-  favors: string[];
-  burdens: string[];
 };
 
 export type UnitType = PlayerType | EnemyType;

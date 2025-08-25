@@ -32,7 +32,7 @@ const Unjoined = () => {
   return (
     <div>
       <div>
-        <span>{game?.data.lobby?.errorMsg}</span>
+        <span>{game?.data.lobby?.errorMessage}</span>
       </div>
       <div className="controls">
         <div className="option">
@@ -41,15 +41,16 @@ const Unjoined = () => {
           </button>
         </div>
         <div className="option">
+          <button className="lobby-btn" onClick={handleJoinRoom}>
+            Join
+          </button>
           <input
+            className="room-input"
             type="text"
             onChange={(event) => setRoomCode(event.target.value)}
             placeholder="Room Code"
             value={roomCode}
           />
-          <button className="lobby-btn" onClick={handleJoinRoom}>
-            Join
-          </button>
         </div>
       </div>
     </div>
@@ -68,8 +69,8 @@ const Waiting = () => {
 
   return (
     <div>
-      <div>{`Room Code: ${lobby?.gameId}`}</div>
-      <div>{`${lobby?.players.length}/4 Players`}</div>
+      <h2>{`Room Code: ${lobby?.gameId}`}</h2>
+      <div>{`${lobby?.users.length}/4 Players`}</div>
       <div>
         <button onClick={handleStart}>{!voteToStart ? "Start" : "Wait"}</button>
       </div>
