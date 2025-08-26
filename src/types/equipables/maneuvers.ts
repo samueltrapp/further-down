@@ -1,7 +1,19 @@
 import { EnemyType, PlayerType } from "../individual/characters.ts";
 import { WeaponName } from "./weapons.ts";
+import { DamageType } from "../turns.ts";
 
 export type ManeuverName = "slap" | "quicksilver" | "fireburst" | "ache";
+
+export type ManeuverType = {
+  name: ManeuverName;
+  description: string;
+  speedCost: number;
+  maxTargets: number;
+  steps: {
+    damageType: DamageType;
+    strength: number;
+  }[];
+};
 
 export type OtherManeuverFnArgsType = {
   recipient: EnemyType;

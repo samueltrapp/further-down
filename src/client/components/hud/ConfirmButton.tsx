@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { playerTurn } from "../../services/turn.ts";
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
-import { WeaponName } from "../../../types/equipables/weapons.ts";
 import {
   GameContext,
   GameDispatchContext,
 } from "../../contexts/GameContext.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
+import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
+import { WeaponName } from "../../../types/equipables/weapons.ts";
 
 export default function ConfirmButton() {
   const game = useContext(GameContext);
@@ -26,8 +26,8 @@ export default function ConfirmButton() {
       className="confirm-button"
       onClick={() => {
         playerTurn({
-          maneuver: client?.selectedManeuver as ManeuverName,
-          weapon: client?.selectedWeapon as WeaponName,
+          maneuver: client?.selectedManeuver?.name as ManeuverName,
+          weapon: client?.selectedWeapon?.name as WeaponName,
           team: "player",
           gameId: lobby.gameId,
           targetIds: client?.selectedEnemyIds,

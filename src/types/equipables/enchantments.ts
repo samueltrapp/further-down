@@ -3,7 +3,9 @@ type AspectName = "ghostly" | "flaming";
 export type EnchantmentName = "lethal" | "silver";
 
 export type EnchantmentType = {
-  enchName: EnchantmentName;
+  name: EnchantmentName;
+  type: "defensive" | "offensive";
+  description: string;
 };
 
 export type OffensiveAffinitiesType = {

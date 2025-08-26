@@ -2,10 +2,10 @@ import { useContext, useState } from "react";
 import { GameContext } from "../../contexts/GameContext.tsx";
 import { RewardOptions } from "../../../types/individual/characters.ts";
 import { ArmorType } from "../../../types/equipables/armors.ts";
-import { BlessingName } from "../../../types/equipables/blessings.ts";
-import { CurseName } from "../../../types/equipables/curses.ts";
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
-import { EnchantmentName } from "../../../types/equipables/enchantments.ts";
+import { BlessingType } from "../../../types/equipables/blessings.ts";
+import { CurseType } from "../../../types/equipables/curses.ts";
+import { ManeuverType } from "../../../types/equipables/maneuvers.ts";
+import { EnchantmentType } from "../../../types/equipables/enchantments.ts";
 import { WeaponType } from "../../../types/equipables/weapons.ts";
 
 function RewardHolding() {
@@ -16,10 +16,10 @@ function RewardSelection(
   rewardOption: RewardOptions,
   ownedSelections: (
     | ArmorType
-    | BlessingName
-    | CurseName
-    | EnchantmentName
-    | ManeuverName
+    | BlessingType
+    | CurseType
+    | EnchantmentType
+    | ManeuverType
     | WeaponType
   )[],
 ) {
@@ -27,7 +27,10 @@ function RewardSelection(
   const rewardLib = game?.data.lib[rewardOption];
 
   const remainingOptions = rewardLib!.filter(
-    (reward) => !ownedSelections.includes(reward),
+    (reward) =>
+      !ownedSelections.some(
+        (ownedSelection) => ownedSelection.name === reward.name,
+      ),
   );
   const options = [];
   for (let optionIndex = 0; optionIndex < 3; optionIndex++) {
@@ -39,7 +42,10 @@ function RewardSelection(
   return (
     <div>
       {options.map((option) => (
-        <button>{option}</button>
+        <button>
+          <div>{option.name}</div>
+          <div>{option.description}</div>
+        </button>
       ))}
     </div>
   );

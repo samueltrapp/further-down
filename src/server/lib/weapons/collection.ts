@@ -1,6 +1,6 @@
 import { WeaponType } from "../../../types/equipables/weapons.ts";
 
-export const wpnDetails: WeaponType[] = [
+export const weaponCollection: WeaponType[] = [
   {
     name: "cutlass",
     power: 7,
@@ -16,6 +16,7 @@ export const wpnDetails: WeaponType[] = [
     level: 1,
     rarity: 0,
     equipped: false,
+    description: "Cutlass description",
   },
   {
     name: "hammer",
@@ -32,6 +33,7 @@ export const wpnDetails: WeaponType[] = [
     level: 1,
     rarity: 0,
     equipped: false,
+    description: "Hammer description",
   },
   {
     name: "scepter",
@@ -48,6 +50,7 @@ export const wpnDetails: WeaponType[] = [
     level: 1,
     rarity: 0,
     equipped: false,
+    description: "Scepter description",
   },
   {
     name: "periapt",
@@ -64,5 +67,6 @@ export const wpnDetails: WeaponType[] = [
     level: 1,
     rarity: 0,
     equipped: false,
+    description: "Periapt description",
   },
 ];

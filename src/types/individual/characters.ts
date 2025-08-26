@@ -1,11 +1,11 @@
 import { StatsType } from "./stats.ts";
-import { ManeuverName } from "../equipables/maneuvers.ts";
+import { ManeuverType } from "../equipables/maneuvers.ts";
 import { WeaponType } from "../equipables/weapons.ts";
 import { TacticName } from "../equipables/tactics.ts";
-import { BlessingName } from "../equipables/blessings.ts";
+import { BlessingType } from "../equipables/blessings.ts";
 import { ArmorType } from "../equipables/armors.ts";
-import { CurseName } from "../equipables/curses.ts";
-import { EnchantmentName } from "../equipables/enchantments.ts";
+import { CurseType } from "../equipables/curses.ts";
+import { EnchantmentType } from "../equipables/enchantments.ts";
 
 export type RewardOptions =
   | "blessings"
@@ -31,10 +31,10 @@ export type PlayerType = {
   };
   rewards: {
     armors: ArmorType[];
-    blessings: BlessingName[];
-    curses: CurseName[];
-    enchantments: EnchantmentName[];
-    maneuvers: ManeuverName[];
+    blessings: BlessingType[];
+    curses: CurseType[];
+    enchantments: EnchantmentType[];
+    maneuvers: ManeuverType[];
     weapons: WeaponType[];
   };
   pendingRewards: PendingRewardType;

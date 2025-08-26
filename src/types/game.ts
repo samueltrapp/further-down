@@ -1,10 +1,10 @@
-import { ManeuverName } from "./equipables/maneuvers.ts";
+import { ManeuverType } from "./equipables/maneuvers.ts";
 import { EnemyType, PlayerType } from "./individual/characters.ts";
-import { WeaponName } from "./equipables/weapons.ts";
-import { BlessingName } from "./equipables/blessings.ts";
-import { CurseName } from "./equipables/curses.ts";
-import { ArmorName } from "./equipables/armors.ts";
-import { EnchantmentName } from "./equipables/enchantments.ts";
+import { WeaponType } from "./equipables/weapons.ts";
+import { BlessingType } from "./equipables/blessings.ts";
+import { CurseType } from "./equipables/curses.ts";
+import { ArmorType } from "./equipables/armors.ts";
+import { EnchantmentType } from "./equipables/enchantments.ts";
 
 export enum LobbyStatus {
   BATTLE = "battle",
@@ -23,12 +23,12 @@ export type BattleType = {
 };
 
 export type LibType = {
-  blessings: BlessingName[];
-  curses: CurseName[];
-  maneuvers: ManeuverName[];
-  weapons: WeaponName[];
-  armors: ArmorName[];
-  enchantments: EnchantmentName[];
+  blessings: BlessingType[];
+  curses: CurseType[];
+  maneuvers: ManeuverType[];
+  weapons: WeaponType[];
+  armors: ArmorType[];
+  enchantments: EnchantmentType[];
 };
 
 export type LobbyType = {

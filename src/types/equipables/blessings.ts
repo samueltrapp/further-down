@@ -4,5 +4,6 @@ export type TimingType = "before" | "after";
 
 export type BlessingType = {
   name: BlessingName;
+  description: string;
   timing: TimingType;
 };

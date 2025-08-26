@@ -1,6 +1,11 @@
 import { GameType, LobbyStatus } from "../../types/game.ts";
 import { randomId } from "./data.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
+import { blessingCollection } from "../lib/blessings/collection.ts";
+import { armorCollection } from "../lib/armors/collection.ts";
+import { maneuverCollection } from "../lib/maneuvers/details.ts";
+import { weaponCollection } from "../lib/weapons/collection.ts";
+import { curseCollection } from "../lib/curses/collection.ts";
 
 const baseStats = {
   vitality: 20,
@@ -38,12 +43,12 @@ export function initializeLobby(gameId: string, userId: string): GameType {
       errorMessage: undefined,
     },
     lib: {
-      blessings: ["angelblade", "flow", "pacifist", "predation"],
-      curses: ["weak"],
-      maneuvers: ["ache", "slap", "fireburst", "quicksilver"],
-      weapons: ["cutlass", "hammer", "periapt", "scepter"],
-      armors: ["leather", "platemail", "robe", "tunic"],
-      enchantments: ["lethal", "silver"],
+      blessings: blessingCollection,
+      curses: curseCollection,
+      maneuvers: maneuverCollection,
+      weapons: weaponCollection,
+      armors: armorCollection,
+      enchantments: [],
     },
   };
 }

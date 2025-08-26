@@ -2,7 +2,6 @@ import { ChangeEvent, MouseEvent, useContext } from "react";
 import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
 import "./StatBlocks.css";
 import "./Player.css";
-import { details } from "../../../server/lib/maneuvers/details.ts";
 import { PlayerType } from "../../../types/individual/characters.ts";
 import { toCaps } from "../../utils/formatting.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
@@ -27,7 +26,8 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
 `;
 
 export default function Player(props: PlayerType) {
-  const { id, name, stats, maneuvers, armors, weapons } = props;
+  const { id, name, stats, rewards } = props;
+  const { maneuvers, armors, weapons } = rewards;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
@@ -41,7 +41,7 @@ export default function Player(props: PlayerType) {
         type: GameAction.SELECT_MANEUVER,
         payload: {
           maneuverSelected: true,
-          maxTargets: details[value].maxTargets,
+          maxTargets: game?.client?.selectedManeuver?.maxTargets || 0,
           maneuver: value,
         },
       });
@@ -79,7 +79,7 @@ export default function Player(props: PlayerType) {
         <div className="action-column">
           <select
             onChange={handleSelectWeapon}
-            value={game?.client.selectedWeapon}
+            value={game?.client.selectedWeapon?.name}
           >
             {weapons.map((weapon) => (
               <option value={weapon.name}>{toCaps(weapon.name)}</option>
@@ -89,13 +89,13 @@ export default function Player(props: PlayerType) {
         <div className="action-column">
           {maneuvers.map((maneuver) => (
             <button
-              className={`maneuver-button ${activeTurn && game?.client.selectedManeuver === maneuver ? "selected-maneuver" : ""}`}
+              className={`maneuver-button ${activeTurn && game?.client.selectedManeuver?.name === maneuver.name ? "selected-maneuver" : ""}`}
               disabled={!activeTurn}
-              key={maneuver}
+              key={maneuver.name}
               onClick={handleClickManeuver}
-              value={maneuver}
+              value={maneuver.name}
             >
-              {`> ${maneuver.toUpperCase()}`}
+              {`> ${maneuver.name.toUpperCase()}`}
             </button>
           ))}
         </div>

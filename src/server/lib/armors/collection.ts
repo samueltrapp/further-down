@@ -1,6 +1,6 @@
 import { ArmorType } from "../../../types/equipables/armors.ts";
 
-export const armDetails: ArmorType[] = [
+export const armorCollection: ArmorType[] = [
   {
     name: "leather",
     constitution: 5,
@@ -15,6 +15,7 @@ export const armDetails: ArmorType[] = [
     },
     level: 1,
     rarity: 0,
+    description: "Medium physical armor",
   },
   {
     name: "platemail",
@@ -30,6 +31,7 @@ export const armDetails: ArmorType[] = [
     },
     level: 1,
     rarity: 0,
+    description: "Heavy physical armor",
   },
   {
     name: "robe",
@@ -45,6 +47,7 @@ export const armDetails: ArmorType[] = [
     },
     level: 1,
     rarity: 0,
+    description: "Light magical armor",
   },
   {
     name: "tunic",
@@ -60,5 +63,6 @@ export const armDetails: ArmorType[] = [
     },
     level: 1,
     rarity: 0,
+    description: "Medium magical armor",
   },
 ];

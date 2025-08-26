@@ -15,4 +15,5 @@ export type ArmorType = {
   rarity: number;
   aspects?: AspectType[];
   enchantments?: EnchantmentType[];
+  description: string;
 };

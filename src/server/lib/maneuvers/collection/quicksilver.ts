@@ -8,18 +8,20 @@ import {
   limitToZero,
   trunc,
 } from "../../../turn/utils/battle.ts";
-import { details } from "../details.ts";
 import { WeaponType } from "../../../../types/equipables/weapons.ts";
+import { maneuverCollection } from "../details.ts";
 
 export function quicksilverOther(fnArgs: OtherManeuverFnArgsType) {
   const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;
-  const mnvDetail = details[maneuver];
+  const mnvDetail = maneuverCollection.find(
+    (maneuverDetails) => maneuverDetails.name === maneuver,
+  );
 
   const weapon = actor.rewards.weapons.find(
     (weapon) => weapon.name === weaponName,
   ) as WeaponType;
 
-  const raw = mnvDetail.actions.map((action) => ({
+  const raw = mnvDetail!.steps.map((action) => ({
     damage:
       calcRawDamage(weapon, actor.stats, action.damageType) * action.strength,
     mitigation: calcRawMitigation(actor.stats, action.damageType),
@@ -53,8 +55,10 @@ export function quicksilverOther(fnArgs: OtherManeuverFnArgsType) {
 
 export function quicksilverSelf(fnArgs: SelfManeuverFnArgsType) {
   const { self, maneuver } = fnArgs;
-  const mnvDetail = details[maneuver];
-  const updatedSpeed = self.stats.speed - mnvDetail.speedCost;
+  const mnvDetail = maneuverCollection.find(
+    (maneuverDetails) => maneuverDetails.name === maneuver,
+  );
+  const updatedSpeed = self.stats.speed - mnvDetail!.speedCost;
 
   return {
     character: {

@@ -16,4 +16,5 @@ export type WeaponType = {
   equipped: boolean;
   aspects?: AspectType[];
   enchantments?: EnchantmentType[];
+  description: string;
 };

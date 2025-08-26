@@ -1,21 +1,24 @@
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
-import { MvnOrTctType } from "../../../types/turns.ts";
+import { ManeuverType } from "../../../types/equipables/maneuvers.ts";
 
-export const details: Record<ManeuverName, MvnOrTctType> = {
-  slap: {
+export const maneuverCollection: ManeuverType[] = [
+  {
+    name: "slap",
+    description: "Slap description",
     speedCost: 12,
     maxTargets: 1,
-    actions: [
+    steps: [
       {
         damageType: "blunt",
         strength: 0.9,
       },
     ],
   },
-  quicksilver: {
+  {
+    name: "quicksilver",
+    description: "Quicksilver description",
     speedCost: 4,
     maxTargets: 1,
-    actions: [
+    steps: [
       {
         damageType: "blunt",
         strength: 0.3,
@@ -34,10 +37,12 @@ export const details: Record<ManeuverName, MvnOrTctType> = {
       },
     ],
   },
-  fireburst: {
+  {
+    name: "fireburst",
+    description: "Fireburst description",
     speedCost: 8,
     maxTargets: 3,
-    actions: [
+    steps: [
       {
         damageType: "elemental",
         strength: 0.15,
@@ -48,14 +53,16 @@ export const details: Record<ManeuverName, MvnOrTctType> = {
       },
     ],
   },
-  ache: {
+  {
+    name: "ache",
+    description: "Ache description",
     speedCost: 15,
     maxTargets: 1,
-    actions: [
+    steps: [
       {
         damageType: "psychic",
         strength: 1.1,
       },
     ],
   },
-};
+];

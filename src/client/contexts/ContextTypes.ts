@@ -1,6 +1,9 @@
 import { GameType } from "../../types/game.ts";
-import { ManeuverName } from "../../types/equipables/maneuvers.ts";
-import { WeaponName } from "../../types/equipables/weapons.ts";
+import {
+  ManeuverName,
+  ManeuverType,
+} from "../../types/equipables/maneuvers.ts";
+import { WeaponName, WeaponType } from "../../types/equipables/weapons.ts";
 
 /* Game Types */
 export type GameStateType = {
@@ -12,14 +15,14 @@ export type GameClientType = {
   enableConfirmation: boolean;
   maxEnemySelections: number;
   selectedEnemyIds: string[];
-  selectedManeuver: ManeuverName | undefined;
-  selectedWeapon: WeaponName | undefined;
+  selectedManeuver: ManeuverType | undefined;
+  selectedWeapon: WeaponType | undefined;
 };
 
 export enum GameAction {
+  SELECT_ENEMY = "SELECT_ENEMY",
   SELECT_MANEUVER = "SELECT_MANEUVER",
   SELECT_WEAPON = "SELECT_TECHNIQUE",
-  SELECT_ENEMY = "SELECT_ENEMY",
   SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE",
   SYNC = "SYNC",
 }
