@@ -4,7 +4,6 @@ import "./StatGrowth.css";
 import { socket } from "../../socket.ts";
 import { GameContext } from "../../contexts/GameContext.tsx";
 
-type RemainingPointsType = { core: number; standard: number };
 type StatClickFnType = (stat: StatName, add: boolean, core: boolean) => void;
 
 const initialStats: StatsType = {
@@ -37,12 +36,11 @@ const StatSlot = ({
   stats: StatsType;
   baselineStats: StatsType;
   stat: StatName;
-  remainingPoints: RemainingPointsType;
+  remainingPoints: number;
   handleClick: StatClickFnType;
 }) => {
   const chosenStat = stats[stat];
   const isCore = stat === "hitPoints" || stat === "speed";
-  const remaining = isCore ? remainingPoints.core : remainingPoints.standard;
   const baseline = baselineStats[stat];
 
   return (
@@ -56,7 +54,7 @@ const StatSlot = ({
       </button>
       {chosenStat}
       <button
-        disabled={chosenStat >= 99 || remaining <= 0}
+        disabled={chosenStat >= 99 || remainingPoints <= 0}
         onClick={() => handleClick(stat, true, isCore)}
       >
         +
@@ -65,42 +63,21 @@ const StatSlot = ({
   );
 };
 
-export function StatGrowth({
-  id,
-  corePoints,
-  standardPoints,
-}: {
-  id: string;
-  corePoints: number;
-  standardPoints: number;
-}) {
+export function StatGrowth({ id, points }: { id: string; points: number }) {
   const game = useContext(GameContext);
   const playerCharacters = game?.data.characters.players;
   const baselineStats =
     playerCharacters?.find((character) => character.id === id)?.stats ||
     initialStats;
   const [stats, setStats] = useState(baselineStats);
-  const [remainingPoints, setRemainingPoints] = useState<RemainingPointsType>({
-    core: corePoints,
-    standard: standardPoints,
-  });
+  const [remainingPoints, setRemainingPoints] = useState(points);
 
-  function updateStats(stat: StatName, add: boolean, core: boolean) {
+  function updateStats(stat: StatName, add: boolean) {
     setStats({
       ...stats,
       [stat]: stats[stat] + (add ? 1 : -1),
     });
-    setRemainingPoints(
-      core
-        ? {
-            ...remainingPoints,
-            core: remainingPoints.core - (add ? 1 : -1),
-          }
-        : {
-            ...remainingPoints,
-            standard: remainingPoints.standard - (add ? 1 : -1),
-          },
-    );
+    setRemainingPoints(points - (add ? 1 : -1));
   }
 
   function submitStats() {
@@ -109,9 +86,7 @@ export function StatGrowth({
 
   return (
     <div className="stat-splash">
-      <h3>
-        CORE STATS ({remainingPoints.core} / {corePoints})
-      </h3>
+      <h3>CORE STATS</h3>
       <div className="stat-cluster core">
         {["hitPoints", "speed"].map((stat) => (
           <StatSlot
@@ -123,9 +98,7 @@ export function StatGrowth({
           />
         ))}
       </div>
-      <h3>
-        OTHER STATS ({remainingPoints.standard} / {standardPoints})
-      </h3>
+      <h3>OTHER STATS</h3>
       <h4>OFFENSIVE</h4>
       <div className="stat-section">
         <div className="stat-cluster">
@@ -176,10 +149,7 @@ export function StatGrowth({
           ))}
         </div>
       </div>
-      <button
-        disabled={remainingPoints.core !== 0 || remainingPoints.standard !== 0}
-        onClick={submitStats}
-      >
+      <button disabled={remainingPoints !== 0} onClick={submitStats}>
         Confirm
       </button>
     </div>

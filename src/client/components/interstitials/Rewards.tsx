@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, MouseEvent } from "react";
 import { GameContext } from "../../contexts/GameContext.tsx";
 import { RewardOptions } from "../../../types/individual/characters.ts";
 import { ArmorType } from "../../../types/equipables/armors.ts";
@@ -7,6 +7,8 @@ import { CurseType } from "../../../types/equipables/curses.ts";
 import { ManeuverType } from "../../../types/equipables/maneuvers.ts";
 import { EnchantmentType } from "../../../types/equipables/enchantments.ts";
 import { WeaponType } from "../../../types/equipables/weapons.ts";
+import { takeReward } from "../../services/skill.ts";
+import { StatGrowth } from "./StatGrowth.tsx";
 
 function RewardHolding() {
   return <div>Waiting for other players.</div>;
@@ -39,10 +41,15 @@ function RewardSelection(
     remainingOptions.splice(randomIndex, 1);
   }
 
+  const submitSelectedReward = (event: MouseEvent<HTMLButtonElement>) => {
+    const target = event.target as HTMLButtonElement;
+    takeReward(rewardOption, target.value);
+  };
+
   return (
     <div>
       {options.map((option) => (
-        <button>
+        <button onClick={submitSelectedReward}>
           <div>{option.name}</div>
           <div>{option.description}</div>
         </button>
@@ -84,6 +91,11 @@ export function Rewards() {
       "enchantments",
       currentPlayerCharacter.rewards.enchantments,
     );
+  } else if (currentPlayerCharacter.pendingRewards.stats > 0) {
+    return StatGrowth({
+      id: currentPlayerCharacter.id,
+      points: currentPlayerCharacter.pendingRewards.stats,
+    });
   } else {
     setCurrentIndex(currentIndex + 1);
   }

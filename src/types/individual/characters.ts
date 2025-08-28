@@ -37,7 +37,7 @@ export type PlayerType = {
     maneuvers: ManeuverType[];
     weapons: WeaponType[];
   };
-  pendingRewards: PendingRewardType;
+  pendingRewards: PendingRewardType & { stats: number };
 };
 
 export type EnemyType = {
