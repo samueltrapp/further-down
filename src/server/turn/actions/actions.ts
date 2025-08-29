@@ -1,6 +1,6 @@
 import { getCharacterDetails } from "../utils/data.ts";
 import { getMnvFns } from "../../lib/maneuvers/fnMap.ts";
-import { EnemyTurnType, PlayerTurnType } from "../../../types/turns.ts";
+import { EnemyTurnType, PlayerTurnType } from "../../../types/events/turn.ts";
 import { CharactersType } from "../../../types/game.ts";
 
 export function resolveManeuver(

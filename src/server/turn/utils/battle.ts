@@ -1,7 +1,7 @@
 import { StatsType } from "../../../types/individual/stats.ts";
 import { UnitType } from "../../../types/individual/characters.ts";
 import { WeaponType } from "../../../types/equipables/weapons.ts";
-import { DamageType } from "../../../types/turns.ts";
+import { DamageType } from "../../../types/events/turn.ts";
 
 const createSpread = (spread: number) => {
   const rand = Math.random();

@@ -1,6 +1,6 @@
 import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
 import { findCharacter } from "./battle.ts";
-import { PlayerTurnType } from "../../../types/turns.ts";
+import { PlayerTurnType } from "../../../types/events/turn.ts";
 import { CharactersType } from "../../../types/game.ts";
 
 export function getCharacterDetails(

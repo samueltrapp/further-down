@@ -1,5 +1,5 @@
-import { ManeuverName } from "./equipables/maneuvers.ts";
-import { WeaponName } from "./equipables/weapons.ts";
+import { ManeuverName } from "../equipables/maneuvers.ts";
+import { WeaponName } from "../equipables/weapons.ts";
 
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 

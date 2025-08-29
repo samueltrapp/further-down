@@ -3,7 +3,7 @@ import { resolvePreActions } from "../turn/actions/preActions.ts";
 import { resolveManeuver, resolveTactic } from "../turn/actions/actions.ts";
 import { resolvePostActions } from "../turn/actions/postActions.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
-import { EnemyTurnType, PlayerTurnType } from "../../types/turns.ts";
+import { EnemyTurnType, PlayerTurnType } from "../../types/events/turn.ts";
 
 export function resolvePlayerTurn(
   turn: PlayerTurnType,

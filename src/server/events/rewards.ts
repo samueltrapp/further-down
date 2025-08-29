@@ -1,35 +1,45 @@
-import {
-  PlayerType,
-  RewardOptions,
-} from "../../types/individual/characters.ts";
 import { sendGame } from "./gameManagement.ts";
 import { ConnectionType } from "../../types/server.ts";
+import { SkillType } from "../../types/events/skill.ts";
+import { PlayerType } from "../../types/individual/characters.ts";
 
-export function updateCharacter(
+export function takeReward(
   connection: ConnectionType,
-  {
-    gameId,
-    rewardSlot,
-    character,
-  }: {
-    gameId: string;
-    rewardSlot: RewardOptions;
-    character: PlayerType;
-  },
+  { rewardOption, rewardName, gameId, characterId }: SkillType,
 ) {
   const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
   if (game) {
     const existingCharacters = game.characters.players;
-    const characterToOverride = existingCharacters.findIndex(
-      (existingCharacter) => existingCharacter.id === character.id,
+    const characterIndex = existingCharacters.findIndex(
+      (existingCharacter) => existingCharacter.id === characterId,
     );
 
-    if (characterToOverride >= 0) {
-      existingCharacters[characterToOverride] = character;
-      game.characters.players[characterToOverride].pendingRewards[rewardSlot] =
-        0;
+    if (characterIndex >= 0) {
+      const character = existingCharacters[characterIndex];
+      const updatedCharacter: PlayerType = {
+        ...character,
+        rewards: {
+          ...character.rewards,
+          [rewardOption]: [...character.rewards[rewardOption], rewardName],
+        },
+        pendingRewards: {
+          ...character.pendingRewards,
+          [rewardOption]: character.pendingRewards[rewardOption] - 1,
+        },
+      };
+
+      connection.gameMeta.games[gameIndex] = {
+        ...game,
+        characters: {
+          ...game.characters,
+          players: game.characters.players.splice(
+            characterIndex,
+            1,
+            updatedCharacter,
+          ),
+        },
+      };
+      sendGame(connection, gameId);
     }
-    connection.gameMeta.games[gameIndex] = game;
-    sendGame(connection, gameId);
   }
 }

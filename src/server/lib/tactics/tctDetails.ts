@@ -1,4 +1,4 @@
-import { MvnOrTctType } from "../../../types/turns.ts";
+import { MvnOrTctType } from "../../../types/events/turn.ts";
 import { TacticName } from "../../../types/equipables/tactics.ts";
 
 export const tctDetails: Record<TacticName, MvnOrTctType> = {

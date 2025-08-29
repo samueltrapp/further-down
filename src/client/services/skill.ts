@@ -1,6 +1,6 @@
 import { socket } from "../socket.ts";
-import { RewardOptions } from "../../types/individual/characters.ts";
+import { SkillType } from "../../types/events/skill.ts";
 
-export const takeReward = (rewardOption: RewardOptions, rewardName: string) => {
-  socket.emit("take-reward", { type: rewardOption, selection: rewardName });
+export const takeReward = (skill: SkillType) => {
+  socket.emit("take-reward", skill);
 };

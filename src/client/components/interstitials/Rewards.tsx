@@ -14,8 +14,12 @@ function RewardHolding() {
   return <div>Waiting for other players.</div>;
 }
 
-function RewardSelection(
-  rewardOption: RewardOptions,
+function RewardSelection({
+  rewardOption,
+  ownedSelections,
+  characterId,
+}: {
+  rewardOption: RewardOptions;
   ownedSelections: (
     | ArmorType
     | BlessingType
@@ -23,8 +27,9 @@ function RewardSelection(
     | EnchantmentType
     | ManeuverType
     | WeaponType
-  )[],
-) {
+  )[];
+  characterId: string;
+}) {
   const game = useContext(GameContext);
   const rewardLib = game?.data.lib[rewardOption];
 
@@ -43,15 +48,21 @@ function RewardSelection(
 
   const submitSelectedReward = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
-    takeReward(rewardOption, target.value);
+    console.log(target.value);
+    takeReward({
+      rewardOption,
+      rewardName: target.value,
+      gameId: game!.data.lobby.gameId,
+      characterId,
+    });
   };
 
   return (
     <div>
       {options.map((option) => (
-        <button onClick={submitSelectedReward}>
-          <div>{option.name}</div>
-          <div>{option.description}</div>
+        <button value={option.name} onClick={submitSelectedReward}>
+          <div style={{ pointerEvents: "none" }}>{option.name}</div>
+          <div style={{ pointerEvents: "none" }}>{option.description}</div>
         </button>
       ))}
     </div>
@@ -61,41 +72,72 @@ function RewardSelection(
 export function Rewards() {
   const game = useContext(GameContext);
   const [currentIndex, setCurrentIndex] = useState(0);
+  console.log(game);
 
   const user = localStorage.getItem("userId");
   const playerCharacters = game!.data.characters.players.filter(
     (playerCharacter) => playerCharacter.userId === user,
   );
   const currentPlayerCharacter = playerCharacters[currentIndex];
+  const characterId = currentPlayerCharacter.id;
 
   if (currentIndex > playerCharacters.length - 1) {
     return <RewardHolding />;
   } else if (currentPlayerCharacter.pendingRewards.curses > 0) {
-    return RewardSelection("curses", currentPlayerCharacter.rewards.curses);
+    return (
+      <RewardSelection
+        rewardOption="curses"
+        ownedSelections={currentPlayerCharacter.rewards.curses}
+        characterId={characterId}
+      />
+    );
   } else if (currentPlayerCharacter.pendingRewards.blessings > 0) {
-    return RewardSelection(
-      "blessings",
-      currentPlayerCharacter.rewards.blessings,
+    return (
+      <RewardSelection
+        rewardOption="blessings"
+        ownedSelections={currentPlayerCharacter.rewards.blessings}
+        characterId={characterId}
+      />
     );
   } else if (currentPlayerCharacter.pendingRewards.maneuvers > 0) {
-    return RewardSelection(
-      "maneuvers",
-      currentPlayerCharacter.rewards.maneuvers,
+    return (
+      <RewardSelection
+        rewardOption="maneuvers"
+        ownedSelections={currentPlayerCharacter.rewards.maneuvers}
+        characterId={characterId}
+      />
     );
   } else if (currentPlayerCharacter.pendingRewards.weapons > 0) {
-    return RewardSelection("weapons", currentPlayerCharacter.rewards.weapons);
+    return (
+      <RewardSelection
+        rewardOption="weapons"
+        ownedSelections={currentPlayerCharacter.rewards.weapons}
+        characterId={characterId}
+      />
+    );
   } else if (currentPlayerCharacter.pendingRewards.armors > 0) {
-    return RewardSelection("armors", currentPlayerCharacter.rewards.armors);
+    return (
+      <RewardSelection
+        rewardOption="armors"
+        ownedSelections={currentPlayerCharacter.rewards.armors}
+        characterId={characterId}
+      />
+    );
   } else if (currentPlayerCharacter.pendingRewards.enchantments > 0) {
-    return RewardSelection(
-      "enchantments",
-      currentPlayerCharacter.rewards.enchantments,
+    return (
+      <RewardSelection
+        rewardOption="enchantments"
+        ownedSelections={currentPlayerCharacter.rewards.enchantments}
+        characterId={characterId}
+      />
     );
   } else if (currentPlayerCharacter.pendingRewards.stats > 0) {
-    return StatGrowth({
-      id: currentPlayerCharacter.id,
-      points: currentPlayerCharacter.pendingRewards.stats,
-    });
+    return (
+      <StatGrowth
+        id={characterId}
+        points={currentPlayerCharacter.pendingRewards.stats}
+      />
+    );
   } else {
     setCurrentIndex(currentIndex + 1);
   }
