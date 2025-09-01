@@ -28,15 +28,23 @@ export function takeReward(
         },
       };
 
+      /* TS refuses to understand this method even after updating the compiler options */
+      // @ts-ignore
+      const q: PlayerType[] = game.characters.players.toSpliced(
+        characterIndex,
+        1,
+        updatedCharacter,
+      );
+
+      console.log(game.characters.players);
+      console.log(characterIndex);
+      console.log(updatedCharacter);
+
       connection.gameMeta.games[gameIndex] = {
         ...game,
         characters: {
           ...game.characters,
-          players: game.characters.players.splice(
-            characterIndex,
-            1,
-            updatedCharacter,
-          ),
+          players: q,
         },
       };
       sendGame(connection, gameId);
