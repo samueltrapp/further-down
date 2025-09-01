@@ -48,7 +48,6 @@ function RewardSelection({
 
   const submitSelectedReward = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
-    console.log(target.value);
     takeReward({
       rewardOption,
       rewardName: target.value,
@@ -60,7 +59,11 @@ function RewardSelection({
   return (
     <div>
       {options.map((option) => (
-        <button value={option.name} onClick={submitSelectedReward}>
+        <button
+          key={option.name}
+          value={option.name}
+          onClick={submitSelectedReward}
+        >
           <div style={{ pointerEvents: "none" }}>{option.name}</div>
           <div style={{ pointerEvents: "none" }}>{option.description}</div>
         </button>
@@ -72,7 +75,6 @@ function RewardSelection({
 export function Rewards() {
   const game = useContext(GameContext);
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(game);
 
   const user = localStorage.getItem("userId");
   const playerCharacters = game!.data.characters.players.filter(
@@ -134,7 +136,7 @@ export function Rewards() {
   } else if (currentPlayerCharacter.pendingRewards.stats > 0) {
     return (
       <StatGrowth
-        id={characterId}
+        characterId={characterId}
         points={currentPlayerCharacter.pendingRewards.stats}
       />
     );

@@ -23,7 +23,7 @@ const baseStats = {
   psychic: 0,
   resistance: 0,
   speed: 20,
-  speedCapacity: 20,
+  currentSpeed: 20,
   warding: 0,
 };
 

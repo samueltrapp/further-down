@@ -1,16 +1,16 @@
 import { useContext, useState } from "react";
 import { StatName, StatsType } from "../../../types/individual/stats.ts";
 import "./StatGrowth.css";
-import { socket } from "../../socket.ts";
 import { GameContext } from "../../contexts/GameContext.tsx";
+import { takeStats } from "../../services/skill.ts";
 
-type StatClickFnType = (stat: StatName, add: boolean, core: boolean) => void;
+type StatClickFnType = (stat: StatName, add: boolean) => void;
 
 const initialStats: StatsType = {
   currentHitPoints: 0,
   hitPoints: 0,
   vitality: 20,
-  speedCapacity: 20,
+  currentSpeed: 20,
   speed: 20,
   physical: 0,
   magical: 0,
@@ -40,7 +40,6 @@ const StatSlot = ({
   handleClick: StatClickFnType;
 }) => {
   const chosenStat = stats[stat];
-  const isCore = stat === "hitPoints" || stat === "speed";
   const baseline = baselineStats[stat];
 
   return (
@@ -48,14 +47,14 @@ const StatSlot = ({
       {stat === "hitPoints" ? "HIT POINTS" : stat.toUpperCase()}
       <button
         disabled={chosenStat <= baseline}
-        onClick={() => handleClick(stat, false, isCore)}
+        onClick={() => handleClick(stat, false)}
       >
         -
       </button>
       {chosenStat}
       <button
         disabled={chosenStat >= 99 || remainingPoints <= 0}
-        onClick={() => handleClick(stat, true, isCore)}
+        onClick={() => handleClick(stat, true)}
       >
         +
       </button>
@@ -63,12 +62,18 @@ const StatSlot = ({
   );
 };
 
-export function StatGrowth({ id, points }: { id: string; points: number }) {
+export function StatGrowth({
+  characterId,
+  points,
+}: {
+  characterId: string;
+  points: number;
+}) {
   const game = useContext(GameContext);
   const playerCharacters = game?.data.characters.players;
   const baselineStats =
-    playerCharacters?.find((character) => character.id === id)?.stats ||
-    initialStats;
+    playerCharacters?.find((character) => character.id === characterId)
+      ?.stats || initialStats;
   const [stats, setStats] = useState(baselineStats);
   const [remainingPoints, setRemainingPoints] = useState(points);
 
@@ -77,19 +82,25 @@ export function StatGrowth({ id, points }: { id: string; points: number }) {
       ...stats,
       [stat]: stats[stat] + (add ? 1 : -1),
     });
-    setRemainingPoints(points - (add ? 1 : -1));
+    setRemainingPoints(remainingPoints - (add ? 1 : -1));
   }
 
   function submitStats() {
-    socket.emit("character", stats);
+    takeStats({
+      newStats: stats,
+      gameId: game!.data.lobby.gameId,
+      characterId,
+    });
   }
 
   return (
     <div className="stat-splash">
+      <h2>Remaining Points: {remainingPoints}</h2>
       <h3>CORE STATS</h3>
       <div className="stat-cluster core">
-        {["hitPoints", "speed"].map((stat) => (
+        {["vitality", "speed"].map((stat) => (
           <StatSlot
+            key={stat}
             stats={stats}
             stat={stat as StatName}
             baselineStats={baselineStats}
@@ -104,6 +115,7 @@ export function StatGrowth({ id, points }: { id: string; points: number }) {
         <div className="stat-cluster">
           {["physical", "bladed", "blunt"].map((stat) => (
             <StatSlot
+              key={stat}
               stats={stats}
               stat={stat as StatName}
               baselineStats={baselineStats}
@@ -115,6 +127,7 @@ export function StatGrowth({ id, points }: { id: string; points: number }) {
         <div className="stat-cluster">
           {["magical", "elemental", "psychic"].map((stat) => (
             <StatSlot
+              key={stat}
               stats={stats}
               stat={stat as StatName}
               baselineStats={baselineStats}
@@ -129,6 +142,7 @@ export function StatGrowth({ id, points }: { id: string; points: number }) {
         <div className="stat-cluster">
           {["defense", "plating", "padding"].map((stat) => (
             <StatSlot
+              key={stat}
               stats={stats}
               stat={stat as StatName}
               baselineStats={baselineStats}
@@ -140,6 +154,7 @@ export function StatGrowth({ id, points }: { id: string; points: number }) {
         <div className="stat-cluster">
           {["resistance", "dampening", "warding"].map((stat) => (
             <StatSlot
+              key={stat}
               stats={stats}
               stat={stat as StatName}
               baselineStats={baselineStats}

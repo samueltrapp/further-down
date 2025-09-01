@@ -3,7 +3,7 @@ import cors from "cors";
 import express from "express";
 import { Server } from "socket.io";
 import { resolveEnemyTurn, resolvePlayerTurn } from "./events/turn.ts";
-import { takeReward } from "./events/rewards.ts";
+import { takeReward, takeStats } from "./events/rewards.ts";
 import { EnemyTurnType, PlayerTurnType } from "../types/events/turn.ts";
 import { GameMetaType, JoinDataType, VoteType } from "../types/server.ts";
 import {
@@ -12,7 +12,7 @@ import {
   sendGame,
   vote,
 } from "./events/gameManagement.ts";
-import { SkillType } from "../types/events/skill.ts";
+import { TakeRewardType, TakeStatsType } from "../types/events/skill.ts";
 
 const port = 8080;
 const app = express();
@@ -69,7 +69,12 @@ io.on("connection", (socket) => {
   socket.on("vote", (startVote: VoteType) => vote(connection, startVote));
 
   // Exploration events
-  socket.on("take-reward", (skill: SkillType) => takeReward(connection, skill));
+  socket.on("take-reward", (skill: TakeRewardType) =>
+    takeReward(connection, skill),
+  );
+  socket.on("take-stats", (stats: TakeStatsType) =>
+    takeStats(connection, stats),
+  );
 
   // Battle events
   socket.on("playerTurn", (turn) => playerTurn(turn));

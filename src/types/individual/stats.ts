@@ -4,7 +4,7 @@ export type StatName =
   | "currentHitPoints"
   | "hitPoints"
   | "vitality"
-  | "speedCapacity"
+  | "currentSpeed"
   | "speed"
   | "physical"
   | "defense"
