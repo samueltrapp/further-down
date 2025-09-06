@@ -16,9 +16,9 @@ const baseStats = {
   defense: 0,
   elemental: 0,
   hitPoints: 100,
-  magical: 0,
+  magical: 5,
   padding: 0,
-  physical: 0,
+  physical: 5,
   plating: 0,
   psychic: 0,
   resistance: 0,
@@ -38,7 +38,7 @@ export function initializeLobby(gameId: string, userId: string): GameType {
       gameId: gameId,
       pastEncounters: 0,
       users: [userId],
-      startVotes: 0,
+      votes: 0,
       status: LobbyStatus.WAITING,
       errorMessage: undefined,
     },
@@ -59,7 +59,7 @@ export function initializeCharacters(game: GameType) {
   const userMapping = () => {
     switch (userCount) {
       case 1:
-        return [users[0], users[0], users[0]];
+        return [users[0]];
       case 2:
         return [users[0], users[0], users[1], users[1]];
       case 3:

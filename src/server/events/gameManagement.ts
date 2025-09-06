@@ -27,12 +27,13 @@ export function joinGame(
 }
 
 export function sendGame(
-  { gameMeta, io }: ConnectionType,
+  { gameMeta, socket, io }: ConnectionType,
   gameId: string,
   logMessages?: string[],
 ) {
   const [selectedGame] = gameMeta.findGameAndIndex(gameId);
   if (selectedGame?.lobby?.gameId) {
+    socket.join(gameId);
     io.to(selectedGame?.lobby?.gameId).emit("update", {
       game: selectedGame,
       logMessages,
@@ -40,13 +41,13 @@ export function sendGame(
   }
 }
 
-export function vote(
+export function startVote(
   connection: ConnectionType,
-  { gameId, voteToStart }: VoteType,
+  { gameId, vote }: VoteType,
 ) {
   const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
   if (game) {
-    const totalVotes = game.lobby.startVotes + (voteToStart ? 1 : -1);
+    const totalVotes = game.lobby.votes + (vote ? 1 : -1);
     const votedToStart = totalVotes === game.lobby.users.length;
 
     const playerCharacters = votedToStart
@@ -63,7 +64,7 @@ export function vote(
       lobby: {
         ...game.lobby,
         status: lobbyStatus,
-        startVotes: totalVotes,
+        votes: votedToStart ? 0 : totalVotes,
       },
     };
   }

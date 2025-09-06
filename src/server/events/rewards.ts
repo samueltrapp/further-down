@@ -1,8 +1,8 @@
 import { sendGame } from "./gameManagement.ts";
-import { ConnectionType } from "../../types/server.ts";
+import { ConnectionType, VoteType } from "../../types/server.ts";
 import { TakeRewardType, TakeStatsType } from "../../types/events/skill.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
-import { GameType } from "../../types/game.ts";
+import { GameType, LobbyStatus } from "../../types/game.ts";
 
 const findCharacter = (game: GameType, characterId: string) =>
   game.characters.players.findIndex(
@@ -87,5 +87,26 @@ export function takeStats(
       };
       sendGame(connection, gameId);
     }
+  }
+}
+
+export function finishSkilling(
+  connection: ConnectionType,
+  { gameId }: VoteType,
+) {
+  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
+  if (game) {
+    const totalVotes = game.lobby.votes + 1;
+    const votedToAdvance = totalVotes === game.lobby.users.length;
+
+    connection.gameMeta.games[gameIndex] = {
+      ...game,
+      lobby: {
+        ...game.lobby,
+        votes: votedToAdvance ? 0 : totalVotes,
+        status: votedToAdvance ? LobbyStatus.BATTLE : game.lobby.status,
+      },
+    };
+    sendGame(connection, gameId);
   }
 }

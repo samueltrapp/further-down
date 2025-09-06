@@ -22,7 +22,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       lobby: {
         gameId: "",
         users: [],
-        startVotes: 0,
+        votes: 0,
         status: LobbyStatus.UNJOINED,
         pastEncounters: 0,
         errorMessage: undefined,

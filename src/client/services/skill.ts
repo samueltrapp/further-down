@@ -8,3 +8,7 @@ export const takeReward = (skill: TakeRewardType) => {
 export const takeStats = (stats: TakeStatsType) => {
   socket.emit("take-stats", stats);
 };
+
+export const finishSkilling = (gameId: string) => {
+  socket.emit("finish-skilling", { gameId, vote: true });
+};

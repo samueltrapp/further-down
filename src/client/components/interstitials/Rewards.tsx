@@ -1,16 +1,23 @@
-import { useContext, useState, MouseEvent } from "react";
+import { useContext, useState, MouseEvent, useEffect } from "react";
 import { GameContext } from "../../contexts/GameContext.tsx";
-import { RewardOptions } from "../../../types/individual/characters.ts";
+import {
+  PlayerType,
+  RewardOptions,
+} from "../../../types/individual/characters.ts";
 import { ArmorType } from "../../../types/equipables/armors.ts";
 import { BlessingType } from "../../../types/equipables/blessings.ts";
 import { CurseType } from "../../../types/equipables/curses.ts";
 import { ManeuverType } from "../../../types/equipables/maneuvers.ts";
 import { EnchantmentType } from "../../../types/equipables/enchantments.ts";
 import { WeaponType } from "../../../types/equipables/weapons.ts";
-import { takeReward } from "../../services/skill.ts";
+import { finishSkilling, takeReward } from "../../services/skill.ts";
 import { StatGrowth } from "./StatGrowth.tsx";
+import { contextualIndefinite, singularize } from "../../utils/formatting.ts";
 
-function RewardHolding() {
+function RewardHolding({ gameId }: { gameId: string }) {
+  useEffect(() => {
+    finishSkilling(gameId);
+  }, [gameId]);
   return <div>Waiting for other players.</div>;
 }
 
@@ -39,6 +46,7 @@ function RewardSelection({
         (ownedSelection) => ownedSelection.name === reward.name,
       ),
   );
+
   const options = [];
   for (let optionIndex = 0; optionIndex < 3; optionIndex++) {
     const randomIndex = Math.floor(Math.random() * remainingOptions.length);
@@ -58,6 +66,7 @@ function RewardSelection({
 
   return (
     <div>
+      <h2>{`Select ${contextualIndefinite(rewardOption)} ${singularize(rewardOption)}`}</h2>
       {options.map((option) => (
         <button
           key={option.name}
@@ -80,11 +89,12 @@ export function Rewards() {
   const playerCharacters = game!.data.characters.players.filter(
     (playerCharacter) => playerCharacter.userId === user,
   );
-  const currentPlayerCharacter = playerCharacters[currentIndex];
-  const characterId = currentPlayerCharacter.id;
+  const currentPlayerCharacter: PlayerType | undefined =
+    playerCharacters[currentIndex];
+  const characterId = currentPlayerCharacter?.id;
 
   if (currentIndex > playerCharacters.length - 1) {
-    return <RewardHolding />;
+    return <RewardHolding gameId={game!.data?.lobby.gameId} />;
   } else if (currentPlayerCharacter.pendingRewards.curses > 0) {
     return (
       <RewardSelection

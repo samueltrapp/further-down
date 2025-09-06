@@ -62,8 +62,14 @@ const Waiting = () => {
   const lobby = game?.data.lobby;
   const [voteToStart, setVoteToStart] = useState(false);
 
+  useEffect(() => {
+    if (lobby?.gameId) {
+      localStorage.setItem("gameId", lobby?.gameId);
+    }
+  }, [lobby]);
+
   const handleStart = () => {
-    socket.emit("vote", { gameId: lobby?.gameId, voteToStart: !voteToStart });
+    socket.emit("start-vote", { gameId: lobby?.gameId, vote: !voteToStart });
     setVoteToStart(!voteToStart);
   };
 

@@ -8,6 +8,20 @@ import { GameAction } from "./contexts/ContextTypes.ts";
 import { GameContext, GameDispatchContext } from "./contexts/GameContext.tsx";
 import "./App.css";
 
+const GameScreen = ({ lobbyStatus }: { lobbyStatus?: LobbyStatus }) => {
+  switch (lobbyStatus) {
+    case LobbyStatus.UNJOINED:
+    case LobbyStatus.WAITING:
+      return <Lobby />;
+    case LobbyStatus.REWARD:
+      return <Rewards />;
+    case LobbyStatus.BATTLE:
+      return <GameBoard />;
+    default:
+      return <div />;
+  }
+};
+
 function App() {
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
@@ -16,9 +30,10 @@ function App() {
   useEffect(() => {
     // Load existing or create new game
     function onConnect() {
-      const existingGame = localStorage.getItem("gameId");
-      if (existingGame) {
-        socket.emit("load", existingGame);
+      const gameId = localStorage.getItem("gameId");
+      const userId = localStorage.getItem("userId");
+      if (gameId && userId) {
+        socket.emit("load", { gameId, userId });
       }
     }
 
@@ -59,12 +74,20 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="container">
-      {(lobbyStatus === LobbyStatus.UNJOINED ||
-        lobbyStatus === LobbyStatus.WAITING) && <Lobby />}
-      {lobbyStatus === LobbyStatus.REWARD && <Rewards />}
-      {lobbyStatus === LobbyStatus.BATTLE && <GameBoard />}
-    </div>
+    <>
+      <button
+        onClick={() => {
+          localStorage.removeItem("gameId");
+          localStorage.removeItem("userId");
+          location.reload();
+        }}
+      >
+        Leave Game
+      </button>
+      <div className="container">
+        <GameScreen lobbyStatus={lobbyStatus} />
+      </div>
+    </>
   );
 }
 

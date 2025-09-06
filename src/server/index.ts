@@ -3,14 +3,14 @@ import cors from "cors";
 import express from "express";
 import { Server } from "socket.io";
 import { resolveEnemyTurn, resolvePlayerTurn } from "./events/turn.ts";
-import { takeReward, takeStats } from "./events/rewards.ts";
+import { finishSkilling, takeReward, takeStats } from "./events/rewards.ts";
 import { EnemyTurnType, PlayerTurnType } from "../types/events/turn.ts";
 import { GameMetaType, JoinDataType, VoteType } from "../types/server.ts";
 import {
   createGame,
   joinGame,
   sendGame,
-  vote,
+  startVote,
 } from "./events/gameManagement.ts";
 import { TakeRewardType, TakeStatsType } from "../types/events/skill.ts";
 
@@ -61,12 +61,24 @@ io.on("connection", (socket) => {
     }
   }
 
-  socket.on("load", (gameId: string) => sendGame(connection, gameId));
+  socket.on(
+    "load",
+    ({ gameId, userId }: { gameId: string; userId: string }) => {
+      const [game] = gameMeta.findGameAndIndex(gameId);
+      const characterInGame = game?.lobby.users.some((user) => user === userId);
+      if (characterInGame) {
+        sendGame(connection, gameId);
+      }
+    },
+  );
 
   // Lobby events
   socket.on("create", (userId: string) => createGame(connection, userId));
   socket.on("join", (joinData: JoinDataType) => joinGame(connection, joinData));
-  socket.on("vote", (startVote: VoteType) => vote(connection, startVote));
+  socket.on("start-vote", (votes: VoteType) => startVote(connection, votes));
+  socket.on("finish-skilling", (votes: VoteType) =>
+    finishSkilling(connection, votes),
+  );
 
   // Exploration events
   socket.on("take-reward", (skill: TakeRewardType) =>
