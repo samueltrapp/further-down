@@ -3,6 +3,8 @@
     Caps: 65 - 90,
     Lower: 97-122
 */
+import { SingleRewardType } from "../../types/equipables/aggregates.ts";
+
 export const randomId = (digits: number = 5) => {
   const id = [];
   while (id.length < digits) {
@@ -16,4 +18,16 @@ export const randomId = (digits: number = 5) => {
     }
   }
   return id.join("");
+};
+
+export const randomizeCollection = (collection: SingleRewardType) => {
+  const copy = [...collection];
+  for (let orderedIndex = copy.length - 1; orderedIndex > 0; orderedIndex--) {
+    const randomIndex = Math.floor(Math.random() * (orderedIndex + 1));
+    [copy[orderedIndex], copy[randomIndex]] = [
+      copy[randomIndex],
+      copy[orderedIndex],
+    ];
+  }
+  return copy;
 };

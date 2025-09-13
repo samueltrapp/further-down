@@ -1,6 +1,12 @@
 import { RewardOptions } from "../individual/characters.ts";
 import { StatsType } from "../individual/stats.ts";
 
+export type SetNameType = {
+  name: string;
+  gameId: string;
+  characterId: string;
+};
+
 export type TakeRewardType = {
   rewardOption: RewardOptions;
   rewardName: string;

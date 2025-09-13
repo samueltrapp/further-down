@@ -4,15 +4,10 @@ import {
   PlayerType,
   RewardOptions,
 } from "../../../types/individual/characters.ts";
-import { ArmorType } from "../../../types/equipables/armors.ts";
-import { BlessingType } from "../../../types/equipables/blessings.ts";
-import { CurseType } from "../../../types/equipables/curses.ts";
-import { ManeuverType } from "../../../types/equipables/maneuvers.ts";
-import { EnchantmentType } from "../../../types/equipables/enchantments.ts";
-import { WeaponType } from "../../../types/equipables/weapons.ts";
 import { finishSkilling, takeReward } from "../../services/skill.ts";
 import { StatGrowth } from "./StatGrowth.tsx";
 import { contextualIndefinite, singularize } from "../../utils/formatting.ts";
+import { NamePrompt } from "./NamePrompt.tsx";
 
 function RewardHolding({ gameId }: { gameId: string }) {
   useEffect(() => {
@@ -23,44 +18,22 @@ function RewardHolding({ gameId }: { gameId: string }) {
 
 function RewardSelection({
   rewardOption,
-  ownedSelections,
-  characterId,
+  character,
+  gameId,
 }: {
   rewardOption: RewardOptions;
-  ownedSelections: (
-    | ArmorType
-    | BlessingType
-    | CurseType
-    | EnchantmentType
-    | ManeuverType
-    | WeaponType
-  )[];
-  characterId: string;
+  character: PlayerType;
+  gameId: string;
 }) {
-  const game = useContext(GameContext);
-  const rewardLib = game?.data.lib[rewardOption];
-
-  const remainingOptions = rewardLib!.filter(
-    (reward) =>
-      !ownedSelections.some(
-        (ownedSelection) => ownedSelection.name === reward.name,
-      ),
-  );
-
-  const options = [];
-  for (let optionIndex = 0; optionIndex < 3; optionIndex++) {
-    const randomIndex = Math.floor(Math.random() * remainingOptions.length);
-    options.push(remainingOptions[randomIndex]);
-    remainingOptions.splice(randomIndex, 1);
-  }
+  const options = character.rewards.queue[rewardOption].slice(0, 3);
 
   const submitSelectedReward = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
     takeReward({
       rewardOption,
       rewardName: target.value,
-      gameId: game!.data.lobby.gameId,
-      characterId,
+      gameId,
+      characterId: character.id,
     });
   };
 
@@ -84,70 +57,75 @@ function RewardSelection({
 export function Rewards() {
   const game = useContext(GameContext);
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const user = localStorage.getItem("userId");
+
+  const gameId = game!.data.lobby.gameId;
   const playerCharacters = game!.data.characters.players.filter(
     (playerCharacter) => playerCharacter.userId === user,
   );
   const currentPlayerCharacter: PlayerType | undefined =
     playerCharacters[currentIndex];
-  const characterId = currentPlayerCharacter?.id;
 
   if (currentIndex > playerCharacters.length - 1) {
     return <RewardHolding gameId={game!.data?.lobby.gameId} />;
-  } else if (currentPlayerCharacter.pendingRewards.curses > 0) {
+  } else if (!currentPlayerCharacter.name) {
+    return (
+      <NamePrompt gameId={gameId} characterId={currentPlayerCharacter.id} />
+    );
+  } else if (currentPlayerCharacter.rewards.pending.curses > 0) {
     return (
       <RewardSelection
         rewardOption="curses"
-        ownedSelections={currentPlayerCharacter.rewards.curses}
-        characterId={characterId}
+        gameId={gameId}
+        character={currentPlayerCharacter}
       />
     );
-  } else if (currentPlayerCharacter.pendingRewards.blessings > 0) {
+  } else if (currentPlayerCharacter.rewards.pending.blessings > 0) {
     return (
       <RewardSelection
         rewardOption="blessings"
-        ownedSelections={currentPlayerCharacter.rewards.blessings}
-        characterId={characterId}
+        gameId={gameId}
+        character={currentPlayerCharacter}
       />
     );
-  } else if (currentPlayerCharacter.pendingRewards.maneuvers > 0) {
+  } else if (currentPlayerCharacter.rewards.pending.maneuvers > 0) {
     return (
       <RewardSelection
         rewardOption="maneuvers"
-        ownedSelections={currentPlayerCharacter.rewards.maneuvers}
-        characterId={characterId}
+        gameId={gameId}
+        character={currentPlayerCharacter}
       />
     );
-  } else if (currentPlayerCharacter.pendingRewards.weapons > 0) {
+  } else if (currentPlayerCharacter.rewards.pending.weapons > 0) {
     return (
       <RewardSelection
         rewardOption="weapons"
-        ownedSelections={currentPlayerCharacter.rewards.weapons}
-        characterId={characterId}
+        gameId={gameId}
+        character={currentPlayerCharacter}
       />
     );
-  } else if (currentPlayerCharacter.pendingRewards.armors > 0) {
+  } else if (currentPlayerCharacter.rewards.pending.armors > 0) {
     return (
       <RewardSelection
         rewardOption="armors"
-        ownedSelections={currentPlayerCharacter.rewards.armors}
-        characterId={characterId}
+        gameId={gameId}
+        character={currentPlayerCharacter}
       />
     );
-  } else if (currentPlayerCharacter.pendingRewards.enchantments > 0) {
+  } else if (currentPlayerCharacter.rewards.pending.enchantments > 0) {
     return (
       <RewardSelection
         rewardOption="enchantments"
-        ownedSelections={currentPlayerCharacter.rewards.enchantments}
-        characterId={characterId}
+        gameId={gameId}
+        character={currentPlayerCharacter}
       />
     );
-  } else if (currentPlayerCharacter.pendingRewards.stats > 0) {
+  } else if (currentPlayerCharacter.rewards.pending.stats > 0) {
     return (
       <StatGrowth
-        characterId={characterId}
-        points={currentPlayerCharacter.pendingRewards.stats}
+        points={currentPlayerCharacter.rewards.pending.stats}
+        gameId={gameId}
+        character={currentPlayerCharacter}
       />
     );
   } else {

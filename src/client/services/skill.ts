@@ -1,5 +1,13 @@
 import { socket } from "../socket.ts";
-import { TakeRewardType, TakeStatsType } from "../../types/events/skill.ts";
+import {
+  SetNameType,
+  TakeRewardType,
+  TakeStatsType,
+} from "../../types/events/skill.ts";
+
+export const submitName = (name: SetNameType) => {
+  socket.emit("submit-name", name);
+};
 
 export const takeReward = (skill: TakeRewardType) => {
   socket.emit("take-reward", skill);

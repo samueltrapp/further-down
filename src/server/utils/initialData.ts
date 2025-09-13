@@ -1,11 +1,17 @@
 import { GameType, LobbyStatus } from "../../types/game.ts";
-import { randomId } from "./data.ts";
+import { randomId, randomizeCollection } from "./data.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
 import { blessingCollection } from "../lib/blessings/collection.ts";
 import { armorCollection } from "../lib/armors/collection.ts";
-import { maneuverCollection } from "../lib/maneuvers/details.ts";
+import { maneuverCollection } from "../lib/maneuvers/collection.ts";
 import { weaponCollection } from "../lib/weapons/collection.ts";
 import { curseCollection } from "../lib/curses/collection.ts";
+import { ArmorType } from "../../types/equipables/armors.ts";
+import { BlessingType } from "../../types/equipables/blessings.ts";
+import { CurseType } from "../../types/equipables/curses.ts";
+import { EnchantmentType } from "../../types/equipables/enchantments.ts";
+import { ManeuverType } from "../../types/equipables/maneuvers.ts";
+import { WeaponType } from "../../types/equipables/weapons.ts";
 
 const baseStats = {
   vitality: 20,
@@ -59,7 +65,7 @@ export function initializeCharacters(game: GameType) {
   const userMapping = () => {
     switch (userCount) {
       case 1:
-        return [users[0]];
+        return [users[0]]; // [users[0], users[0], users[0]]
       case 2:
         return [users[0], users[0], users[1], users[1]];
       case 3:
@@ -83,22 +89,32 @@ export function initializeCharacters(game: GameType) {
         favors: [],
         lastTurn: 0,
       },
-      pendingRewards: {
-        armors: 1,
-        blessings: 1,
-        curses: 0,
-        enchantments: 0,
-        maneuvers: 2,
-        weapons: 1,
-        stats: 10,
-      },
       rewards: {
-        armors: [],
-        blessings: [],
-        curses: [],
-        enchantments: [],
-        maneuvers: [],
-        weapons: [],
+        owned: {
+          armors: [],
+          blessings: [],
+          curses: [],
+          enchantments: [],
+          maneuvers: [],
+          weapons: [],
+        },
+        queue: {
+          armors: randomizeCollection(armorCollection) as ArmorType[],
+          blessings: randomizeCollection(blessingCollection) as BlessingType[],
+          curses: randomizeCollection(curseCollection) as CurseType[],
+          enchantments: randomizeCollection([]) as EnchantmentType[],
+          maneuvers: randomizeCollection(maneuverCollection) as ManeuverType[],
+          weapons: randomizeCollection(weaponCollection) as WeaponType[],
+        },
+        pending: {
+          armors: 1,
+          blessings: 1,
+          curses: 0,
+          enchantments: 0,
+          maneuvers: 2,
+          weapons: 1,
+          stats: 10,
+        },
       },
       stats: baseStats,
       savedStats: baseStats,

@@ -27,7 +27,7 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
 
 export default function Player(props: PlayerType) {
   const { id, name, stats, rewards } = props;
-  const { maneuvers, armors, weapons } = rewards;
+  const { maneuvers, armors, weapons } = rewards.owned;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const activeTurn = game?.data.battle?.turnOrder[0] === id;

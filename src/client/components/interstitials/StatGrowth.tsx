@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { StatName, StatsType } from "../../../types/individual/stats.ts";
 import "./StatGrowth.css";
-import { GameContext } from "../../contexts/GameContext.tsx";
 import { takeStats } from "../../services/skill.ts";
+import { PlayerType } from "../../../types/individual/characters.ts";
 
 type StatClickFnType = (stat: StatName, add: boolean) => void;
 
@@ -63,17 +63,15 @@ const StatSlot = ({
 };
 
 export function StatGrowth({
-  characterId,
   points,
+  gameId,
+  character,
 }: {
-  characterId: string;
   points: number;
+  gameId: string;
+  character: PlayerType;
 }) {
-  const game = useContext(GameContext);
-  const playerCharacters = game?.data.characters.players;
-  const baselineStats =
-    playerCharacters?.find((character) => character.id === characterId)
-      ?.stats || initialStats;
+  const baselineStats = character?.stats || initialStats;
   const [stats, setStats] = useState(baselineStats);
   const [remainingPoints, setRemainingPoints] = useState(points);
 
@@ -88,8 +86,8 @@ export function StatGrowth({
   function submitStats() {
     takeStats({
       newStats: stats,
-      gameId: game!.data.lobby.gameId,
-      characterId,
+      gameId,
+      characterId: character.id,
     });
   }
 

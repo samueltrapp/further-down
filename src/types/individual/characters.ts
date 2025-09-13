@@ -7,6 +7,15 @@ import { ArmorType } from "../equipables/armors.ts";
 import { CurseType } from "../equipables/curses.ts";
 import { EnchantmentType } from "../equipables/enchantments.ts";
 
+type RewardSpread = {
+  armors: ArmorType[];
+  blessings: BlessingType[];
+  curses: CurseType[];
+  enchantments: EnchantmentType[];
+  maneuvers: ManeuverType[];
+  weapons: WeaponType[];
+};
+
 export type RewardOptions =
   | "blessings"
   | "curses"
@@ -30,14 +39,10 @@ export type PlayerType = {
     lastTurn: number;
   };
   rewards: {
-    armors: ArmorType[];
-    blessings: BlessingType[];
-    curses: CurseType[];
-    enchantments: EnchantmentType[];
-    maneuvers: ManeuverType[];
-    weapons: WeaponType[];
+    owned: RewardSpread;
+    queue: RewardSpread;
+    pending: PendingRewardType & { stats: number };
   };
-  pendingRewards: PendingRewardType & { stats: number };
 };
 
 export type EnemyType = {

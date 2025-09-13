@@ -9,7 +9,7 @@ import {
   trunc,
 } from "../../../turn/utils/battle.ts";
 import { WeaponType } from "../../../../types/equipables/weapons.ts";
-import { maneuverCollection } from "../details.ts";
+import { maneuverCollection } from "../collection.ts";
 
 export function quicksilverOther(fnArgs: OtherManeuverFnArgsType) {
   const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;
@@ -17,7 +17,7 @@ export function quicksilverOther(fnArgs: OtherManeuverFnArgsType) {
     (maneuverDetails) => maneuverDetails.name === maneuver,
   );
 
-  const weapon = actor.rewards.weapons.find(
+  const weapon = actor.rewards.owned.weapons.find(
     (weapon) => weapon.name === weaponName,
   ) as WeaponType;
 
