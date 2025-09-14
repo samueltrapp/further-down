@@ -1,4 +1,4 @@
-import { useContext, useState, MouseEvent, useEffect } from "react";
+import { useContext, useState, MouseEvent } from "react";
 import { GameContext } from "../../contexts/GameContext.tsx";
 import {
   PlayerType,
@@ -9,10 +9,7 @@ import { StatGrowth } from "./StatGrowth.tsx";
 import { contextualIndefinite, singularize } from "../../utils/formatting.ts";
 import { NamePrompt } from "./NamePrompt.tsx";
 
-function RewardHolding({ gameId }: { gameId: string }) {
-  useEffect(() => {
-    finishSkilling(gameId);
-  }, [gameId]);
+function RewardHolding() {
   return <div>Waiting for other players.</div>;
 }
 
@@ -57,17 +54,21 @@ function RewardSelection({
 export function Rewards() {
   const game = useContext(GameContext);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const user = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
 
   const gameId = game!.data.lobby.gameId;
+  const votes = game!.data.lobby.votes;
   const playerCharacters = game!.data.characters.players.filter(
-    (playerCharacter) => playerCharacter.userId === user,
+    (playerCharacter) => playerCharacter.userId === userId,
   );
   const currentPlayerCharacter: PlayerType | undefined =
     playerCharacters[currentIndex];
 
   if (currentIndex > playerCharacters.length - 1) {
-    return <RewardHolding gameId={game!.data?.lobby.gameId} />;
+    if (gameId && userId && !votes.includes(userId)) {
+      finishSkilling({ gameId, userId });
+    }
+    return <RewardHolding />;
   } else if (!currentPlayerCharacter.name) {
     return (
       <NamePrompt gameId={gameId} characterId={currentPlayerCharacter.id} />

@@ -43,12 +43,14 @@ export function sendGame(
 
 export function startVote(
   connection: ConnectionType,
-  { gameId, vote }: VoteType,
+  { gameId, vote, userId }: VoteType,
 ) {
   const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
   if (game) {
-    const totalVotes = game.lobby.votes + (vote ? 1 : -1);
-    const votedToStart = totalVotes === game.lobby.users.length;
+    const totalVotes = vote
+      ? [...game.lobby.votes, userId]
+      : [...game.lobby.votes].filter((user) => user !== userId);
+    const votedToStart = totalVotes.length === game.lobby.users.length;
 
     const playerCharacters = votedToStart
       ? initializeCharacters(game)
@@ -64,7 +66,7 @@ export function startVote(
       lobby: {
         ...game.lobby,
         status: lobbyStatus,
-        votes: votedToStart ? 0 : totalVotes,
+        votes: votedToStart ? [] : totalVotes,
       },
     };
   }

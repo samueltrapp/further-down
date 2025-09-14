@@ -7,6 +7,8 @@ import {
 } from "../../types/events/skill.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
 import { GameType, LobbyStatus } from "../../types/game.ts";
+import { randomizeCollection } from "../utils/data.ts";
+import { SingleRewardType } from "../../types/equipables/aggregates.ts";
 
 const findCharacter = (game: GameType, characterId: string) =>
   game.characters.players.findIndex(
@@ -60,7 +62,7 @@ export function takeReward(
       const character = game.characters.players[characterIndex];
       const reducedQueue = character.rewards.queue[rewardOption].filter(
         (queueItem) => queueItem.name !== rewardName,
-      );
+      ) as SingleRewardType;
 
       const updatedCharacter: PlayerType = {
         ...character,
@@ -74,7 +76,7 @@ export function takeReward(
           },
           queue: {
             ...character.rewards.queue,
-            [rewardOption]: reducedQueue,
+            [rewardOption]: randomizeCollection(reducedQueue),
           },
           pending: {
             ...character.rewards.pending,
@@ -147,18 +149,21 @@ export function takeStats(
 
 export function finishSkilling(
   connection: ConnectionType,
-  { gameId }: VoteType,
+  { gameId, userId }: VoteType,
 ) {
   const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
   if (game) {
-    const totalVotes = game.lobby.votes + 1;
-    const votedToAdvance = totalVotes === game.lobby.users.length;
+    const votes = [...game.lobby.votes];
+    const alreadyVoted = votes.includes(userId);
+    const totalVotes = alreadyVoted ? votes : [...votes, userId];
+    const votedToAdvance = totalVotes.length === game.lobby.users.length;
+    console.log(totalVotes, votedToAdvance);
 
     connection.gameMeta.games[gameIndex] = {
       ...game,
       lobby: {
         ...game.lobby,
-        votes: votedToAdvance ? 0 : totalVotes,
+        votes: votedToAdvance ? [] : totalVotes,
         status: votedToAdvance ? LobbyStatus.BATTLE : game.lobby.status,
       },
     };

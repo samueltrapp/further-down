@@ -36,7 +36,7 @@ export type LobbyType = {
   status: LobbyStatus;
   pastEncounters: number;
   users: string[];
-  votes: number;
+  votes: string[];
   errorMessage: string | undefined;
 };
 
