@@ -6,9 +6,10 @@ import {
   TakeStatsType,
 } from "../../types/events/skill.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
-import { GameType, LobbyStatus } from "../../types/game.ts";
+import { CharactersType, GameType, LobbyStatus } from "../../types/game.ts";
 import { randomizeCollection } from "../utils/data.ts";
 import { SingleRewardType } from "../../types/equipables/aggregates.ts";
+import { pickEnemies, setBlankBattle } from "../battle/generator.ts";
 
 const findCharacter = (game: GameType, characterId: string) =>
   game.characters.players.findIndex(
@@ -63,6 +64,9 @@ export function takeReward(
       const reducedQueue = character.rewards.queue[rewardOption].filter(
         (queueItem) => queueItem.name !== rewardName,
       ) as SingleRewardType;
+      const selectedReward = character.rewards.queue[rewardOption].find(
+        (reward) => reward.name === rewardName,
+      );
 
       const updatedCharacter: PlayerType = {
         ...character,
@@ -71,7 +75,7 @@ export function takeReward(
             ...character.rewards.owned,
             [rewardOption]: [
               ...character.rewards.owned[rewardOption],
-              rewardName,
+              selectedReward,
             ],
           },
           queue: {
@@ -157,10 +161,22 @@ export function finishSkilling(
     const alreadyVoted = votes.includes(userId);
     const totalVotes = alreadyVoted ? votes : [...votes, userId];
     const votedToAdvance = totalVotes.length === game.lobby.users.length;
-    console.log(totalVotes, votedToAdvance);
+
+    let battle = game.battle;
+    let characters: CharactersType = game.characters;
+    if (votedToAdvance) {
+      const enemies = pickEnemies();
+      characters = {
+        ...characters,
+        enemies,
+      };
+      battle = setBlankBattle(characters);
+    }
 
     connection.gameMeta.games[gameIndex] = {
       ...game,
+      battle,
+      characters,
       lobby: {
         ...game.lobby,
         votes: votedToAdvance ? [] : totalVotes,

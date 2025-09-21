@@ -82,7 +82,9 @@ export default function Player(props: PlayerType) {
             value={game?.client.selectedWeapon?.name}
           >
             {weapons.map((weapon) => (
-              <option value={weapon.name}>{toCaps(weapon.name)}</option>
+              <option key={id} value={weapon.name}>
+                {toCaps(weapon.name)}
+              </option>
             ))}
           </select>
         </div>

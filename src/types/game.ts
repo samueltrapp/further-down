@@ -6,6 +6,14 @@ import { CurseType } from "./equipables/curses.ts";
 import { ArmorType } from "./equipables/armors.ts";
 import { EnchantmentType } from "./equipables/enchantments.ts";
 
+export enum BattleGrade {
+  BOSS = "boss",
+  MINI = "mini",
+  MINOR = "minor",
+  MODERATE = "moderate",
+  MAJOR = "major",
+}
+
 export enum LobbyStatus {
   BATTLE = "battle",
   EXPLORATION = "exploration",
@@ -19,7 +27,7 @@ export type BattleType = {
   round: number;
   speedElapsed: number;
   turnOrder: string[];
-  grade: "boss" | "mini" | "major" | "moderate" | "minor";
+  grade: BattleGrade;
 };
 
 export type LibType = {

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { socket } from "./socket.ts";
 import { GameType, LobbyStatus } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard/GameBoard.tsx";
@@ -23,6 +23,7 @@ const GameScreen = ({ lobbyStatus }: { lobbyStatus?: LobbyStatus }) => {
 };
 
 function App() {
+  const [loaded, setLoaded] = useState(false);
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const lobbyStatus = game?.data.lobby.status;
@@ -35,6 +36,7 @@ function App() {
       if (gameId && userId) {
         socket.emit("load", { gameId, userId });
       }
+      setLoaded(true);
     }
 
     function onFailedJoin(msg: string) {
@@ -85,7 +87,7 @@ function App() {
         Leave Game
       </button>
       <div className="container">
-        <GameScreen lobbyStatus={lobbyStatus} />
+        {loaded && <GameScreen lobbyStatus={lobbyStatus} />}
       </div>
     </>
   );
