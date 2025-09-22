@@ -22,7 +22,10 @@ export const resolveTurnOrder = (characters: CharactersType): string[] => {
     if (relation !== 0) return relation;
     else {
       // Break ties by picking the player who went longest ago
-      return -1 * (a.lastTurn - b.lastTurn);
+      const order = a.lastTurn - b.lastTurn;
+      // Or randomly by ID if that was also a tie
+      const lastResort = a.id < b.id ? 1 : -1;
+      return order !== 0 ? -1 * (a.lastTurn - b.lastTurn) : lastResort;
     }
   });
 

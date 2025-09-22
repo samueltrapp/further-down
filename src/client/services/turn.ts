@@ -1,10 +1,13 @@
 import { socket } from "../socket.ts";
-import { EnemyTurnType, PlayerTurnType } from "../../types/events/turn.ts";
+import {
+  EnemyClientTurnType,
+  PlayerTurnType,
+} from "../../types/events/turn.ts";
 
 export const playerTurn = (turn: PlayerTurnType) => {
-  socket.emit("playerTurn", turn);
+  socket.emit("player-turn", turn);
 };
 
-export const enemyTurn = (turn: EnemyTurnType) => {
-  socket.emit("enemyTurn", turn);
+export const enemyTurn = (turn: EnemyClientTurnType) => {
+  socket.emit("enemy-turn", turn);
 };

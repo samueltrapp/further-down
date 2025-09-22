@@ -1,6 +1,9 @@
 import { getCharacterDetails } from "../utils/data.ts";
 import { getMnvFns } from "../../lib/maneuvers/fnMap.ts";
-import { EnemyTurnType, PlayerTurnType } from "../../../types/events/turn.ts";
+import {
+  EnemyServerTurnType,
+  PlayerTurnType,
+} from "../../../types/events/turn.ts";
 import { CharactersType } from "../../../types/game.ts";
 
 export function resolveManeuver(
@@ -63,7 +66,7 @@ export function resolveManeuver(
 export function resolveTactic(
   characters: CharactersType,
   logMessages: string[],
-  turn: EnemyTurnType,
+  turn: EnemyServerTurnType,
 ) {
   console.log(turn);
 

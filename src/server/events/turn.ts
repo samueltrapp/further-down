@@ -3,7 +3,12 @@ import { resolvePreActions } from "../turn/actions/preActions.ts";
 import { resolveManeuver, resolveTactic } from "../turn/actions/actions.ts";
 import { resolvePostActions } from "../turn/actions/postActions.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
-import { EnemyTurnType, PlayerTurnType } from "../../types/events/turn.ts";
+import {
+  EnemyClientTurnType,
+  EnemyServerTurnType,
+  PlayerTurnType,
+} from "../../types/events/turn.ts";
+import { TacticName } from "../../types/equipables/tactics.ts";
 
 export function resolvePlayerTurn(
   turn: PlayerTurnType,
@@ -40,11 +45,27 @@ export function resolvePlayerTurn(
 }
 
 export function resolveEnemyTurn(
-  turn: EnemyTurnType,
+  turn: EnemyClientTurnType,
   game: GameType,
 ): { game: GameType; logMessages: string[] } {
+  const tactic = "spore burst" as TacticName;
+  const targetIds = [
+    game.characters.players[
+      Math.floor(Math.random() * game.characters.players.length)
+    ].id,
+  ];
+  const decidedTurn: EnemyServerTurnType = {
+    ...turn,
+    tactic,
+    targetIds,
+  };
+
   let { characters, logMessages } = resolvePreActions(game.characters);
-  ({ characters, logMessages } = resolveTactic(characters, logMessages, turn));
+  ({ characters, logMessages } = resolveTactic(
+    characters,
+    logMessages,
+    decidedTurn,
+  ));
   ({ characters, logMessages } = resolvePostActions(characters, logMessages));
 
   const arePlayersDone = !characters.players.some(

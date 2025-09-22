@@ -9,7 +9,7 @@ import {
   takeReward,
   takeStats,
 } from "./events/rewards.ts";
-import { EnemyTurnType, PlayerTurnType } from "../types/events/turn.ts";
+import { EnemyClientTurnType, PlayerTurnType } from "../types/events/turn.ts";
 import { GameMetaType, JoinDataType, VoteType } from "../types/server.ts";
 import {
   createGame,
@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
     }
   }
 
-  function enemyTurn(turn: EnemyTurnType) {
+  function enemyTurn(turn: EnemyClientTurnType) {
     const gameId = turn.gameId;
     const [game, gameIndex] = gameMeta.findGameAndIndex(gameId);
     if (gameMeta && game) {
@@ -99,8 +99,8 @@ io.on("connection", (socket) => {
   );
 
   // Battle events
-  socket.on("playerTurn", (turn) => playerTurn(turn));
-  socket.on("enemyTurn", (turn) => enemyTurn(turn));
+  socket.on("player-turn", (turn: PlayerTurnType) => playerTurn(turn));
+  socket.on("enemy-turn", (turn: EnemyClientTurnType) => enemyTurn(turn));
 });
 
 server.on("error", (e) => {

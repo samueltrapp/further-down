@@ -1,5 +1,6 @@
 import { ManeuverName } from "../equipables/maneuvers.ts";
 import { WeaponName } from "../equipables/weapons.ts";
+import { TacticName } from "../equipables/tactics.ts";
 
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
@@ -15,8 +16,13 @@ export type PlayerTurnType = BaseTurnType & {
   weapon: WeaponName;
 };
 
-export type EnemyTurnType = BaseTurnType & {
+export type EnemyClientTurnType = BaseTurnType & {
   team: "enemy";
+};
+
+export type EnemyServerTurnType = EnemyClientTurnType & {
+  tactic: TacticName;
+  targetIds: string[];
 };
 
 export type MvnOrTctType = {
