@@ -2,11 +2,9 @@ import { StatsType } from "../../../types/individual/stats.ts";
 import { UnitType } from "../../../types/individual/characters.ts";
 import { WeaponType } from "../../../types/equipables/weapons.ts";
 import { DamageType } from "../../../types/events/turn.ts";
+import { random } from "../../../common/utils.ts";
 
-const createSpread = (spread: number) => {
-  const rand = Math.random();
-  return (Math.floor(rand * 10) % 2 === 0 ? 1 : -1) * Math.round(rand * spread);
-};
+const createSpread = (spread: number) => random(spread * 2) - spread;
 
 export const findCharacter = (
   characters: UnitType[],

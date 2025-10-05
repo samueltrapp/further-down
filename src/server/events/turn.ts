@@ -9,6 +9,7 @@ import {
   PlayerTurnType,
 } from "../../types/events/turn.ts";
 import { TacticName } from "../../types/equipables/tactics.ts";
+import { random } from "../../common/utils.ts";
 
 export function resolvePlayerTurn(
   turn: PlayerTurnType,
@@ -50,9 +51,7 @@ export function resolveEnemyTurn(
 ): { game: GameType; logMessages: string[] } {
   const tactic = "spore burst" as TacticName;
   const targetIds = [
-    game.characters.players[
-      Math.floor(Math.random() * game.characters.players.length)
-    ].id,
+    game.characters.players[random(game.characters.players.length)].id,
   ];
   const decidedTurn: EnemyServerTurnType = {
     ...turn,
