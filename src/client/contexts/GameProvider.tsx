@@ -32,8 +32,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       enableConfirmation: false,
       maxEnemySelections: 0,
       selectedEnemyIds: [],
-      selectedManeuver: undefined,
-      selectedWeapon: undefined,
+      selectedManeuver: null,
+      selectedWeapon: null,
     },
   });
 
@@ -53,6 +53,15 @@ function gameReducer(game: GameStateType, action: GameActionType) {
         ...game,
         data: action.payload,
       };
+    case GameAction.PLAYER_ACTION: {
+      return {
+        ...game,
+        client: {
+          ...game.client,
+          ...action.payload,
+        },
+      };
+    }
     default:
       return game;
   }

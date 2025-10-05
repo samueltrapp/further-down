@@ -38,7 +38,7 @@ export const pickEnemies = () => {
       favors: [],
       lastTurn: 0,
     },
-    tactics: ["spore burst", "gentle slap"],
+    tactics: ["sporeBurst", "gentleSlap"],
   };
 
   return [

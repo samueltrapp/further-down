@@ -15,13 +15,12 @@ export default function ConfirmButton() {
   const lobby = game?.data.lobby;
   const currentTurn = game?.data.battle?.turnOrder[0];
 
-  return client &&
-    client?.enableConfirmation &&
+  return lobby?.gameId &&
+    client &&
     client?.selectedManeuver &&
     client?.selectedWeapon &&
-    client?.selectedEnemyIds &&
-    currentTurn &&
-    lobby?.gameId ? (
+    client?.selectedEnemyIds.length > 0 &&
+    currentTurn ? (
     <button
       className="confirm-button"
       onClick={() => {
@@ -34,13 +33,12 @@ export default function ConfirmButton() {
           issuerId: currentTurn,
         });
         if (dispatch) {
-          dispatch({ type: GameAction.SELECT_ENEMY, payload: null });
           dispatch({
-            type: GameAction.SELECT_MANEUVER,
+            type: GameAction.PLAYER_ACTION,
             payload: {
-              maneuverSelected: false,
-              maxTargets: 0,
-              maneuver: undefined,
+              maxEnemySelections: 0,
+              selectedEnemyIds: [],
+              selectedManeuver: null,
             },
           });
         }

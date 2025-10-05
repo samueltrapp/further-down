@@ -1,9 +1,6 @@
 import { GameType } from "../../types/game.ts";
-import {
-  ManeuverName,
-  ManeuverType,
-} from "../../types/equipables/maneuvers.ts";
-import { WeaponName, WeaponType } from "../../types/equipables/weapons.ts";
+import { ManeuverType } from "../../types/equipables/maneuvers.ts";
+import { WeaponType } from "../../types/equipables/weapons.ts";
 
 /* Game Types */
 export type GameStateType = {
@@ -15,14 +12,12 @@ export type GameClientType = {
   enableConfirmation: boolean;
   maxEnemySelections: number;
   selectedEnemyIds: string[];
-  selectedManeuver: ManeuverType | undefined;
-  selectedWeapon: WeaponType | undefined;
+  selectedManeuver: ManeuverType | null;
+  selectedWeapon: WeaponType | null;
 };
 
 export enum GameAction {
-  SELECT_ENEMY = "SELECT_ENEMY",
-  SELECT_MANEUVER = "SELECT_MANEUVER",
-  SELECT_WEAPON = "SELECT_TECHNIQUE",
+  PLAYER_ACTION = "PLAYER_ACTION",
   SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE",
   SYNC = "SYNC",
 }
@@ -33,21 +28,13 @@ export type GameActionType = BattleActionType | LobbyActionType;
 /* Battle Dispatcher */
 type BattleActionType =
   | {
-      type: GameAction.SELECT_MANEUVER;
-      payload: {
-        maneuverSelected: boolean;
-        maxTargets: number;
-        maneuver: ManeuverName | undefined;
-      };
+      type: GameAction.PLAYER_ACTION;
+      payload: Partial<GameClientType>;
     }
   | {
-      type: GameAction.SELECT_WEAPON;
-      payload: {
-        weapon: WeaponName | undefined;
-      };
-    }
-  | { type: GameAction.SELECT_ENEMY; payload: string | null }
-  | { type: GameAction.SYNC; payload: GameType };
+      type: GameAction.SYNC;
+      payload: GameType;
+    };
 
 /* Lobby Dispatcher */
 type LobbyActionType = {

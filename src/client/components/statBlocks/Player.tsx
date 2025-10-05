@@ -34,28 +34,32 @@ export default function Player(props: PlayerType) {
   const maxHp = Math.floor(armors[0].constitution * stats.vitality);
 
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {
-    const target = event.target as HTMLButtonElement;
-    const value = target.value as ManeuverName;
-    if (dispatch && target.value) {
+    const value = (event.target as HTMLButtonElement).value as ManeuverName;
+    const selectedManeuver = game?.data.lib.maneuvers.find(
+      (maneuver) => maneuver.name === value,
+    );
+    if (dispatch && value) {
       dispatch({
-        type: GameAction.SELECT_MANEUVER,
+        type: GameAction.PLAYER_ACTION,
         payload: {
-          maneuverSelected: true,
-          maxTargets: game?.client?.selectedManeuver?.maxTargets || 0,
-          maneuver: value,
+          selectedEnemyIds: [],
+          selectedManeuver,
+          maxEnemySelections: selectedManeuver?.maxTargets || 0,
         },
       });
     }
   };
 
   const handleSelectWeapon = (event: ChangeEvent<HTMLSelectElement>) => {
-    const target = event.target as HTMLSelectElement;
-    const value = target.value as WeaponName;
-    if (dispatch && target.value) {
+    const value = event.target.value as WeaponName;
+    const selectedWeapon = game?.data.lib.weapons.find(
+      (weapon) => weapon.name === value,
+    );
+    if (dispatch && value) {
       dispatch({
-        type: GameAction.SELECT_WEAPON,
+        type: GameAction.PLAYER_ACTION,
         payload: {
-          weapon: value,
+          selectedWeapon: selectedWeapon,
         },
       });
     }
@@ -81,6 +85,11 @@ export default function Player(props: PlayerType) {
             onChange={handleSelectWeapon}
             value={game?.client.selectedWeapon?.name}
           >
+            {game?.client.selectedWeapon === null && (
+              <option key="unarmed" value={""}>
+                Unarmed
+              </option>
+            )}
             {weapons.map((weapon) => (
               <option key={id} value={weapon.name}>
                 {toCaps(weapon.name)}

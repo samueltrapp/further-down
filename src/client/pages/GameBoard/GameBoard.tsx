@@ -11,6 +11,7 @@ import {
   GameDispatchContext,
 } from "../../contexts/GameContext.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
+import { selectEnemies } from "../../contexts/contextActions.ts";
 
 function GameBoard() {
   const game = useContext(GameContext);
@@ -22,10 +23,17 @@ function GameBoard() {
   const { players, enemies } = characters;
 
   const handleSelect = (enemyId: string) => {
-    if (dispatch && game?.client.enableConfirmation) {
+    if (dispatch) {
+      const updatedEnemyIds = selectEnemies(
+        enemyId,
+        game?.client?.selectedEnemyIds,
+        game?.client?.maxEnemySelections,
+      );
       dispatch({
-        type: GameAction.SELECT_ENEMY,
-        payload: enemyId,
+        type: GameAction.PLAYER_ACTION,
+        payload: {
+          selectedEnemyIds: updatedEnemyIds,
+        },
       });
     }
   };

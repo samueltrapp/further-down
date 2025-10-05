@@ -28,8 +28,8 @@ const baseStats = {
   plating: 0,
   psychic: 0,
   resistance: 0,
-  speed: 20,
-  currentSpeed: 20,
+  speed: 21,
+  currentSpeed: 21,
   warding: 0,
 };
 
