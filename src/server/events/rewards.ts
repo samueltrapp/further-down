@@ -1,4 +1,4 @@
-import { sendGame } from "./gameManagement.ts";
+import { sendGame } from "../meta/gameManagement.ts";
 import { ConnectionType, VoteType } from "../../types/server.ts";
 import {
   SetNameType,

@@ -1,25 +1,13 @@
 import { MvnOrTctType } from "../../../types/events/turn.ts";
 import { TacticName } from "../../../types/equipables/tactics.ts";
 
+import gentleSlap from "./collection/gentleSlap.ts";
+import meltingMist from "./collection/meltingMist.ts";
+import sporeBurst from "./collection/sporeBurst.ts";
+
 export const tctDetails: Record<TacticName, MvnOrTctType> = {
-  sporeBurst: {
-    speedCost: 7,
-    maxTargets: 4,
-    actions: [
-      {
-        damageType: "elemental",
-        strength: 0.75,
-      },
-    ],
-  },
-  gentleSlap: {
-    speedCost: 4,
-    maxTargets: 1,
-    actions: [
-      {
-        damageType: "blunt",
-        strength: 0.35,
-      },
-    ],
-  },
+  gentleSlap,
+  meltingMist,
+  sporeBurst,
+
 };

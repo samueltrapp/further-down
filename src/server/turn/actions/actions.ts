@@ -68,7 +68,7 @@ export function resolveTactic(
   logMessages: string[],
   turn: EnemyServerTurnType,
 ) {
-  console.log(turn);
+
 
   return {
     characters,

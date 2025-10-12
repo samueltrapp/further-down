@@ -28,7 +28,7 @@ export type EnemyServerTurnType = EnemyClientTurnType & {
 export type MvnOrTctType = {
   speedCost: number;
   maxTargets: number;
-  actions: {
+  steps?: {
     damageType: DamageType;
     strength: number;
   }[];
