@@ -26,6 +26,7 @@ export type EnemyServerTurnType = EnemyClientTurnType & {
 };
 
 export type MvnOrTctType = {
+  description?: string;
   speedCost: number;
   maxTargets: number;
   steps?: {

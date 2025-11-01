@@ -7,12 +7,12 @@ export function getCharacterDetails(
   characters: CharactersType,
   turn: PlayerTurnType,
 ) {
-  const actor = findCharacter(characters.players, turn.issuerId);
-  const recipients = turn.targetIds.map((targetId: string) =>
+  const source = findCharacter(characters.players, turn.issuerId);
+  const targets = turn.targetIds.map((targetId: string) =>
     findCharacter(characters.enemies, targetId),
   );
-  return { actor, recipients } as {
-    actor: [PlayerType, number];
-    recipients: [EnemyType, number][];
+  return { source, targets } as {
+    source: [PlayerType, number];
+    targets: [EnemyType, number][];
   };
 }

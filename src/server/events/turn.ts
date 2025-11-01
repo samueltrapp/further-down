@@ -8,7 +8,6 @@ import {
   EnemyServerTurnType,
   PlayerTurnType,
 } from "../../types/events/turn.ts";
-import { TacticName } from "../../types/equipables/tactics.ts";
 import { random } from "../../common/utils.ts";
 
 function finishTurn(characters: CharactersType, game: GameType, logMessages: string[])  {
@@ -53,23 +52,26 @@ export function resolveEnemyTurn(
   turn: EnemyClientTurnType,
   game: GameType,
 ): { game: GameType; logMessages: string[] } {
-  const tactic = "sporeBurst" as TacticName;
-  const targetIds = [
-    game.characters.players[random(game.characters.players.length)].id,
-  ];
-  const decidedTurn: EnemyServerTurnType = {
-    ...turn,
-    tactic,
-    targetIds,
-  };
+  const self = game.characters.enemies.find((enemy => enemy.id === turn.issuerId));
+  const tactics = self?.tactics;
+  if (tactics) {
+    const randomTactic = tactics[random(tactics.length)];
+    const targetIds = [
+      game.characters.players[random(game.characters.players.length)].id,
+    ];
+    const decidedTurn: EnemyServerTurnType = {
+      ...turn,
+      tactic: randomTactic,
+      targetIds,
+    };
 
-  let { characters, logMessages } = resolvePreActions(game.characters);
-  ({ characters, logMessages } = resolveTactic(
-    characters,
-    logMessages,
-    decidedTurn,
-  ));
-  ({ characters, logMessages } = resolvePostActions(characters, logMessages));
-
-  return finishTurn(characters, game, logMessages);
+    let { characters, logMessages } = resolvePreActions(game.characters);
+    ({ characters, logMessages } = resolveTactic(
+      characters,
+      logMessages,
+      decidedTurn,
+    ));
+    ({ characters, logMessages } = resolvePostActions(characters, logMessages));
+    return finishTurn(characters, game, logMessages);
+  }
 }
