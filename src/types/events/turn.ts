@@ -6,7 +6,7 @@ export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
 type BaseTurnType = {
   gameId: string;
-  issuerId: string;
+  sourceId: string;
 };
 
 export type PlayerTurnType = BaseTurnType & {
@@ -33,4 +33,10 @@ export type MvnOrTctType = {
     damageType: DamageType;
     strength: number;
   }[];
+};
+
+export type MnvOrTctFnType = {
+  characters: CharactersType;
+  sourceId: string;
+  targetIds: string[];
 };

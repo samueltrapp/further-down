@@ -1,7 +1,5 @@
 import {BattleType, CharactersType, GameType} from "../../types/game.ts";
-import { resolvePreActions } from "../turn/actions/preActions.ts";
 import { resolveManeuver, resolveTactic } from "../turn/actions/actions.ts";
-import { resolvePostActions } from "../turn/actions/postActions.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
 import {
   EnemyClientTurnType,
@@ -11,11 +9,11 @@ import {
 import { random } from "../../common/utils.ts";
 
 function finishTurn(characters: CharactersType, game: GameType, logMessages: string[])  {
-  const arePlayersDone = !characters.players.some(
-    (character) => character.stats.speed > 0,
+  const arePlayersDone = Object.values(characters.players).every(
+    (character) => character.stats.speed <= 0,
   );
-  const areEnemiesDone = !characters.enemies.some(
-    (character) => character.stats.speed > 0,
+  const areEnemiesDone = Object.values(characters.enemies).every(
+    (character) => character.stats.speed <= 0,
   );
   const isRoundEnd = arePlayersDone && areEnemiesDone;
 
@@ -37,13 +35,7 @@ export function resolvePlayerTurn(
   turn: PlayerTurnType,
   game: GameType,
 ): { game: GameType; logMessages: string[] } {
-  let { characters, logMessages } = resolvePreActions(game.characters);
-  ({ characters, logMessages } = resolveManeuver(
-    characters,
-    logMessages,
-    turn,
-  ));
-  ({ characters, logMessages } = resolvePostActions(characters, logMessages));
+  const { characters, logMessages } = resolveManeuver(game.characters, [], turn);
 
   return finishTurn(characters, game, logMessages);
 }
@@ -52,26 +44,17 @@ export function resolveEnemyTurn(
   turn: EnemyClientTurnType,
   game: GameType,
 ): { game: GameType; logMessages: string[] } {
-  const self = game.characters.enemies.find((enemy => enemy.id === turn.issuerId));
-  const tactics = self?.tactics;
-  if (tactics) {
-    const randomTactic = tactics[random(tactics.length)];
-    const targetIds = [
-      game.characters.players[random(game.characters.players.length)].id,
-    ];
-    const decidedTurn: EnemyServerTurnType = {
-      ...turn,
-      tactic: randomTactic,
-      targetIds,
-    };
+  const tactics = game.characters.enemies[turn.sourceId].tactics;
+  const randomTactic = tactics[random(tactics.length)];
+  const targetIds = [
+    game.characters.players[random(Object.values(game.characters.players).length)].id,
+  ];
+  const decidedTurn: EnemyServerTurnType = {
+    ...turn,
+    tactic: randomTactic,
+    targetIds,
+  };
 
-    let { characters, logMessages } = resolvePreActions(game.characters);
-    ({ characters, logMessages } = resolveTactic(
-      characters,
-      logMessages,
-      decidedTurn,
-    ));
-    ({ characters, logMessages } = resolvePostActions(characters, logMessages));
-    return finishTurn(characters, game, logMessages);
-  }
+  const { characters, logMessages } = resolveTactic(game.characters, [], decidedTurn);
+  return finishTurn(characters, game, logMessages);
 }

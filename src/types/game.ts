@@ -49,8 +49,8 @@ export type LobbyType = {
 };
 
 export type CharactersType = {
-  players: PlayerType[];
-  enemies: EnemyType[];
+  players: Record<string, PlayerType>;
+  enemies: Record<string, EnemyType>;
 };
 
 export type GameType = {

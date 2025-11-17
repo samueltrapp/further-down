@@ -6,6 +6,7 @@ import { BlessingType } from "../equipables/blessings.ts";
 import { ArmorType } from "../equipables/armors.ts";
 import { CurseType } from "../equipables/curses.ts";
 import { EnchantmentType } from "../equipables/enchantments.ts";
+import {FavorName} from "../equipables/effects.ts";
 
 type RewardSpread = {
   armors: ArmorType[];
@@ -34,7 +35,7 @@ export type PlayerType = {
   stats: StatsType;
   savedStats: StatsType;
   effects: {
-    favors: string[];
+    favors: Record<FavorName, number>;
     burdens: string[];
     lastTurn: number;
   };

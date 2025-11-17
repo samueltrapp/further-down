@@ -1,6 +1,6 @@
 import {MvnOrTctType} from "../../../../types/events/turn.ts";
 
-const gentleSlap: MvnOrTctType = {
+const bonk: MvnOrTctType = {
   speedCost: 4,
   maxTargets: 1,
   steps: [
@@ -11,4 +11,4 @@ const gentleSlap: MvnOrTctType = {
   ],
 };
 
-export default gentleSlap;
+export default bonk;

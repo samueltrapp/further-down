@@ -4,7 +4,7 @@ export type EnchantmentName = "lethal" | "silver";
 
 export type EnchantmentType = {
   name: EnchantmentName;
-  type: "defensive" | "offensive";
+  type: "hit" | "turn" | "round";
   description: string;
 };
 
