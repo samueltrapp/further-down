@@ -13,8 +13,10 @@ export function resolveManeuver(
 ) {
   const { maneuver, sourceId, targetIds } = turn;
   const mnvFn = getMnvFn(maneuver);
-  const characterResults = mnvFn ? mnvFn({characters, sourceId, targetIds}) : characters;
-  return { characters: characterResults, logMessages };
+  const { characterResults, logResults } = mnvFn
+    ? mnvFn({ characters, sourceId, targetIds })
+    : { characterResults: characters, logResults: logMessages };
+  return { characters: characterResults, logMessages: logResults };
 }
 
 export function resolveTactic(
@@ -22,11 +24,13 @@ export function resolveTactic(
   logMessages: string[],
   turn: EnemyServerTurnType,
 ) {
-  const { tactic } = turn;
+  const { tactic, sourceId, targetIds } = turn;
   const tacticFn = getTacticFn(tactic);
-  const characterResults = tacticFn ? tacticFn(characters) : characters;
+  const { characterResults, logResults } = tacticFn
+    ? tacticFn({ characters, sourceId, targetIds })
+    : { characterResults: characters, logResults: logMessages };
   return {
-    characters,
-    logMessages,
+    characters: characterResults,
+    logMessages: logResults,
   };
 }

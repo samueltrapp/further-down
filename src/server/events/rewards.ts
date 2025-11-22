@@ -5,16 +5,10 @@ import {
   TakeRewardType,
   TakeStatsType,
 } from "../../types/events/skill.ts";
-import { PlayerType } from "../../types/individual/characters.ts";
-import { CharactersType, GameType, LobbyStatus } from "../../types/game.ts";
+import { CharactersType, LobbyStatus } from "../../types/game.ts";
 import { randomizeCollection } from "../utils/data.ts";
 import { SingleRewardType } from "../../types/equipables/aggregates.ts";
 import { pickEnemies, setBlankBattle } from "../battle/generator.ts";
-
-const findCharacter = (game: GameType, characterId: string) =>
-  game.characters.players.findIndex(
-    (existingCharacter) => existingCharacter.id === characterId,
-  );
 
 export function submitName(
   connection: ConnectionType,
@@ -22,28 +16,19 @@ export function submitName(
 ) {
   const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
   if (game) {
-    const characterIndex = findCharacter(game, characterId);
+    const character = game.characters.players[characterId];
 
-    if (characterIndex >= 0) {
-      const character = game.characters.players[characterIndex];
-      const updatedCharacter = {
-        ...character,
-        name,
-      };
-
-      /* TS refuses to understand this method even after updating the compiler options */
-      // @ts-ignore
-      const playerCharacters: PlayerType[] = game.characters.players.toSpliced(
-        characterIndex,
-        1,
-        updatedCharacter,
-      );
+    if (character) {
+      character.name = name;
 
       connection.gameMeta.games[gameIndex] = {
         ...game,
         characters: {
           ...game.characters,
-          players: playerCharacters,
+          players: {
+            ...game.characters.players,
+            [characterId]: character,
+          },
         },
       };
       sendGame(connection, gameId);
@@ -57,10 +42,9 @@ export function takeReward(
 ) {
   const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
   if (game) {
-    const characterIndex = findCharacter(game, characterId);
+    const character = game.characters.players[characterId];
 
-    if (characterIndex >= 0) {
-      const character = game.characters.players[characterIndex];
+    if (character) {
       const reducedQueue = character.rewards.queue[rewardOption].filter(
         (queueItem) => queueItem.name !== rewardName,
       ) as SingleRewardType;
@@ -68,40 +52,19 @@ export function takeReward(
         (reward) => reward.name === rewardName,
       );
 
-      const updatedCharacter: PlayerType = {
-        ...character,
-        rewards: {
-          owned: {
-            ...character.rewards.owned,
-            [rewardOption]: [
-              ...character.rewards.owned[rewardOption],
-              selectedReward,
-            ],
-          },
-          queue: {
-            ...character.rewards.queue,
-            [rewardOption]: randomizeCollection(reducedQueue),
-          },
-          pending: {
-            ...character.rewards.pending,
-            [rewardOption]: character.rewards.pending[rewardOption] - 1,
-          },
-        },
-      };
-
-      /* TS refuses to understand this method even after updating the compiler options */
-      // @ts-ignore
-      const playerCharacters: PlayerType[] = game.characters.players.toSpliced(
-        characterIndex,
-        1,
-        updatedCharacter,
-      );
+      character.rewards.owned[rewardOption].push(selectedReward);
+      character.rewards.queue[rewardOption] = randomizeCollection(reducedQueue);
+      character.rewards.pending[rewardOption] =
+        character.rewards.pending[rewardOption] - 1;
 
       connection.gameMeta.games[gameIndex] = {
         ...game,
         characters: {
           ...game.characters,
-          players: playerCharacters,
+          players: {
+            ...game.characters.players,
+            [characterId]: character,
+          },
         },
       };
       sendGame(connection, gameId);
@@ -115,35 +78,20 @@ export function takeStats(
 ) {
   const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
   if (game) {
-    const characterIndex = findCharacter(game, characterId);
+    const character = game.characters.players[characterId];
 
-    if (characterIndex >= 0) {
-      const character = game.characters.players[characterIndex];
-      const updatedCharacter: PlayerType = {
-        ...character,
-        stats: newStats,
-        rewards: {
-          ...character.rewards,
-          pending: {
-            ...character.rewards.pending,
-            stats: 0,
-          },
-        },
-      };
-
-      /* TS refuses to understand this method even after updating the compiler options */
-      // @ts-ignore
-      const playerCharacters: PlayerType[] = game.characters.players.toSpliced(
-        characterIndex,
-        1,
-        updatedCharacter,
-      );
+    if (character) {
+      character.stats = newStats;
+      character.rewards.pending.stats = 0;
 
       connection.gameMeta.games[gameIndex] = {
         ...game,
         characters: {
           ...game.characters,
-          players: playerCharacters,
+          players: {
+            ...game.characters.players,
+            [characterId]: character,
+          },
         },
       };
       sendGame(connection, gameId);

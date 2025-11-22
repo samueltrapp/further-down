@@ -6,5 +6,5 @@ import sporeBurst from "./library/sporeBurst.ts";
 
 export const tacticCollection: Record<TacticName, MvnOrTctType> = {
   bonk: bonk,
-  sporeBurst,
+  sporeBurst: sporeBurst,
 };

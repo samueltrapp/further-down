@@ -6,7 +6,7 @@ import { BlessingType } from "../equipables/blessings.ts";
 import { ArmorType } from "../equipables/armors.ts";
 import { CurseType } from "../equipables/curses.ts";
 import { EnchantmentType } from "../equipables/enchantments.ts";
-import {FavorName} from "../equipables/effects.ts";
+import { FavorName } from "../equipables/effects.ts";
 
 type RewardSpread = {
   armors: ArmorType[];
@@ -28,7 +28,6 @@ export type RewardOptions =
 export type PendingRewardType = Record<RewardOptions, number>;
 
 export type PlayerType = {
-  id: string;
   name: string;
   userId: string;
   team: "player";
@@ -47,7 +46,6 @@ export type PlayerType = {
 };
 
 export type EnemyType = {
-  id: string;
   name: string;
   team: "enemy";
   stats: StatsType;

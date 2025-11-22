@@ -1,4 +1,4 @@
-import {MvnOrTctType} from "../../../../types/events/turn.ts";
+import { MvnOrTctType } from "../../../../types/events/turn.ts";
 
 const bonk: MvnOrTctType = {
   speedCost: 4,
@@ -6,7 +6,8 @@ const bonk: MvnOrTctType = {
   steps: [
     {
       damageType: "blunt",
-      strength: 0.35,
+      strength: 1.2,
+      base: 5,
     },
   ],
 };

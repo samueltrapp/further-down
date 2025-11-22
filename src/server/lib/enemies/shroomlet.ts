@@ -1,4 +1,4 @@
-import {EnemyType} from "../../../types/individual/characters.ts";
+import { EnemyType } from "../../../types/individual/characters.ts";
 
 const shroomlet: Omit<EnemyType, "id"> = {
   name: "Shroomlet",
@@ -27,7 +27,7 @@ const shroomlet: Omit<EnemyType, "id"> = {
     favors: [],
     lastTurn: 0,
   },
-  tactics: ["sporeBurst", "gentleSlap"],
+  tactics: ["bonk"],
 };
 
 export default shroomlet;

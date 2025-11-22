@@ -37,8 +37,8 @@ export function initializeLobby(gameId: string, userId: string): GameType {
   return {
     battle: undefined,
     characters: {
-      enemies: [],
-      players: [],
+      enemies: {},
+      players: {},
     },
     lobby: {
       gameId: gameId,

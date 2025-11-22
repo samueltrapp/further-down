@@ -6,7 +6,7 @@ import "./Enemy.css";
 import { GameContext } from "../../contexts/GameContext.tsx";
 
 function Enemy(props: EnemyType) {
-  const { id, name, stats } = props;
+  const { name, stats } = props;
 
   const game = useContext(GameContext);
   const client = game?.client;

@@ -1,11 +1,18 @@
-import {TacticName} from "../../../types/equipables/tactics.ts";
-import {CharactersType} from "../../../types/game.ts";
-import {MnvOrTctFnType} from "../../../types/events/turn.ts";
-import {bonkFn} from "./implementation/bonk.ts";
+import { TacticName } from "../../../types/equipables/tactics.ts";
+import { CharactersType } from "../../../types/game.ts";
+import { MnvOrTctFnType } from "../../../types/events/turn.ts";
+import { bonkFn } from "./implementation/bonk.ts";
 
-type ResolvedTacticFnType = ({characters, sourceId, targetIds}: MnvOrTctFnType) => {characters: CharactersType, logMessages: string[]};
+type ResolvedTacticFnType = ({
+  characters,
+  sourceId,
+  targetIds,
+}: MnvOrTctFnType) => {
+  characterResults: CharactersType;
+  logResults: string[];
+};
 
-const tactics = [
+const tactics: [TacticName, ResolvedTacticFnType][] = [
   ["bonk", bonkFn],
   // ["sporeBurst", sporeBurst]
 ];

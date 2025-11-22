@@ -1,17 +1,61 @@
-import {MnvOrTctFnType} from "../../../../types/events/turn.ts";
-import {tacticCollection} from "../collection.ts";
+import { MnvOrTctFnType } from "../../../../types/events/turn.ts";
+import { tacticCollection } from "../collection.ts";
+import {
+  calcRawEnemyDamage,
+  calcRawMitigation,
+  limitToZero,
+  trunc,
+} from "../../../turn/utils/battle.ts";
 
-
-export function bonkFn({characters, sourceId, targetIds}: MnvOrTctFnType) {
+export function bonkFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
   const tctDetail = tacticCollection.bonk;
   const source = characters.enemies[sourceId];
-  const targets = targetIds.map(targetId => characters.players[targetId]);
+  const targets = targetIds.map((targetId) => characters.players[targetId]);
 
+  const raw = tctDetail.steps?.map((action) => {
+    const baseDamage = calcRawEnemyDamage(
+      action.base || 0,
+      source.stats,
+      action.damageType,
+    );
+    const adjustedDamage = baseDamage * action.strength;
 
-  const logMessages: string[] = [];
+    return {
+      damage: adjustedDamage,
+      mitigation: targets.map((target) =>
+        calcRawMitigation(target.stats, action.damageType),
+      ),
+    };
+  });
+
+  if (raw) {
+    targets.forEach((target, index) => {
+      target.stats.hitPoints -= limitToZero(
+        trunc(
+          raw.reduce(
+            (total, rawEntry) =>
+              total + (rawEntry.damage - rawEntry.mitigation[index]),
+            0,
+          ),
+        ),
+      );
+    });
+  }
+
+  const logMessages: string[] = [""];
+
+  const characterResponse = {
+    players: {
+      ...characters.players,
+    },
+    enemies: {
+      ...characters.enemies,
+      [sourceId]: source,
+    },
+  };
 
   return {
-    characters,
-    logMessages
-  }
+    characterResults: characterResponse,
+    logResults: logMessages,
+  };
 }

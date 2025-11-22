@@ -1,4 +1,3 @@
-import { UnitType } from "../../types/individual/characters.ts";
 import { CharactersType } from "../../types/game.ts";
 
 type CharTurnType = {
@@ -8,13 +7,14 @@ type CharTurnType = {
 };
 
 export const resolveTurnOrder = (characters: CharactersType): string[] => {
-  const allCharacters = (characters.players as UnitType[]).concat(
-    characters.enemies,
-  );
-  const charTurns = allCharacters.map((character) => ({
-    id: character.id,
-    lastTurn: character.effects.lastTurn,
-    speed: character.stats.speed,
+  const allCharacters = {
+    ...characters.players,
+    ...characters.enemies,
+  };
+  const charTurns = Object.entries(allCharacters).map((character) => ({
+    id: character[0],
+    lastTurn: character[1].effects.lastTurn,
+    speed: character[1].stats.speed,
   }));
 
   charTurns.sort((a: CharTurnType, b: CharTurnType) => {

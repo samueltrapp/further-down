@@ -1,6 +1,7 @@
 import { ManeuverName } from "../equipables/maneuvers.ts";
 import { WeaponName } from "../equipables/weapons.ts";
 import { TacticName } from "../equipables/tactics.ts";
+import { CharactersType } from "../game.ts";
 
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
@@ -32,6 +33,7 @@ export type MvnOrTctType = {
   steps?: {
     damageType: DamageType;
     strength: number;
+    base?: number;
   }[];
 };
 
