@@ -1,7 +1,7 @@
-import { TacticName } from "../../../types/equipables/tactics.ts";
 import { CharactersType } from "../../../types/game.ts";
 import { MnvOrTctFnType } from "../../../types/events/turn.ts";
 import { bonkFn } from "./implementation/bonk.ts";
+import { TacticName } from "../../../types/equipables/actions.ts";
 
 type ResolvedTacticFnType = ({
   characters,

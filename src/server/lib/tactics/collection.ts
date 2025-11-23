@@ -1,10 +1,7 @@
-import { MvnOrTctType } from "../../../types/events/turn.ts";
-import { TacticName } from "../../../types/equipables/tactics.ts";
-
 import bonk from "./library/bonk.ts";
-import sporeBurst from "./library/sporeBurst.ts";
+import { TacticType } from "../../../types/equipables/actions.ts";
 
-export const tacticCollection: Record<TacticName, MvnOrTctType> = {
-  bonk: bonk,
-  sporeBurst: sporeBurst,
-};
+export const tacticCollection: TacticType[] = [
+  bonk,
+  // sporeBurst
+];

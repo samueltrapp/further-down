@@ -10,7 +10,7 @@ import { ArmorType } from "../../types/equipables/armors.ts";
 import { BlessingType } from "../../types/equipables/blessings.ts";
 import { CurseType } from "../../types/equipables/curses.ts";
 import { EnchantmentType } from "../../types/equipables/enchantments.ts";
-import { ManeuverType } from "../../types/equipables/maneuvers.ts";
+import { ManeuverType } from "../../types/equipables/actions.ts";
 import { WeaponType } from "../../types/equipables/weapons.ts";
 
 const baseStats = {
@@ -78,15 +78,15 @@ export function initializeCharacters(game: GameType) {
   };
   const userSpread = userMapping();
 
-  const initialCharacters: PlayerType[] = [];
+  const initialCharacters: Record<string, PlayerType> = {};
   for (const user of userSpread) {
-    initialCharacters.push({
-      id: randomId(8),
+    const id = randomId(8);
+    initialCharacters[id] = {
       name: "",
       userId: user,
       effects: {
         burdens: [],
-        favors: [],
+        favors: {},
         lastTurn: 0,
       },
       rewards: {
@@ -119,7 +119,7 @@ export function initializeCharacters(game: GameType) {
       stats: baseStats,
       savedStats: baseStats,
       team: "player",
-    });
+    };
   }
 
   return initialCharacters;

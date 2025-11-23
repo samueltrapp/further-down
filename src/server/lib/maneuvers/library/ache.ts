@@ -1,7 +1,7 @@
-import {MvnOrTctType} from "../../../../types/events/turn.ts";
+import { ManeuverType } from "../../../../types/equipables/actions.ts";
 
-
-const ache: MvnOrTctType = {
+const ache: ManeuverType = {
+  name: "ache",
   description: "Ache description",
   speedCost: 15,
   maxTargets: 1,

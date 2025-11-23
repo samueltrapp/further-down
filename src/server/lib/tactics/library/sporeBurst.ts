@@ -1,6 +1,8 @@
-import {MvnOrTctType} from "../../../../types/events/turn.ts";
+import { TacticType } from "../../../../types/equipables/actions.ts";
 
-const sporeBurst: MvnOrTctType = {
+const sporeBurst: TacticType = {
+  name: "sporeBurst",
+  description: "Spore burst description",
   speedCost: 7,
   maxTargets: 4,
   steps: [

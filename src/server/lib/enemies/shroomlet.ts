@@ -22,6 +22,7 @@ const shroomlet: Omit<EnemyType, "id"> = {
     dampening: -1,
     warding: 3,
   },
+  base: 6,
   effects: {
     burdens: [],
     favors: [],

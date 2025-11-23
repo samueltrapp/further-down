@@ -1,4 +1,4 @@
-import { ManeuverType } from "./equipables/maneuvers.ts";
+import { ManeuverType } from "./equipables/actions.ts";
 import { EnemyType, PlayerType } from "./individual/characters.ts";
 import { WeaponType } from "./equipables/weapons.ts";
 import { BlessingType } from "./equipables/blessings.ts";

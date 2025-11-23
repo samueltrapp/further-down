@@ -1,4 +1,4 @@
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
+import { ManeuverName } from "../../../types/equipables/actions.ts";
 import { acheFn } from "./implementation/ache.ts";
 import { CharactersType } from "../../../types/game.ts";
 import { MnvOrTctFnType } from "../../../types/events/turn.ts";

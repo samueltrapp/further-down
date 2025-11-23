@@ -1,6 +1,6 @@
 // import {
 //   OtherManeuverFnArgsType,
-// } from "../../../../types/equipables/maneuvers.ts";
+// } from "../../../../types/equipables/actions.ts";
 // import {
 //   calcRawDamage,
 //   calcRawMitigation,

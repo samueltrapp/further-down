@@ -1,13 +1,14 @@
-import { MvnOrTctType } from "../../../../types/events/turn.ts";
+import { TacticType } from "../../../../types/equipables/actions.ts";
 
-const bonk: MvnOrTctType = {
+const bonk: TacticType = {
+  name: "bonk",
+  description: "Bonk description",
   speedCost: 4,
   maxTargets: 1,
   steps: [
     {
       damageType: "blunt",
-      strength: 1.2,
-      base: 5,
+      strength: 0.8,
     },
   ],
 };

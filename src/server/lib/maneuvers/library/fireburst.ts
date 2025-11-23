@@ -1,6 +1,7 @@
-import {MvnOrTctType} from "../../../../types/events/turn.ts";
+import { ManeuverType } from "../../../../types/equipables/actions.ts";
 
-const fireburst: MvnOrTctType =  {
+const fireburst: ManeuverType = {
+  name: "fireburst",
   description: "Fireburst description",
   speedCost: 8,
   maxTargets: 3,

@@ -1,5 +1,5 @@
 import { ChangeEvent, MouseEvent, useContext } from "react";
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
+import { ManeuverName } from "../../../types/equipables/actions.ts";
 import "./StatBlocks.css";
 import "./Player.css";
 import { PlayerType } from "../../../types/individual/characters.ts";

@@ -6,7 +6,7 @@
 // } from "../../../turn/utils/battle.ts";
 // import {
 //   OtherManeuverFnArgsType,
-// } from "../../../../types/equipables/maneuvers.ts";
+// } from "../../../../types/equipables/actions.ts";
 // import { WeaponType } from "../../../../types/equipables/weapons.ts";
 // import { maneuverCollection } from "../collection.ts";
 //

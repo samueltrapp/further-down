@@ -58,7 +58,9 @@ export function resolveEnemyTurn(
   const randomTactic = tactics[randNum(tactics.length)];
 
   // Pick max number of targets randomly
-  const maxTargets = tacticCollection[randomTactic].maxTargets;
+  const maxTargets =
+    tacticCollection.find((tactic) => tactic.name === randomTactic)
+      ?.maxTargets || 1;
   const targetIds: string[] = [];
   for (let targetSelect = 0; targetSelect < maxTargets; targetSelect++) {
     targetIds.push(randEntry(Object.keys(game.characters.players)) as string);

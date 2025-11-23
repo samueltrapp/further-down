@@ -1,7 +1,6 @@
 import { StatsType } from "./stats.ts";
-import { ManeuverType } from "../equipables/maneuvers.ts";
+import { ManeuverType, TacticName } from "../equipables/actions.ts";
 import { WeaponType } from "../equipables/weapons.ts";
-import { TacticName } from "../equipables/tactics.ts";
 import { BlessingType } from "../equipables/blessings.ts";
 import { ArmorType } from "../equipables/armors.ts";
 import { CurseType } from "../equipables/curses.ts";
@@ -27,6 +26,15 @@ export type RewardOptions =
 
 export type PendingRewardType = Record<RewardOptions, number>;
 
+type TriggerType = "hit" | "turn" | "round" | "battle";
+type DurationType =
+  | "instant"
+  | "hit"
+  | "turn"
+  | "round"
+  | "battle"
+  | "permanent";
+
 export type PlayerType = {
   name: string;
   userId: string;
@@ -34,7 +42,17 @@ export type PlayerType = {
   stats: StatsType;
   savedStats: StatsType;
   effects: {
-    favors: Record<FavorName, number>;
+    favors: Partial<
+      Record<
+        FavorName,
+        {
+          stacks: number;
+          duration: DurationType;
+          trigger: TriggerType;
+          tooltip: string;
+        }
+      >
+    >;
     burdens: string[];
     lastTurn: number;
   };
@@ -49,6 +67,7 @@ export type EnemyType = {
   name: string;
   team: "enemy";
   stats: StatsType;
+  base: number;
   effects: {
     burdens: string[];
     favors: string[];

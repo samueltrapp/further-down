@@ -1,6 +1,7 @@
-import {MvnOrTctType} from "../../../../types/events/turn.ts";
+import { ManeuverType } from "../../../../types/equipables/actions.ts";
 
-const quicksilver: MvnOrTctType =   {
+const quicksilver: ManeuverType = {
+  name: "quicksilver",
   description: "Quicksilver description",
   speedCost: 4,
   maxTargets: 1,

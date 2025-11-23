@@ -8,13 +8,21 @@ import {
 } from "../../../turn/utils/battle.ts";
 
 export function bonkFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
-  const tctDetail = tacticCollection.bonk;
+  const tctDetail = tacticCollection.find((tactic) => tactic.name === "bonk");
   const source = characters.enemies[sourceId];
   const targets = targetIds.map((targetId) => characters.players[targetId]);
 
+  // Handle error
+  if (!tctDetail) {
+    return {
+      characterResults: characters,
+      logResults: [`ERROR HANDLING BONK`],
+    };
+  }
+
   const raw = tctDetail.steps?.map((action) => {
     const baseDamage = calcRawEnemyDamage(
-      action.base || 0,
+      source.base || 0,
       source.stats,
       action.damageType,
     );

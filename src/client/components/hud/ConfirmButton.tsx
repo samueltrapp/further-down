@@ -5,7 +5,7 @@ import {
   GameDispatchContext,
 } from "../../contexts/GameContext.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
+import { ManeuverName } from "../../../types/equipables/actions.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
 
 export default function ConfirmButton() {

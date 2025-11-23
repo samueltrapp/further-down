@@ -8,10 +8,19 @@ import { maneuverCollection } from "../collection.ts";
 import { MnvOrTctFnType } from "../../../../types/events/turn.ts";
 
 export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
-  const mnvDetail = maneuverCollection.ache;
+  const mnvDetail = maneuverCollection.find(
+    (maneuver) => maneuver.name === "ache",
+  );
   const source = characters.players[sourceId];
   const targets = targetIds.map((targetId) => characters.enemies[targetId]);
   const weapon = source.rewards.owned.weapons[0];
+
+  if (!mnvDetail) {
+    return {
+      characterResults: characters,
+      logResults: ["ERROR HANDLING ACHE"],
+    };
+  }
 
   // Calc damage and mitigation per step
   const raw = mnvDetail.steps?.map((action) => {
@@ -20,7 +29,7 @@ export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
       source.stats,
       action.damageType,
     );
-    const verveBonus = (source.effects.favors?.verve || 0) * 5;
+    const verveBonus = (source.effects.favors?.verve?.stacks || 0) * 5;
     const adjustedDamage = (baseDamage + verveBonus) * action.strength;
 
     return {
@@ -32,9 +41,18 @@ export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
   });
 
   // Increase verve stack
+  // TODO: Move Verve logic to be general
   source.effects.favors.verve = source.effects.favors.verve
-    ? source.effects.favors.verve + 1
-    : 1;
+    ? {
+        ...source.effects.favors.verve,
+        stacks: source.effects.favors.verve.stacks + 1,
+      }
+    : {
+        stacks: 1,
+        trigger: "turn",
+        duration: "battle",
+        tooltip: "VERVE: Empowers psychic effects",
+      };
 
   if (raw) {
     targets.forEach((target, index) => {
