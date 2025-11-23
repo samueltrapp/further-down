@@ -30,7 +30,7 @@ export default function ConfirmButton() {
           team: "player",
           gameId: lobby.gameId,
           targetIds: client?.selectedEnemyIds,
-          issuerId: currentTurn,
+          sourceId: currentTurn,
         });
         if (dispatch) {
           dispatch({

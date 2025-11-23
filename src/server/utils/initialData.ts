@@ -111,7 +111,7 @@ export function initializeCharacters(game: GameType) {
           blessings: 1,
           curses: 0,
           enchantments: 0,
-          maneuvers: 2,
+          maneuvers: 1,
           weapons: 1,
           stats: 0,
         },

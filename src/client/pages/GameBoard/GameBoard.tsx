@@ -44,9 +44,9 @@ function GameBoard() {
       <div className="board">
         <div className="filler-column" />
         <div className="player-column">
-          {players.map((player) => (
-            <div key={player.id}>
-              <Character {...player} />
+          {Object.entries(players).map((player) => (
+            <div key={player[0]}>
+              <Character id={player[0]} {...player[1]} />
             </div>
           ))}
         </div>
@@ -57,9 +57,9 @@ function GameBoard() {
           <ConfirmButton />
         </div>
         <div className="enemy-column">
-          {enemies.map((enemy) => (
-            <div key={enemy.id} onClick={() => handleSelect(enemy.id)}>
-              <Enemy {...enemy} />
+          {Object.entries(enemies).map((enemy) => (
+            <div key={enemy[0]} onClick={() => handleSelect(enemy[0])}>
+              <Enemy id={enemy[0]} {...enemy[1]} />
             </div>
           ))}
         </div>

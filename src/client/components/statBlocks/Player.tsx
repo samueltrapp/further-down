@@ -25,7 +25,7 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
   }};
 `;
 
-export default function Player(props: PlayerType) {
+export default function Player(props: PlayerType & { id: string }) {
   const { id, name, stats, rewards } = props;
   const { maneuvers, armors, weapons } = rewards.owned;
   const game = useContext(GameContext);

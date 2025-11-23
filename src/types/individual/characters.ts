@@ -75,5 +75,3 @@ export type EnemyType = {
   };
   tactics: TacticName[];
 };
-
-export type UnitType = PlayerType | EnemyType;
