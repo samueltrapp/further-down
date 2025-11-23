@@ -5,7 +5,7 @@ import "./StatBlocks.css";
 import "./Enemy.css";
 import { GameContext } from "../../contexts/GameContext.tsx";
 
-function Enemy(props: EnemyType) {
+function Enemy(props: EnemyType & { id: string }) {
   const { id, name, stats } = props;
 
   const game = useContext(GameContext);
@@ -20,7 +20,7 @@ function Enemy(props: EnemyType) {
         enemyTurn({
           gameId: lobby?.gameId,
           team: "enemy",
-          issuerId: id,
+          sourceId: id,
         });
       }, 1500);
     }

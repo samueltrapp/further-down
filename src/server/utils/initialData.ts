@@ -10,7 +10,7 @@ import { ArmorType } from "../../types/equipables/armors.ts";
 import { BlessingType } from "../../types/equipables/blessings.ts";
 import { CurseType } from "../../types/equipables/curses.ts";
 import { EnchantmentType } from "../../types/equipables/enchantments.ts";
-import { ManeuverType } from "../../types/equipables/maneuvers.ts";
+import { ManeuverType } from "../../types/equipables/actions.ts";
 import { WeaponType } from "../../types/equipables/weapons.ts";
 
 const baseStats = {
@@ -37,8 +37,8 @@ export function initializeLobby(gameId: string, userId: string): GameType {
   return {
     battle: undefined,
     characters: {
-      enemies: [],
-      players: [],
+      enemies: {},
+      players: {},
     },
     lobby: {
       gameId: gameId,
@@ -78,15 +78,15 @@ export function initializeCharacters(game: GameType) {
   };
   const userSpread = userMapping();
 
-  const initialCharacters: PlayerType[] = [];
+  const initialCharacters: Record<string, PlayerType> = {};
   for (const user of userSpread) {
-    initialCharacters.push({
-      id: randomId(8),
+    const id = randomId(8);
+    initialCharacters[id] = {
       name: "",
       userId: user,
       effects: {
         burdens: [],
-        favors: [],
+        favors: {},
         lastTurn: 0,
       },
       rewards: {
@@ -111,7 +111,7 @@ export function initializeCharacters(game: GameType) {
           blessings: 1,
           curses: 0,
           enchantments: 0,
-          maneuvers: 2,
+          maneuvers: 1,
           weapons: 1,
           stats: 0,
         },
@@ -119,7 +119,7 @@ export function initializeCharacters(game: GameType) {
       stats: baseStats,
       savedStats: baseStats,
       team: "player",
-    });
+    };
   }
 
   return initialCharacters;

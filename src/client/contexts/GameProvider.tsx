@@ -8,8 +8,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     data: {
       battle: undefined,
       characters: {
-        enemies: [],
-        players: [],
+        enemies: {},
+        players: {},
       },
       lib: {
         armors: [],

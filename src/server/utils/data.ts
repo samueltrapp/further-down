@@ -4,12 +4,12 @@
     Lower: 97-122
 */
 import { SingleRewardType } from "../../types/equipables/aggregates.ts";
-import { random } from "../../common/utils.ts";
+import { randNum } from "../../common/utils.ts";
 
 export const randomId = (digits: number = 5) => {
   const id = [];
   while (id.length < digits) {
-    const pick = random(62);
+    const pick = randNum(62);
     if (pick < 10) {
       id.push(String.fromCharCode(pick + 48));
     } else if (pick < 36) {
@@ -24,7 +24,7 @@ export const randomId = (digits: number = 5) => {
 export const randomizeCollection = (collection: SingleRewardType) => {
   const copy = [...collection];
   for (let orderedIndex = copy.length - 1; orderedIndex > 0; orderedIndex--) {
-    const randomIndex = random(orderedIndex + 1);
+    const randomIndex = randNum(orderedIndex + 1);
     [copy[orderedIndex], copy[randomIndex]] = [
       copy[randomIndex],
       copy[orderedIndex],

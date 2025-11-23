@@ -16,10 +16,12 @@ function RewardHolding() {
 function RewardSelection({
   rewardOption,
   character,
+  characterId,
   gameId,
 }: {
   rewardOption: RewardOptions;
   character: PlayerType;
+  characterId: string;
   gameId: string;
 }) {
   const options = character.rewards.queue[rewardOption].slice(0, 3);
@@ -30,7 +32,7 @@ function RewardSelection({
       rewardOption,
       rewardName: target.value,
       gameId,
-      characterId: character.id,
+      characterId: characterId,
     });
   };
 
@@ -56,80 +58,92 @@ export function Rewards() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const userId = localStorage.getItem("userId");
 
-  const gameId = game!.data.lobby.gameId;
-  const votes = game!.data.lobby.votes;
-  const playerCharacters = game!.data.characters.players.filter(
-    (playerCharacter) => playerCharacter.userId === userId,
+  if (!game) {
+    return null;
+  }
+
+  const gameId = game.data.lobby.gameId;
+  const votes = game.data.lobby.votes;
+  const playerCharacters = Object.entries(game.data.characters.players).filter(
+    (playerCharacter) => playerCharacter[1].userId === userId,
   );
-  const currentPlayerCharacter: PlayerType | undefined =
-    playerCharacters[currentIndex];
 
   if (currentIndex > playerCharacters.length - 1) {
     if (gameId && userId && !votes.includes(userId)) {
       finishSkilling({ gameId, userId });
     }
     return <RewardHolding />;
-  } else if (!currentPlayerCharacter.name) {
-    return (
-      <NamePrompt gameId={gameId} characterId={currentPlayerCharacter.id} />
-    );
-  } else if (currentPlayerCharacter.rewards.pending.curses > 0) {
-    return (
-      <RewardSelection
-        rewardOption="curses"
-        gameId={gameId}
-        character={currentPlayerCharacter}
-      />
-    );
-  } else if (currentPlayerCharacter.rewards.pending.blessings > 0) {
-    return (
-      <RewardSelection
-        rewardOption="blessings"
-        gameId={gameId}
-        character={currentPlayerCharacter}
-      />
-    );
-  } else if (currentPlayerCharacter.rewards.pending.maneuvers > 0) {
-    return (
-      <RewardSelection
-        rewardOption="maneuvers"
-        gameId={gameId}
-        character={currentPlayerCharacter}
-      />
-    );
-  } else if (currentPlayerCharacter.rewards.pending.weapons > 0) {
-    return (
-      <RewardSelection
-        rewardOption="weapons"
-        gameId={gameId}
-        character={currentPlayerCharacter}
-      />
-    );
-  } else if (currentPlayerCharacter.rewards.pending.armors > 0) {
-    return (
-      <RewardSelection
-        rewardOption="armors"
-        gameId={gameId}
-        character={currentPlayerCharacter}
-      />
-    );
-  } else if (currentPlayerCharacter.rewards.pending.enchantments > 0) {
-    return (
-      <RewardSelection
-        rewardOption="enchantments"
-        gameId={gameId}
-        character={currentPlayerCharacter}
-      />
-    );
-  } else if (currentPlayerCharacter.rewards.pending.stats > 0) {
-    return (
-      <StatGrowth
-        points={currentPlayerCharacter.rewards.pending.stats}
-        gameId={gameId}
-        character={currentPlayerCharacter}
-      />
-    );
   } else {
-    setCurrentIndex(currentIndex + 1);
+    const currentPlayerId = playerCharacters[currentIndex][0];
+    const currentPlayerCharacter = playerCharacters[currentIndex][1];
+
+    if (!currentPlayerCharacter.name) {
+      return <NamePrompt gameId={gameId} characterId={currentPlayerId} />;
+    } else if (currentPlayerCharacter.rewards.pending.curses > 0) {
+      return (
+        <RewardSelection
+          rewardOption="curses"
+          gameId={gameId}
+          character={currentPlayerCharacter}
+          characterId={currentPlayerId}
+        />
+      );
+    } else if (currentPlayerCharacter.rewards.pending.blessings > 0) {
+      return (
+        <RewardSelection
+          rewardOption="blessings"
+          gameId={gameId}
+          character={currentPlayerCharacter}
+          characterId={currentPlayerId}
+        />
+      );
+    } else if (currentPlayerCharacter.rewards.pending.maneuvers > 0) {
+      return (
+        <RewardSelection
+          rewardOption="maneuvers"
+          gameId={gameId}
+          character={currentPlayerCharacter}
+          characterId={currentPlayerId}
+        />
+      );
+    } else if (currentPlayerCharacter.rewards.pending.weapons > 0) {
+      return (
+        <RewardSelection
+          rewardOption="weapons"
+          gameId={gameId}
+          character={currentPlayerCharacter}
+          characterId={currentPlayerId}
+        />
+      );
+    } else if (currentPlayerCharacter.rewards.pending.armors > 0) {
+      return (
+        <RewardSelection
+          rewardOption="armors"
+          gameId={gameId}
+          character={currentPlayerCharacter}
+          characterId={currentPlayerId}
+        />
+      );
+    } else if (currentPlayerCharacter.rewards.pending.enchantments > 0) {
+      return (
+        <RewardSelection
+          rewardOption="enchantments"
+          gameId={gameId}
+          character={currentPlayerCharacter}
+          characterId={currentPlayerId}
+        />
+      );
+    } else if (currentPlayerCharacter.rewards.pending.stats > 0) {
+      return (
+        <StatGrowth
+          points={currentPlayerCharacter.rewards.pending.stats}
+          gameId={gameId}
+          character={currentPlayerCharacter}
+          characterId={currentPlayerId}
+        />
+      );
+    } else {
+      setCurrentIndex(currentIndex + 1);
+    }
   }
 }

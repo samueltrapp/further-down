@@ -2,7 +2,6 @@ import * as http from "http";
 import cors from "cors";
 import express from "express";
 import { Server } from "socket.io";
-import { resolveEnemyTurn, resolvePlayerTurn } from "./events/turn.ts";
 import {
   finishSkilling,
   submitName,
@@ -16,12 +15,13 @@ import {
   joinGame,
   sendGame,
   startVote,
-} from "./events/gameManagement.ts";
+} from "./meta/gameManagement.ts";
 import {
   SetNameType,
   TakeRewardType,
   TakeStatsType,
 } from "../types/events/skill.ts";
+import {takeEnemyTurn, takePlayerTurn} from "./meta/turnHandler.ts";
 
 const port = 8080;
 const app = express();
@@ -49,26 +49,6 @@ const gameMeta: GameMetaType = {
 
 io.on("connection", (socket) => {
   const connection = { gameMeta, io, socket };
-
-  function playerTurn(turn: PlayerTurnType) {
-    const gameId = turn.gameId;
-    const [game, gameIndex] = gameMeta.findGameAndIndex(gameId);
-    if (gameMeta && game) {
-      const { game: updatedGame, logMessages } = resolvePlayerTurn(turn, game);
-      gameMeta.games[gameIndex] = updatedGame;
-      sendGame(connection, gameId, logMessages);
-    }
-  }
-
-  function enemyTurn(turn: EnemyClientTurnType) {
-    const gameId = turn.gameId;
-    const [game, gameIndex] = gameMeta.findGameAndIndex(gameId);
-    if (gameMeta && game) {
-      const { game: updatedGame, logMessages } = resolveEnemyTurn(turn, game);
-      gameMeta.games[gameIndex] = updatedGame;
-      sendGame(connection, gameId, logMessages);
-    }
-  }
 
   socket.on(
     "load",
@@ -99,8 +79,8 @@ io.on("connection", (socket) => {
   );
 
   // Battle events
-  socket.on("player-turn", (turn: PlayerTurnType) => playerTurn(turn));
-  socket.on("enemy-turn", (turn: EnemyClientTurnType) => enemyTurn(turn));
+  socket.on("player-turn", (turn: PlayerTurnType) => takePlayerTurn(connection, turn));
+  socket.on("enemy-turn", (turn: EnemyClientTurnType) => takeEnemyTurn(connection, turn));
 });
 
 server.on("error", (e) => {

@@ -1,23 +1,11 @@
 import { StatsType } from "../../../types/individual/stats.ts";
-import { UnitType } from "../../../types/individual/characters.ts";
 import { WeaponType } from "../../../types/equipables/weapons.ts";
 import { DamageType } from "../../../types/events/turn.ts";
-import { random } from "../../../common/utils.ts";
+import { randNum } from "../../../common/utils.ts";
 
-const createSpread = (spread: number) => random(spread * 2) - spread;
+const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
-export const findCharacter = (
-  characters: UnitType[],
-  charId: string,
-): [UnitType, number] => {
-  const attackerId = characters.findIndex(
-    (character) => character.id === charId,
-  );
-  const attacker = characters[attackerId];
-  return [attacker, attackerId];
-};
-
-export const calcRawDamage = (
+export const calcRawPlayerDamage = (
   weapon: WeaponType,
   stats: StatsType,
   damageType: DamageType,
@@ -46,6 +34,25 @@ export const calcRawDamage = (
   }
 };
 
+export const calcRawEnemyDamage = (
+  base: number,
+  stats: StatsType,
+  damageType: DamageType,
+) => {
+  switch (damageType) {
+    case "bladed":
+      return base + stats.bladed;
+    case "blunt":
+      return base + stats.blunt;
+    case "elemental":
+      return base + stats.elemental;
+    case "psychic":
+      return base + stats.psychic;
+    default:
+      return 0;
+  }
+};
+
 export const calcRawMitigation = (stats: StatsType, damageType: DamageType) => {
   switch (damageType) {
     case "blunt":
@@ -61,5 +68,6 @@ export const calcRawMitigation = (stats: StatsType, damageType: DamageType) => {
   }
 };
 
-export const limitToZero = (value: number) => Math.max(value, 0);
+export const limitToZero = (value: number | undefined) =>
+  value ? Math.max(value, 0) : 0;
 export const trunc = (value: number) => Math.trunc(value);

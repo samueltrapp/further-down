@@ -1,12 +1,17 @@
-import { ManeuverName } from "../equipables/maneuvers.ts";
+import {
+  ManeuverName,
+  ManeuverType,
+  TacticName,
+  TacticType,
+} from "../equipables/actions.ts";
 import { WeaponName } from "../equipables/weapons.ts";
-import { TacticName } from "../equipables/tactics.ts";
+import { CharactersType } from "../game.ts";
 
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
 type BaseTurnType = {
   gameId: string;
-  issuerId: string;
+  sourceId: string;
 };
 
 export type PlayerTurnType = BaseTurnType & {
@@ -25,11 +30,10 @@ export type EnemyServerTurnType = EnemyClientTurnType & {
   targetIds: string[];
 };
 
-export type MvnOrTctType = {
-  speedCost: number;
-  maxTargets: number;
-  actions: {
-    damageType: DamageType;
-    strength: number;
-  }[];
+export type MvnOrTctType = ManeuverType | TacticType;
+
+export type MnvOrTctFnType = {
+  characters: CharactersType;
+  sourceId: string;
+  targetIds: string[];
 };

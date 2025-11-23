@@ -1,5 +1,5 @@
 import { ChangeEvent, MouseEvent, useContext } from "react";
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
+import { ManeuverName } from "../../../types/equipables/actions.ts";
 import "./StatBlocks.css";
 import "./Player.css";
 import { PlayerType } from "../../../types/individual/characters.ts";
@@ -25,7 +25,7 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
   }};
 `;
 
-export default function Player(props: PlayerType) {
+export default function Player(props: PlayerType & { id: string }) {
   const { id, name, stats, rewards } = props;
   const { maneuvers, armors, weapons } = rewards.owned;
   const game = useContext(GameContext);

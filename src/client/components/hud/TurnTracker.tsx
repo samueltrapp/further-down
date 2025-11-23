@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext.tsx";
-import { UnitType } from "../../../types/individual/characters.ts";
 import styled from "styled-components";
 import "./Hud.css";
 
@@ -32,20 +31,21 @@ export default function TurnTracker() {
   const battle = game?.data.battle;
   const characters = game?.data.characters;
 
-  const turnTracker =
-    characters &&
-    battle?.turnOrder.map((turnId) => {
-      const allCharacters = (characters?.players as UnitType[]).concat(
-        characters?.enemies,
-      );
-      const turnChar = allCharacters?.find(
-        (character) => character.id === turnId,
-      );
-      return {
-        name: turnChar?.name,
-        speed: turnChar?.stats.speed,
-      };
-    });
+  if (!game || !battle || !characters) {
+    return null;
+  }
+
+  const allCharacters = {
+    ...characters.players,
+    ...characters.enemies,
+  };
+  const turnTracker = battle.turnOrder.map((turnId) => {
+    const turnChar = allCharacters[turnId];
+    return {
+      name: turnChar?.name,
+      speed: turnChar?.stats.speed,
+    };
+  });
 
   return (
     <div className="turn-tracker-container">

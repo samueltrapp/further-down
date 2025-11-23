@@ -5,7 +5,7 @@ import {
   GameDispatchContext,
 } from "../../contexts/GameContext.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
+import { ManeuverName } from "../../../types/equipables/actions.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
 
 export default function ConfirmButton() {
@@ -30,7 +30,7 @@ export default function ConfirmButton() {
           team: "player",
           gameId: lobby.gameId,
           targetIds: client?.selectedEnemyIds,
-          issuerId: currentTurn,
+          sourceId: currentTurn,
         });
         if (dispatch) {
           dispatch({

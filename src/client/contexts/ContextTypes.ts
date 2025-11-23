@@ -1,5 +1,5 @@
 import { GameType } from "../../types/game.ts";
-import { ManeuverType } from "../../types/equipables/maneuvers.ts";
+import { ManeuverType } from "../../types/equipables/actions.ts";
 import { WeaponType } from "../../types/equipables/weapons.ts";
 
 /* Game Types */
