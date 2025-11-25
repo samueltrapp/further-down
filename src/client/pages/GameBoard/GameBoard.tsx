@@ -23,7 +23,7 @@ function GameBoard() {
   const { players, enemies } = characters;
 
   const handleSelect = (enemyId: string) => {
-    if (dispatch) {
+    if (dispatch && game.client.selectedManeuver) {
       const updatedEnemyIds = selectEnemies(
         enemyId,
         game?.client?.selectedEnemyIds,
