@@ -1,11 +1,11 @@
 export type TeamType = "player" | "enemy";
 
 export type StatName =
-  | "currentHitPoints"
-  | "hitPoints"
+  | "life"
+  | "maxLife"
   | "vitality"
-  | "currentSpeed"
   | "speed"
+  | "maxSpeed"
   | "physical"
   | "defense"
   | "magical"

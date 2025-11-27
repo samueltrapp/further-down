@@ -31,7 +31,9 @@ function Enemy(props: EnemyType & { id: string }) {
       className={`char-box enemy-box ${activeTurn && "active-enemy"} ${isSelected && "selected-enemy"}`}
     >
       <div className="name">{name}</div>
-      <div>Hit Points: {stats?.hitPoints}</div>
+      <div>
+        Hit Points: {stats?.life} / {stats.maxLife}
+      </div>
       <div>Physical: {stats?.physical}</div>
       <div>Speed: {stats?.speed}</div>
     </div>

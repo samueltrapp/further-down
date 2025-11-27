@@ -3,7 +3,7 @@ import { ManeuverType } from "../../../../types/equipables/actions.ts";
 const ache: ManeuverType = {
   name: "ache",
   description: "Ache description",
-  speedCost: 15,
+  speedCost: 11,
   maxTargets: 1,
   steps: [
     {

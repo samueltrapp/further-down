@@ -1,14 +1,14 @@
 import { EnemyType } from "../../../types/individual/characters.ts";
 
-const shroomlet: Omit<EnemyType, "id"> = {
+const shroomlet: EnemyType = {
   name: "Shroomlet",
   team: "enemy",
   stats: {
     vitality: 0,
-    currentHitPoints: 400,
-    hitPoints: 400,
-    currentSpeed: 20,
+    life: 400,
+    maxLife: 400,
     speed: 20,
+    maxSpeed: 20,
     physical: 3,
     magical: 5,
     bladed: 1,

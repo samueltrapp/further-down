@@ -12,8 +12,8 @@ export const setBlankBattle = (characters: CharactersType) => ({
 });
 
 export const pickEnemies = (): Record<string, EnemyType> => ({
-  [randomId(10)]: { ...shroomlet },
-  [randomId(10)]: { ...shroomlet },
-  [randomId(10)]: { ...shroomlet },
-  [randomId(10)]: { ...shroomlet },
+  [randomId(10)]: structuredClone(shroomlet),
+  [randomId(10)]: structuredClone(shroomlet),
+  [randomId(10)]: structuredClone(shroomlet),
+  [randomId(10)]: structuredClone(shroomlet),
 });

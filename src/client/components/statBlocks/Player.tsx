@@ -27,11 +27,10 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
 
 export default function Player(props: PlayerType & { id: string }) {
   const { id, name, stats, rewards } = props;
-  const { maneuvers, armors, weapons } = rewards.owned;
+  const { maneuvers, weapons } = rewards.owned;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
-  const maxHp = Math.floor(armors[0].constitution * stats.vitality);
 
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {
     const value = (event.target as HTMLButtonElement).value as ManeuverName;
@@ -70,14 +69,16 @@ export default function Player(props: PlayerType & { id: string }) {
       <div className="id-bar">
         <div className="name">{name}</div>
         <HealthBar
-          $percentHealth={stats.hitPoints / maxHp}
+          $percentHealth={stats.life / stats.maxLife}
           className="health-bar"
         >
           <span>
-            {stats.hitPoints} / {maxHp}
+            {stats.life} / {stats.maxLife}
           </span>
         </HealthBar>
-        <div className="speed-display">{stats.speed}</div>
+        <div className="speed-display">
+          {stats.speed} / {stats.maxSpeed}
+        </div>
       </div>
       <div className="stat-body">
         <div className="action-column">

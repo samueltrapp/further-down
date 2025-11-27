@@ -14,7 +14,11 @@ import { ManeuverType } from "../../types/equipables/actions.ts";
 import { WeaponType } from "../../types/equipables/weapons.ts";
 
 const baseStats = {
+  life: 100,
+  maxLife: 100,
   vitality: 20,
+  speed: 21,
+  maxSpeed: 21,
   bladed: 0,
   blunt: 0,
   currentHitPoints: 100,
@@ -28,8 +32,6 @@ const baseStats = {
   plating: 0,
   psychic: 0,
   resistance: 0,
-  speed: 21,
-  currentSpeed: 21,
   warding: 0,
 };
 

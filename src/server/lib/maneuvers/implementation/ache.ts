@@ -54,9 +54,11 @@ export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
         tooltip: "VERVE: Empowers psychic effects",
       };
 
+  source.stats.speed -= mnvDetail.speedCost;
+
   if (raw) {
     targets.forEach((target, index) => {
-      target.stats.hitPoints -= limitToZero(
+      target.stats.life -= limitToZero(
         trunc(
           raw.reduce(
             (total, rawEntry) =>
