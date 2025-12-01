@@ -52,7 +52,9 @@ export function takeReward(
         (reward) => reward.name === rewardName,
       );
 
+      // @ts-ignore
       character.rewards.owned[rewardOption].push(selectedReward);
+      // @ts-ignore
       character.rewards.queue[rewardOption] = randomizeCollection(reducedQueue);
       character.rewards.pending[rewardOption] =
         character.rewards.pending[rewardOption] - 1;

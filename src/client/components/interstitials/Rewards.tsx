@@ -142,8 +142,7 @@ export function Rewards() {
           characterId={currentPlayerId}
         />
       );
-    } else {
-      setCurrentIndex(currentIndex + 1);
     }
+    setCurrentIndex(currentIndex + 1);
   }
 }

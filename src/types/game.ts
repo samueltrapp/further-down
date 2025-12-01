@@ -18,6 +18,7 @@ export enum LobbyStatus {
   BATTLE = "battle",
   EXPLORATION = "exploration",
   FULL = "full",
+  PREPARE = "prepare",
   REWARD = "reward",
   UNJOINED = "unjoined",
   WAITING = "waiting",

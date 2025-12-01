@@ -22,53 +22,44 @@ export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
     };
   }
 
-  // Calc damage and mitigation per step
-  const raw = mnvDetail.steps?.map((action) => {
-    const baseDamage = calcRawPlayerDamage(
-      weapon,
-      source.stats,
-      action.damageType,
-    );
-    const verveBonus = (source.effects.favors?.verve?.stacks || 0) * 5;
-    const adjustedDamage = (baseDamage + verveBonus) * action.strength;
-
-    return {
-      damage: adjustedDamage,
-      mitigation: targets.map((target) =>
-        calcRawMitigation(target.stats, action.damageType),
-      ),
-    };
-  });
-
   // Increase verve stack
   // TODO: Move Verve logic to be general
-  source.effects.favors.verve = source.effects.favors.verve
-    ? {
-        ...source.effects.favors.verve,
-        stacks: source.effects.favors.verve.stacks + 1,
-      }
-    : {
-        stacks: 1,
-        trigger: "turn",
-        duration: "battle",
-        tooltip: "VERVE: Empowers psychic effects",
-      };
+  // source.effects.favors.verve = source.effects.favors.verve
+  //   ? {
+  //       ...source.effects.favors.verve,
+  //       stacks: source.effects.favors.verve.stacks + 1,
+  //     }
+  //   : {
+  //       stacks: 1,
+  //       trigger: "turn",
+  //       duration: "battle",
+  //       tooltip: "VERVE: Empowers psychic effects",
+  //     };
 
   source.stats.speed -= mnvDetail.speedCost;
 
-  if (raw) {
-    targets.forEach((target, index) => {
-      target.stats.life -= limitToZero(
-        trunc(
-          raw.reduce(
-            (total, rawEntry) =>
-              total + (rawEntry.damage - rawEntry.mitigation[index]),
-            0,
-          ),
-        ),
+  targets.forEach((target, index) => {
+    const rawDamage = mnvDetail.steps?.map((action) => {
+      const baseDamage = calcRawPlayerDamage(
+          weapon,
+          source.stats,
+          action.damageType,
       );
+      const verveBonus = (source.effects.favors?.verve?.stacks || 0) * 5;
+      return (baseDamage + verveBonus) * action.strength;
+
+        // mitigation: calcRawMitigation(target.stats, action.damageType)
     });
-  }
+    target.stats.life -= limitToZero(
+      trunc(
+        rawDamage.reduce(
+          (total, rawEntry) =>
+            total + (rawEntry.damage - rawEntry.mitigation[index]),
+          0,
+        ),
+      ),
+    );
+  });
 
   const logMessages = [
     `${source.name.toUpperCase()} hit ${targets[0].name.toUpperCase()} with ACHE`,

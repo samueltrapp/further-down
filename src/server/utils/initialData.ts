@@ -67,7 +67,7 @@ export function initializeCharacters(game: GameType) {
   const userMapping = () => {
     switch (userCount) {
       case 1:
-        return [users[0]]; // [users[0], users[0], users[0]]
+        return [users[0], users[0], users[0]];
       case 2:
         return [users[0], users[0], users[1], users[1]];
       case 3:
