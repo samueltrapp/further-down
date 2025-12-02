@@ -1,5 +1,3 @@
-type AspectName = "ghostly" | "flaming";
-
 export type EnchantmentName = "lethal" | "silver";
 
 export type EnchantmentType = {
@@ -24,9 +22,4 @@ export type DefensiveAffinitiesType = {
   padding: number;
   dampening: number;
   warding: number;
-};
-
-export type AspectType = {
-  aspName: AspectName;
-  preOrPost: "pre" | "post";
 };

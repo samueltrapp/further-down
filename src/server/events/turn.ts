@@ -40,11 +40,7 @@ export function resolvePlayerTurn(
   turn: PlayerTurnType,
   game: GameType,
 ): { game: GameType; logMessages: string[] } {
-  const { characters, logMessages } = resolveManeuver(
-    game.characters,
-    [],
-    turn,
-  );
+  const { characters, logMessages } = resolveManeuver(game.characters, turn);
 
   return finishTurn(characters, game, logMessages);
 }
@@ -75,7 +71,6 @@ export function resolveEnemyTurn(
 
   const { characters, logMessages } = resolveTactic(
     game.characters,
-    [],
     decidedTurn,
   );
   return finishTurn(characters, game, logMessages);

@@ -33,11 +33,13 @@ const baseStats = {
   psychic: 0,
   resistance: 0,
   warding: 0,
+  evasion: 0,
+  accuracy: 0,
 };
 
 export function initializeLobby(gameId: string, userId: string): GameType {
   return {
-    battle: undefined,
+    battle: null,
     characters: {
       enemies: {},
       players: {},
@@ -48,7 +50,7 @@ export function initializeLobby(gameId: string, userId: string): GameType {
       users: [userId],
       votes: [],
       status: LobbyStatus.WAITING,
-      errorMessage: undefined,
+      errorMessage: "",
     },
     lib: {
       blessings: blessingCollection,
@@ -83,14 +85,14 @@ export function initializeCharacters(game: GameType) {
   const initialCharacters: Record<string, PlayerType> = {};
   for (const user of userSpread) {
     const id = randomId(8);
-    initialCharacters[id] = {
+    initialCharacters[id] = structuredClone({
       name: "",
       userId: user,
       effects: {
-        burdens: [],
+        burdens: {},
         favors: {},
-        lastTurn: 0,
       },
+      lastTurn: 0,
       rewards: {
         owned: {
           armors: [],
@@ -121,7 +123,7 @@ export function initializeCharacters(game: GameType) {
       stats: baseStats,
       savedStats: baseStats,
       team: "player",
-    };
+    });
   }
 
   return initialCharacters;

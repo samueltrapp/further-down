@@ -22,48 +22,50 @@ export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
     };
   }
 
-  // Increase verve stack
-  // TODO: Move Verve logic to be general
-  // source.effects.favors.verve = source.effects.favors.verve
-  //   ? {
-  //       ...source.effects.favors.verve,
-  //       stacks: source.effects.favors.verve.stacks + 1,
-  //     }
-  //   : {
-  //       stacks: 1,
-  //       trigger: "turn",
-  //       duration: "battle",
-  //       tooltip: "VERVE: Empowers psychic effects",
-  //     };
+  const logMessages: string[] = [];
 
+  // Modify source
   source.stats.speed -= mnvDetail.speedCost;
 
-  targets.forEach((target, index) => {
-    const rawDamage = mnvDetail.steps?.map((action) => {
+  // Modify targets
+  targets.forEach((target) => {
+    mnvDetail.steps?.forEach((action) => {
+      /* Damage */
       const baseDamage = calcRawPlayerDamage(
-          weapon,
-          source.stats,
-          action.damageType,
+        weapon,
+        source.stats,
+        action.damageType,
       );
-      const verveBonus = (source.effects.favors?.verve?.stacks || 0) * 5;
-      return (baseDamage + verveBonus) * action.strength;
+      const anguishBonus = (target.effects.burdens?.anguish?.stacks || 0) * 5;
+      const damageMitigation = calcRawMitigation(
+        target.stats,
+        action.damageType,
+      );
+      const modifiedDamage = (baseDamage + anguishBonus) * action.strength;
+      const damage = trunc(modifiedDamage - damageMitigation);
+      const newLife = limitToZero(target.stats.life - damage);
+      logMessages.push(
+        `${source.name.toUpperCase()} hit ${target.name.toUpperCase()} with ACHE for ${damage} ${action.damageType.toUpperCase()} DAMAGE (${target.stats.life} -> ${newLife}).`,
+      );
+      target.stats.life = newLife;
 
-        // mitigation: calcRawMitigation(target.stats, action.damageType)
+      /* Burden */
+      const previousAnguish = target.effects.burdens?.anguish?.stacks || 0;
+      if (target.effects.burdens.anguish) {
+        target.effects.burdens.anguish.stacks = previousAnguish + 1;
+      } else {
+        target.effects.burdens.anguish = {
+          stacks: 1,
+          trigger: "turn",
+          duration: "battle",
+          tooltip: "VERVE: Empowers psychic effects",
+        };
+      }
+      logMessages.push(
+        `${source.name.toUpperCase()} applied ANGUISH to ${target.name.toUpperCase()} with ACHE (${previousAnguish} -> ${target.effects.burdens.anguish.stacks}).`,
+      );
     });
-    target.stats.life -= limitToZero(
-      trunc(
-        rawDamage.reduce(
-          (total, rawEntry) =>
-            total + (rawEntry.damage - rawEntry.mitigation[index]),
-          0,
-        ),
-      ),
-    );
   });
-
-  const logMessages = [
-    `${source.name.toUpperCase()} hit ${targets[0].name.toUpperCase()} with ACHE`,
-  ];
 
   const characterResponse = {
     players: {

@@ -14,12 +14,14 @@ export type GameClientType = {
   selectedEnemyIds: string[];
   selectedManeuver: ManeuverType | null;
   selectedWeapon: WeaponType | null;
+  logHistory: string[];
 };
 
 export enum GameAction {
   PLAYER_ACTION = "PLAYER_ACTION",
   SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE",
   SYNC = "SYNC",
+  LOG = "LOG",
 }
 
 /* Dispatch Types */
@@ -34,6 +36,10 @@ type BattleActionType =
   | {
       type: GameAction.SYNC;
       payload: GameType;
+    }
+  | {
+      type: GameAction.LOG;
+      payload: string[];
     };
 
 /* Lobby Dispatcher */

@@ -68,6 +68,5 @@ export const calcRawMitigation = (stats: StatsType, damageType: DamageType) => {
   }
 };
 
-export const limitToZero = (value: number | undefined) =>
-  value ? Math.max(value, 0) : 0;
+export const limitToZero = (value: number) => Math.max(value, 0);
 export const trunc = (value: number) => Math.trunc(value);

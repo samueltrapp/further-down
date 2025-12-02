@@ -24,6 +24,8 @@ const initialStats: StatsType = {
   padding: 0,
   dampening: 0,
   warding: 0,
+  evasion: 0,
+  accuracy: 0,
 };
 
 const StatSlot = ({

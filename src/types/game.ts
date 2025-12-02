@@ -55,7 +55,7 @@ export type CharactersType = {
 };
 
 export type GameType = {
-  battle: BattleType | undefined;
+  battle: BattleType | null;
   characters: CharactersType;
   lib: LibType;
   lobby: LobbyType;

@@ -21,13 +21,15 @@ const shroomlet: EnemyType = {
     plating: 0,
     dampening: -1,
     warding: 3,
+    evasion: 0,
+    accuracy: 0,
   },
   base: 6,
   effects: {
-    burdens: [],
-    favors: [],
-    lastTurn: 0,
+    burdens: {},
+    favors: {},
   },
+  lastTurn: 0,
   tactics: ["bonk"],
 };
 

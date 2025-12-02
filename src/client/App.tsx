@@ -52,12 +52,18 @@ function App() {
 
     function onUpdateGameState(update: {
       game: GameType;
-      logMessages: string[];
+      logMessages: string[] | undefined;
     }) {
-      if (dispatch && update) {
+      if (dispatch && update.game) {
         dispatch({
           type: GameAction.SYNC,
           payload: update.game,
+        });
+      }
+      if (dispatch && update.logMessages) {
+        dispatch({
+          type: GameAction.LOG,
+          payload: update.logMessages,
         });
       }
     }

@@ -6,7 +6,7 @@ import { LobbyStatus } from "../../types/game.ts";
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(gameReducer, {
     data: {
-      battle: undefined,
+      battle: null,
       characters: {
         enemies: {},
         players: {},
@@ -25,7 +25,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         votes: [],
         status: LobbyStatus.UNJOINED,
         pastEncounters: 0,
-        errorMessage: undefined,
+        errorMessage: "",
       },
     },
     client: {
@@ -34,6 +34,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       selectedEnemyIds: [],
       selectedManeuver: null,
       selectedWeapon: null,
+      logHistory: [],
     },
   });
 
@@ -59,6 +60,15 @@ function gameReducer(game: GameStateType, action: GameActionType) {
         client: {
           ...game.client,
           ...action.payload,
+        },
+      };
+    }
+    case GameAction.LOG: {
+      return {
+        ...game,
+        client: {
+          ...game.client,
+          logHistory: [...game.client.logHistory, ...action.payload],
         },
       };
     }
