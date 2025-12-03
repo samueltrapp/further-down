@@ -16,7 +16,7 @@
   display: flex;
   width: 14%;
   position: relative;
-  top: -7.5rem;
+  top: 0;
   flex-direction: column;
   padding: 8px;
 }
@@ -41,11 +41,7 @@
   border: 1px solid var(--gray);
   color: var(--black);
   height: 400px;
-}
-
-.battle-log-header {
-  background-color: var(--white);
-  color: var(--black);
-  margin: 0 0 1rem;
-  padding: 0.125rem 0.5rem;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: scroll;
 }
