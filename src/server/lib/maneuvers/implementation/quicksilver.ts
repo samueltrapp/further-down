@@ -1,51 +1,62 @@
-// import {
-//   OtherManeuverFnArgsType,
-// } from "../../../../types/equipables/actions.ts";
-// import {
-//   calcRawDamage,
-//   calcRawMitigation,
-//   limitToZero,
-//   trunc,
-// } from "../../../turn/utils/battle.ts";
-// import { WeaponType } from "../../../../types/equipables/weapons.ts";
-// import { maneuverCollection } from "../collection.ts";
-//
-// export function quicksilverFn(fnArgs: OtherManeuverFnArgsType) {
-//   const { actor, recipient, maneuver, weapon: weaponName } = fnArgs;
-//   const mnvDetail = maneuverCollection[maneuver];
-//
-//   const weapon = actor.rewards.owned.weapons.find(
-//     (weapon) => weapon.name === weaponName,
-//   ) as WeaponType;
-//
-//   const raw = mnvDetail.steps!.map((action) => ({
-//     damage:
-//       calcRawDamage(weapon, actor.stats, action.damageType) * action.strength,
-//     mitigation: calcRawMitigation(actor.stats, action.damageType),
-//   }));
-//   const mitigatedDamage = limitToZero(
-//     raw.reduce(
-//       (total, rawEntry) => total + (rawEntry.damage - rawEntry.mitigation),
-//       0,
-//     ),
-//   );
-//   const updatedHp = limitToZero(
-//     trunc(recipient.stats.hitPoints - mitigatedDamage),
-//   );
-//
-//   const logMessages = [
-//     `${actor.name.toUpperCase()} hit ${recipient.name.toUpperCase()} with ${maneuver.toUpperCase()} for ${mitigatedDamage} damage!}
-//   (${recipient.stats.hitPoints} -> ${updatedHp})`,
-//   ];
-//
-//   return {
-//     character: {
-//       ...recipient,
-//       stats: {
-//         ...recipient.stats,
-//         hitPoints: updatedHp,
-//       },
-//     },
-//     logMessages,
-//   };
-// }
+import {
+  calcRawMitigation,
+  calcRawPlayerDamage,
+  limitToZero,
+  trunc,
+} from "../../../turn/utils/battle.ts";
+import { maneuverCollection } from "../collection.ts";
+import { MnvOrTctFnType } from "../../../../types/events/turn.ts";
+
+export function quicksilverFn({
+  characters,
+  sourceId,
+  targetIds,
+}: MnvOrTctFnType) {
+  const mnvDetail = maneuverCollection.find(
+    (maneuver) => maneuver.name === "quicksilver",
+  );
+  const source = characters.players[sourceId];
+  const targets = targetIds.map((targetId) => characters.enemies[targetId]);
+  const weapon = source.rewards.owned.weapons[0];
+
+  if (!mnvDetail) {
+    return {
+      characterResults: characters,
+      logResults: ["ERROR HANDLING QUICKSILVER"],
+    };
+  }
+
+  const logMessages: string[] = [];
+
+  // Modify source
+  source.stats.speed -= mnvDetail.speedCost;
+
+  // Modify targets
+  targets.forEach((target) => {
+    mnvDetail.steps?.forEach((action) => {
+      /* Damage */
+      const baseDamage = calcRawPlayerDamage(
+        weapon,
+        source.stats,
+        action.damageType,
+      );
+      const anguishBonus = (target.effects.burdens?.anguish?.stacks || 0) * 5;
+      const damageMitigation = calcRawMitigation(
+        target.stats,
+        action.damageType,
+      );
+      const modifiedDamage = (baseDamage + anguishBonus) * action.strength;
+      const damage = trunc(modifiedDamage - damageMitigation);
+      const newLife = limitToZero(target.stats.life - damage);
+      logMessages.push(
+        `${source.name.toUpperCase()} hit ${target.name.toUpperCase()} with QUICKSILVER for ${damage} ${action.damageType.toUpperCase()} DAMAGE (${target.stats.life} -> ${newLife}).`,
+      );
+      target.stats.life = newLife;
+    });
+  });
+
+  return {
+    characterResults: characters,
+    logResults: logMessages,
+  };
+}

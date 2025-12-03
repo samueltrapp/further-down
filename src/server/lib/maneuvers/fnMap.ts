@@ -2,6 +2,7 @@ import { ManeuverName } from "../../../types/equipables/actions.ts";
 import { acheFn } from "./implementation/ache.ts";
 import { CharactersType } from "../../../types/game.ts";
 import { MnvOrTctFnType } from "../../../types/events/turn.ts";
+import { quicksilverFn } from "./implementation/quicksilver.ts";
 
 type ResolvedManeuverFnType = ({
   characters,
@@ -14,8 +15,8 @@ type ResolvedManeuverFnType = ({
 
 const maneuvers: [ManeuverName, ResolvedManeuverFnType][] = [
   ["ache", acheFn],
+  ["quicksilver", quicksilverFn],
   // ["fireburst", fireburstFn],
-  // ["quicksilver", quicksilverFn],
   // ["slap", slapFn]
 ];
 

@@ -67,18 +67,8 @@ export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
     });
   });
 
-  const characterResponse = {
-    players: {
-      ...characters.players,
-      [sourceId]: source,
-    },
-    enemies: {
-      ...characters.enemies,
-    },
-  };
-
   return {
-    characterResults: characterResponse,
+    characterResults: characters,
     logResults: logMessages,
   };
 }
