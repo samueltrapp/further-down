@@ -11,6 +11,7 @@ const slap: MvnOrTctType = {
       strength: 0.9,
     },
   ],
+  tags: ["attack", "blunt", "single", "pure", "burden"],
 };
 
 export default slap;

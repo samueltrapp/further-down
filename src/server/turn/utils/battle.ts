@@ -1,7 +1,7 @@
 import { StatsType } from "../../../types/individual/stats.ts";
 import { WeaponType } from "../../../types/equipables/weapons.ts";
-import { DamageType } from "../../../types/events/turn.ts";
 import { randNum } from "../../../common/utils.ts";
+import { DamageType } from "../../../types/equipables/actions.ts";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
 

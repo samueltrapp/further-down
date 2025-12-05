@@ -7,8 +7,6 @@ import {
 import { WeaponName } from "../equipables/weapons.ts";
 import { CharactersType } from "../game.ts";
 
-export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
-
 type BaseTurnType = {
   gameId: string;
   sourceId: string;

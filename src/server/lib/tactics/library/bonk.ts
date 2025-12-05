@@ -11,6 +11,7 @@ const bonk: TacticType = {
       strength: 0.8,
     },
   ],
+  tags: ["attack", "single", "pure", "blunt"],
 };
 
 export default bonk;

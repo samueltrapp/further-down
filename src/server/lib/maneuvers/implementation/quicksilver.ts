@@ -28,24 +28,23 @@ export function quicksilverFn({
 
   const logMessages: string[] = [];
 
-  // Modify source
+  /* Speed */
   source.stats.speed -= mnvDetail.speedCost;
 
-  // Modify targets
-  targets.forEach((target) => {
-    mnvDetail.steps?.forEach((action) => {
-      /* Damage */
-      const baseDamage = calcRawPlayerDamage(
-        weapon,
-        source.stats,
-        action.damageType,
-      );
-      const anguishBonus = (target.effects.burdens?.anguish?.stacks || 0) * 5;
+  mnvDetail.steps?.forEach((action) => {
+    /* Damage */
+    const baseDamage = calcRawPlayerDamage(
+      weapon,
+      source.stats,
+      action.damageType,
+    );
+
+    targets.forEach((target) => {
       const damageMitigation = calcRawMitigation(
         target.stats,
         action.damageType,
       );
-      const modifiedDamage = (baseDamage + anguishBonus) * action.strength;
+      const modifiedDamage = baseDamage * action.strength;
       const damage = trunc(modifiedDamage - damageMitigation);
       const newLife = limitToZero(target.stats.life - damage);
       logMessages.push(

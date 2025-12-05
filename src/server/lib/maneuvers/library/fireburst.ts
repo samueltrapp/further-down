@@ -15,6 +15,7 @@ const fireburst: ManeuverType = {
       strength: 0.5,
     },
   ],
+  tags: ["attack"],
 };
 
 export default fireburst;

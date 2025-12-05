@@ -28,14 +28,16 @@ export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
   source.stats.speed -= mnvDetail.speedCost;
 
   // Modify targets
-  targets.forEach((target) => {
-    mnvDetail.steps?.forEach((action) => {
+  mnvDetail.steps?.forEach((action) => {
+    const baseDamage = calcRawPlayerDamage(
+      weapon,
+      source.stats,
+      action.damageType,
+    );
+
+    targets.forEach((target) => {
       /* Damage */
-      const baseDamage = calcRawPlayerDamage(
-        weapon,
-        source.stats,
-        action.damageType,
-      );
+
       const anguishBonus = (target.effects.burdens?.anguish?.stacks || 0) * 5;
       const damageMitigation = calcRawMitigation(
         target.stats,

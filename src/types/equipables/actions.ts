@@ -1,10 +1,23 @@
-import { DamageType } from "../events/turn.ts";
+export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
 // All maneuvers
 export type ManeuverName = "slap" | "quicksilver" | "fireburst" | "ache";
 
 // All tactics
 export type TacticName = "sporeBurst" | "bonk";
+
+type TagType =
+  | "attack" // Damages life
+  | "protect" // In response to losing life
+  | "pure" // Only deals one type of damage
+  | "mixed" // Deals multiple types of damage
+  | "single" // One hit
+  | "multi" // Multiple hits
+  | "heal" // Increases life actively
+  | "regeneration" // Restores life passively
+  | "favor" // Applies favor
+  | "burden" // Applies burden
+  | DamageType;
 
 type BaseActionType = {
   description: string;
@@ -14,6 +27,7 @@ type BaseActionType = {
     damageType: DamageType;
     strength: number;
   }[];
+  tags: TagType[];
 };
 
 export type ManeuverType = BaseActionType & {

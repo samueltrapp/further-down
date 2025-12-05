@@ -23,6 +23,7 @@ const quicksilver: ManeuverType = {
       strength: 0.3,
     },
   ],
+  tags: ["attack", "multi", "pure", "bladed"],
 };
 
 export default quicksilver;

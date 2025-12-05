@@ -11,6 +11,7 @@ const sporeBurst: TacticType = {
       strength: 0.75,
     },
   ],
+  tags: ["attack"],
 };
 
 export default sporeBurst;

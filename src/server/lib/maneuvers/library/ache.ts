@@ -11,6 +11,7 @@ const ache: ManeuverType = {
       strength: 1.1,
     },
   ],
+  tags: ["attack", "single", "pure", "psychic", "burden"],
 };
 
 export default ache;
