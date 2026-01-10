@@ -7,7 +7,7 @@ import { LobbyStatus } from "../../types/game.ts";
 export function createGame(connection: ConnectionType, userId: string) {
   const newGameId = randomId();
   connection.socket.join(newGameId);
-  connection.gameMeta.games.push(initializeLobby(newGameId, userId));
+  connection.meta.games.set(newGameId, initializeLobby(newGameId, userId));
   sendGame(connection, newGameId);
 }
 
@@ -15,23 +15,23 @@ export function joinGame(
   connection: ConnectionType,
   { gameId, userId }: JoinDataType,
 ) {
-  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
+  const game = connection.meta.games.get(gameId);
   connection.socket.join(userId);
   const joinResponse = existingLobby(connection.io, game, userId);
   if (joinResponse) {
     const updatedGame = joinResponse;
     connection.socket.join(gameId);
-    connection.gameMeta.games[gameIndex] = updatedGame;
+    connection.meta.games.set(gameId, updatedGame);
     sendGame(connection, gameId);
   }
 }
 
 export function sendGame(
-  { gameMeta, socket, io }: ConnectionType,
+  { meta, socket, io }: ConnectionType,
   gameId: string,
   logMessages?: string[],
 ) {
-  const [selectedGame] = gameMeta.findGameAndIndex(gameId);
+  const selectedGame = meta.games.get(gameId);
   if (selectedGame?.lobby?.gameId) {
     socket.join(gameId);
     io.to(selectedGame?.lobby?.gameId).emit("update", {
@@ -45,7 +45,7 @@ export function startVote(
   connection: ConnectionType,
   { gameId, vote, userId }: VoteType,
 ) {
-  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
+  const game = connection.meta.games.get(gameId);
   if (game) {
     const totalVotes = vote
       ? [...game.lobby.votes, userId]
@@ -57,7 +57,7 @@ export function startVote(
       : game.characters.players;
     const lobbyStatus = votedToStart ? LobbyStatus.REWARD : game.lobby.status;
 
-    connection.gameMeta.games[gameIndex] = {
+    const newGameState = {
       ...game,
       characters: {
         ...game.characters,
@@ -69,6 +69,7 @@ export function startVote(
         votes: votedToStart ? [] : totalVotes,
       },
     };
+    connection.meta.games.set(gameId, newGameState);
   }
   sendGame(connection, gameId);
 }

@@ -7,10 +7,10 @@ export function takeTurn(
   connection: ConnectionType,
   turn: PlayerTurnType
 ) {
-  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(turn.gameId);
+  const game = connection.meta.games.get(turn.gameId);
   if (game) {
     const { game: updatedGame, logMessages } = resolvePlayerTurn(turn, game);
-    connection.gameMeta.games[gameIndex] = updatedGame;
+    connection.meta.games.set(turn.gameId, updatedGame);
     sendGame(connection, turn.gameId, logMessages);
   }
 }

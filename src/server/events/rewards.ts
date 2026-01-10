@@ -14,14 +14,14 @@ export function submitName(
   connection: ConnectionType,
   { name, gameId, characterId }: SetNameType,
 ) {
-  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
+  const game = connection.meta.games.get(gameId);
   if (game) {
     const character = game.characters.players[characterId];
 
     if (character) {
       character.name = name;
 
-      connection.gameMeta.games[gameIndex] = {
+      const newGameState = {
         ...game,
         characters: {
           ...game.characters,
@@ -31,6 +31,7 @@ export function submitName(
           },
         },
       };
+      connection.meta.games.set(gameId, newGameState);
       sendGame(connection, gameId);
     }
   }
@@ -40,7 +41,7 @@ export function takeReward(
   connection: ConnectionType,
   { rewardOption, rewardName, gameId, characterId }: TakeRewardType,
 ) {
-  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
+  const game = connection.meta.games.get(gameId);
   if (game) {
     const character = game.characters.players[characterId];
 
@@ -59,7 +60,7 @@ export function takeReward(
       character.rewards.pending[rewardOption] =
         character.rewards.pending[rewardOption] - 1;
 
-      connection.gameMeta.games[gameIndex] = {
+      const newGameState = {
         ...game,
         characters: {
           ...game.characters,
@@ -69,6 +70,7 @@ export function takeReward(
           },
         },
       };
+      connection.meta.games.set(gameId, newGameState);
       sendGame(connection, gameId);
     }
   }
@@ -78,7 +80,7 @@ export function takeStats(
   connection: ConnectionType,
   { newStats, gameId, characterId }: TakeStatsType,
 ) {
-  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
+  const game = connection.meta.games.get(gameId);
   if (game) {
     const character = game.characters.players[characterId];
 
@@ -86,7 +88,7 @@ export function takeStats(
       character.stats = newStats;
       character.rewards.pending.stats = 0;
 
-      connection.gameMeta.games[gameIndex] = {
+      const newGameState = {
         ...game,
         characters: {
           ...game.characters,
@@ -96,6 +98,7 @@ export function takeStats(
           },
         },
       };
+      connection.meta.games.set(gameId, newGameState);
       sendGame(connection, gameId);
     }
   }
@@ -105,7 +108,7 @@ export function finishSkilling(
   connection: ConnectionType,
   { gameId, userId }: VoteType,
 ) {
-  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(gameId);
+  const game = connection.meta.games.get(gameId);
   if (game) {
     const votes = [...game.lobby.votes];
     const alreadyVoted = votes.includes(userId);
@@ -123,7 +126,7 @@ export function finishSkilling(
       battle = setBlankBattle(characters);
     }
 
-    connection.gameMeta.games[gameIndex] = {
+    const newGameState = {
       ...game,
       battle,
       characters,
@@ -133,6 +136,7 @@ export function finishSkilling(
         status: votedToAdvance ? LobbyStatus.BATTLE : game.lobby.status,
       },
     };
+    connection.meta.games.set(gameId, newGameState);
     sendGame(connection, gameId);
   }
 }

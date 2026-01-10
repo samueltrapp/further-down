@@ -1,4 +1,3 @@
 import {killerInstinct} from "./implementation/killerInstinct.ts";
 
-
-export enchantmentCollection = [killerInstinct];
+export const enchantmentCollection = [killerInstinct];

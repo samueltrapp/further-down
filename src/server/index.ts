@@ -9,7 +9,7 @@ import {
   takeStats,
 } from "./events/rewards.ts";
 import { PlayerTurnType } from "../types/events/turn.ts";
-import { GameMetaType, JoinDataType, VoteType } from "../types/server.ts";
+import { JoinDataType, MetaType, VoteType} from "../types/server.ts";
 import {
   createGame,
   joinGame,
@@ -35,25 +35,17 @@ const io = new Server(server, {
   },
 });
 
-const gameMeta: GameMetaType = {
-  games: [],
-  findGameAndIndex(gameId: string) {
-    const gameIndex = this?.games?.findIndex((game) => {
-      return game.lobby.gameId === gameId;
-    });
-    return gameIndex >= 0
-      ? [this.games[gameIndex], gameIndex]
-      : [undefined, -1];
-  },
+const meta: MetaType = {
+  games: new Map()
 };
 
 io.on("connection", (socket) => {
-  const connection = { gameMeta, io, socket };
+  const connection = { meta, io, socket };
 
   socket.on(
     "load",
     ({ gameId, userId }: { gameId: string; userId: string }) => {
-      const [game] = gameMeta.findGameAndIndex(gameId);
+      const game = meta.games.get(gameId);
       const characterInGame = game?.lobby.users.some((user) => user === userId);
       if (characterInGame) {
         sendGame(connection, gameId);
