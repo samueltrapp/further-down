@@ -10,7 +10,10 @@ export function resolveManeuver(
   characters: CharactersType,
   turn: PlayerTurnType,
 ) {
-  const { maneuver, sourceId, targetIds } = turn;
+  const { maneuver, sourceId, targetIds, gameId, weapon } = turn;
+
+
+  let ctx = {}
   const mnvFn = getMnvFn(maneuver);
   const { characterResults, logResults } = mnvFn
     ? mnvFn({ characters, sourceId, targetIds })

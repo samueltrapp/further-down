@@ -6,6 +6,8 @@ import {
 } from "../../../turn/utils/battle.ts";
 import { maneuverCollection } from "../collection.ts";
 import { MnvOrTctFnType } from "../../../../types/events/turn.ts";
+import { getEnchMap } from "../../enchantments/enchantmentFnMap.ts";
+import {randNum} from "../../../../common/utils.ts";
 
 export function quicksilverFn({
   characters,
@@ -32,6 +34,8 @@ export function quicksilverFn({
   source.stats.speed -= mnvDetail.speedCost;
 
   mnvDetail.steps?.forEach((action) => {
+    const hit = randNum(100);
+
     /* Damage */
     const baseDamage = calcRawPlayerDamage(
       weapon,
@@ -40,17 +44,33 @@ export function quicksilverFn({
     );
 
     targets.forEach((target) => {
-      const damageMitigation = calcRawMitigation(
-        target.stats,
-        action.damageType,
-      );
-      const modifiedDamage = baseDamage * action.strength;
-      const damage = trunc(modifiedDamage - damageMitigation);
-      const newLife = limitToZero(target.stats.life - damage);
-      logMessages.push(
-        `${source.name.toUpperCase()} hit ${target.name.toUpperCase()} with QUICKSILVER for ${damage} ${action.damageType.toUpperCase()} DAMAGE (${target.stats.life} -> ${newLife}).`,
-      );
-      target.stats.life = newLife;
+      const hitThreshold = mnvDetail.accuracy + source.stats.accuracy - target.stats.evasion;
+
+      if (hit <= hitThreshold) {
+        const damageMitigation = calcRawMitigation(
+          target.stats,
+          action.damageType,
+        );
+
+        let modifiedDamage = baseDamage;
+        if (source.rewards.owned.enchantments.find(enchantment => enchantment.name === "killerInstinct")) {
+          modifiedDamage = getEnchMap("killerInstinct").fn(source, modifiedDamage);
+          console.log(modifiedDamage);
+        }
+
+        modifiedDamage *= action.strength;
+        const damage = trunc(modifiedDamage - damageMitigation);
+        const newLife = limitToZero(target.stats.life - damage);
+
+        logMessages.push(
+          `${source.name.toUpperCase()} hit ${target.name.toUpperCase()} with QUICKSILVER for ${damage} ${action.damageType.toUpperCase()} DAMAGE (${target.stats.life} -> ${newLife}).`,
+        );
+
+        target.stats.life = newLife;
+      }
+      else {
+        logMessages.push(`${source.name.toUpperCase()} missed ${target.name.toUpperCase()} with QUICKSILVER`);
+      }
     });
   });
 

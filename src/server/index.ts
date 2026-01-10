@@ -8,7 +8,7 @@ import {
   takeReward,
   takeStats,
 } from "./events/rewards.ts";
-import { EnemyClientTurnType, PlayerTurnType } from "../types/events/turn.ts";
+import { PlayerTurnType } from "../types/events/turn.ts";
 import { GameMetaType, JoinDataType, VoteType } from "../types/server.ts";
 import {
   createGame,
@@ -21,7 +21,7 @@ import {
   TakeRewardType,
   TakeStatsType,
 } from "../types/events/skill.ts";
-import {takeEnemyTurn, takePlayerTurn} from "./meta/turnHandler.ts";
+import { takeTurn } from "./meta/turnHandler.ts";
 
 const port = 8080;
 const app = express();
@@ -62,25 +62,24 @@ io.on("connection", (socket) => {
   );
 
   // Lobby events
-  socket.on("create", (userId: string) => createGame(connection, userId));
-  socket.on("join", (joinData: JoinDataType) => joinGame(connection, joinData));
-  socket.on("start-vote", (votes: VoteType) => startVote(connection, votes));
-  socket.on("finish-skilling", (votes: VoteType) =>
+  socket.on("lobby:create", (userId: string) => createGame(connection, userId));
+  socket.on("lobby:join", (joinData: JoinDataType) => joinGame(connection, joinData));
+  socket.on("lobby:vote", (votes: VoteType) => startVote(connection, votes));
+  socket.on("lobby:skill", (votes: VoteType) =>
     finishSkilling(connection, votes),
   );
 
   // Exploration events
-  socket.on("submit-name", (name: SetNameType) => submitName(connection, name));
-  socket.on("take-reward", (skill: TakeRewardType) =>
+  socket.on("char:name", (name: SetNameType) => submitName(connection, name));
+  socket.on("char:reward", (skill: TakeRewardType) =>
     takeReward(connection, skill),
   );
-  socket.on("take-stats", (stats: TakeStatsType) =>
+  socket.on("char:skill", (stats: TakeStatsType) =>
     takeStats(connection, stats),
   );
 
   // Battle events
-  socket.on("player-turn", (turn: PlayerTurnType) => takePlayerTurn(connection, turn));
-  socket.on("enemy-turn", (turn: EnemyClientTurnType) => takeEnemyTurn(connection, turn));
+  socket.on("action:player", (turn: PlayerTurnType) => takeTurn(connection, turn));
 });
 
 server.on("error", (e) => {

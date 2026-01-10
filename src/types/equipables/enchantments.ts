@@ -1,4 +1,4 @@
-export type EnchantmentName = "discipline" | "thousandCuts";
+export type EnchantmentName = "discipline" | "killerInstinct" | "redFang" | "thousandCuts";
 
 export type EnchantmentType = {
   name: EnchantmentName;

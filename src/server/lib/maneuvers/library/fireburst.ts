@@ -5,6 +5,7 @@ const fireburst: ManeuverType = {
   description: "Fireburst description",
   speedCost: 8,
   maxTargets: 3,
+  accuracy: 80,
   steps: [
     {
       damageType: "elemental",

@@ -1,6 +1,6 @@
-export const discipline = {
+export const redFang = {
   type: "",
-  priority: 6,
+  priority: 5,
   fn
 };
 

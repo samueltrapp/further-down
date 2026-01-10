@@ -6,7 +6,7 @@ export type ManeuverName = "slap" | "quicksilver" | "fireburst" | "ache";
 // All tactics
 export type TacticName = "sporeBurst" | "bonk";
 
-type TagType =
+export type TagType =
   | "attack" // Damages life
   | "protect" // In response to losing life
   | "pure" // Only deals one type of damage
@@ -20,6 +20,7 @@ type TagType =
   | DamageType;
 
 type BaseActionType = {
+  accuracy: number;
   description: string;
   speedCost: number;
   maxTargets: number;

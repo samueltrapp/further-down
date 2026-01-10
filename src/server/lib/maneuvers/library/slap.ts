@@ -5,6 +5,7 @@ const slap: MvnOrTctType = {
   description: "Slap description",
   speedCost: 12,
   maxTargets: 1,
+  accuracy: 75,
   steps: [
     {
       damageType: "blunt",

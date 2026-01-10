@@ -1,3 +1,3 @@
-export type FavorName = "verve";
+export type FavorName = "thousandCuts" | "verve";
 
 export type BurdenName = "anguish";

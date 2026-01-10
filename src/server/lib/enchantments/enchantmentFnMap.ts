@@ -1,13 +1,17 @@
-// import {thousandCutsFn} from "./implementation/thousandCuts.ts";
-// import {disciplineFn} from "./implementation/discipline.ts";
-// import {EnchantmentName} from "../../../types/equipables/enchantments.ts";
-//
-// const enchantments = [
-//   ["discipline", disciplineFn],
-//   ["thousandCuts", thousandCutsFn],
-// ];
-//
-// const enchantmentMap = new Map(enchantments);
-//
-// export const getEnchFn = (enchantment: EnchantmentName) =>
-//   enchantmentMap.get(enchantment);
+import { EnchantmentName } from "../../../types/equipables/enchantments.ts";
+import {thousandCuts} from "./implementation/thousandCuts.ts";
+import {killerInstinct} from "./implementation/killerInstinct.ts";
+import {discipline} from "./implementation/discipline.ts";
+import {redFang} from "./implementation/redFang.ts";
+
+const enchantments = [
+  ["discipline", discipline],
+  ["thousandCuts", thousandCuts],
+  ["redFang", redFang],
+  ["killerInstinct", killerInstinct]
+];
+
+const enchantmentMap = new Map(enchantments);
+
+export const getEnchMap = (enchantment: EnchantmentName) =>
+  enchantmentMap.get(enchantment);

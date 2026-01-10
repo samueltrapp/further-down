@@ -37,7 +37,6 @@ export function acheFn({ characters, sourceId, targetIds }: MnvOrTctFnType) {
 
     targets.forEach((target) => {
       /* Damage */
-
       const anguishBonus = (target.effects.burdens?.anguish?.stacks || 0) * 5;
       const damageMitigation = calcRawMitigation(
         target.stats,

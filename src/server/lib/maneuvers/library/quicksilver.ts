@@ -5,6 +5,7 @@ const quicksilver: ManeuverType = {
   description: "Quicksilver description",
   speedCost: 4,
   maxTargets: 1,
+  accuracy: 90,
   steps: [
     {
       damageType: "blunt",

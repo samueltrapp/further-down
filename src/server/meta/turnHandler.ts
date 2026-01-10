@@ -1,9 +1,9 @@
-import {EnemyClientTurnType, PlayerTurnType} from "../../types/events/turn.ts";
-import {resolveEnemyTurn, resolvePlayerTurn} from "../events/turn.ts";
+import { PlayerTurnType} from "../../types/events/turn.ts";
+import { resolvePlayerTurn} from "../events/turn.ts";
 import {sendGame} from "./gameManagement.ts";
 import {ConnectionType} from "../../types/server.ts";
 
-export function takePlayerTurn(
+export function takeTurn(
   connection: ConnectionType,
   turn: PlayerTurnType
 ) {
@@ -15,14 +15,14 @@ export function takePlayerTurn(
   }
 }
 
-export function takeEnemyTurn(
-  connection: ConnectionType,
-  turn: EnemyClientTurnType
-) {
-  const [game, gameIndex] = connection.gameMeta.findGameAndIndex(turn.gameId);
-  if (game) {
-    const { game: updatedGame, logMessages } = resolveEnemyTurn(turn, game);
-    connection.gameMeta.games[gameIndex] = updatedGame;
-    sendGame(connection, turn.gameId, logMessages);
-  }
-}
+// export function takeEnemyTurn(
+//   connection: ConnectionType,
+//   turn: EnemyClientTurnType
+// ) {
+//   const [game, gameIndex] = connection.gameMeta.findGameAndIndex(turn.gameId);
+//   if (game) {
+//     const { game: updatedGame, logMessages } = resolveEnemyTurn(turn, game);
+//     connection.gameMeta.games[gameIndex] = updatedGame;
+//     sendGame(connection, turn.gameId, logMessages);
+//   }
+// }

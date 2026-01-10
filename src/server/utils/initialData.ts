@@ -106,7 +106,7 @@ export function initializeCharacters(game: GameType) {
           armors: randomizeCollection(armorCollection) as ArmorType[],
           blessings: randomizeCollection(blessingCollection) as BlessingType[],
           curses: randomizeCollection(curseCollection) as CurseType[],
-          enchantments: randomizeCollection([]) as EnchantmentType[],
+          enchantments: randomizeCollection(enchantment) as EnchantmentType[],
           maneuvers: randomizeCollection(maneuverCollection) as ManeuverType[],
           weapons: randomizeCollection(weaponCollection) as WeaponType[],
         },
