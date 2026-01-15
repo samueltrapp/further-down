@@ -49,14 +49,17 @@ type DurationType =
   | "battle"
   | "permanent";
 
-export type PlayerType = {
+type CharacterType = {
   name: string;
-  userId: string;
-  team: "player";
   stats: StatsType;
-  savedStats: StatsType;
   effects: EffectsType;
   lastTurn: number;
+};
+
+export type PlayerType = CharacterType & {
+  userId: string;
+  team: "player";
+  savedStats: StatsType;
   rewards: {
     owned: RewardSpread;
     queue: RewardSpread;
@@ -64,12 +67,8 @@ export type PlayerType = {
   };
 };
 
-export type EnemyType = {
-  name: string;
+export type EnemyType = CharacterType & {
   team: "enemy";
-  stats: StatsType;
   base: number;
-  effects: EffectsType;
-  lastTurn: number;
   tactics: TacticName[];
 };

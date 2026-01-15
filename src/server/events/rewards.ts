@@ -16,7 +16,7 @@ export function submitName(
 ) {
   const game = connection.meta.games.get(gameId);
   if (game) {
-    const character = game.characters.players[characterId];
+    const character = game.characters.get(characterId);
 
     if (character) {
       character.name = name;
@@ -26,7 +26,7 @@ export function submitName(
         characters: {
           ...game.characters,
           players: {
-            ...game.characters.players,
+            ...game.characters,
             [characterId]: character,
           },
         },
@@ -43,7 +43,7 @@ export function takeReward(
 ) {
   const game = connection.meta.games.get(gameId);
   if (game) {
-    const character = game.characters.players[characterId];
+    const character = game.characters.get(characterId);
 
     if (character) {
       const reducedQueue = character.rewards.queue[rewardOption].filter(

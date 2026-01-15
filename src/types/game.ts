@@ -49,10 +49,7 @@ export type LobbyType = {
   errorMessage: string | undefined;
 };
 
-export type CharactersType = {
-  players: Record<string, PlayerType>;
-  enemies: Record<string, EnemyType>;
-};
+export type CharactersType = Map<string, PlayerType | EnemyType>;
 
 export type GameType = {
   battle: BattleType | null;

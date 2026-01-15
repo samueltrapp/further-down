@@ -1,22 +1,17 @@
 import { ManeuverType } from "../../../../types/equipables/actions.ts";
 
-const fireburst: ManeuverType = {
-  name: "fireburst",
-  description: "Fireburst description",
+export const deluge: ManeuverType = {
+  name: "deluge",
+  description: "Deluge description",
   speedCost: 8,
   maxTargets: 3,
   accuracy: 80,
   steps: [
     {
-      damageType: "elemental",
-      strength: 0.15,
-    },
-    {
+      type: "hit",
       damageType: "elemental",
       strength: 0.5,
     },
   ],
   tags: ["attack"],
 };
-
-export default fireburst;

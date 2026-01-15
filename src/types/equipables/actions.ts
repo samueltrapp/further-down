@@ -1,7 +1,7 @@
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
 // All maneuvers
-export type ManeuverName = "slap" | "quicksilver" | "fireburst" | "ache";
+export type ManeuverName = "pummel" | "quicksilver" | "deluge" | "ache";
 
 // All tactics
 export type TacticName = "sporeBurst" | "bonk";
@@ -19,15 +19,29 @@ export type TagType =
   | "burden" // Applies burden
   | DamageType;
 
+export type HitStep = {
+  type: "hit",
+  damageType: DamageType,
+  strength: number
+};
+
+export type HealStep = {
+  type: "heal",
+  strength: number
+};
+
+export type EffectStep = {
+  type: "effect",
+};
+
+export type StepType = HitStep | HealStep | EffectStep;
+
 type BaseActionType = {
   accuracy: number;
   description: string;
   speedCost: number;
   maxTargets: number;
-  steps: {
-    damageType: DamageType;
-    strength: number;
-  }[];
+  steps: StepType[];
   tags: TagType[];
 };
 

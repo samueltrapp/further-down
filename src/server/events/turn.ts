@@ -1,9 +1,5 @@
 import { BattleType, CharactersType, GameType } from "../../types/game.ts";
-import { resolveManeuver } from "../turn/actions/actions.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
-import {
-  PlayerTurnType,
-} from "../../types/events/turn.ts";
 
 function finishTurn(
   characters: CharactersType,
@@ -32,14 +28,14 @@ function finishTurn(
   };
 }
 
-export function resolvePlayerTurn(
-  turn: PlayerTurnType,
-  game: GameType,
-): { game: GameType; logMessages: string[] } {
-  const { characters, logMessages } = resolveManeuver(game.characters, turn);
-
-  return finishTurn(characters, game, logMessages);
-}
+// export function resolvePlayerTurn(
+//   turn: PlayerTurnType,
+//   game: GameType,
+// ): { game: GameType; logMessages: string[] } {
+//   const { characters, logMessages } = resolveManeuver(game.characters, turn);
+//
+//   return finishTurn(characters, game, logMessages);
+// }
 
 // export function resolveEnemyTurn(
 //   turn: EnemyClientTurnType,

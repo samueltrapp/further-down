@@ -21,7 +21,7 @@ import {
   TakeRewardType,
   TakeStatsType,
 } from "../types/events/skill.ts";
-import { takeTurn } from "./meta/turnHandler.ts";
+import { handleTurn } from "./meta/turnHandler.ts";
 
 const port = 8080;
 const app = express();
@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
   );
 
   // Battle events
-  socket.on("action:player", (turn: PlayerTurnType) => takeTurn(connection, turn));
+  socket.on("action:player", (turn: PlayerTurnType) => handleTurn(connection, turn));
 });
 
 server.on("error", (e) => {

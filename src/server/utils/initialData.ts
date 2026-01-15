@@ -8,8 +8,6 @@ import { weaponCollection } from "../lib/weapons/collection.ts";
 import { curseCollection } from "../lib/curses/collection.ts";
 import { ArmorType } from "../../types/equipables/armors.ts";
 import { BlessingType } from "../../types/equipables/blessings.ts";
-import { CurseType } from "../../types/equipables/curses.ts";
-import { EnchantmentType } from "../../types/equipables/enchantments.ts";
 import { ManeuverType } from "../../types/equipables/actions.ts";
 import { WeaponType } from "../../types/equipables/weapons.ts";
 
@@ -40,10 +38,7 @@ const baseStats = {
 export function initializeLobby(gameId: string, userId: string): GameType {
   return {
     battle: null,
-    characters: {
-      enemies: {},
-      players: {},
-    },
+    characters: new Map(),
     lobby: {
       gameId: gameId,
       pastEncounters: 0,
@@ -82,10 +77,10 @@ export function initializeCharacters(game: GameType) {
   };
   const userSpread = userMapping();
 
-  const initialCharacters: Record<string, PlayerType> = {};
+  const initialCharacters: Map<string, PlayerType> = new Map();
   for (const user of userSpread) {
     const id = randomId(8);
-    initialCharacters[id] = structuredClone({
+    const blankCharacter: PlayerType = structuredClone({
       name: "",
       userId: user,
       effects: {
@@ -105,8 +100,8 @@ export function initializeCharacters(game: GameType) {
         queue: {
           armors: randomizeCollection(armorCollection) as ArmorType[],
           blessings: randomizeCollection(blessingCollection) as BlessingType[],
-          curses: randomizeCollection(curseCollection) as CurseType[],
-          enchantments: randomizeCollection(enchantment) as EnchantmentType[],
+          curses: [],
+          enchantments: [],
           maneuvers: randomizeCollection(maneuverCollection) as ManeuverType[],
           weapons: randomizeCollection(weaponCollection) as WeaponType[],
         },
@@ -124,6 +119,8 @@ export function initializeCharacters(game: GameType) {
       savedStats: baseStats,
       team: "player",
     });
+
+    initialCharacters.set(id, blankCharacter);
   }
 
   return initialCharacters;

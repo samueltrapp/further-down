@@ -52,16 +52,15 @@ export function startVote(
       : [...game.lobby.votes].filter((user) => user !== userId);
     const votedToStart = totalVotes.length === game.lobby.users.length;
 
-    const playerCharacters = votedToStart
+    const characters = votedToStart
       ? initializeCharacters(game)
-      : game.characters.players;
+      : game.characters;
     const lobbyStatus = votedToStart ? LobbyStatus.REWARD : game.lobby.status;
 
     const newGameState = {
       ...game,
       characters: {
-        ...game.characters,
-        players: playerCharacters,
+        ...characters
       },
       lobby: {
         ...game.lobby,
