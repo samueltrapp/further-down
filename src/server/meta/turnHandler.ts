@@ -1,8 +1,8 @@
 import { PlayerTurnType} from "../../types/events/turn.ts";
 import {ConnectionType} from "../../types/server.ts";
 import {mnvFns} from "../lib/maneuvers/fnMap.ts";
-import {EnemyType, PlayerType} from "../../types/individual/characters.ts";
-import {ActionCtx} from "../turn/actions/actionCtx.ts";
+import {PlayerType} from "../../types/individual/characters.ts";
+import {ActionCtx, StepCtx} from "../turn/actions/actionCtx.ts";
 import {damage} from "../lib/maneuvers/damage.ts";
 import {mitigate} from "../lib/maneuvers/mitigate.ts";
 
@@ -19,16 +19,12 @@ export function handleTurn(
       return;
     }
 
-    let ctx: ActionCtx = {
+    const actionCtx: ActionCtx = {
       characters: {...game.characters},
       sourceId: turn.sourceId,
       friendlyTargetIds: turn.friendlyTargetIds,
       enemyTargetIds: turn.enemyTargetIds,
       weapon,
-      messages: [],
-      damage: [],
-      mitigation: [],
-      heal: [],
       speed: 0,
     };
 
@@ -41,6 +37,14 @@ export function handleTurn(
 
     /* Action */
     mnv?.steps.forEach(step => {
+      let ctx: StepCtx = {
+        ...actionCtx,
+        messages: [],
+        damage: 0,
+        mitigation: new Map(),
+        heal: 0
+      };
+
       if (step.type === "hit") {
         ctx = damage(step, ctx);
         // check evasion

@@ -1,11 +1,11 @@
 import {HitStep} from "../../../types/equipables/actions.ts";
-import {ActionCtx} from "../../turn/actions/actionCtx.ts";
+import {StepCtx} from "../../turn/actions/actionCtx.ts";
 import {randNum} from "../../../common/utils.ts";
 import {trunc} from "../../turn/utils/battle.ts";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
-export const damage = (step: HitStep, ctx: ActionCtx) => {
+export const damage = (step: HitStep, ctx: StepCtx) => {
     const { damageType, strength } = step;
     const { characters, sourceId, weapon } = ctx;
 
@@ -41,7 +41,7 @@ export const damage = (step: HitStep, ctx: ActionCtx) => {
         }
     }
 
-    const damageInstance = [...ctx.damage, trunc(strength * damage())];
+    const damageInstance = trunc(strength * damage());
 
     return {
         ...ctx,

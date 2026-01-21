@@ -1,14 +1,14 @@
 import {HitStep} from "../../../types/equipables/actions.ts";
-import {ActionCtx} from "../../turn/actions/actionCtx.ts";
+import {StepCtx} from "../../turn/actions/actionCtx.ts";
 import {StatsType} from "../../../types/individual/stats.ts";
 
-export const mitigate = (step: HitStep, ctx: ActionCtx) => {
+export const mitigate = (step: HitStep, ctx: StepCtx) => {
     const { damageType } = step;
     const { characters, enemyTargetIds } = ctx;
     const defenders = enemyTargetIds?.map(id => ({
         id: id,
         stats: characters.get(id)?.stats
-    }))
+    }));
 
     if (!defenders || defenders.length === 0) {
         return ctx;
@@ -40,6 +40,6 @@ export const mitigate = (step: HitStep, ctx: ActionCtx) => {
 
     return {
         ...ctx,
-        mitigation: [...ctx.mitigation, mitigationMap]
+        mitigation: mitigationMap
     };
 }
