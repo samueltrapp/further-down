@@ -21,6 +21,7 @@ export type TagType =
 
 export type HitStep = {
   type: "hit",
+  accuracy: number,
   damageType: DamageType,
   strength: number
 };

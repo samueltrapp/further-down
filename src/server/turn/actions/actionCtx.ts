@@ -12,7 +12,12 @@ export type ActionCtx = {
 
 export type StepCtx = ActionCtx & {
     messages: string[];
+    toHit: number;
+    accuracy: number;
     damage: number;
-    mitigation: Map<string, number>;
+    mitigation: Map<string, {
+        evasion: number,
+        reduction: number
+    }>;
     heal: number;
 };

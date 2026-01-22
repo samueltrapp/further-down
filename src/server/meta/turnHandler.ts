@@ -3,7 +3,7 @@ import {ConnectionType} from "../../types/server.ts";
 import {mnvFns} from "../lib/maneuvers/fnMap.ts";
 import {PlayerType} from "../../types/individual/characters.ts";
 import {ActionCtx, StepCtx} from "../turn/actions/actionCtx.ts";
-import {damage} from "../lib/maneuvers/damage.ts";
+import {applyDamage, damage} from "../lib/maneuvers/damage.ts";
 import {mitigate} from "../lib/maneuvers/mitigate.ts";
 
 export function handleTurn(
@@ -40,6 +40,8 @@ export function handleTurn(
       let ctx: StepCtx = {
         ...actionCtx,
         messages: [],
+        toHit: 0,
+        accuracy: 0,
         damage: 0,
         mitigation: new Map(),
         heal: 0
@@ -50,7 +52,7 @@ export function handleTurn(
         // check evasion
         ctx = mitigate(step, ctx);
 
-        // applyDamage
+        ctx = applyDamage(ctx);
       }
       else if (step.type === "heal") {
         ctx = {...ctx};
