@@ -1,69 +1,25 @@
-import { BattleType, CharactersType, GameType } from "../../types/game.ts";
-import { resolveTurnOrder } from "../utils/turnOrder.ts";
-
-function finishTurn(
-  characters: CharactersType,
-  game: GameType,
-  logMessages: string[],
-) {
-  const arePlayersDone = Object.values(characters.players).every(
-    (character) => character.stats.speed <= 0,
-  );
-  const areEnemiesDone = Object.values(characters.enemies).every(
-    (character) => character.stats.speed <= 0,
-  );
-  const isRoundEnd = arePlayersDone && areEnemiesDone;
-
-  return {
-    game: {
-      ...game,
-      battle: {
-        ...(game.battle as BattleType),
-        round: isRoundEnd ? game.battle!.round : game.battle!.round + 1,
-        turnOrder: resolveTurnOrder(characters),
-      },
-      characters,
-    },
-    logMessages,
-  };
-}
-
-// export function resolvePlayerTurn(
-//   turn: PlayerTurnType,
+// import { BattleType, CharactersType, GameType } from "../../types/game.ts";
+// import { resolveTurnOrder } from "../utils/turnOrder.ts";
+//
+// function finishTurn(
+//   characters: CharactersType,
 //   game: GameType,
-// ): { game: GameType; logMessages: string[] } {
-//   const { characters, logMessages } = resolveManeuver(game.characters, turn);
+//   logMessages: string[],
+// ) {
+//   const charactersIter = characters.values();
+//   // @ts-ignore
+//   const isRoundEnd = charactersIter.every(character => character.stats.speed <= 0);
 //
-//   return finishTurn(characters, game, logMessages);
-// }
-
-// export function resolveEnemyTurn(
-//   turn: EnemyClientTurnType,
-//   game: GameType,
-// ): { game: GameType; logMessages: string[] } {
-//   // Pick random tactic from available list
-//   const tactics = game.characters.enemies[turn.sourceId].tactics;
-//   const randomTactic = tactics[randNum(tactics.length)];
-//
-//   // Pick max number of targets randomly
-//   const maxTargets =
-//     tacticCollection.find((tactic) => tactic.name === randomTactic)
-//       ?.maxTargets || 1;
-//   const targetIds: string[] = [];
-//   for (let targetSelect = 0; targetSelect < maxTargets; targetSelect++) {
-//     targetIds.push(randEntry(Object.keys(game.characters.players)) as string);
-//   }
-//
-//   const decidedTurn: EnemyServerTurnType = {
-//     ...turn,
-//     tactic: randomTactic,
-//     sourceId: turn.sourceId,
-//     targetIds,
+//   return {
+//     game: {
+//       ...game,
+//       battle: {
+//         ...(game.battle as BattleType),
+//         round: isRoundEnd ? game.battle!.round : game.battle!.round + 1,
+//         turnOrder: resolveTurnOrder(characters),
+//       },
+//       characters,
+//     },
+//     logMessages,
 //   };
-//
-//   const { characters, logMessages } = resolveTactic(
-//     game.characters,
-//     decidedTurn,
-//   );
-//   return finishTurn(characters, game, logMessages);
 // }

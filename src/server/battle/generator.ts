@@ -11,9 +11,9 @@ export const setBlankBattle = (characters: CharactersType) => ({
   grade: BattleGrade.MODERATE,
 });
 
-export const pickEnemies = (): Record<string, EnemyType> => ({
-  [randomId(10)]: structuredClone(shroomlet),
-  [randomId(10)]: structuredClone(shroomlet),
-  [randomId(10)]: structuredClone(shroomlet),
-  [randomId(10)]: structuredClone(shroomlet),
-});
+export const pickEnemies = (): [string, EnemyType][] => ([
+  [randomId(10), structuredClone(shroomlet)],
+  [randomId(10), structuredClone(shroomlet)],
+  [randomId(10), structuredClone(shroomlet)],
+  [randomId(10), structuredClone(shroomlet)],
+]);

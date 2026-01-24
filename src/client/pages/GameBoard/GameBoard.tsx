@@ -12,6 +12,7 @@ import {
 } from "../../contexts/GameContext.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
 import { selectEnemies } from "../../contexts/contextActions.ts";
+import {EnemyType, PlayerType} from "../../../types/individual/characters.ts";
 
 function GameBoard() {
   const game = useContext(GameContext);
@@ -20,7 +21,15 @@ function GameBoard() {
   const characters = game?.data.characters;
 
   if (!battle || !characters) return;
-  const { players, enemies } = characters;
+  const fresh: {players: [string, PlayerType][], enemies: [string, EnemyType][]} = {players: [], enemies: []};
+  Array.from(characters).reduce((arrs, curr) => {
+    if (curr[1].team === "player") {
+      arrs.players.push(curr);
+    }
+    else {
+      arrs.enemies.push(curr);
+    }
+  }, fresh);
 
   const handleSelect = (enemyId: string) => {
     if (dispatch && game.client.selectedManeuver) {

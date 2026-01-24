@@ -7,6 +7,8 @@ const sporeBurst: TacticType = {
   maxTargets: 4,
   steps: [
     {
+      type: "hit",
+      accuracy: 75,
       damageType: "elemental",
       strength: 0.75,
     },

@@ -7,10 +7,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(gameReducer, {
     data: {
       battle: null,
-      characters: {
-        enemies: {},
-        players: {},
-      },
+      characters: new Map(),
       lib: {
         armors: [],
         blessings: [],

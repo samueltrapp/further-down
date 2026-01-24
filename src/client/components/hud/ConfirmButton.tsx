@@ -29,7 +29,8 @@ export default function ConfirmButton() {
           weapon: client?.selectedWeapon?.name as WeaponName,
           team: "player",
           gameId: lobby.gameId,
-          targetIds: client?.selectedEnemyIds,
+          enemyTargetIds: client?.selectedEnemyIds,
+          friendlyTargetIds: client?.selectedEnemyIds,
           sourceId: currentTurn,
         });
         if (dispatch) {
