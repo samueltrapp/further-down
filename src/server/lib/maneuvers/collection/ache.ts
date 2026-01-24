@@ -5,16 +5,16 @@ const ache: ManeuverType = {
   description: "Ache description",
   speedCost: 11,
   maxTargets: 1,
-  accuracy: 85,
   steps: [
     {
       type: "hit",
+      accuracy: 85,
       damageType: "psychic",
       strength: 1.1,
     },
     {
       type: "effect",
-    }
+    },
   ],
   tags: ["attack", "single", "pure", "psychic", "burden"],
 };

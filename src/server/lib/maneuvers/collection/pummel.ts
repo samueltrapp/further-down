@@ -1,13 +1,14 @@
 import { MvnOrTctType } from "../../../../types/events/turn.ts";
 
-const slap: MvnOrTctType = {
-  name: "slap",
-  description: "Slap description",
+const pummel: MvnOrTctType = {
+  name: "pummel",
+  description: "Pummel description",
   speedCost: 12,
   maxTargets: 1,
-  accuracy: 75,
   steps: [
     {
+      type: "hit",
+      accuracy: 75,
       damageType: "blunt",
       strength: 0.9,
     },
@@ -15,4 +16,4 @@ const slap: MvnOrTctType = {
   tags: ["attack", "blunt", "single", "pure", "burden"],
 };
 
-export default slap;
+export default pummel;

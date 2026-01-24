@@ -20,25 +20,24 @@ export type TagType =
   | DamageType;
 
 export type HitStep = {
-  type: "hit",
-  accuracy: number,
-  damageType: DamageType,
-  strength: number
+  type: "hit";
+  accuracy: number;
+  damageType: DamageType;
+  strength: number;
 };
 
 export type HealStep = {
-  type: "heal",
-  strength: number
+  type: "heal";
+  strength: number;
 };
 
 export type EffectStep = {
-  type: "effect",
+  type: "effect";
 };
 
 export type StepType = HitStep | HealStep | EffectStep;
 
 type BaseActionType = {
-  accuracy: number;
   description: string;
   speedCost: number;
   maxTargets: number;

@@ -5,10 +5,10 @@ export const deluge: ManeuverType = {
   description: "Deluge description",
   speedCost: 8,
   maxTargets: 3,
-  accuracy: 80,
   steps: [
     {
       type: "hit",
+      accuracy: 80,
       damageType: "elemental",
       strength: 0.5,
     },
