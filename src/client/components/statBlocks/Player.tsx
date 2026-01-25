@@ -11,6 +11,7 @@ import {
   GameDispatchContext,
 } from "../../contexts/GameContext.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
+import {maneuverMap} from "../../../shared/definitions/maneuvers/sets.ts";
 
 const HealthBar = styled.div<{ $percentHealth: number }>`
   width: ${(props) => `${props.$percentHealth * 100}%`};
@@ -34,9 +35,7 @@ export default function Player(props: PlayerType & { id: string }) {
 
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {
     const value = (event.target as HTMLButtonElement).value as ManeuverName;
-    const selectedManeuver = game?.data.lib.maneuvers.find(
-      (maneuver) => maneuver.name === value,
-    );
+    const selectedManeuver = maneuverMap.get(value);
     if (dispatch && value) {
       dispatch({
         type: GameAction.PLAYER_ACTION,

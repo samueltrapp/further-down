@@ -1,10 +1,10 @@
 import { PlayerTurnType } from "../../types/events/turn.ts";
 import { ConnectionType } from "../../types/server.ts";
-import { mnvFns } from "../lib/maneuvers/fnMap.ts";
+import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
-import { ActionCtx } from "../turn/actions/actionCtx.ts";
-import { applyDamage, calcDamage } from "../lib/maneuvers/damage.ts";
-import { calcMitigation } from "../lib/maneuvers/mitigation.ts";
+import { ActionCtx } from "../../types/events/actionCtx.ts";
+import { applyDamage, calcDamage } from "../../shared/definitions/maneuvers/damage.ts";
+import { calcMitigation } from "../../shared/definitions/maneuvers/mitigation.ts";
 
 const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
   return {
@@ -45,7 +45,7 @@ export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
       heal: 0,
     };
 
-    const mnv = mnvFns.get(turn.maneuver);
+    const mnv = maneuverMap.get(turn.maneuver);
     if (!mnv) {
       return;
     }

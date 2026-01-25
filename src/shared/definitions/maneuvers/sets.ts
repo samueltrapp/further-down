@@ -5,4 +5,5 @@ const maneuvers: [ManeuverName, ManeuverType][] = [
   ["quicksilver", quicksilver],
 ];
 
-export const mnvFns = new Map<ManeuverName, ManeuverType>(maneuvers);
+export const maneuverMap = new Map<ManeuverName, ManeuverType>(maneuvers);
+export const maneuverCollection = Array.from(maneuverMap.keys());

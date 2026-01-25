@@ -11,7 +11,4 @@ const enchantments = [
   ["killerInstinct", killerInstinct]
 ];
 
-const enchantmentMap = new Map(enchantments);
-
-export const getEnchMap = (enchantment: EnchantmentName) =>
-  enchantmentMap.get(enchantment);
+export const enchantmentMap = new Map<EnchantmentName, any>(enchantments);

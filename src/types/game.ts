@@ -1,10 +1,4 @@
-import { ManeuverType } from "./equipables/actions.ts";
 import { EnemyType, PlayerType } from "./individual/characters.ts";
-import { WeaponType } from "./equipables/weapons.ts";
-import { BlessingType } from "./equipables/blessings.ts";
-import { CurseType } from "./equipables/curses.ts";
-import { ArmorType } from "./equipables/armors.ts";
-import { EnchantmentType } from "./equipables/enchantments.ts";
 
 export enum BattleGrade {
   BOSS = "boss",
@@ -31,15 +25,6 @@ export type BattleType = {
   grade: BattleGrade;
 };
 
-export type LibType = {
-  blessings: BlessingType[];
-  curses: CurseType[];
-  maneuvers: ManeuverType[];
-  weapons: WeaponType[];
-  armors: ArmorType[];
-  enchantments: EnchantmentType[];
-};
-
 export type LobbyType = {
   gameId: string;
   status: LobbyStatus;
@@ -54,6 +39,5 @@ export type CharactersType = Map<string, PlayerType | EnemyType>;
 export type GameType = {
   battle: BattleType | null;
   characters: CharactersType;
-  lib: LibType;
   lobby: LobbyType;
 };

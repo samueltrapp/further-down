@@ -1,5 +1,5 @@
-import { CharactersType } from "../../../types/game.ts";
-import { WeaponType } from "../../../types/equipables/weapons.ts";
+import { CharactersType } from "../game.ts";
+import { WeaponType } from "../equipables/weapons.ts";
 
 export type ActionCtx = {
   characters: CharactersType;

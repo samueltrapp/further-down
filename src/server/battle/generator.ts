@@ -1,7 +1,7 @@
 import { BattleGrade, CharactersType } from "../../types/game.ts";
-import { randomId } from "../utils/data.ts";
+import { randomId } from "../utils/character.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
-import shroomlet from "../lib/enemies/shroomlet.ts";
+import shroomlet from "../../shared/enemies/shroomlet.ts";
 import { EnemyType } from "../../types/individual/characters.ts";
 
 export const setBlankBattle = (characters: CharactersType) => ({

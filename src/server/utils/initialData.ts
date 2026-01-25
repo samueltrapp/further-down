@@ -1,15 +1,12 @@
 import { GameType, LobbyStatus } from "../../types/game.ts";
-import { randomId, randomizeCollection } from "./data.ts";
+import { randomId, randomizeCollection } from "./character.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
-import { blessingCollection } from "../lib/blessings/collection.ts";
-import { armorCollection } from "../lib/armors/collection.ts";
-import { maneuverCollection } from "../lib/maneuvers/collection.ts";
-import { weaponCollection } from "../lib/weapons/collection.ts";
-import { curseCollection } from "../lib/curses/collection.ts";
+import { armorCollection } from "../lib/armors/sets.ts";
+import { weaponCollection } from "../../shared/definitions/weapons/sets.ts";
 import { ArmorType } from "../../types/equipables/armors.ts";
-import { BlessingType } from "../../types/equipables/blessings.ts";
-import { ManeuverType } from "../../types/equipables/actions.ts";
+import {ManeuverName} from "../../types/equipables/actions.ts";
 import { WeaponType } from "../../types/equipables/weapons.ts";
+import {maneuverCollection} from "../../shared/definitions/maneuvers/sets.ts";
 
 const baseStats = {
   life: 100,
@@ -46,15 +43,7 @@ export function initializeLobby(gameId: string, userId: string): GameType {
       votes: [],
       status: LobbyStatus.WAITING,
       errorMessage: "",
-    },
-    lib: {
-      blessings: blessingCollection,
-      curses: curseCollection,
-      maneuvers: maneuverCollection,
-      weapons: weaponCollection,
-      armors: armorCollection,
-      enchantments: [],
-    },
+    }
   };
 }
 
@@ -98,12 +87,10 @@ export function initializeCharacters(game: GameType) {
           weapons: [],
         },
         queue: {
-          armors: randomizeCollection(armorCollection) as ArmorType[],
-          blessings: randomizeCollection(blessingCollection) as BlessingType[],
-          curses: [],
+          armors: [], //randomizeCollection(armorCollection) as ArmorType[],
           enchantments: [],
-          maneuvers: randomizeCollection(maneuverCollection) as ManeuverType[],
-          weapons: randomizeCollection(weaponCollection) as WeaponType[],
+          maneuvers: [],
+          weapons: [],
         },
         pending: {
           armors: 1,

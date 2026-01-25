@@ -5,4 +5,5 @@ const tactics: [TacticName, TacticType][] = [
   ["bonk", bonk],
 ];
 
-export const tacticFns = new Map<TacticName, TacticType>(tactics);
+export const tacticMap = new Map<TacticName, TacticType>(tactics);
+export const tacticCollection = Array.from(tacticMap.keys());

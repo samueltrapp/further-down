@@ -1,5 +1,5 @@
 import { HitStep } from "../../../types/equipables/actions.ts";
-import { ActionCtx } from "../../turn/actions/actionCtx.ts";
+import { ActionCtx } from "../../../types/events/actionCtx.ts";
 import { StatsType } from "../../../types/individual/stats.ts";
 
 export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {

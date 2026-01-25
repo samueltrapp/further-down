@@ -1,4 +1,4 @@
-import { EnemyType } from "../../../types/individual/characters.ts";
+import { EnemyType } from "../../types/individual/characters.ts";
 
 const shroomlet: EnemyType = {
   name: "Shroomlet",

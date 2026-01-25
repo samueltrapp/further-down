@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { randomId } from "../../../server/utils/data.ts";
+import { randomId } from "../../../server/utils/character.ts";
 import { socket } from "../../socket.ts";
 import "./Lobby.scss";
 import { GameContext } from "../../contexts/GameContext.tsx";

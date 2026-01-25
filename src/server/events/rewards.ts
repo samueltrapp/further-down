@@ -6,7 +6,7 @@ import {
   TakeStatsType,
 } from "../../types/events/skill.ts";
 import { CharactersType, LobbyStatus } from "../../types/game.ts";
-import { randomizeCollection } from "../utils/data.ts";
+import { randomizeCollection } from "../utils/character.ts";
 import { SingleRewardType } from "../../types/equipables/aggregates.ts";
 import { pickEnemies, setBlankBattle } from "../battle/generator.ts";
 import {PlayerType} from "../../types/individual/characters.ts";

@@ -1,7 +1,7 @@
 import { HitStep } from "../../../types/equipables/actions.ts";
-import { ActionCtx } from "../../turn/actions/actionCtx.ts";
+import { ActionCtx } from "../../../types/events/actionCtx.ts";
 import { randNum } from "../../../common/utils.ts";
-import { limitToZero, trunc } from "../../turn/utils/battle.ts";
+import { limitToZero, trunc } from "../../../server/utils/battle.ts";
 import { randomInt } from "node:crypto";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;

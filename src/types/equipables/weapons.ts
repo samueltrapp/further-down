@@ -1,6 +1,6 @@
 import { OffensiveAffinitiesType, EnchantmentType } from "./enchantments.ts";
 
-export type WeaponName = "cutlass" | "hammer" | "scepter" | "periapt";
+export type WeaponName = "cutlass" | "hammer" | "periapt" | "scepter";
 
 export type WeaponType = {
   name: WeaponName;

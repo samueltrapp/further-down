@@ -1,4 +1,4 @@
-import { randomId } from "../utils/data.ts";
+import { randomId } from "../utils/character.ts";
 import { initializeCharacters, initializeLobby } from "../utils/initialData.ts";
 import { ConnectionType, JoinDataType, VoteType } from "../../types/server.ts";
 import { existingLobby } from "../menus/lobby.ts";
