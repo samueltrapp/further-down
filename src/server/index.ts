@@ -9,7 +9,7 @@ import {
   takeStats,
 } from "./events/rewards.ts";
 import { PlayerTurnType } from "../types/events/turn.ts";
-import { JoinDataType, MetaType, VoteType} from "../types/server.ts";
+import { JoinDataType, MetaType, VoteType } from "../types/server.ts";
 import {
   createGame,
   joinGame,
@@ -36,14 +36,14 @@ const io = new Server(server, {
 });
 
 const meta: MetaType = {
-  games: new Map()
+  games: new Map(),
 };
 
 io.on("connection", (socket) => {
   const connection = { meta, io, socket };
 
   socket.on(
-    "load",
+    "game:load",
     ({ gameId, userId }: { gameId: string; userId: string }) => {
       const game = meta.games.get(gameId);
       const characterInGame = game?.lobby.users.some((user) => user === userId);
@@ -55,7 +55,9 @@ io.on("connection", (socket) => {
 
   // Lobby events
   socket.on("lobby:create", (userId: string) => createGame(connection, userId));
-  socket.on("lobby:join", (joinData: JoinDataType) => joinGame(connection, joinData));
+  socket.on("lobby:join", (joinData: JoinDataType) =>
+    joinGame(connection, joinData),
+  );
   socket.on("lobby:vote", (votes: VoteType) => startVote(connection, votes));
   socket.on("lobby:skill", (votes: VoteType) =>
     finishSkilling(connection, votes),
@@ -71,7 +73,9 @@ io.on("connection", (socket) => {
   );
 
   // Battle events
-  socket.on("action:player", (turn: PlayerTurnType) => handleTurn(connection, turn));
+  socket.on("action:player", (turn: PlayerTurnType) =>
+    handleTurn(connection, turn),
+  );
 });
 
 server.on("error", (e) => {

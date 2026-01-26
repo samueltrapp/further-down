@@ -34,7 +34,7 @@ function App() {
       const gameId = localStorage.getItem("gameId");
       const userId = localStorage.getItem("userId");
       if (gameId && userId) {
-        socket.emit("load", { gameId, userId });
+        socket.emit("game:load", { gameId, userId });
       }
       setLoaded(true);
     }

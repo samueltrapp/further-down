@@ -18,14 +18,14 @@ const Unjoined = () => {
   const handleCreateRoom = () => {
     const userId = localStorage.getItem("userId");
     if (userId) {
-      socket.emit("create", userId);
+      socket.emit("lobby:create", userId);
     }
   };
 
   const handleJoinRoom = () => {
     const userId = localStorage.getItem("userId");
     if (userId) {
-      socket.emit("join", { gameId: roomCode, userId });
+      socket.emit("lobby:join", { gameId: roomCode, userId });
     }
   };
 
@@ -70,7 +70,7 @@ const Waiting = () => {
   }, [lobby]);
 
   const handleStart = () => {
-    socket.emit("start-vote", {
+    socket.emit("lobby:vote", {
       gameId: lobby?.gameId,
       vote: !voteToStart,
       userId: userId,

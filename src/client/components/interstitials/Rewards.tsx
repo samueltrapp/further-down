@@ -57,6 +57,7 @@ export function Rewards() {
 
   const gameId = game.data.lobby.gameId;
   const votes = game.data.lobby.votes;
+  console.log(game.data.characters);
   const playerCharacters = Array.from(game.data.characters.values()).filter(
     (playerCharacter) =>
       playerCharacter.team === "player" && playerCharacter.userId === userId,
