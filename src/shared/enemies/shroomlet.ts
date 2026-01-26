@@ -1,6 +1,7 @@
 import { EnemyType } from "../../types/individual/characters.ts";
 
-const shroomlet: EnemyType = {
+const shroomlet = (id: string): EnemyType => ({
+  id,
   name: "Shroomlet",
   team: "enemy",
   stats: {
@@ -31,6 +32,6 @@ const shroomlet: EnemyType = {
   },
   lastTurn: 0,
   tactics: ["bonk"],
-};
+});
 
 export default shroomlet;

@@ -1,12 +1,14 @@
 import { GameType, LobbyStatus } from "../../types/game.ts";
 import { randomId, randomizeCollection } from "./character.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
-import { armorCollection } from "../lib/armors/sets.ts";
+import { armorCollection } from "../../shared/definitions/armors/sets.ts";
+import { enchantmentCollection } from "../../shared/definitions/enchantments/sets.ts";
+import { maneuverCollection } from "../../shared/definitions/maneuvers/sets.ts";
 import { weaponCollection } from "../../shared/definitions/weapons/sets.ts";
-import { ArmorType } from "../../types/equipables/armors.ts";
-import {ManeuverName} from "../../types/equipables/actions.ts";
-import { WeaponType } from "../../types/equipables/weapons.ts";
-import {maneuverCollection} from "../../shared/definitions/maneuvers/sets.ts";
+import { ArmorName } from "../../types/equipables/armors.ts";
+import { EnchantmentName } from "../../types/equipables/enchantments.ts";
+import { ManeuverName } from "../../types/equipables/actions.ts";
+import { WeaponName } from "../../types/equipables/weapons.ts";
 
 const baseStats = {
   life: 100,
@@ -43,7 +45,7 @@ export function initializeLobby(gameId: string, userId: string): GameType {
       votes: [],
       status: LobbyStatus.WAITING,
       errorMessage: "",
-    }
+    },
   };
 }
 
@@ -70,6 +72,7 @@ export function initializeCharacters(game: GameType) {
   for (const user of userSpread) {
     const id = randomId(8);
     const blankCharacter: PlayerType = structuredClone({
+      id,
       name: "",
       userId: user,
       effects: {
@@ -78,24 +81,24 @@ export function initializeCharacters(game: GameType) {
       },
       lastTurn: 0,
       rewards: {
+        equippedArmor: null,
+        equippedWeapon: null,
         owned: {
           armors: [],
-          blessings: [],
-          curses: [],
           enchantments: [],
           maneuvers: [],
           weapons: [],
         },
         queue: {
-          armors: [], //randomizeCollection(armorCollection) as ArmorType[],
-          enchantments: [],
-          maneuvers: [],
-          weapons: [],
+          armors: randomizeCollection(armorCollection) as ArmorName[],
+          enchantments: randomizeCollection(
+            enchantmentCollection,
+          ) as EnchantmentName[],
+          maneuvers: randomizeCollection(maneuverCollection) as ManeuverName[],
+          weapons: randomizeCollection(weaponCollection) as WeaponName[],
         },
         pending: {
           armors: 1,
-          blessings: 1,
-          curses: 0,
           enchantments: 0,
           maneuvers: 1,
           weapons: 1,

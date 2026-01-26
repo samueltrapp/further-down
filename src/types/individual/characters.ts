@@ -1,19 +1,17 @@
 import { StatsType } from "./stats.ts";
-import { ManeuverType, TacticName } from "../equipables/actions.ts";
-import { WeaponType } from "../equipables/weapons.ts";
-import { BlessingType } from "../equipables/blessings.ts";
-import { ArmorType } from "../equipables/armors.ts";
-import { CurseType } from "../equipables/curses.ts";
-import { EnchantmentType } from "../equipables/enchantments.ts";
+import { ManeuverName, TacticName } from "../equipables/actions.ts";
+import { WeaponName } from "../equipables/weapons.ts";
+import { ArmorName } from "../equipables/armors.ts";
+import { EnchantmentName } from "../equipables/enchantments.ts";
 import { BurdenName, FavorName } from "../equipables/effects.ts";
 
 type RewardSpread = {
-  armors: ArmorType[];
-  blessings: BlessingType[];
-  curses: CurseType[];
-  enchantments: EnchantmentType[];
-  maneuvers: ManeuverType[];
-  weapons: WeaponType[];
+  armors: ArmorName[];
+  // blessings: BlessingType[];
+  // curses: CurseType[];
+  enchantments: EnchantmentName[];
+  maneuvers: ManeuverName[];
+  weapons: WeaponName[];
 };
 
 type EffectType = {
@@ -30,13 +28,7 @@ type EffectsType = {
   burdens: BurdenType;
 };
 
-export type RewardOptions =
-  | "blessings"
-  | "curses"
-  | "maneuvers"
-  | "weapons"
-  | "armors"
-  | "enchantments";
+export type RewardOptions = "maneuvers" | "weapons" | "armors" | "enchantments";
 
 export type PendingRewardType = Record<RewardOptions, number>;
 
@@ -50,6 +42,7 @@ type DurationType =
   | "permanent";
 
 type CharacterType = {
+  id: string;
   name: string;
   stats: StatsType;
   effects: EffectsType;
@@ -61,6 +54,8 @@ export type PlayerType = CharacterType & {
   team: "player";
   savedStats: StatsType;
   rewards: {
+    equippedWeapon: WeaponName | null;
+    equippedArmor: ArmorName | null;
     owned: RewardSpread;
     queue: RewardSpread;
     pending: PendingRewardType & { stats: number };

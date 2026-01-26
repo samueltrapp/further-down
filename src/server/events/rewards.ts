@@ -9,7 +9,7 @@ import { CharactersType, LobbyStatus } from "../../types/game.ts";
 import { randomizeCollection } from "../utils/character.ts";
 import { SingleRewardType } from "../../types/equipables/aggregates.ts";
 import { pickEnemies, setBlankBattle } from "../battle/generator.ts";
-import {PlayerType} from "../../types/individual/characters.ts";
+import { PlayerType } from "../../types/individual/characters.ts";
 
 export function submitName(
   connection: ConnectionType,
@@ -44,14 +44,16 @@ export function takeReward(
 ) {
   const game = connection.meta.games.get(gameId);
   if (game) {
-    const character = game.characters.get(characterId) as PlayerType | undefined;
+    const character = game.characters.get(characterId) as
+      | PlayerType
+      | undefined;
 
     if (character && character.team === "player") {
       const reducedQueue = character.rewards.queue[rewardOption].filter(
-        (queueItem) => queueItem.name !== rewardName,
+        (queueItem) => queueItem !== rewardName,
       ) as SingleRewardType;
       const selectedReward = character.rewards.queue[rewardOption].find(
-        (reward) => reward.name === rewardName,
+        (reward) => reward === rewardName,
       );
 
       // @ts-ignore
@@ -80,7 +82,9 @@ export function takeStats(
 ) {
   const game = connection.meta.games.get(gameId);
   if (game) {
-    const character = game.characters.get(characterId) as PlayerType | undefined;
+    const character = game.characters.get(characterId) as
+      | PlayerType
+      | undefined;
 
     if (character && character.team === "player") {
       character.stats = newStats;
@@ -90,7 +94,7 @@ export function takeStats(
         ...game,
         characters: {
           ...game.characters,
-            [characterId]: character,
+          [characterId]: character,
         },
       };
       connection.meta.games.set(gameId, newGameState);
@@ -114,7 +118,7 @@ export function finishSkilling(
     const characters: CharactersType = game.characters;
     if (votedToAdvance) {
       const enemies = pickEnemies();
-      enemies.forEach(enemy => {
+      enemies.forEach((enemy) => {
         characters.set(enemy[0], enemy[1]);
       });
       battle = setBlankBattle(characters);

@@ -3,15 +3,18 @@ import { ActionCtx } from "../../../types/events/actionCtx.ts";
 import { randNum } from "../../../common/utils.ts";
 import { limitToZero, trunc } from "../../../server/utils/battle.ts";
 import { randomInt } from "node:crypto";
+import { weaponMap } from "../weapons/sets.ts";
+import { PlayerType } from "../../../types/individual/characters.ts";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
 export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   const { damageType, strength } = step;
-  const { characters, sourceId, weapon } = ctx;
-
-  const source = characters.get(sourceId);
-  if (!source) {
+  const { characters, sourceId } = ctx;
+  const source = characters.get(sourceId) as PlayerType | undefined;
+  const weaponName = source?.rewards.equippedWeapon;
+  const weapon = weaponName && weaponMap.get(weaponName);
+  if (!source || !weapon) {
     return ctx;
   }
 

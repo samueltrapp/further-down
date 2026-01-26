@@ -16,12 +16,10 @@ function RewardHolding() {
 function RewardSelection({
   rewardOption,
   character,
-  characterId,
   gameId,
 }: {
   rewardOption: RewardOptions;
   character: PlayerType;
-  characterId: string;
   gameId: string;
 }) {
   const options = character.rewards.queue[rewardOption].slice(0, 3);
@@ -32,7 +30,7 @@ function RewardSelection({
       rewardOption,
       rewardName: target.value,
       gameId,
-      characterId: characterId,
+      characterId: character.id,
     });
   };
 
@@ -40,13 +38,8 @@ function RewardSelection({
     <div>
       <h2>{`Select ${contextualIndefinite(rewardOption)} ${singularize(rewardOption)}`}</h2>
       {options.map((option) => (
-        <button
-          key={option.name}
-          value={option.name}
-          onClick={submitSelectedReward}
-        >
-          <div style={{ pointerEvents: "none" }}>{option.name}</div>
-          <div style={{ pointerEvents: "none" }}>{option.description}</div>
+        <button key={option} value={option} onClick={submitSelectedReward}>
+          <div style={{ pointerEvents: "none" }}>{option}</div>
         </button>
       ))}
     </div>
@@ -64,8 +57,9 @@ export function Rewards() {
 
   const gameId = game.data.lobby.gameId;
   const votes = game.data.lobby.votes;
-  const playerCharacters = Object.entries(game.data.characters.players).filter(
-    (playerCharacter) => playerCharacter[1].userId === userId,
+  const playerCharacters = Array.from(game.data.characters.values()).filter(
+    (playerCharacter) =>
+      playerCharacter.team === "player" && playerCharacter.userId === userId,
   );
 
   if (currentIndex > playerCharacters.length - 1) {
@@ -74,28 +68,11 @@ export function Rewards() {
     }
     return <RewardHolding />;
   } else {
-    const currentPlayerId = playerCharacters[currentIndex][0];
-    const currentPlayerCharacter = playerCharacters[currentIndex][1];
+    const currentPlayerCharacter = playerCharacters[currentIndex] as PlayerType;
 
     if (!currentPlayerCharacter.name) {
-      return <NamePrompt gameId={gameId} characterId={currentPlayerId} />;
-    } else if (currentPlayerCharacter.rewards.pending.curses > 0) {
       return (
-        <RewardSelection
-          rewardOption="curses"
-          gameId={gameId}
-          character={currentPlayerCharacter}
-          characterId={currentPlayerId}
-        />
-      );
-    } else if (currentPlayerCharacter.rewards.pending.blessings > 0) {
-      return (
-        <RewardSelection
-          rewardOption="blessings"
-          gameId={gameId}
-          character={currentPlayerCharacter}
-          characterId={currentPlayerId}
-        />
+        <NamePrompt gameId={gameId} characterId={currentPlayerCharacter.id} />
       );
     } else if (currentPlayerCharacter.rewards.pending.maneuvers > 0) {
       return (
@@ -103,7 +80,6 @@ export function Rewards() {
           rewardOption="maneuvers"
           gameId={gameId}
           character={currentPlayerCharacter}
-          characterId={currentPlayerId}
         />
       );
     } else if (currentPlayerCharacter.rewards.pending.weapons > 0) {
@@ -112,7 +88,6 @@ export function Rewards() {
           rewardOption="weapons"
           gameId={gameId}
           character={currentPlayerCharacter}
-          characterId={currentPlayerId}
         />
       );
     } else if (currentPlayerCharacter.rewards.pending.armors > 0) {
@@ -121,7 +96,6 @@ export function Rewards() {
           rewardOption="armors"
           gameId={gameId}
           character={currentPlayerCharacter}
-          characterId={currentPlayerId}
         />
       );
     } else if (currentPlayerCharacter.rewards.pending.enchantments > 0) {
@@ -130,7 +104,6 @@ export function Rewards() {
           rewardOption="enchantments"
           gameId={gameId}
           character={currentPlayerCharacter}
-          characterId={currentPlayerId}
         />
       );
     } else if (currentPlayerCharacter.rewards.pending.stats > 0) {
@@ -139,7 +112,6 @@ export function Rewards() {
           points={currentPlayerCharacter.rewards.pending.stats}
           gameId={gameId}
           character={currentPlayerCharacter}
-          characterId={currentPlayerId}
         />
       );
     }

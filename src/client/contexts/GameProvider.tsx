@@ -8,14 +8,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     data: {
       battle: null,
       characters: new Map(),
-      lib: {
-        armors: [],
-        blessings: [],
-        curses: [],
-        enchantments: [],
-        maneuvers: [],
-        weapons: [],
-      },
       lobby: {
         gameId: "",
         users: [],

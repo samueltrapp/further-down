@@ -11,9 +11,7 @@ export const setBlankBattle = (characters: CharactersType) => ({
   grade: BattleGrade.MODERATE,
 });
 
-export const pickEnemies = (): [string, EnemyType][] => ([
-  [randomId(10), structuredClone(shroomlet)],
-  [randomId(10), structuredClone(shroomlet)],
-  [randomId(10), structuredClone(shroomlet)],
-  [randomId(10), structuredClone(shroomlet)],
-]);
+export const pickEnemies = (): [string, EnemyType][] => {
+  const ids = [randomId(10), randomId(10), randomId(10), randomId(10)];
+  return ids.map((id) => [id, structuredClone(shroomlet(id))]);
+};

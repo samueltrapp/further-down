@@ -3,7 +3,10 @@ import { ConnectionType } from "../../types/server.ts";
 import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
-import { applyDamage, calcDamage } from "../../shared/definitions/maneuvers/damage.ts";
+import {
+  applyDamage,
+  calcDamage,
+} from "../../shared/definitions/maneuvers/damage.ts";
 import { calcMitigation } from "../../shared/definitions/maneuvers/mitigation.ts";
 
 const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
@@ -22,11 +25,8 @@ export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
   const game = connection.meta.games.get(turn.gameId);
   if (game) {
     const source = game.characters.get(turn.sourceId) as PlayerType | undefined;
-    const weapon = source?.rewards.owned.weapons.find(
-      (weapon) => weapon.equipped,
-    );
 
-    if (!source || !weapon) {
+    if (!source) {
       return;
     }
 
@@ -35,7 +35,6 @@ export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
       sourceId: turn.sourceId,
       friendlyTargetIds: turn.friendlyTargetIds,
       enemyTargetIds: turn.enemyTargetIds,
-      weapon,
       speed: 0,
       messages: [],
       toHit: 0,

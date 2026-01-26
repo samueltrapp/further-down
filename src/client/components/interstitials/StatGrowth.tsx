@@ -68,12 +68,10 @@ export function StatGrowth({
   points,
   gameId,
   character,
-  characterId,
 }: {
   points: number;
   gameId: string;
   character: PlayerType;
-  characterId: string;
 }) {
   const baselineStats = character?.stats || initialStats;
   const [stats, setStats] = useState(baselineStats);
@@ -91,7 +89,7 @@ export function StatGrowth({
     takeStats({
       newStats: stats,
       gameId,
-      characterId: characterId,
+      characterId: character.id,
     });
   }
 
