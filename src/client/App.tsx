@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { socket } from "./socket.ts";
-import { GameType, LobbyStatus } from "../types/game.ts";
+import { LobbyStatus, SerializedGameType } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard/GameBoard.tsx";
 import { Lobby } from "./pages/Lobby/Lobby.tsx";
 import { Rewards } from "./components/interstitials/Rewards";
@@ -34,7 +34,7 @@ function App() {
       const gameId = localStorage.getItem("gameId");
       const userId = localStorage.getItem("userId");
       if (gameId && userId) {
-        socket.emit("load", { gameId, userId });
+        socket.emit("game:load", { gameId, userId });
       }
       setLoaded(true);
     }
@@ -50,16 +50,22 @@ function App() {
       }
     }
 
-    function onUpdateGameState(update: {
-      game: GameType;
-      logMessages: string[];
-    }) {
-      if (dispatch && update) {
+    function onUpdateGameState(update: { game: SerializedGameType }) {
+      if (dispatch && update.game) {
         dispatch({
           type: GameAction.SYNC,
-          payload: update.game,
+          payload: {
+            ...update.game,
+            characters: new Map(update.game.characters),
+          },
         });
       }
+      // if (dispatch && update.logMessages) {
+      //   dispatch({
+      //     type: GameAction.LOG,
+      //     payload: update.logMessages,
+      //   });
+      // }
     }
 
     socket.connect();

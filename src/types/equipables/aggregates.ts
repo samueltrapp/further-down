@@ -1,14 +1,10 @@
-import { ArmorType } from "./armors.ts";
-import { BlessingType } from "./blessings.ts";
-import { CurseType } from "./curses.ts";
-import { EnchantmentType } from "./enchantments.ts";
-import { ManeuverType } from "./actions.ts";
-import { WeaponType } from "./weapons.ts";
+import { ArmorName } from "./armors.ts";
+import { EnchantmentName } from "./enchantments.ts";
+import { ManeuverName } from "./actions.ts";
+import { WeaponName } from "./weapons.ts";
 
 export type SingleRewardType =
-  | ArmorType[]
-  | BlessingType[]
-  | CurseType[]
-  | EnchantmentType[]
-  | ManeuverType[]
-  | WeaponType[];
+  | ArmorName[]
+  | EnchantmentName[]
+  | ManeuverName[]
+  | WeaponName[];

@@ -1,10 +1,15 @@
-import {
-  OffensiveAffinitiesType,
-  AspectType,
-  EnchantmentType,
-} from "./enchantments.ts";
+import { EnchantmentType } from "./enchantments.ts";
 
-export type WeaponName = "cutlass" | "hammer" | "scepter" | "periapt";
+export type WeaponName = "cutlass" | "hammer" | "periapt" | "scepter";
+
+type OffensiveAffinitiesType = {
+  physical: number;
+  magical: number;
+  bladed: number;
+  blunt: number;
+  elemental: number;
+  psychic: number;
+};
 
 export type WeaponType = {
   name: WeaponName;
@@ -14,7 +19,6 @@ export type WeaponType = {
   level: number;
   rarity: number;
   equipped: boolean;
-  aspects?: AspectType[];
   enchantments?: EnchantmentType[];
   description: string;
 };

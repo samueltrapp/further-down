@@ -1,25 +1,10 @@
-import { GameType } from "../../types/game.ts";
-import { ManeuverType } from "../../types/equipables/actions.ts";
-import { WeaponType } from "../../types/equipables/weapons.ts";
-
-/* Game Types */
-export type GameStateType = {
-  data: GameType;
-  client: GameClientType;
-};
-
-export type GameClientType = {
-  enableConfirmation: boolean;
-  maxEnemySelections: number;
-  selectedEnemyIds: string[];
-  selectedManeuver: ManeuverType | null;
-  selectedWeapon: WeaponType | null;
-};
+import { GameClientType, GameType } from "../../types/game.ts";
 
 export enum GameAction {
   PLAYER_ACTION = "PLAYER_ACTION",
   SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE",
   SYNC = "SYNC",
+  LOG = "LOG",
 }
 
 /* Dispatch Types */
@@ -34,6 +19,10 @@ type BattleActionType =
   | {
       type: GameAction.SYNC;
       payload: GameType;
+    }
+  | {
+      type: GameAction.LOG;
+      payload: string[];
     };
 
 /* Lobby Dispatcher */

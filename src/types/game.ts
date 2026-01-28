@@ -1,10 +1,6 @@
-import { ManeuverType } from "./equipables/actions.ts";
 import { EnemyType, PlayerType } from "./individual/characters.ts";
-import { WeaponType } from "./equipables/weapons.ts";
-import { BlessingType } from "./equipables/blessings.ts";
-import { CurseType } from "./equipables/curses.ts";
-import { ArmorType } from "./equipables/armors.ts";
-import { EnchantmentType } from "./equipables/enchantments.ts";
+import { ManeuverName } from "./equipables/actions.ts";
+import { WeaponName } from "./equipables/weapons.ts";
 
 export enum BattleGrade {
   BOSS = "boss",
@@ -18,6 +14,7 @@ export enum LobbyStatus {
   BATTLE = "battle",
   EXPLORATION = "exploration",
   FULL = "full",
+  PREPARE = "prepare",
   REWARD = "reward",
   UNJOINED = "unjoined",
   WAITING = "waiting",
@@ -30,15 +27,6 @@ export type BattleType = {
   grade: BattleGrade;
 };
 
-export type LibType = {
-  blessings: BlessingType[];
-  curses: CurseType[];
-  maneuvers: ManeuverType[];
-  weapons: WeaponType[];
-  armors: ArmorType[];
-  enchantments: EnchantmentType[];
-};
-
 export type LobbyType = {
   gameId: string;
   status: LobbyStatus;
@@ -48,14 +36,29 @@ export type LobbyType = {
   errorMessage: string | undefined;
 };
 
-export type CharactersType = {
-  players: Record<string, PlayerType>;
-  enemies: Record<string, EnemyType>;
-};
+export type CharactersType = Map<string, PlayerType | EnemyType>;
 
 export type GameType = {
-  battle: BattleType | undefined;
+  battle: BattleType | null;
   characters: CharactersType;
-  lib: LibType;
   lobby: LobbyType;
+};
+
+export type SerializedGameType = Omit<GameType, "character"> & {
+  characters: [string, PlayerType | EnemyType][];
+};
+
+export type GameStateType = {
+  data: GameType;
+  client: GameClientType;
+};
+
+export type GameClientType = {
+  enableConfirmation: boolean;
+  maxEnemySelections: number;
+  selectedEnemyIds: string[];
+  selectedFriendlyIds: string[];
+  selectedManeuver: ManeuverName | "";
+  selectedWeapon: WeaponName | "";
+  logHistory: string[];
 };

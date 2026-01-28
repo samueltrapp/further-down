@@ -25,11 +25,12 @@ export default function ConfirmButton() {
       className="confirm-button"
       onClick={() => {
         playerTurn({
-          maneuver: client?.selectedManeuver?.name as ManeuverName,
-          weapon: client?.selectedWeapon?.name as WeaponName,
+          maneuver: client.selectedManeuver as ManeuverName,
+          weapon: client.selectedWeapon as WeaponName,
           team: "player",
           gameId: lobby.gameId,
-          targetIds: client?.selectedEnemyIds,
+          enemyTargetIds: client.selectedEnemyIds,
+          friendlyTargetIds: client.selectedEnemyIds,
           sourceId: currentTurn,
         });
         if (dispatch) {
@@ -38,7 +39,8 @@ export default function ConfirmButton() {
             payload: {
               maxEnemySelections: 0,
               selectedEnemyIds: [],
-              selectedManeuver: null,
+              selectedFriendlyIds: [],
+              selectedManeuver: "",
             },
           });
         }

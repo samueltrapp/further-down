@@ -35,12 +35,8 @@ export default function TurnTracker() {
     return null;
   }
 
-  const allCharacters = {
-    ...characters.players,
-    ...characters.enemies,
-  };
   const turnTracker = battle.turnOrder.map((turnId) => {
-    const turnChar = allCharacters[turnId];
+    const turnChar = characters.get(turnId);
     return {
       name: turnChar?.name,
       speed: turnChar?.stats.speed,

@@ -6,17 +6,17 @@ import {
 } from "../../types/events/skill.ts";
 
 export const submitName = (name: SetNameType) => {
-  socket.emit("submit-name", name);
+  socket.emit("char:name", name);
 };
 
 export const takeReward = (skill: TakeRewardType) => {
-  socket.emit("take-reward", skill);
+  socket.emit("char:reward", skill);
 };
 
 export const takeStats = (stats: TakeStatsType) => {
-  socket.emit("take-stats", stats);
+  socket.emit("char:skill", stats);
 };
 
 export const finishSkilling = (skill: { gameId: string; userId: string }) => {
-  socket.emit("finish-skilling", skill);
+  socket.emit("lobby:skill", skill);
 };

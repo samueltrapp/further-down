@@ -1,30 +1,36 @@
 import { StatsType } from "./stats.ts";
-import { ManeuverType, TacticName } from "../equipables/actions.ts";
-import { WeaponType } from "../equipables/weapons.ts";
-import { BlessingType } from "../equipables/blessings.ts";
-import { ArmorType } from "../equipables/armors.ts";
-import { CurseType } from "../equipables/curses.ts";
-import { EnchantmentType } from "../equipables/enchantments.ts";
-import { FavorName } from "../equipables/effects.ts";
+import { ManeuverName, TacticName } from "../equipables/actions.ts";
+import { WeaponName } from "../equipables/weapons.ts";
+import { ArmorName } from "../equipables/armors.ts";
+import { EnchantmentName } from "../equipables/enchantments.ts";
+import { BurdenName, FavorName } from "../equipables/effects.ts";
 
 type RewardSpread = {
-  armors: ArmorType[];
-  blessings: BlessingType[];
-  curses: CurseType[];
-  enchantments: EnchantmentType[];
-  maneuvers: ManeuverType[];
-  weapons: WeaponType[];
+  armors: ArmorName[];
+  // blessings: BlessingType[];
+  // curses: CurseType[];
+  enchantments: EnchantmentName[];
+  maneuvers: ManeuverName[];
+  weapons: WeaponName[];
 };
 
-export type RewardOptions =
-  | "blessings"
-  | "curses"
-  | "maneuvers"
-  | "weapons"
-  | "armors"
-  | "enchantments";
+type EffectType = {
+  stacks: number;
+  duration: DurationType;
+  trigger: TriggerType;
+  tooltip: string;
+};
 
-export type PendingRewardType = Record<RewardOptions, number>;
+type FavorType = Partial<Record<FavorName, EffectType>>;
+type BurdenType = Partial<Record<BurdenName, EffectType>>;
+type EffectsType = {
+  favors: FavorType;
+  burdens: BurdenType;
+};
+
+export type RewardTypes = "maneuvers" | "weapons" | "armors" | "enchantments";
+
+export type PendingRewardType = Record<RewardTypes, number>;
 
 type TriggerType = "hit" | "turn" | "round" | "battle";
 type DurationType =
@@ -35,43 +41,29 @@ type DurationType =
   | "battle"
   | "permanent";
 
-export type PlayerType = {
+type CharacterType = {
+  id: string;
   name: string;
+  stats: StatsType;
+  effects: EffectsType;
+  lastTurn: number;
+};
+
+export type PlayerType = CharacterType & {
   userId: string;
   team: "player";
-  stats: StatsType;
   savedStats: StatsType;
-  effects: {
-    favors: Partial<
-      Record<
-        FavorName,
-        {
-          stacks: number;
-          duration: DurationType;
-          trigger: TriggerType;
-          tooltip: string;
-        }
-      >
-    >;
-    burdens: string[];
-    lastTurn: number;
-  };
   rewards: {
+    equippedWeapon: WeaponName | null;
+    equippedArmor: ArmorName | null;
     owned: RewardSpread;
     queue: RewardSpread;
     pending: PendingRewardType & { stats: number };
   };
 };
 
-export type EnemyType = {
-  name: string;
+export type EnemyType = CharacterType & {
   team: "enemy";
-  stats: StatsType;
   base: number;
-  effects: {
-    burdens: string[];
-    favors: string[];
-    lastTurn: number;
-  };
   tactics: TacticName[];
 };

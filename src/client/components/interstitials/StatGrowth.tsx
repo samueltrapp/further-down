@@ -7,11 +7,11 @@ import { PlayerType } from "../../../types/individual/characters.ts";
 type StatClickFnType = (stat: StatName, add: boolean) => void;
 
 const initialStats: StatsType = {
-  currentHitPoints: 0,
-  hitPoints: 0,
+  life: 0,
+  maxLife: 0,
   vitality: 20,
-  currentSpeed: 20,
-  speed: 20,
+  speed: 21,
+  maxSpeed: 20,
   physical: 0,
   magical: 0,
   bladed: 0,
@@ -24,6 +24,8 @@ const initialStats: StatsType = {
   padding: 0,
   dampening: 0,
   warding: 0,
+  evasion: 0,
+  accuracy: 0,
 };
 
 const StatSlot = ({
@@ -44,7 +46,7 @@ const StatSlot = ({
 
   return (
     <div>
-      {stat === "hitPoints" ? "HIT POINTS" : stat.toUpperCase()}
+      {stat === "life" ? "LIFE" : stat.toUpperCase()}
       <button
         disabled={chosenStat <= baseline}
         onClick={() => handleClick(stat, false)}
@@ -66,12 +68,10 @@ export function StatGrowth({
   points,
   gameId,
   character,
-  characterId,
 }: {
   points: number;
   gameId: string;
   character: PlayerType;
-  characterId: string;
 }) {
   const baselineStats = character?.stats || initialStats;
   const [stats, setStats] = useState(baselineStats);
@@ -89,7 +89,7 @@ export function StatGrowth({
     takeStats({
       newStats: stats,
       gameId,
-      characterId: characterId,
+      characterId: character.id,
     });
   }
 

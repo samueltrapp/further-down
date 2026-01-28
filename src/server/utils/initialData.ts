@@ -1,20 +1,21 @@
 import { GameType, LobbyStatus } from "../../types/game.ts";
-import { randomId, randomizeCollection } from "./data.ts";
+import { randomId, randomizeCollection } from "./character.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
-import { blessingCollection } from "../lib/blessings/collection.ts";
-import { armorCollection } from "../lib/armors/collection.ts";
-import { maneuverCollection } from "../lib/maneuvers/collection.ts";
-import { weaponCollection } from "../lib/weapons/collection.ts";
-import { curseCollection } from "../lib/curses/collection.ts";
-import { ArmorType } from "../../types/equipables/armors.ts";
-import { BlessingType } from "../../types/equipables/blessings.ts";
-import { CurseType } from "../../types/equipables/curses.ts";
-import { EnchantmentType } from "../../types/equipables/enchantments.ts";
-import { ManeuverType } from "../../types/equipables/actions.ts";
-import { WeaponType } from "../../types/equipables/weapons.ts";
+import { armorCollection } from "../../shared/definitions/armors/sets.ts";
+import { enchantmentCollection } from "../../shared/definitions/enchantments/sets.ts";
+import { maneuverCollection } from "../../shared/definitions/maneuvers/sets.ts";
+import { weaponCollection } from "../../shared/definitions/weapons/sets.ts";
+import { ArmorName } from "../../types/equipables/armors.ts";
+import { EnchantmentName } from "../../types/equipables/enchantments.ts";
+import { ManeuverName } from "../../types/equipables/actions.ts";
+import { WeaponName } from "../../types/equipables/weapons.ts";
 
 const baseStats = {
+  life: 100,
+  maxLife: 100,
   vitality: 20,
+  speed: 21,
+  maxSpeed: 21,
   bladed: 0,
   blunt: 0,
   currentHitPoints: 100,
@@ -28,33 +29,22 @@ const baseStats = {
   plating: 0,
   psychic: 0,
   resistance: 0,
-  speed: 21,
-  currentSpeed: 21,
   warding: 0,
+  evasion: 0,
+  accuracy: 0,
 };
 
 export function initializeLobby(gameId: string, userId: string): GameType {
   return {
-    battle: undefined,
-    characters: {
-      enemies: {},
-      players: {},
-    },
+    battle: null,
+    characters: new Map(),
     lobby: {
       gameId: gameId,
       pastEncounters: 0,
       users: [userId],
       votes: [],
       status: LobbyStatus.WAITING,
-      errorMessage: undefined,
-    },
-    lib: {
-      blessings: blessingCollection,
-      curses: curseCollection,
-      maneuvers: maneuverCollection,
-      weapons: weaponCollection,
-      armors: armorCollection,
-      enchantments: [],
+      errorMessage: "",
     },
   };
 }
@@ -65,7 +55,7 @@ export function initializeCharacters(game: GameType) {
   const userMapping = () => {
     switch (userCount) {
       case 1:
-        return [users[0]]; // [users[0], users[0], users[0]]
+        return [users[0], users[0], users[0]];
       case 2:
         return [users[0], users[0], users[1], users[1]];
       case 3:
@@ -78,38 +68,37 @@ export function initializeCharacters(game: GameType) {
   };
   const userSpread = userMapping();
 
-  const initialCharacters: Record<string, PlayerType> = {};
+  const initialCharacters: Map<string, PlayerType> = new Map();
   for (const user of userSpread) {
     const id = randomId(8);
-    initialCharacters[id] = {
+    const blankCharacter: PlayerType = structuredClone({
+      id,
       name: "",
       userId: user,
       effects: {
-        burdens: [],
+        burdens: {},
         favors: {},
-        lastTurn: 0,
       },
+      lastTurn: 0,
       rewards: {
+        equippedArmor: null,
+        equippedWeapon: null,
         owned: {
           armors: [],
-          blessings: [],
-          curses: [],
           enchantments: [],
           maneuvers: [],
           weapons: [],
         },
         queue: {
-          armors: randomizeCollection(armorCollection) as ArmorType[],
-          blessings: randomizeCollection(blessingCollection) as BlessingType[],
-          curses: randomizeCollection(curseCollection) as CurseType[],
-          enchantments: randomizeCollection([]) as EnchantmentType[],
-          maneuvers: randomizeCollection(maneuverCollection) as ManeuverType[],
-          weapons: randomizeCollection(weaponCollection) as WeaponType[],
+          armors: randomizeCollection(armorCollection) as ArmorName[],
+          enchantments: randomizeCollection(
+            enchantmentCollection,
+          ) as EnchantmentName[],
+          maneuvers: randomizeCollection(maneuverCollection) as ManeuverName[],
+          weapons: randomizeCollection(weaponCollection) as WeaponName[],
         },
         pending: {
           armors: 1,
-          blessings: 1,
-          curses: 0,
           enchantments: 0,
           maneuvers: 1,
           weapons: 1,
@@ -119,7 +108,9 @@ export function initializeCharacters(game: GameType) {
       stats: baseStats,
       savedStats: baseStats,
       team: "player",
-    };
+    });
+
+    initialCharacters.set(id, blankCharacter);
   }
 
   return initialCharacters;
