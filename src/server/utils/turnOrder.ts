@@ -7,15 +7,16 @@ type CharTurnType = {
 };
 
 export const resolveTurnOrder = (characters: CharactersType): string[] => {
-  const charTurns: {id: string; lastTurn: number; speed: number}[] = [];
-  const q = characters.entries();
-  let w;
-  while (w = q.next().value, w !== undefined) {
-    charTurns.push({id: w[0],
-        lastTurn: w[1].lastTurn,
-        speed: w[1].stats.speed});
+  const charTurns: { id: string; lastTurn: number; speed: number }[] = [];
+  const charEntries = characters.entries();
+  let charEntry;
+  while (((charEntry = charEntries.next().value), charEntry !== undefined)) {
+    charTurns.push({
+      id: charEntry[0],
+      lastTurn: charEntry[1].lastTurn,
+      speed: charEntry[1].stats.speed,
+    });
   }
-
 
   charTurns.sort((a: CharTurnType, b: CharTurnType) => {
     const relation = -1 * (a.speed - b.speed);

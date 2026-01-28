@@ -28,9 +28,9 @@ type EffectsType = {
   burdens: BurdenType;
 };
 
-export type RewardOptions = "maneuvers" | "weapons" | "armors" | "enchantments";
+export type RewardTypes = "maneuvers" | "weapons" | "armors" | "enchantments";
 
-export type PendingRewardType = Record<RewardOptions, number>;
+export type PendingRewardType = Record<RewardTypes, number>;
 
 type TriggerType = "hit" | "turn" | "round" | "battle";
 type DurationType =

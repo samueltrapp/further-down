@@ -10,6 +10,8 @@ import { randomizeCollection } from "../utils/character.ts";
 import { SingleRewardType } from "../../types/equipables/aggregates.ts";
 import { pickEnemies, setBlankBattle } from "../battle/generator.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
+import { WeaponName } from "../../types/equipables/weapons.ts";
+import { ArmorName } from "../../types/equipables/armors.ts";
 
 export function submitName(
   connection: ConnectionType,
@@ -20,19 +22,17 @@ export function submitName(
     const character = game.characters.get(characterId);
 
     if (character) {
+      /* Update character name */
       character.name = name;
+      game.characters.set(characterId, character);
 
-      const newGameState = {
+      /* Update game with character changes */
+      const updatedGame = {
         ...game,
-        characters: {
-          ...game.characters,
-          players: {
-            ...game.characters,
-            [characterId]: character,
-          },
-        },
+        characters: game.characters,
       };
-      connection.meta.games.set(gameId, newGameState);
+
+      connection.meta.games.set(gameId, updatedGame);
       sendGame(connection, gameId);
     }
   }
@@ -40,7 +40,7 @@ export function submitName(
 
 export function takeReward(
   connection: ConnectionType,
-  { rewardOption, rewardName, gameId, characterId }: TakeRewardType,
+  { rewardType, rewardName, gameId, characterId }: TakeRewardType,
 ) {
   const game = connection.meta.games.get(gameId);
   if (game) {
@@ -49,26 +49,36 @@ export function takeReward(
       | undefined;
 
     if (character && character.team === "player") {
-      const reducedQueue = character.rewards.queue[rewardOption].filter(
+      const reducedQueue = character.rewards.queue[rewardType].filter(
         (queueItem) => queueItem !== rewardName,
       ) as SingleRewardType;
-      const selectedReward = character.rewards.queue[rewardOption].find(
-        (reward) => reward === rewardName,
-      );
 
+      /* Add chosen reward to character and reshuffle remaining options */
       // @ts-ignore
-      character.rewards.owned[rewardOption].push(selectedReward);
-      // @ts-ignore
-      character.rewards.queue[rewardOption] = randomizeCollection(reducedQueue);
-      character.rewards.pending[rewardOption] =
-        character.rewards.pending[rewardOption] - 1;
+      character.rewards.owned[rewardType].push(rewardName);
 
+      /* Auto-equip weapon if currently unarmed */
+      if (
+        rewardType === "weapons" &&
+        character.rewards.equippedWeapon === null
+      ) {
+        character.rewards.equippedWeapon = rewardName as WeaponName;
+      } else if (rewardType === "armors") {
+      /* Auto-equip any armor as soon as it's acquired */
+        character.rewards.equippedArmor = rewardName as ArmorName;
+      }
+      // @ts-ignore
+      character.rewards.queue[rewardType] = randomizeCollection(reducedQueue);
+      character.rewards.pending[rewardType] =
+        character.rewards.pending[rewardType] - 1;
+
+      /* Update character */
+      game.characters.set(characterId, character);
+
+      /* Update game */
       const newGameState = {
         ...game,
-        characters: {
-          ...game.characters,
-          [characterId]: character,
-        },
+        characters: game.characters,
       };
       connection.meta.games.set(gameId, newGameState);
       sendGame(connection, gameId);
@@ -92,10 +102,7 @@ export function takeStats(
 
       const newGameState = {
         ...game,
-        characters: {
-          ...game.characters,
-          [characterId]: character,
-        },
+        characters: game.characters,
       };
       connection.meta.games.set(gameId, newGameState);
       sendGame(connection, gameId);

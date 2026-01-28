@@ -1,4 +1,6 @@
 import { EnemyType, PlayerType } from "./individual/characters.ts";
+import { ManeuverName } from "./equipables/actions.ts";
+import { WeaponName } from "./equipables/weapons.ts";
 
 export enum BattleGrade {
   BOSS = "boss",
@@ -40,4 +42,23 @@ export type GameType = {
   battle: BattleType | null;
   characters: CharactersType;
   lobby: LobbyType;
+};
+
+export type SerializedGameType = Omit<GameType, "character"> & {
+  characters: [string, PlayerType | EnemyType][];
+};
+
+export type GameStateType = {
+  data: GameType;
+  client: GameClientType;
+};
+
+export type GameClientType = {
+  enableConfirmation: boolean;
+  maxEnemySelections: number;
+  selectedEnemyIds: string[];
+  selectedFriendlyIds: string[];
+  selectedManeuver: ManeuverName | "";
+  selectedWeapon: WeaponName | "";
+  logHistory: string[];
 };

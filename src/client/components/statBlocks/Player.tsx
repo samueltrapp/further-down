@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useContext } from "react";
+import { ChangeEvent, MouseEvent, useContext, useEffect } from "react";
 import { ManeuverName } from "../../../types/equipables/actions.ts";
 import "./StatBlocks.css";
 import "./Player.css";
@@ -34,6 +34,21 @@ export default function Player(props: PlayerType & { id: string }) {
   const dispatch = useContext(GameDispatchContext);
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
 
+  useEffect(() => {
+    if (
+      !game?.client.selectedWeapon &&
+      dispatch &&
+      props.rewards.equippedWeapon
+    ) {
+      dispatch({
+        type: GameAction.PLAYER_ACTION,
+        payload: {
+          selectedWeapon: props.rewards.equippedWeapon,
+        },
+      });
+    }
+  }, [dispatch, game?.client.selectedWeapon, props.rewards.equippedWeapon]);
+
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {
     const value = (event.target as HTMLButtonElement).value as ManeuverName;
     const selectedManeuver = maneuverMap.get(value);
@@ -42,7 +57,7 @@ export default function Player(props: PlayerType & { id: string }) {
         type: GameAction.PLAYER_ACTION,
         payload: {
           selectedEnemyIds: [],
-          selectedManeuver,
+          selectedManeuver: value,
           maxEnemySelections: selectedManeuver?.maxTargets || 0,
         },
       });
@@ -51,7 +66,7 @@ export default function Player(props: PlayerType & { id: string }) {
 
   const handleSelectWeapon = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as WeaponName;
-    const selectedWeapon = weaponMap.get(value);
+    const selectedWeapon = weaponMap.get(value)?.name || "";
     if (dispatch && value) {
       dispatch({
         type: GameAction.PLAYER_ACTION,
@@ -82,13 +97,8 @@ export default function Player(props: PlayerType & { id: string }) {
         <div className="action-column">
           <select
             onChange={handleSelectWeapon}
-            value={game?.client.selectedWeapon?.name}
+            value={game?.client.selectedWeapon}
           >
-            {game?.client.selectedWeapon === null && (
-              <option key="unarmed" value={""}>
-                Unarmed
-              </option>
-            )}
             {weapons.map((weapon) => (
               <option key={id} value={weapon}>
                 {toCaps(weapon)}
@@ -99,7 +109,7 @@ export default function Player(props: PlayerType & { id: string }) {
         <div className="action-column">
           {maneuvers.map((maneuver) => (
             <button
-              className={`maneuver-button ${activeTurn && game?.client.selectedManeuver?.name === maneuver ? "selected-maneuver" : ""}`}
+              className={`maneuver-button ${activeTurn && game?.client.selectedManeuver === maneuver ? "selected-maneuver" : ""}`}
               disabled={!activeTurn}
               key={maneuver}
               onClick={handleClickManeuver}

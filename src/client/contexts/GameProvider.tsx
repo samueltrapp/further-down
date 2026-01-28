@@ -1,7 +1,7 @@
 import { GameContext, GameDispatchContext } from "./GameContext.tsx";
 import { ReactNode, useReducer } from "react";
-import { GameAction, GameActionType, GameStateType } from "./ContextTypes.ts";
-import { LobbyStatus } from "../../types/game.ts";
+import { GameAction, GameActionType } from "./ContextTypes.ts";
+import { GameStateType, LobbyStatus } from "../../types/game.ts";
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(gameReducer, {
@@ -21,8 +21,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       enableConfirmation: false,
       maxEnemySelections: 0,
       selectedEnemyIds: [],
-      selectedManeuver: null,
-      selectedWeapon: null,
+      selectedFriendlyIds: [],
+      selectedManeuver: "",
+      selectedWeapon: "",
       logHistory: [],
     },
   });
@@ -52,15 +53,15 @@ function gameReducer(game: GameStateType, action: GameActionType) {
         },
       };
     }
-    case GameAction.LOG: {
-      return {
-        ...game,
-        client: {
-          ...game.client,
-          logHistory: [...game.client.logHistory, ...action.payload],
-        },
-      };
-    }
+    // case GameAction.LOG: {
+    //   return {
+    //     ...game,
+    //     client: {
+    //       ...game.client,
+    //       logHistory: [...game.client.logHistory, ...action.payload],
+    //     },
+    //   };
+    // }
     default:
       return game;
   }

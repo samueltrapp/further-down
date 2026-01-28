@@ -60,18 +60,20 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
 export const applyDamage = (ctx: ActionCtx) => {
   const { characters, damage, mitigation } = ctx;
 
-  mitigation.forEach((v, k) => {
+  mitigation.forEach((mitigationFactor, charId) => {
     /* Total threshold for attacker to hit */
-    const revisedAccuracy = ctx.accuracy - v.evasion;
+    const revisedAccuracy = ctx.accuracy - mitigationFactor.evasion;
 
+    console.log(`To hit: ${ctx.toHit}, accuracy: ${revisedAccuracy}`);
     if (ctx.toHit > revisedAccuracy) {
       // miss
     } else {
-      const character = characters.get(k);
-      const reducedDamage = limitToZero(damage - v.reduction);
+      const character = characters.get(charId);
+      const reducedDamage = limitToZero(damage - mitigationFactor.reduction);
+      console.log(`Damage: ${damage}, reduced damage: ${reducedDamage}`);
 
       if (character?.stats?.life) {
-        character.stats.life = reducedDamage;
+        character.stats.life -= reducedDamage;
       }
     }
   });

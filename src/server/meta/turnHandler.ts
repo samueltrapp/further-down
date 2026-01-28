@@ -8,6 +8,11 @@ import {
   calcDamage,
 } from "../../shared/definitions/maneuvers/damage.ts";
 import { calcMitigation } from "../../shared/definitions/maneuvers/mitigation.ts";
+import {
+  expendSpeed,
+  finishTurn,
+} from "../../shared/definitions/maneuvers/speed.ts";
+import { sendGame } from "./gameManagement.ts";
 
 const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
   return {
@@ -30,12 +35,14 @@ export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
       return;
     }
 
+    source.rewards.equippedWeapon = turn.weapon;
+
     let ctx: ActionCtx = {
-      characters: { ...game.characters },
+      characters: game.characters,
       sourceId: turn.sourceId,
       friendlyTargetIds: turn.friendlyTargetIds,
       enemyTargetIds: turn.enemyTargetIds,
-      speed: 0,
+      speed: maneuverMap.get(turn.maneuver)!.speedCost, //TODO: type
       messages: [],
       toHit: 0,
       accuracy: 0,
@@ -71,13 +78,17 @@ export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
     });
 
     /* Post-action */
+    ctx = expendSpeed(ctx);
 
-    const updatedGame = {
+    let updatedGame = {
       ...game,
       characters: ctx?.characters,
     };
 
+    updatedGame = finishTurn(updatedGame);
+
     connection.meta.games.set(turn.gameId, updatedGame);
+    sendGame(connection, turn.gameId);
     // sendGame(connection, turn.gameId, logMessages);
   }
 }

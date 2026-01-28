@@ -1,21 +1,4 @@
-import { GameType } from "../../types/game.ts";
-import { ManeuverType } from "../../types/equipables/actions.ts";
-import { WeaponType } from "../../types/equipables/weapons.ts";
-
-/* Game Types */
-export type GameStateType = {
-  data: GameType;
-  client: GameClientType;
-};
-
-export type GameClientType = {
-  enableConfirmation: boolean;
-  maxEnemySelections: number;
-  selectedEnemyIds: string[];
-  selectedManeuver: ManeuverType | null;
-  selectedWeapon: WeaponType | null;
-  logHistory: string[];
-};
+import { GameClientType, GameType } from "../../types/game.ts";
 
 export enum GameAction {
   PLAYER_ACTION = "PLAYER_ACTION",

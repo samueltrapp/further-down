@@ -2,7 +2,7 @@ import { useContext, useState, MouseEvent } from "react";
 import { GameContext } from "../../contexts/GameContext.tsx";
 import {
   PlayerType,
-  RewardOptions,
+  RewardTypes,
 } from "../../../types/individual/characters.ts";
 import { finishSkilling, takeReward } from "../../services/skill.ts";
 import { StatGrowth } from "./StatGrowth.tsx";
@@ -14,20 +14,20 @@ function RewardHolding() {
 }
 
 function RewardSelection({
-  rewardOption,
+  rewardType,
   character,
   gameId,
 }: {
-  rewardOption: RewardOptions;
+  rewardType: RewardTypes;
   character: PlayerType;
   gameId: string;
 }) {
-  const options = character.rewards.queue[rewardOption].slice(0, 3);
+  const options = character.rewards.queue[rewardType].slice(0, 3);
 
   const submitSelectedReward = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
     takeReward({
-      rewardOption,
+      rewardType,
       rewardName: target.value,
       gameId,
       characterId: character.id,
@@ -36,7 +36,7 @@ function RewardSelection({
 
   return (
     <div>
-      <h2>{`Select ${contextualIndefinite(rewardOption)} ${singularize(rewardOption)}`}</h2>
+      <h2>{`Select ${contextualIndefinite(rewardType)} ${singularize(rewardType)}`}</h2>
       {options.map((option) => (
         <button key={option} value={option} onClick={submitSelectedReward}>
           <div style={{ pointerEvents: "none" }}>{option}</div>
@@ -57,7 +57,6 @@ export function Rewards() {
 
   const gameId = game.data.lobby.gameId;
   const votes = game.data.lobby.votes;
-  console.log(game.data.characters);
   const playerCharacters = Array.from(game.data.characters.values()).filter(
     (playerCharacter) =>
       playerCharacter.team === "player" && playerCharacter.userId === userId,
@@ -78,7 +77,7 @@ export function Rewards() {
     } else if (currentPlayerCharacter.rewards.pending.maneuvers > 0) {
       return (
         <RewardSelection
-          rewardOption="maneuvers"
+          rewardType="maneuvers"
           gameId={gameId}
           character={currentPlayerCharacter}
         />
@@ -86,7 +85,7 @@ export function Rewards() {
     } else if (currentPlayerCharacter.rewards.pending.weapons > 0) {
       return (
         <RewardSelection
-          rewardOption="weapons"
+          rewardType="weapons"
           gameId={gameId}
           character={currentPlayerCharacter}
         />
@@ -94,7 +93,7 @@ export function Rewards() {
     } else if (currentPlayerCharacter.rewards.pending.armors > 0) {
       return (
         <RewardSelection
-          rewardOption="armors"
+          rewardType="armors"
           gameId={gameId}
           character={currentPlayerCharacter}
         />
@@ -102,7 +101,7 @@ export function Rewards() {
     } else if (currentPlayerCharacter.rewards.pending.enchantments > 0) {
       return (
         <RewardSelection
-          rewardOption="enchantments"
+          rewardType="enchantments"
           gameId={gameId}
           character={currentPlayerCharacter}
         />

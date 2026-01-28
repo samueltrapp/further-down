@@ -34,6 +34,7 @@ export default function TurnTracker() {
   if (!game || !battle || !characters) {
     return null;
   }
+
   const turnTracker = battle.turnOrder.map((turnId) => {
     const turnChar = characters.get(turnId);
     return {
