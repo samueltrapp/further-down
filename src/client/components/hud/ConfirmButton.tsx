@@ -15,38 +15,45 @@ export default function ConfirmButton() {
   const lobby = game?.data.lobby;
   const currentTurn = game?.data.battle?.turnOrder[0];
 
-  return lobby?.gameId &&
+  const enabled =
+    lobby?.gameId &&
     client &&
     client?.selectedManeuver &&
     client?.selectedWeapon &&
     client?.selectedEnemyIds.length > 0 &&
-    currentTurn ? (
+    currentTurn;
+
+  function handleConfirm() {
+    if (!enabled) return;
+    playerTurn({
+      maneuver: client.selectedManeuver as ManeuverName,
+      weapon: client.selectedWeapon as WeaponName,
+      team: "player",
+      gameId: lobby.gameId,
+      enemyTargetIds: client.selectedEnemyIds,
+      friendlyTargetIds: client.selectedEnemyIds,
+      sourceId: currentTurn,
+    });
+    if (dispatch) {
+      dispatch({
+        type: GameAction.PLAYER_ACTION,
+        payload: {
+          maxEnemySelections: 0,
+          selectedEnemyIds: [],
+          selectedFriendlyIds: [],
+          selectedManeuver: "",
+        },
+      });
+    }
+  }
+
+  return (
     <button
       className="confirm-button"
-      onClick={() => {
-        playerTurn({
-          maneuver: client.selectedManeuver as ManeuverName,
-          weapon: client.selectedWeapon as WeaponName,
-          team: "player",
-          gameId: lobby.gameId,
-          enemyTargetIds: client.selectedEnemyIds,
-          friendlyTargetIds: client.selectedEnemyIds,
-          sourceId: currentTurn,
-        });
-        if (dispatch) {
-          dispatch({
-            type: GameAction.PLAYER_ACTION,
-            payload: {
-              maxEnemySelections: 0,
-              selectedEnemyIds: [],
-              selectedFriendlyIds: [],
-              selectedManeuver: "",
-            },
-          });
-        }
-      }}
+      disabled={!enabled}
+      onClick={handleConfirm}
     >
       Confirm
     </button>
-  ) : null;
+  );
 }

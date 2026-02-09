@@ -15,6 +15,7 @@ import { maneuverMap } from "../../../shared/definitions/maneuvers/sets.ts";
 import { weaponMap } from "../../../shared/definitions/weapons/sets.ts";
 
 const HealthBar = styled.div<{ $percentHealth: number }>`
+  height: 10px;
   width: ${(props) => `${props.$percentHealth * 100}%`};
   background-color: ${(props) => {
     if (props.$percentHealth > 0.66) {
@@ -80,15 +81,13 @@ export default function Player(props: PlayerType & { id: string }) {
   return (
     <div className={`char-box player-box ${activeTurn && "active-char"}`}>
       <div className="id-bar">
-        <div className="name">{name}</div>
         <HealthBar
           $percentHealth={stats.life / stats.maxLife}
           className="health-bar"
         >
-          <span>
-            {stats.life} / {stats.maxLife}
-          </span>
+          {/*{stats.life} / {stats.maxLife}*/}
         </HealthBar>
+        <div className="name special-font">{name}</div>
         <div className="speed-display">
           {stats.speed} / {stats.maxSpeed}
         </div>
@@ -115,7 +114,7 @@ export default function Player(props: PlayerType & { id: string }) {
               onClick={handleClickManeuver}
               value={maneuver}
             >
-              {`> ${maneuver.toUpperCase()}`}
+              {`† ${maneuver.toUpperCase()}`}
             </button>
           ))}
         </div>

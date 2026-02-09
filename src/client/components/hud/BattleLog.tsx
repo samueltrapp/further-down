@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext.tsx";
+import "./Hud.css";
 
 export default function BattleLog() {
   const game = useContext(GameContext);

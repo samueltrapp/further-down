@@ -1,14 +1,14 @@
 :root {
   /* Neutrals */
   --white: #ffffff;
-  --black: #060906;
+  --black: #080607;
   --brown: #1e0b12;
   --off-white: #f1f1e2;
   --gray: #424342;
   --silver: #c0c0c0;
 
   /* Greens */
-  --black-green: #121812;
+  --black-green: #0e100e;
   --chartreuse: #bedf43;
   --dark-green: #183c2b;
 
@@ -44,16 +44,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.special-font {
+  font-family: "Cinzel Decorative", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-button {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Metamorphous", serif;
+  font-weight: 400;
+  font-style: normal;
+  background: radial-gradient(
+    circle at center in hsl shorter hue,
+    var(--teal),
+    var(--black)
+  );
 }
 
 h1 {

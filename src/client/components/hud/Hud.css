@@ -32,7 +32,6 @@
   border: none;
   display: block;
   font-size: 2rem;
-  margin: auto;
   padding: 0.5rem;
 }
 
@@ -40,7 +39,7 @@
   background-color: var(--off-white);
   border: 1px solid var(--gray);
   color: var(--black);
-  height: 400px;
+  height: 32px;
   display: flex;
   flex-direction: column-reverse;
   overflow: scroll;

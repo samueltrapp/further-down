@@ -1,5 +1,4 @@
 .char-box {
-  border: 2px solid var(--gray);
   border-radius: 12px;
   padding: 12px;
   margin-bottom: 36px;
@@ -12,7 +11,7 @@
   border-bottom: 1px solid var(--off-white);
   display: flex;
   flex-direction: column;
-  font-size: 2rem;
+  font-size: 1.25rem;
   justify-content: space-between;
   margin-bottom: 16px;
   padding-bottom: 8px;

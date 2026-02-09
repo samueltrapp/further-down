@@ -13,6 +13,7 @@ import {
 import { GameAction } from "../../contexts/ContextTypes.ts";
 import { selectEnemies } from "../../contexts/contextActions.ts";
 import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
+import GraphicsCanvas from "../../components/hud/GraphicsCanvas.tsx";
 
 function GameBoard() {
   const game = useContext(GameContext);
@@ -65,8 +66,9 @@ function GameBoard() {
 
         <div className="hub-column">
           <Advisor />
-          <BattleLog />
+          <GraphicsCanvas />
           <ConfirmButton />
+          <BattleLog />
         </div>
         <div className="enemy-column">
           {Object.values(splitChars.enemies).map((enemy) => (

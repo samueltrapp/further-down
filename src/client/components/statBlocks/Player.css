@@ -1,5 +1,7 @@
 .player-box {
   background-color: var(--dark-green);
+  border: 2px solid transparent;
+  box-shadow: -4px 8px 8px 8px var(--black);
 }
 
 .maneuver-button {
@@ -36,6 +38,5 @@
 }
 
 .active-char {
-  background-color: var(--blue);
-  border-color: var(--plum);
+  border: 1px solid var(--white);
 }
