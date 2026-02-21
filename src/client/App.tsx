@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { socket } from "./socket.ts";
-import { LobbyStatus, SerializedGameType } from "../types/game.ts";
+import { GameType, LobbyStatus } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard/GameBoard.tsx";
 import { Lobby } from "./pages/Lobby/Lobby.tsx";
 import { Rewards } from "./components/interstitials/Rewards";
 import { GameAction } from "./contexts/ContextTypes.ts";
-import { GameContext, GameDispatchContext } from "./contexts/GameContext.tsx";
+import { useGame } from "./hooks/useGame.ts";
 import "./App.css";
 
 const GameScreen = ({ lobbyStatus }: { lobbyStatus?: LobbyStatus }) => {
@@ -24,12 +24,11 @@ const GameScreen = ({ lobbyStatus }: { lobbyStatus?: LobbyStatus }) => {
 
 function App() {
   const [loaded, setLoaded] = useState(false);
-  const game = useContext(GameContext);
-  const dispatch = useContext(GameDispatchContext);
+  const { game, dispatch } = useGame();
   const lobbyStatus = game?.data.lobby.status;
 
   useEffect(() => {
-    // Load existing or create new game
+    /* Load existing or create new game */
     function onConnect() {
       const gameId = localStorage.getItem("gameId");
       const userId = localStorage.getItem("userId");
@@ -39,6 +38,7 @@ function App() {
       setLoaded(true);
     }
 
+    /* Warn about failed attempts to join */
     function onFailedJoin(msg: string) {
       if (dispatch) {
         dispatch({
@@ -50,14 +50,12 @@ function App() {
       }
     }
 
-    function onUpdateGameState(update: { game: SerializedGameType }) {
+    /* Update context based on new game state */
+    function onUpdateGameState(update: { game: GameType }) {
       if (dispatch && update.game) {
         dispatch({
           type: GameAction.SYNC,
-          payload: {
-            ...update.game,
-            characters: new Map(update.game.characters),
-          },
+          payload: update.game,
         });
       }
       // if (dispatch && update.logMessages) {

@@ -4,14 +4,14 @@ import { resolveTurnOrder } from "../../../server/utils/turnOrder.ts";
 
 export const expendSpeed = (ctx: ActionCtx): ActionCtx => {
   const { characters, sourceId } = ctx;
-  const source = characters.get(sourceId);
+  const source = characters[sourceId];
 
   if (!source) {
     return ctx;
   }
 
   source.stats.speed -= ctx.speed;
-  ctx.characters.set(sourceId, source);
+  ctx.characters[sourceId] = source;
   return {
     ...ctx,
     characters,
@@ -19,7 +19,11 @@ export const expendSpeed = (ctx: ActionCtx): ActionCtx => {
 };
 
 export const finishTurn = (game: GameType) => {
-  const charactersIter = game.characters.values();
+  if (!game.characters) {
+    return game;
+  }
+
+  const charactersIter = Object.values(game.characters);
   const isRoundEnd = Array.from(charactersIter).every(
     (character) => character.stats.speed <= 0,
   );

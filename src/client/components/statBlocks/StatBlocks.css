@@ -8,7 +8,6 @@
 }
 
 .id-bar {
-  border-bottom: 1px solid var(--off-white);
   display: flex;
   flex-direction: column;
   font-size: 1.25rem;

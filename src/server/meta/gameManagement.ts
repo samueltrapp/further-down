@@ -26,17 +26,10 @@ export function joinGame(
   }
 }
 
-export function sendGame({ meta, socket, io }: ConnectionType, gameId: string) {
+export function sendGame({ meta, io }: ConnectionType, gameId: string) {
   const selectedGame = meta.games.get(gameId);
   if (selectedGame?.lobby?.gameId) {
-    const serializedGame = {
-      ...selectedGame,
-      characters: Array.from(selectedGame?.characters),
-    };
-    socket.join(gameId);
-    io.to(selectedGame?.lobby?.gameId).emit("update", {
-      game: serializedGame,
-    });
+    io.to(selectedGame?.lobby?.gameId).emit("update", { game: selectedGame });
   }
 }
 

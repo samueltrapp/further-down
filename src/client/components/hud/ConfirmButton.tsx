@@ -1,27 +1,25 @@
-import { useContext } from "react";
 import { playerTurn } from "../../services/turn.ts";
-import {
-  GameContext,
-  GameDispatchContext,
-} from "../../contexts/GameContext.tsx";
-import { GameAction } from "../../contexts/ContextTypes.ts";
 import { ManeuverName } from "../../../types/equipables/actions.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
+import { useGame } from "../../hooks/useGame.ts";
+import { useTurnOrder } from "../../hooks/useTurnOrder.ts";
+import { checkOwnership } from "../../utils/checkOwnership.ts";
 
 export default function ConfirmButton() {
-  const game = useContext(GameContext);
-  const dispatch = useContext(GameDispatchContext);
+  const { game } = useGame();
+  const character = useTurnOrder();
+  const isUserTurn = checkOwnership(character);
   const client = game?.client;
   const lobby = game?.data.lobby;
-  const currentTurn = game?.data.battle?.turnOrder[0];
 
-  const enabled =
+  const enabled = !!(
     lobby?.gameId &&
-    client &&
     client?.selectedManeuver &&
     client?.selectedWeapon &&
     client?.selectedEnemyIds.length > 0 &&
-    currentTurn;
+    character &&
+    isUserTurn
+  );
 
   function handleConfirm() {
     if (!enabled) return;
@@ -32,19 +30,8 @@ export default function ConfirmButton() {
       gameId: lobby.gameId,
       enemyTargetIds: client.selectedEnemyIds,
       friendlyTargetIds: client.selectedEnemyIds,
-      sourceId: currentTurn,
+      sourceId: character.id,
     });
-    if (dispatch) {
-      dispatch({
-        type: GameAction.PLAYER_ACTION,
-        payload: {
-          maxEnemySelections: 0,
-          selectedEnemyIds: [],
-          selectedFriendlyIds: [],
-          selectedManeuver: "",
-        },
-      });
-    }
   }
 
   return (

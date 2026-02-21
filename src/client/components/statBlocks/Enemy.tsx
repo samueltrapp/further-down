@@ -1,10 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { EnemyType } from "../../../types/individual/characters.ts";
 import { enemyTurn } from "../../services/turn.ts";
 import "./StatBlocks.css";
 import "./Enemy.css";
-import { GameContext } from "../../contexts/GameContext.tsx";
 import styled from "styled-components";
+import { useGame } from "../../hooks/useGame.ts";
 
 const HealthBar = styled.div<{ $percentHealth: number }>`
   height: 10px;
@@ -23,7 +23,7 @@ const HealthBar = styled.div<{ $percentHealth: number }>`
 function Enemy(props: EnemyType & { id: string }) {
   const { id, name, stats } = props;
 
-  const game = useContext(GameContext);
+  const { game } = useGame();
   const client = game?.client;
   const lobby = game?.data.lobby;
   const activeTurn = game?.data.battle?.turnOrder[0] === id;

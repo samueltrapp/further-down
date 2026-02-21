@@ -1,13 +1,18 @@
 import { GameContext, GameDispatchContext } from "./GameContext.tsx";
 import { ReactNode, useReducer } from "react";
 import { GameAction, GameActionType } from "./ContextTypes.ts";
-import { GameStateType, LobbyStatus } from "../../types/game.ts";
+import {
+  GameClientType,
+  GameStateType,
+  GameType,
+  LobbyStatus,
+} from "../../types/game.ts";
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [game, dispatch] = useReducer(gameReducer, {
     data: {
       battle: null,
-      characters: new Map(),
+      characters: null,
       lobby: {
         gameId: "",
         users: [],
@@ -18,7 +23,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       },
     },
     client: {
-      enableConfirmation: false,
       maxEnemySelections: 0,
       selectedEnemyIds: [],
       selectedFriendlyIds: [],
@@ -37,11 +41,33 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+function resetTurn(state: GameType): GameClientType {
+  const turn = state?.battle?.turnOrder[0];
+  const equippedWeapon = (() => {
+    if (turn) {
+      const character = state?.characters?.[turn];
+      if (character && character?.team === "player") {
+        return character?.rewards?.equippedWeapon || "";
+      }
+    }
+    return "";
+  })();
+
+  return {
+    maxEnemySelections: 0,
+    selectedEnemyIds: [],
+    selectedFriendlyIds: [],
+    selectedManeuver: "",
+    selectedWeapon: equippedWeapon,
+    logHistory: [],
+  };
+}
+
 function gameReducer(game: GameStateType, action: GameActionType) {
   switch (action.type) {
     case GameAction.SYNC:
       return {
-        ...game,
+        client: resetTurn(action.payload),
         data: action.payload,
       };
     case GameAction.PLAYER_ACTION: {

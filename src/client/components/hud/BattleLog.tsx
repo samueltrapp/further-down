@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { GameContext } from "../../contexts/GameContext.tsx";
 import "./Hud.css";
+import { useGame } from "../../hooks/useGame.ts";
 
 export default function BattleLog() {
-  const game = useContext(GameContext);
+  const { game } = useGame();
   const log = game?.client?.logHistory;
 
   return (

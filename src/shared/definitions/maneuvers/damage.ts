@@ -11,7 +11,7 @@ const createSpread = (spread: number) => randNum(spread * 2) - spread;
 export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   const { damageType, strength } = step;
   const { characters, sourceId } = ctx;
-  const source = characters.get(sourceId) as PlayerType | undefined;
+  const source = characters[sourceId] as PlayerType | undefined;
   const weaponName = source?.rewards.equippedWeapon;
   const weapon = weaponName && weaponMap.get(weaponName);
   if (!source || !weapon) {
@@ -64,13 +64,11 @@ export const applyDamage = (ctx: ActionCtx) => {
     /* Total threshold for attacker to hit */
     const revisedAccuracy = ctx.accuracy - mitigationFactor.evasion;
 
-    console.log(`To hit: ${ctx.toHit}, accuracy: ${revisedAccuracy}`);
     if (ctx.toHit > revisedAccuracy) {
-      // miss
+      // TODO: miss
     } else {
-      const character = characters.get(charId);
+      const character = characters[charId];
       const reducedDamage = limitToZero(damage - mitigationFactor.reduction);
-      console.log(`Damage: ${damage}, reduced damage: ${reducedDamage}`);
 
       if (character?.stats?.life) {
         character.stats.life -= reducedDamage;

@@ -1,6 +1,8 @@
+import "./GraphicsCanvas.css";
+
 function GraphicsCanvas() {
   return (
-    <div style={{ height: "400px", backgroundColor: "white" }}>
+    <div className="canvas-container">
       <canvas></canvas>
     </div>
   );

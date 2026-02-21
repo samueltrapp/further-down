@@ -1,5 +1,4 @@
-import { useContext, useState, MouseEvent } from "react";
-import { GameContext } from "../../contexts/GameContext.tsx";
+import { useState, MouseEvent } from "react";
 import {
   PlayerType,
   RewardTypes,
@@ -8,6 +7,7 @@ import { finishSkilling, takeReward } from "../../services/skill.ts";
 import { StatGrowth } from "./StatGrowth.tsx";
 import { contextualIndefinite, singularize } from "../../utils/formatting.ts";
 import { NamePrompt } from "./NamePrompt.tsx";
+import { useGame } from "../../hooks/useGame.ts";
 
 function RewardHolding() {
   return <div>Waiting for other players.</div>;
@@ -47,17 +47,19 @@ function RewardSelection({
 }
 
 export function Rewards() {
-  const game = useContext(GameContext);
+  const { game } = useGame();
   const [currentIndex, setCurrentIndex] = useState(0);
   const userId = localStorage.getItem("userId");
 
-  if (!game) {
+  if (!game || !game.data.characters) {
     return null;
   }
 
   const gameId = game.data.lobby.gameId;
   const votes = game.data.lobby.votes;
-  const playerCharacters = Array.from(game.data.characters.values()).filter(
+  const playerCharacters = Array.from(
+    Object.values(game.data.characters),
+  ).filter(
     (playerCharacter) =>
       playerCharacter.team === "player" && playerCharacter.userId === userId,
   );

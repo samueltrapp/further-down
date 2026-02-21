@@ -36,16 +36,12 @@ export type LobbyType = {
   errorMessage: string | undefined;
 };
 
-export type CharactersType = Map<string, PlayerType | EnemyType>;
+export type CharactersType = Record<string, PlayerType | EnemyType>;
 
 export type GameType = {
   battle: BattleType | null;
-  characters: CharactersType;
+  characters: CharactersType | null;
   lobby: LobbyType;
-};
-
-export type SerializedGameType = Omit<GameType, "character"> & {
-  characters: [string, PlayerType | EnemyType][];
 };
 
 export type GameStateType = {
@@ -54,7 +50,6 @@ export type GameStateType = {
 };
 
 export type GameClientType = {
-  enableConfirmation: boolean;
   maxEnemySelections: number;
   selectedEnemyIds: string[];
   selectedFriendlyIds: string[];

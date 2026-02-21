@@ -1,5 +1,10 @@
+@import "StatBlocks.css";
+
 .player-box {
   background-color: var(--dark-green);
+  background-image: url("/images/man.png");
+  background-repeat: no-repeat;
+  background-position: left center;
   border: 2px solid transparent;
   box-shadow: -4px 8px 8px 8px var(--black);
 }
@@ -39,4 +44,8 @@
 
 .active-char {
   border: 1px solid var(--white);
+}
+
+.left {
+  text-align: right;
 }
