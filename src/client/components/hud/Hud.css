@@ -22,11 +22,14 @@
 
 .confirm-button {
   background-color: var(--sunset);
-
   border: none;
   display: block;
   font-size: 2rem;
   padding: 0.5rem;
+
+  &[disabled] {
+    background-color: var(--silver);
+  }
 }
 
 .battle-log {

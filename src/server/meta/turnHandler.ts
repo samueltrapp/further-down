@@ -14,6 +14,7 @@ import {
 } from "../../shared/definitions/maneuvers/speed.ts";
 import { sendGame } from "./gameManagement.ts";
 import { GameType } from "../../types/game.ts";
+import { switchWeapon } from "../../shared/definitions/maneuvers/core.ts";
 
 const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
   return {
@@ -36,8 +37,6 @@ export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
       return;
     }
 
-    source.rewards.equippedWeapon = turn.weapon;
-
     let ctx: ActionCtx = {
       characters: game.characters,
       sourceId: turn.sourceId,
@@ -58,6 +57,7 @@ export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
     }
 
     /* Pre-action */
+    ctx = switchWeapon(ctx, turn.weapon);
 
     /* Action */
     mnv?.steps.forEach((step) => {

@@ -113,10 +113,13 @@ export function finishSkilling(
     const alreadyVoted = votes.includes(userId);
     const totalVotes = alreadyVoted ? votes : [...votes, userId];
     const votedToAdvance = totalVotes.length === game.lobby.users.length;
+    const enemiesExist = Object.values(game?.characters || {}).some(
+      (char) => char.team === "enemy",
+    ); // TODO: Move enemy set-up
 
     let battle = game.battle;
     const characters = game.characters;
-    if (votedToAdvance && characters) {
+    if (votedToAdvance && characters && !enemiesExist) {
       const enemies = pickEnemies();
       enemies.forEach((enemy) => {
         characters[enemy[0]] = enemy[1];
