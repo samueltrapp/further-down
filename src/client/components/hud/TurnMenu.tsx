@@ -1,6 +1,6 @@
 import "./TurnMenu.css";
 import { useTurnOrder } from "../../hooks/useTurnOrder.ts";
-import { ChangeEvent, MouseEvent } from "react";
+import { MouseEvent } from "react";
 import { GameAction } from "../../contexts/ContextTypes.ts";
 import { useGame } from "../../hooks/useGame.ts";
 import { ManeuverName } from "../../../types/equipables/actions.ts";
@@ -13,8 +13,13 @@ import { checkOwnership } from "../../utils/checkOwnership.ts";
 
 function PersonalMenu({ character }: { character: PlayerType }) {
   const { game, dispatch } = useGame();
-  const isUserTurn = checkOwnership(character);
   const { maneuvers, weapons } = character.rewards.owned;
+  const isUserTurn = checkOwnership(character);
+  const equippedWeapon = game?.client?.selectedWeapon;
+  const filledManeuvers: (ManeuverName | "")[] =
+    maneuvers.length < 6
+      ? maneuvers.concat(new Array(6 - maneuvers.length).fill(""))
+      : maneuvers;
 
   const handleClickManeuver = (event: MouseEvent<HTMLButtonElement>) => {
     const value = (event.target as HTMLButtonElement).value as ManeuverName;
@@ -31,8 +36,8 @@ function PersonalMenu({ character }: { character: PlayerType }) {
     }
   };
 
-  const handleSelectWeapon = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as WeaponName;
+  const handleSelectWeapon = (event: MouseEvent<HTMLButtonElement>) => {
+    const value = (event.target as HTMLButtonElement).value as WeaponName;
     const selectedWeapon = weaponMap.get(value)?.name || "";
     if (dispatch && value) {
       dispatch({
@@ -46,28 +51,27 @@ function PersonalMenu({ character }: { character: PlayerType }) {
 
   return (
     <div>
-      <div className="action-column">
-        <select
-          onChange={handleSelectWeapon}
-          value={game?.client.selectedWeapon}
-        >
-          {weapons.map((weapon) => (
-            <option key={weapon} value={weapon}>
-              {toCaps(weapon)}
-            </option>
-          ))}
-        </select>
+      <div className="weapon-toolbar">
+        {weapons.map((weapon) => (
+          <button
+            className={`weapon-button ${equippedWeapon === weapon && "equipped-weapon"}`}
+            onClick={handleSelectWeapon}
+            value={weapon}
+          >
+            {toCaps(weapon)}
+          </button>
+        ))}
       </div>
-      <div className="action-column">
-        {maneuvers.map((maneuver) => (
+      <div className="maneuver-track">
+        {filledManeuvers.map((maneuver, id) => (
           <button
             className={`maneuver-button ${isUserTurn && game?.client.selectedManeuver === maneuver ? "selected-maneuver" : ""}`}
-            disabled={!isUserTurn}
-            key={maneuver}
+            disabled={!isUserTurn || maneuver === ""}
+            key={maneuver || id}
             onClick={handleClickManeuver}
             value={maneuver}
           >
-            {`† ${maneuver.toUpperCase()}`}
+            {maneuver !== "" ? `${toCaps(maneuver)}` : ""}
           </button>
         ))}
       </div>

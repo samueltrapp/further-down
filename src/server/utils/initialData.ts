@@ -101,7 +101,7 @@ export function initializeCharacters(game: GameType) {
           armors: 1,
           enchantments: 0,
           maneuvers: 1,
-          weapons: 1,
+          weapons: 2,
           stats: 0,
         },
       },
