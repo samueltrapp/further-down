@@ -13,6 +13,7 @@ import {
   finishTurn,
 } from "../../shared/definitions/maneuvers/speed.ts";
 import { sendGame } from "./gameManagement.ts";
+import { GameType } from "../../types/game.ts";
 
 const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
   return {
@@ -28,8 +29,8 @@ const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
 
 export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
   const game = connection.meta.games.get(turn.gameId);
-  if (game) {
-    const source = game.characters.get(turn.sourceId) as PlayerType | undefined;
+  if (game && game.characters) {
+    const source = game.characters[turn.sourceId] as PlayerType | undefined;
 
     if (!source) {
       return;
@@ -80,7 +81,7 @@ export function handleTurn(connection: ConnectionType, turn: PlayerTurnType) {
     /* Post-action */
     ctx = expendSpeed(ctx);
 
-    let updatedGame = {
+    let updatedGame: GameType = {
       ...game,
       characters: ctx?.characters,
     };

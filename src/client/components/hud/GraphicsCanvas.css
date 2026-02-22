@@ -1,0 +1,6 @@
+.canvas-container {
+  background-color: var(--black);
+  border-radius: 32px 32px 0 0;
+  height: 12.5rem;
+  width: 100%;
+}

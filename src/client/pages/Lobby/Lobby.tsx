@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { randomId } from "../../../server/utils/character.ts";
 import { socket } from "../../socket.ts";
 import "./Lobby.scss";
-import { GameContext } from "../../contexts/GameContext.tsx";
+import { useGame } from "../../hooks/useGame.ts";
 
 const Unjoined = () => {
-  const game = useContext(GameContext);
+  const { game } = useGame();
   const [roomCode, setRoomCode] = useState("");
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const Unjoined = () => {
 };
 
 const Waiting = () => {
-  const game = useContext(GameContext);
+  const { game } = useGame();
   const lobby = game?.data.lobby;
   const [voteToStart, setVoteToStart] = useState(false);
   const userId = localStorage.getItem("userId");
@@ -90,6 +90,6 @@ const Waiting = () => {
 };
 
 export function Lobby() {
-  const game = useContext(GameContext);
+  const { game } = useGame();
   return game?.data.lobby.status === "unjoined" ? <Unjoined /> : <Waiting />;
 }

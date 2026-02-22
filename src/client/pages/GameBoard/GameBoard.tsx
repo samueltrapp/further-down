@@ -1,22 +1,18 @@
-import { useContext } from "react";
 import Player from "../../components/statBlocks/Player.tsx";
 import Enemy from "../../components/statBlocks/Enemy.tsx";
 import "./GameBoard.css";
 import TurnTracker from "../../components/hud/TurnTracker.tsx";
 import ConfirmButton from "../../components/hud/ConfirmButton.tsx";
 import BattleLog from "../../components/hud/BattleLog.tsx";
-import Advisor from "../../components/hud/Advisor.tsx";
-import {
-  GameContext,
-  GameDispatchContext,
-} from "../../contexts/GameContext.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
 import { selectEnemies } from "../../contexts/contextActions.ts";
 import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
+import GraphicsCanvas from "../../components/hud/GraphicsCanvas.tsx";
+import TurnMenu from "../../components/hud/TurnMenu.tsx";
+import { useGame } from "../../hooks/useGame.ts";
 
 function GameBoard() {
-  const game = useContext(GameContext);
-  const dispatch = useContext(GameDispatchContext);
+  const { game, dispatch } = useGame();
   const battle = game?.data.battle;
   const characters = game?.data.characters;
 
@@ -25,7 +21,7 @@ function GameBoard() {
     players: [],
     enemies: [],
   };
-  Array.from(characters).reduce((arrs, curr) => {
+  Object.entries(characters).reduce((arrs, curr) => {
     if (curr[1].team === "player") {
       arrs.players.push(curr[1] as PlayerType);
     } else {
@@ -64,9 +60,12 @@ function GameBoard() {
         </div>
 
         <div className="hub-column">
-          <Advisor />
-          <BattleLog />
-          <ConfirmButton />
+          <div className="inner-hub">
+            <GraphicsCanvas />
+            <TurnMenu />
+            <ConfirmButton />
+            <BattleLog />
+          </div>
         </div>
         <div className="enemy-column">
           {Object.values(splitChars.enemies).map((enemy) => (

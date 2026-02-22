@@ -1,0 +1,6 @@
+.menu-container {
+  background-color: var(--black);
+  border-radius: 0 0 32px 32px;
+  height: 200px;
+  width: 100%;
+}

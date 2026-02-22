@@ -7,7 +7,7 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
   const { characters, enemyTargetIds } = ctx;
   const defenders = enemyTargetIds?.map((id) => ({
     id: id,
-    stats: characters.get(id)?.stats,
+    stats: characters[id]?.stats,
   }));
 
   if (!defenders || defenders.length === 0) {

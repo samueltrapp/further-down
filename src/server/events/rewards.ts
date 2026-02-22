@@ -5,7 +5,7 @@ import {
   TakeRewardType,
   TakeStatsType,
 } from "../../types/events/skill.ts";
-import { CharactersType, LobbyStatus } from "../../types/game.ts";
+import { LobbyStatus } from "../../types/game.ts";
 import { randomizeCollection } from "../utils/character.ts";
 import { SingleRewardType } from "../../types/equipables/aggregates.ts";
 import { pickEnemies, setBlankBattle } from "../battle/generator.ts";
@@ -18,23 +18,20 @@ export function submitName(
   { name, gameId, characterId }: SetNameType,
 ) {
   const game = connection.meta.games.get(gameId);
-  if (game) {
-    const character = game.characters.get(characterId);
+  if (game && game.characters) {
+    /* Update character name */
+    const character = game.characters?.[characterId];
+    character.name = name;
+    game.characters[characterId] = character;
 
-    if (character) {
-      /* Update character name */
-      character.name = name;
-      game.characters.set(characterId, character);
+    /* Update game with character changes */
+    const updatedGame = {
+      ...game,
+      characters: game.characters,
+    };
 
-      /* Update game with character changes */
-      const updatedGame = {
-        ...game,
-        characters: game.characters,
-      };
-
-      connection.meta.games.set(gameId, updatedGame);
-      sendGame(connection, gameId);
-    }
+    connection.meta.games.set(gameId, updatedGame);
+    sendGame(connection, gameId);
   }
 }
 
@@ -43,10 +40,8 @@ export function takeReward(
   { rewardType, rewardName, gameId, characterId }: TakeRewardType,
 ) {
   const game = connection.meta.games.get(gameId);
-  if (game) {
-    const character = game.characters.get(characterId) as
-      | PlayerType
-      | undefined;
+  if (game && game.characters) {
+    const character = game.characters[characterId] as PlayerType | undefined;
 
     if (character && character.team === "player") {
       const reducedQueue = character.rewards.queue[rewardType].filter(
@@ -64,7 +59,7 @@ export function takeReward(
       ) {
         character.rewards.equippedWeapon = rewardName as WeaponName;
       } else if (rewardType === "armors") {
-      /* Auto-equip any armor as soon as it's acquired */
+        /* Auto-equip any armor as soon as it's acquired */
         character.rewards.equippedArmor = rewardName as ArmorName;
       }
       // @ts-ignore
@@ -73,7 +68,7 @@ export function takeReward(
         character.rewards.pending[rewardType] - 1;
 
       /* Update character */
-      game.characters.set(characterId, character);
+      game.characters[characterId] = character;
 
       /* Update game */
       const newGameState = {
@@ -91,10 +86,8 @@ export function takeStats(
   { newStats, gameId, characterId }: TakeStatsType,
 ) {
   const game = connection.meta.games.get(gameId);
-  if (game) {
-    const character = game.characters.get(characterId) as
-      | PlayerType
-      | undefined;
+  if (game && game.characters) {
+    const character = game.characters[characterId] as PlayerType | undefined;
 
     if (character && character.team === "player") {
       character.stats = newStats;
@@ -122,11 +115,11 @@ export function finishSkilling(
     const votedToAdvance = totalVotes.length === game.lobby.users.length;
 
     let battle = game.battle;
-    const characters: CharactersType = game.characters;
-    if (votedToAdvance) {
+    const characters = game.characters;
+    if (votedToAdvance && characters) {
       const enemies = pickEnemies();
       enemies.forEach((enemy) => {
-        characters.set(enemy[0], enemy[1]);
+        characters[enemy[0]] = enemy[1];
       });
       battle = setBlankBattle(characters);
     }

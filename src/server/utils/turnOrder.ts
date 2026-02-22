@@ -8,9 +8,8 @@ type CharTurnType = {
 
 export const resolveTurnOrder = (characters: CharactersType): string[] => {
   const charTurns: { id: string; lastTurn: number; speed: number }[] = [];
-  const charEntries = characters.entries();
-  let charEntry;
-  while (((charEntry = charEntries.next().value), charEntry !== undefined)) {
+  const charEntries = Object.entries(characters);
+  for (const charEntry of charEntries) {
     charTurns.push({
       id: charEntry[0],
       lastTurn: charEntry[1].lastTurn,

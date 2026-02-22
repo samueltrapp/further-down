@@ -1,5 +1,9 @@
+@import "StatBlocks.css";
+
 .enemy-box {
   background-color: var(--maroon);
+  border: 1px solid transparent;
+  box-shadow: 4px 8px 8px 8px var(--black);
 }
 
 .active-enemy {

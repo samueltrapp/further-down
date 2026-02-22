@@ -37,7 +37,7 @@ const baseStats = {
 export function initializeLobby(gameId: string, userId: string): GameType {
   return {
     battle: null,
-    characters: new Map(),
+    characters: null,
     lobby: {
       gameId: gameId,
       pastEncounters: 0,
@@ -68,10 +68,10 @@ export function initializeCharacters(game: GameType) {
   };
   const userSpread = userMapping();
 
-  const initialCharacters: Map<string, PlayerType> = new Map();
+  const initialCharacters: Record<string, PlayerType> = {};
   for (const user of userSpread) {
     const id = randomId(8);
-    const blankCharacter: PlayerType = structuredClone({
+    initialCharacters[id] = structuredClone({
       id,
       name: "",
       userId: user,
@@ -109,8 +109,6 @@ export function initializeCharacters(game: GameType) {
       savedStats: baseStats,
       team: "player",
     });
-
-    initialCharacters.set(id, blankCharacter);
   }
 
   return initialCharacters;
