@@ -32,6 +32,7 @@ const shroomlet = (id: string): EnemyType => ({
   },
   lastTurn: 0,
   tactics: ["bonk"],
+  isDead: false,
 });
 
 export default shroomlet;

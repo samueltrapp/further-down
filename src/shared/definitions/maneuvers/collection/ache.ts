@@ -4,6 +4,7 @@ const ache: ManeuverType = {
   name: "ache",
   description: "Ache description",
   speedCost: 11,
+  targetTeam: "enemy",
   maxTargets: 1,
   steps: [
     {

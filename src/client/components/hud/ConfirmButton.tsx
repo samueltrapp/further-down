@@ -29,7 +29,7 @@ export default function ConfirmButton() {
       team: "player",
       gameId: lobby.gameId,
       enemyTargetIds: client.selectedEnemyIds,
-      friendlyTargetIds: client.selectedEnemyIds,
+      playerTargetIds: client.selectedEnemyIds,
       sourceId: character.id,
     });
   }

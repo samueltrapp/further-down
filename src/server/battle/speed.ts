@@ -1,6 +1,6 @@
-import { ActionCtx } from "../../../types/events/actionCtx.ts";
-import { BattleType, GameType } from "../../../types/game.ts";
-import { resolveTurnOrder } from "../../../server/utils/turnOrder.ts";
+import { ActionCtx } from "../../types/events/actionCtx.ts";
+import { BattleType, GameType } from "../../types/game.ts";
+import { resolveTurnOrder } from "../utils/turnOrder.ts";
 
 export const expendSpeed = (ctx: ActionCtx): ActionCtx => {
   const { characters, sourceId } = ctx;

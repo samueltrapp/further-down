@@ -4,6 +4,7 @@ const sporeBurst: TacticType = {
   name: "sporeBurst",
   description: "Spore burst description",
   speedCost: 7,
+  targetTeam: "player",
   maxTargets: 4,
   steps: [
     {

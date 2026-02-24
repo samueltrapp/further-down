@@ -4,6 +4,7 @@ const pummel: MvnOrTctType = {
   name: "pummel",
   description: "Pummel description",
   speedCost: 12,
+  targetTeam: "enemy",
   maxTargets: 1,
   steps: [
     {

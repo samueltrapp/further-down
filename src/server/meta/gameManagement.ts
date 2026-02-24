@@ -2,7 +2,8 @@ import { randomId } from "../utils/character.ts";
 import { initializeCharacters, initializeLobby } from "../utils/initialData.ts";
 import { ConnectionType, JoinDataType, VoteType } from "../../types/server.ts";
 import { existingLobby } from "../menus/lobby.ts";
-import { LobbyStatus } from "../../types/game.ts";
+import { GameType, LobbyStatus } from "../../types/game.ts";
+import { finishSkilling } from "../events/rewards.ts";
 
 export function createGame(connection: ConnectionType, userId: string) {
   const newGameId = randomId();
@@ -47,6 +48,14 @@ export function startVote(
     const characters = votedToStart
       ? initializeCharacters(game)
       : game.characters;
+
+    // Short-cut character creation
+    if (process.env.MOCK_SINGLE_PLAYER === "true") {
+      connection.meta.games.set(gameId, <GameType>{ ...game, characters });
+      finishSkilling(connection, { gameId, userId });
+      return;
+    }
+
     const lobbyStatus = votedToStart ? LobbyStatus.REWARD : game.lobby.status;
 
     const newGameState = {
@@ -58,7 +67,7 @@ export function startVote(
         votes: votedToStart ? [] : totalVotes,
       },
     };
-    connection.meta.games.set(gameId, newGameState);
+    connection.meta.games.set(gameId, <GameType>newGameState);
   }
   sendGame(connection, gameId);
 }

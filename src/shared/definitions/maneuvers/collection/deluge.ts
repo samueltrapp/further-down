@@ -4,7 +4,8 @@ export const deluge: ManeuverType = {
   name: "deluge",
   description: "Deluge description",
   speedCost: 8,
-  maxTargets: 3,
+  targetTeam: "enemy",
+  maxTargets: 4,
   steps: [
     {
       type: "hit",
