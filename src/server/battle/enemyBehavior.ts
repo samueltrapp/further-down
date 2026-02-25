@@ -23,13 +23,14 @@ const pickTargets = (candidate: TacticName, game: GameType) => {
     /* Get list of all potential targets based on tactic details */
     let viableTargets = Object.values(game.characters).reduce(
       (targets: string[], character) => {
-        if (character.team === tactic.targetTeam) {
+        if (character.team === tactic.targetTeam && !character.isDead) {
           targets.push(character.id);
         }
         return targets;
       },
       [],
     );
+
     /* Pick actual targets */
     while (
       selectedTargets.length < tactic.maxTargets &&
@@ -83,5 +84,7 @@ export const decideEnemyTurn = (
     tactic: decision.tactic,
     team: "enemy",
   };
-  handleTurn(connection, turn);
+
+  /* Delay enemy turns to provide visible feedback */
+  setTimeout(() => handleTurn(connection, turn), 1000 + randNum(1500));
 };

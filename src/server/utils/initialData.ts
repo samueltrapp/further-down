@@ -123,7 +123,7 @@ const blankCharacters = (userSpread: string[]) => {
 const prefabSinglePlayer = (userId: string) => ({
   XVGbnfui: {
     id: "XVGbnfui",
-    name: "Player",
+    name: "Alvin",
     userId: userId,
     effects: {
       burdens: {},
@@ -204,7 +204,7 @@ const prefabSinglePlayer = (userId: string) => ({
   },
   "3b9hsrxl": {
     id: "3b9hsrxl",
-    name: "Player",
+    name: "Berenice",
     userId: userId,
     effects: {
       burdens: {},
@@ -285,7 +285,7 @@ const prefabSinglePlayer = (userId: string) => ({
   },
   ymukbWJk: {
     id: "ymukbWJk",
-    name: "Player",
+    name: "Charlie",
     userId: userId,
     effects: {
       burdens: {},
