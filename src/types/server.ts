@@ -18,6 +18,6 @@ export type JoinDataType = {
 
 export type VoteType = {
   gameId: string;
-  vote: boolean;
+  vote?: boolean;
   userId: string;
 };

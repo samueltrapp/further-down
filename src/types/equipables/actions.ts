@@ -1,10 +1,19 @@
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
 // All maneuvers
-export type ManeuverName = "pummel" | "quicksilver" | "deluge" | "ache";
+export enum ManeuverName {
+  ACHE = "ache",
+  DELUGE = "deluge",
+  PUMMEL = "pummel",
+  QUICKSILVER = "quicksilver",
+}
 
 // All tactics
-export type TacticName = "sporeBurst" | "bonk";
+export enum TacticName {
+  PASS = "pass",
+  BONK = "bonk",
+  SPORE_BURST = "sporeBurst",
+}
 
 export type TagType =
   | "attack" // Damages life
@@ -40,6 +49,7 @@ export type StepType = HitStep | HealStep | EffectStep;
 type BaseActionType = {
   description: string;
   speedCost: number;
+  targetTeam: "player" | "enemy";
   maxTargets: number;
   steps: StepType[];
   tags: TagType[];

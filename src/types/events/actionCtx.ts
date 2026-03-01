@@ -3,7 +3,7 @@ import { CharactersType } from "../game.ts";
 export type ActionCtx = {
   characters: CharactersType;
   sourceId: string;
-  friendlyTargetIds: string[] | undefined;
+  playerTargetIds: string[] | undefined;
   enemyTargetIds: string[] | undefined;
   speed: number;
   messages: string[];

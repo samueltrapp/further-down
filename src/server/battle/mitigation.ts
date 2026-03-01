@@ -1,11 +1,11 @@
-import { HitStep } from "../../../types/equipables/actions.ts";
-import { ActionCtx } from "../../../types/events/actionCtx.ts";
-import { StatsType } from "../../../types/individual/stats.ts";
+import { HitStep } from "../../types/equipables/actions.ts";
+import { ActionCtx } from "../../types/events/actionCtx.ts";
+import { StatsType } from "../../types/individual/stats.ts";
 
 export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
   const { damageType } = step;
-  const { characters, enemyTargetIds } = ctx;
-  const defenders = enemyTargetIds?.map((id) => ({
+  const { characters, enemyTargetIds, playerTargetIds } = ctx;
+  const defenders = (playerTargetIds || enemyTargetIds)?.map((id) => ({
     id: id,
     stats: characters[id]?.stats,
   }));

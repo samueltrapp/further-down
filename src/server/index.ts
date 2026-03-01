@@ -22,9 +22,11 @@ import {
   TakeStatsType,
 } from "../types/events/skill.ts";
 import { handleTurn } from "./meta/turnHandler.ts";
+import dotenv from "dotenv";
 
 const port = 8080;
 const app = express();
+dotenv.config();
 
 app.use(cors());
 

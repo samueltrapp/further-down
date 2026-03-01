@@ -1,4 +1,5 @@
 import { EnemyType } from "../../types/individual/characters.ts";
+import { TacticName } from "../../types/equipables/actions.ts";
 
 const shroomlet = (id: string): EnemyType => ({
   id,
@@ -31,7 +32,8 @@ const shroomlet = (id: string): EnemyType => ({
     favors: {},
   },
   lastTurn: 0,
-  tactics: ["bonk"],
+  tactics: [TacticName.BONK],
+  isDead: false,
 });
 
 export default shroomlet;

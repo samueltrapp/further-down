@@ -1,25 +1,43 @@
-import { HitStep } from "../../../types/equipables/actions.ts";
-import { ActionCtx } from "../../../types/events/actionCtx.ts";
-import { randNum } from "../../../common/utils.ts";
-import { limitToZero, trunc } from "../../../server/utils/battle.ts";
+import { HitStep } from "../../types/equipables/actions.ts";
+import { ActionCtx } from "../../types/events/actionCtx.ts";
+import { randNum } from "../../common/utils.ts";
+import { limitToZero, trunc } from "../utils/battle.ts";
 import { randomInt } from "node:crypto";
-import { weaponMap } from "../weapons/sets.ts";
-import { PlayerType } from "../../../types/individual/characters.ts";
+import { weaponMap } from "../../shared/definitions/weapons/sets.ts";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
 export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   const { damageType, strength } = step;
   const { characters, sourceId } = ctx;
-  const source = characters[sourceId] as PlayerType | undefined;
-  const weaponName = source?.rewards.equippedWeapon;
-  const weapon = weaponName && weaponMap.get(weaponName);
-  if (!source || !weapon) {
+  const source = characters[sourceId];
+
+  if (!source) {
     return ctx;
   }
 
   const stats = source.stats;
-  const baseDamage = weapon.power + createSpread(weapon.spread);
+
+  /* Initialize weapon stats for weaponless enemies */
+  let affinities = {
+    physical: 1,
+    magical: 1,
+    bladed: 1,
+    blunt: 1,
+    elemental: 1,
+    psychic: 1,
+  };
+  let baseDamage = 0;
+
+  if (source.team === "player") {
+    const weaponName = source?.rewards.equippedWeapon;
+    const weapon = weaponName && weaponMap.get(weaponName);
+    if (!weapon) {
+      return ctx;
+    }
+    affinities = weapon.affinities;
+    baseDamage = weapon.power + createSpread(weapon.spread);
+  }
 
   const {
     physical: phAff,
@@ -28,7 +46,7 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
     blunt: bltAff,
     elemental: eleAff,
     psychic: psyAff,
-  } = weapon.affinities;
+  } = affinities;
 
   const damage = () => {
     switch (damageType) {

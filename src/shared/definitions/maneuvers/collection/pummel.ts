@@ -1,9 +1,11 @@
 import { MvnOrTctType } from "../../../../types/events/turn.ts";
+import { ManeuverName } from "../../../../types/equipables/actions.ts";
 
 const pummel: MvnOrTctType = {
-  name: "pummel",
+  name: ManeuverName.PUMMEL,
   description: "Pummel description",
   speedCost: 12,
+  targetTeam: "enemy",
   maxTargets: 1,
   steps: [
     {

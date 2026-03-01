@@ -1,3 +1,8 @@
-export type FavorName = "thousandCuts" | "verve";
+export enum BurdenName {
+  ANGUISH = "anguish",
+}
 
-export type BurdenName = "anguish";
+export enum FavorName {
+  A_THOUSAND_CUTS = "aThousandCuts",
+  VERVE = "verve",
+}

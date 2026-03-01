@@ -1,9 +1,13 @@
-import { TacticType } from "../../../../types/equipables/actions.ts";
+import {
+  TacticName,
+  TacticType,
+} from "../../../../types/equipables/actions.ts";
 
 const sporeBurst: TacticType = {
-  name: "sporeBurst",
+  name: TacticName.SPORE_BURST,
   description: "Spore burst description",
   speedCost: 7,
+  targetTeam: "player",
   maxTargets: 4,
   steps: [
     {

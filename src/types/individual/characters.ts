@@ -47,6 +47,7 @@ type CharacterType = {
   stats: StatsType;
   effects: EffectsType;
   lastTurn: number;
+  isDead: boolean;
 };
 
 export type PlayerType = CharacterType & {

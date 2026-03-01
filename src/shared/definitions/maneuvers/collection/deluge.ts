@@ -1,10 +1,14 @@
-import { ManeuverType } from "../../../../types/equipables/actions.ts";
+import {
+  ManeuverName,
+  ManeuverType,
+} from "../../../../types/equipables/actions.ts";
 
 export const deluge: ManeuverType = {
-  name: "deluge",
+  name: ManeuverName.DELUGE,
   description: "Deluge description",
   speedCost: 8,
-  maxTargets: 3,
+  targetTeam: "enemy",
+  maxTargets: 4,
   steps: [
     {
       type: "hit",

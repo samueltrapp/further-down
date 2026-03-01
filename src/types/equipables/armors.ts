@@ -1,6 +1,11 @@
 import { EnchantmentType } from "./enchantments.ts";
 
-export type ArmorName = "leather" | "platemail" | "robe" | "tunic";
+export enum ArmorName {
+  LEATHER = "leather",
+  PLATEMAIL = "platemail",
+  ROBE = "robe",
+  TUNIC = "tunic",
+}
 
 type DefensiveAffinitiesType = {
   defense: number;

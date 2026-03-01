@@ -1,6 +1,11 @@
 import { EnchantmentType } from "./enchantments.ts";
 
-export type WeaponName = "cutlass" | "hammer" | "periapt" | "scepter";
+export enum WeaponName {
+  CUTLASS = "cutlass",
+  HAMMER = "hammer",
+  PERIAPT = "periapt",
+  SCEPTER = "scepter",
+}
 
 type OffensiveAffinitiesType = {
   physical: number;

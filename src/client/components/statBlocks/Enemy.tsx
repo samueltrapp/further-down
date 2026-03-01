@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { EnemyType } from "../../../types/individual/characters.ts";
-import { enemyTurn } from "../../services/turn.ts";
 import "./StatBlocks.css";
 import "./Enemy.css";
 import styled from "styled-components";
@@ -25,21 +23,8 @@ function Enemy(props: EnemyType & { id: string }) {
 
   const { game } = useGame();
   const client = game?.client;
-  const lobby = game?.data.lobby;
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
   const isSelected = client?.selectedEnemyIds.includes(id);
-
-  useEffect(() => {
-    if (activeTurn && lobby?.gameId) {
-      setTimeout(() => {
-        enemyTurn({
-          gameId: lobby?.gameId,
-          team: "enemy",
-          sourceId: id,
-        });
-      }, 1500);
-    }
-  }, [activeTurn, lobby?.gameId, id]);
 
   return (
     <div

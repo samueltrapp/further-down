@@ -1,9 +1,13 @@
-import { ManeuverType } from "../../../../types/equipables/actions.ts";
+import {
+  ManeuverName,
+  ManeuverType,
+} from "../../../../types/equipables/actions.ts";
 
 export const quicksilver: ManeuverType = {
-  name: "quicksilver",
+  name: ManeuverName.QUICKSILVER,
   description: "Quicksilver description",
   speedCost: 4,
+  targetTeam: "enemy",
   maxTargets: 1,
   steps: [
     {
