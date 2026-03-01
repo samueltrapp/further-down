@@ -16,8 +16,15 @@ export enum LobbyStatus {
   FULL = "full",
   PREPARE = "prepare",
   REWARD = "reward",
+  SUMMARY = "summary",
   UNJOINED = "unjoined",
   WAITING = "waiting",
+}
+
+export enum Victor {
+  ENEMY = "enemy",
+  NONE = "none",
+  PLAYER = "player",
 }
 
 export type BattleType = {
@@ -25,6 +32,7 @@ export type BattleType = {
   speedElapsed: number;
   turnOrder: string[];
   grade: BattleGrade;
+  victor: Victor;
 };
 
 export type LobbyType = {

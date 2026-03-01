@@ -44,6 +44,7 @@ export default function TurnTracker() {
 
   return (
     <div className="turn-tracker-container">
+      <div>{`Round ${game.data.battle?.round}`}</div>
       {turnTracker?.slice(0, 3)?.map((turn, index) => (
         <TurnTrackerRow
           key={battle?.turnOrder[index]}

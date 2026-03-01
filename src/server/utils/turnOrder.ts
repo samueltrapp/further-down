@@ -6,6 +6,9 @@ type CharTurnType = {
   speed: number;
 };
 
+export const resolveRoundCount = (round: number, isRoundEnd: boolean) =>
+  isRoundEnd && round ? round + 1 : round;
+
 export const resolveTurnOrder = (characters: CharactersType): string[] => {
   const charTurns: { id: string; lastTurn: number; speed: number }[] = [];
   const charEntries = Object.entries(characters);

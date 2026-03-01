@@ -1,7 +1,10 @@
-import { TacticType } from "../../../../types/equipables/actions.ts";
+import {
+  TacticName,
+  TacticType,
+} from "../../../../types/equipables/actions.ts";
 
 export const pass: TacticType = {
-  name: "pass",
+  name: TacticName.PASS,
   description: "Skips turn",
   speedCost: 10,
   targetTeam: "enemy",

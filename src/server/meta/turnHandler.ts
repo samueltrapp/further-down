@@ -4,10 +4,15 @@ import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { applyDamage, calcDamage } from "../battle/damage.ts";
 import { calcMitigation } from "../battle/mitigation.ts";
-import { expendSpeed, finishTurn } from "../battle/speed.ts";
+import { expendSpeed } from "../battle/speed.ts";
 import { sendGame } from "./gameManagement.ts";
-import { GameType } from "../../types/game.ts";
-import { applyDeath, checkNextTurn, switchWeapon } from "../battle/core.ts";
+import { Victor } from "../../types/game.ts";
+import {
+  applyDeath,
+  checkNextTurn,
+  finishTurn,
+  switchWeapon,
+} from "../battle/core.ts";
 import { tacticMap } from "../../shared/definitions/tactics/sets.ts";
 
 const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
@@ -79,15 +84,13 @@ export function handleTurn(
     ctx = expendSpeed(ctx);
     ctx = applyDeath(ctx);
 
-    let updatedGame: GameType = {
-      ...game,
-      characters: ctx?.characters,
-    };
-
-    updatedGame = finishTurn(updatedGame);
+    const updatedGame = finishTurn(game, ctx.characters);
     connection.meta.games.set(turn.gameId, updatedGame);
     sendGame(connection, turn.gameId);
 
-    checkNextTurn(connection, turn.gameId);
+    /* Automatically take enemy turn if applicable */
+    if (updatedGame.battle?.victor === Victor.NONE) {
+      checkNextTurn(connection, turn.gameId);
+    }
   }
 }

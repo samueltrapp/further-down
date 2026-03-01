@@ -1,10 +1,11 @@
 import { ActionCtx } from "../events/actionCtx.ts";
 
-export type EnchantmentName =
-  | "discipline"
-  | "killerInstinct"
-  | "redFang"
-  | "thousandCuts";
+export enum EnchantmentName {
+  A_THOUSAND_CUTS = "aThousandCuts",
+  DISCIPLINE = "discipline",
+  KILLER_INSTINCT = "killerInstinct",
+  RED_FANG = "redFang",
+}
 
 export type EnchantmentType = {
   name: EnchantmentName;

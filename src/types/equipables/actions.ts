@@ -1,10 +1,19 @@
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
 // All maneuvers
-export type ManeuverName = "pummel" | "quicksilver" | "deluge" | "ache";
+export enum ManeuverName {
+  ACHE = "ache",
+  DELUGE = "deluge",
+  PUMMEL = "pummel",
+  QUICKSILVER = "quicksilver",
+}
 
 // All tactics
-export type TacticName = "sporeBurst" | "bonk" | "pass";
+export enum TacticName {
+  PASS = "pass",
+  BONK = "bonk",
+  SPORE_BURST = "sporeBurst",
+}
 
 export type TagType =
   | "attack" // Damages life

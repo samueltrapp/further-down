@@ -1,7 +1,10 @@
-import { ManeuverType } from "../../../../types/equipables/actions.ts";
+import {
+  ManeuverName,
+  ManeuverType,
+} from "../../../../types/equipables/actions.ts";
 
 const ache: ManeuverType = {
-  name: "ache",
+  name: ManeuverName.ACHE,
   description: "Ache description",
   speedCost: 11,
   targetTeam: "enemy",

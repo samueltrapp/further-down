@@ -1,7 +1,10 @@
-import { TacticType } from "../../../../types/equipables/actions.ts";
+import {
+  TacticName,
+  TacticType,
+} from "../../../../types/equipables/actions.ts";
 
 export const bonk: TacticType = {
-  name: "bonk",
+  name: TacticName.BONK,
   description: "A gentle slap that grows stronger each round",
   speedCost: 5,
   targetTeam: "player",

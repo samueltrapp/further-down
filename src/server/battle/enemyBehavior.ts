@@ -71,7 +71,7 @@ export const decideEnemyTurn = (
     },
     {
       priority: 0,
-      tactic: "pass",
+      tactic: TacticName.PASS,
     },
   );
 
