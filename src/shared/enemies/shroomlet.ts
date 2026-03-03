@@ -1,9 +1,24 @@
 import { EnemyType } from "../../types/individual/characters.ts";
 import { TacticName } from "../../types/equipables/actions.ts";
 
-const shroomlet = (id: string): EnemyType => ({
+const numToChar = (num: number) => {
+  switch (num) {
+    case 0:
+      return "A";
+    case 1:
+      return "B";
+    case 2:
+      return "C";
+    case 3:
+      return "D";
+    default:
+      return "X";
+  }
+};
+
+const shroomlet = (id: string, index: number): EnemyType => ({
   id,
-  name: "Shroomlet",
+  name: `Shroomlet ${numToChar(index)}`,
   team: "enemy",
   stats: {
     vitality: 0,

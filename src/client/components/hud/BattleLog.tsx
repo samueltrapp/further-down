@@ -1,15 +1,18 @@
-import "./Hud.css";
 import { useGame } from "../../hooks/useGame.ts";
+import "./BattleLog.css";
+import "./Hud.css";
 
 export default function BattleLog() {
   const { game } = useGame();
-  const log = game?.client?.logHistory;
+  const log = game?.data?.battle?.messages;
 
   return (
     <div className="battle-log central-column">
-      {log?.map((logLine) => (
-        <p>{logLine}</p>
-      ))}
+      <ul>
+        {log?.map((logLine) => (
+          <li>{logLine}</li>
+        ))}
+      </ul>
     </div>
   );
 }

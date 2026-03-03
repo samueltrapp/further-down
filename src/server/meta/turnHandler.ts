@@ -18,7 +18,6 @@ import { tacticMap } from "../../shared/definitions/tactics/sets.ts";
 const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
   return {
     ...ctx,
-    messages: [],
     toHit: 0,
     accuracy: 0,
     damage: 0,
@@ -39,7 +38,7 @@ export function handleTurn(
       ? maneuverMap.get(turn.maneuver)
       : tacticMap.get(turn.tactic);
 
-    if (!source || !action) {
+    if (!source || !action || !game.battle) {
       return; // TODO: Better error handling
     }
 
@@ -48,8 +47,9 @@ export function handleTurn(
       sourceId: turn.sourceId,
       playerTargetIds: turn.playerTargetIds,
       enemyTargetIds: turn.enemyTargetIds,
+      actionName: action.name,
       speed: action.speedCost,
-      messages: [],
+      messages: game.battle.messages,
       toHit: 0,
       accuracy: 0,
       damage: 0,
@@ -84,7 +84,7 @@ export function handleTurn(
     ctx = expendSpeed(ctx);
     ctx = applyDeath(ctx);
 
-    const updatedGame = finishTurn(game, ctx.characters);
+    const updatedGame = finishTurn(game, ctx.characters, ctx.messages);
     connection.meta.games.set(turn.gameId, updatedGame);
     sendGame(connection, turn.gameId);
 

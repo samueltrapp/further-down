@@ -14,6 +14,7 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
     return ctx;
   }
 
+  // TODO: Fix mitigation to rely on armor
   const mitigation = (targetStat: StatsType) => {
     switch (damageType) {
       case "blunt":

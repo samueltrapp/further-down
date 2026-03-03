@@ -60,6 +60,7 @@ export const checkNextTurn = (connection: ConnectionType, gameId: string) => {
 export const finishTurn = (
   game: GameType,
   characters: CharactersType,
+  messages: string[],
 ): GameType => {
   if (!game.characters || !game.battle) {
     return game;
@@ -88,14 +89,17 @@ export const finishTurn = (
   /* Mark winner if one team is defeated */
   const victor = (() => {
     if (areEnemiesDead && !arePlayersDead) {
+      messages.push("PLAYERS WIN.");
       return Victor.PLAYER;
     } else if (arePlayersDead) {
+      messages.push("ENEMIES WIN.");
       return Victor.ENEMY;
     } else return Victor.NONE;
   })();
 
   /* Replenish speed at end of round */
   if (victor === Victor.NONE && isRoundEnd) {
+    messages.push(`End of round ${game.battle.round}.`);
     characters = restoreSpeed(characters);
   }
 
@@ -104,6 +108,7 @@ export const finishTurn = (
     ...game,
     battle: {
       ...(game.battle as BattleType),
+      messages,
       round: resolveRoundCount(game.battle.round, isRoundEnd),
       turnOrder: resolveTurnOrder(game.characters),
       victor,

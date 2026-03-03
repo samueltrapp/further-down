@@ -1,7 +1,7 @@
 import { GameType } from "../../types/game.ts";
 import { TacticName } from "../../types/equipables/actions.ts";
 import { tacticMap } from "../../shared/definitions/tactics/sets.ts";
-import { randEntry, randNum } from "../../common/utils.ts";
+import { randEntry, randNum } from "../../shared/utils.ts";
 import { handleTurn } from "../meta/turnHandler.ts";
 import { ConnectionType } from "../../types/server.ts";
 import { EnemyTurnType } from "../../types/events/turn.ts";

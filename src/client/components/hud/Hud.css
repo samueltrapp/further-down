@@ -31,15 +31,3 @@
     background-color: var(--silver);
   }
 }
-
-.battle-log {
-  background-color: var(--off-white);
-  border: 1px solid var(--gray);
-  color: var(--black);
-  height: 32px;
-  display: flex;
-  flex-direction: column-reverse;
-  overflow: scroll;
-  width: 100%;
-  margin-top: 24px;
-}
