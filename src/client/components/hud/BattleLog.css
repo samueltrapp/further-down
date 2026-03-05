@@ -1,13 +1,34 @@
+.autoscroll {
+  background-color: rgba(172, 141, 56, 0.7);
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 .battle-log {
-  background-color: var(--off-white);
-  border: 1px solid var(--gray);
-  border-radius: 2rem;
   color: var(--black);
   height: 7rem;
   display: flex;
   flex-direction: column-reverse;
   overflow: scroll;
   width: 100%;
-  margin-top: 1.5rem;
+  margin: 0.5rem 0;
   font-size: 0.75rem;
+  scrollbar-gutter: auto;
+  scrollbar-color: var(--aubergine) transparent;
+  scrollbar-width: thin;
+
+  ul {
+    margin: 0;
+  }
+}
+
+.central-column {
+  background-color: var(--off-white);
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  width: 100%;
 }
