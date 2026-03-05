@@ -6,4 +6,3 @@ export const randEntry = (arr: unknown[]) => {
     altered: [...arr].splice(index, 1),
   };
 };
-export const roll = (threshold: number) => threshold <= randNum(100);

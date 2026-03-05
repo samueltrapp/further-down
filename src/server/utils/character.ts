@@ -4,7 +4,7 @@
     Lower: 97-122
 */
 import { SingleRewardType } from "../../types/equipables/aggregates.ts";
-import { randNum } from "../../common/utils.ts";
+import { randNum } from "../../shared/utils.ts";
 
 export const randomId = (digits: number = 5) => {
   const id = [];

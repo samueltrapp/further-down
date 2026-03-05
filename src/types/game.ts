@@ -28,10 +28,11 @@ export enum Victor {
 }
 
 export type BattleType = {
+  grade: BattleGrade;
+  messages: string[];
   round: number;
   speedElapsed: number;
   turnOrder: string[];
-  grade: BattleGrade;
   victor: Victor;
 };
 
@@ -63,5 +64,4 @@ export type GameClientType = {
   selectedFriendlyIds: string[];
   selectedManeuver: ManeuverName | "";
   selectedWeapon: WeaponName | "";
-  logHistory: string[];
 };

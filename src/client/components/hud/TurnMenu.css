@@ -1,7 +1,7 @@
 .menu-container {
   background-color: transparent;
   border-radius: 0 0 32px 32px;
-  height: 200px;
+  margin-bottom: calc(1rem + 2px);
   width: 100%;
 }
 

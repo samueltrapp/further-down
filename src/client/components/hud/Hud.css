@@ -1,7 +1,3 @@
-.central-column {
-  margin: 0 1rem 1rem;
-}
-
 .turn-tracker-container {
   background-color: var(--black);
   border: 2px solid var(--chartreuse);
@@ -24,22 +20,11 @@
   background-color: var(--sunset);
   border: none;
   display: block;
-  font-size: 2rem;
+  font-size: 1.25rem;
   padding: 0.5rem;
+  width: 100%;
 
   &[disabled] {
     background-color: var(--silver);
   }
-}
-
-.battle-log {
-  background-color: var(--off-white);
-  border: 1px solid var(--gray);
-  color: var(--black);
-  height: 32px;
-  display: flex;
-  flex-direction: column-reverse;
-  overflow: scroll;
-  width: 100%;
-  margin-top: 24px;
 }

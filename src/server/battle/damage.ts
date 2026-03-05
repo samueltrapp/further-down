@@ -1,6 +1,6 @@
 import { HitStep } from "../../types/equipables/actions.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
-import { randNum } from "../../common/utils.ts";
+import { randNum } from "../../shared/utils.ts";
 import { limitToZero, trunc } from "../utils/battle.ts";
 import { randomInt } from "node:crypto";
 import { weaponMap } from "../../shared/definitions/weapons/sets.ts";
@@ -76,26 +76,30 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
 };
 
 export const applyDamage = (ctx: ActionCtx) => {
-  const { characters, damage, mitigation } = ctx;
+  const { actionName, characters, damage, messages, mitigation, sourceId } =
+    ctx;
+  const sourceName = characters[sourceId].name;
 
   mitigation.forEach((mitigationFactor, charId) => {
     /* Total threshold for attacker to hit */
     const revisedAccuracy = ctx.accuracy - mitigationFactor.evasion;
 
     if (ctx.toHit > revisedAccuracy) {
-      // TODO: miss
+      messages.push(
+        `${sourceName} missed ${characters[charId].name} with ${actionName}.`,
+      );
     } else {
       const character = characters[charId];
       const reducedDamage = limitToZero(damage - mitigationFactor.reduction);
-
       if (character?.stats?.life) {
         character.stats.life -= reducedDamage;
       }
+
+      messages.push(
+        `${sourceName} hit ${characters[charId].name} with ${actionName} for ${reducedDamage} (${damage} - ${mitigationFactor.reduction}).`,
+      );
     }
   });
 
-  return {
-    ...ctx,
-    characters,
-  };
+  return ctx;
 };
