@@ -85,7 +85,7 @@ export const applyDamage = (ctx: ActionCtx) => {
     const revisedAccuracy = ctx.accuracy - mitigationFactor.evasion;
 
     if (ctx.toHit > revisedAccuracy) {
-      messages.push(
+      messages.steps?.push(
         `${sourceName} missed ${characters[charId].name} with ${actionName}.`,
       );
     } else {
@@ -95,7 +95,7 @@ export const applyDamage = (ctx: ActionCtx) => {
         character.stats.life -= reducedDamage;
       }
 
-      messages.push(
+      messages.steps?.push(
         `${sourceName} hit ${characters[charId].name} with ${actionName} for ${reducedDamage} (${damage} - ${mitigationFactor.reduction}).`,
       );
     }

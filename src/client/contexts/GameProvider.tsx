@@ -28,7 +28,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       selectedFriendlyIds: [],
       selectedManeuver: "",
       selectedWeapon: "",
-      logHistory: [],
     },
   });
 
@@ -59,7 +58,6 @@ function resetTurn(state: GameType): GameClientType {
     selectedFriendlyIds: [],
     selectedManeuver: "",
     selectedWeapon: equippedWeapon,
-    logHistory: [],
   };
 }
 
