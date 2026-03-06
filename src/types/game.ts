@@ -27,9 +27,14 @@ export enum Victor {
   PLAYER = "player",
 }
 
+export type TurnLog = {
+  headline: string;
+  steps?: string[];
+};
+
 export type BattleType = {
   grade: BattleGrade;
-  messages: string[];
+  messages: TurnLog[];
   round: number;
   speedElapsed: number;
   turnOrder: string[];

@@ -17,8 +17,15 @@ export default function BattleLog() {
     <div className="central-column">
       <div id="battle-log" className="battle-log">
         <ul>
-          {log?.map((logLine) => (
-            <li>{logLine}</li>
+          {log?.map((logLine, index) => (
+            <li key={logLine.headline + index}>
+              {logLine.headline}
+              <ul>
+                {logLine.steps?.map((step, stepIndex) => (
+                  <li key={step + index + stepIndex}>{step}</li>
+                ))}
+              </ul>
+            </li>
           ))}
         </ul>
       </div>

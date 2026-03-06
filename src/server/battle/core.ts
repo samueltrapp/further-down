@@ -7,6 +7,7 @@ import {
   BattleType,
   CharactersType,
   GameType,
+  TurnLog,
   Victor,
 } from "../../types/game.ts";
 import { resolveRoundCount, resolveTurnOrder } from "../utils/turnOrder.ts";
@@ -17,13 +18,12 @@ export const applyDeath = (ctx: ActionCtx) => {
   const { characters } = ctx;
 
   for (const character of Object.values(characters)) {
-    character.isDead = character.stats.life <= 0;
+    if (character.stats.life <= 0) {
+      character.isDead = true;
+      ctx.messages.steps?.push(`${character.name} fell in battle!`);
+    }
   }
-
-  return {
-    ...ctx,
-    characters,
-  };
+  return ctx;
 };
 
 /* Update character's equipped weapon */
@@ -35,10 +35,7 @@ export const switchWeapon = (ctx: ActionCtx, weapon: WeaponName) => {
   }
 
   source.rewards.equippedWeapon = weapon;
-  return {
-    ...ctx,
-    characters,
-  };
+  return ctx;
 };
 
 /* Check if it's now an enemy's turn, generating turn details if it is */
@@ -60,7 +57,7 @@ export const checkNextTurn = (connection: ConnectionType, gameId: string) => {
 export const finishTurn = (
   game: GameType,
   characters: CharactersType,
-  messages: string[],
+  messages: TurnLog,
 ): GameType => {
   if (!game.characters || !game.battle) {
     return game;
@@ -89,17 +86,22 @@ export const finishTurn = (
   /* Mark winner if one team is defeated */
   const victor = (() => {
     if (areEnemiesDead && !arePlayersDead) {
-      messages.push("PLAYERS WIN.");
+      messages.steps?.push("PLAYERS WIN.");
       return Victor.PLAYER;
     } else if (arePlayersDead) {
-      messages.push("ENEMIES WIN.");
+      messages.steps?.push("ENEMIES WIN.");
       return Victor.ENEMY;
     } else return Victor.NONE;
   })();
 
+  const separatedMessages = game.battle.messages;
+  separatedMessages.push(messages);
+
   /* Replenish speed at end of round */
   if (victor === Victor.NONE && isRoundEnd) {
-    messages.push(`End of round ${game.battle.round}.`);
+    separatedMessages.push({
+      headline: `End of round ${game.battle.round}.`,
+    });
     characters = restoreSpeed(characters);
   }
 
@@ -108,7 +110,7 @@ export const finishTurn = (
     ...game,
     battle: {
       ...(game.battle as BattleType),
-      messages,
+      messages: separatedMessages,
       round: resolveRoundCount(game.battle.round, isRoundEnd),
       turnOrder: resolveTurnOrder(game.characters),
       victor,

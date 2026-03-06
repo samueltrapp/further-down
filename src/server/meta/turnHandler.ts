@@ -26,6 +26,18 @@ const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
   };
 };
 
+const turnLog = (
+  sourceName: string,
+  actionName: string,
+  weaponName: string | undefined,
+) => {
+  const weaponClause = weaponName ? ` (${weaponName}` : "";
+  return {
+    headline: `${sourceName} used ${actionName}${weaponClause}.`,
+    steps: [],
+  };
+};
+
 export function handleTurn(
   connection: ConnectionType,
   turn: PlayerTurnType | EnemyTurnType,
@@ -42,6 +54,8 @@ export function handleTurn(
       return; // TODO: Better error handling
     }
 
+    const weapon = turn.team === "player" ? turn.weapon : undefined;
+
     let ctx: ActionCtx = {
       characters: game.characters,
       sourceId: turn.sourceId,
@@ -49,7 +63,7 @@ export function handleTurn(
       enemyTargetIds: turn.enemyTargetIds,
       actionName: action.name,
       speed: action.speedCost,
-      messages: game.battle.messages,
+      messages: turnLog(source.name, action.name, weapon),
       toHit: 0,
       accuracy: 0,
       damage: 0,
