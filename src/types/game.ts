@@ -1,5 +1,5 @@
 import { EnemyType, PlayerType } from "./individual/characters.ts";
-import { ManeuverName } from "./equipables/actions.ts";
+import { ManeuverName, TargetMethodType } from "./equipables/actions.ts";
 import { WeaponName } from "./equipables/weapons.ts";
 
 export enum BattleGrade {
@@ -64,9 +64,9 @@ export type GameStateType = {
 };
 
 export type GameClientType = {
-  maxEnemySelections: number;
-  selectedEnemyIds: string[];
-  selectedFriendlyIds: string[];
+  maxSelections: number;
+  selectionType: TargetMethodType;
+  selectedIds: string[];
   selectedManeuver: ManeuverName | "";
   selectedWeapon: WeaponName | "";
 };

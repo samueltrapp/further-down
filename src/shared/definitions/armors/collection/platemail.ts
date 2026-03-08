@@ -1,7 +1,8 @@
-import { ArmorName, ArmorType } from "../../../../types/equipables/armors.ts";
+import { ArmorType } from "../../../../types/equipables/armors.ts";
 
 export const platemail: ArmorType = {
-  name: ArmorName.PLATEMAIL,
+  name: "platemail",
+  team: "player",
   constitution: 5,
   protection: 4,
   affinities: {

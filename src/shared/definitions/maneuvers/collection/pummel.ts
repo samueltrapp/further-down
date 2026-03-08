@@ -1,18 +1,19 @@
-import { MvnOrTctType } from "../../../../types/events/turn.ts";
-import { ManeuverName } from "../../../../types/equipables/actions.ts";
+import { ManeuverType } from "../../../../types/equipables/actions.ts";
 
-const pummel: MvnOrTctType = {
-  name: ManeuverName.PUMMEL,
+const pummel: ManeuverType = {
+  name: "pummel",
+  team: "player",
   description: "Pummel description",
-  speedCost: 12,
-  targetTeam: "enemy",
+  speedCost: 8,
+  perspective: "other",
+  targetMethod: "select",
   maxTargets: 1,
   steps: [
     {
       type: "hit",
-      accuracy: 75,
+      accuracy: 70,
       damageType: "blunt",
-      strength: 0.9,
+      strength: 1.4,
     },
   ],
   tags: ["attack", "blunt", "single", "pure", "burden"],

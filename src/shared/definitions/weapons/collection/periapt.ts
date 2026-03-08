@@ -1,10 +1,8 @@
-import {
-  WeaponName,
-  WeaponType,
-} from "../../../../types/equipables/weapons.ts";
+import { WeaponType } from "../../../../types/equipables/weapons.ts";
 
 export const periapt: WeaponType = {
-  name: WeaponName.PERIAPT,
+  name: "periapt",
+  team: "player",
   power: 9,
   spread: 4,
   affinities: {
@@ -17,6 +15,5 @@ export const periapt: WeaponType = {
   },
   level: 1,
   rarity: 0,
-  equipped: false,
   description: "Periapt description",
 };

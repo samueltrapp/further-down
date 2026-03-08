@@ -13,11 +13,40 @@ import {
   finishTurn,
   switchWeapon,
 } from "../battle/core.ts";
-import { tacticMap } from "../../shared/definitions/tactics/sets.ts";
+import { toCaps } from "../../client/utils/formatting.ts";
+import { TeamType } from "../../types/individual/characters.ts";
+import { randEntry, validTargets } from "../../shared/utils.ts";
 
-const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
+type TurnProps = {
+  sourceTeam: TeamType;
+  targetIds: string[];
+};
+
+const assignTargets = (ctx: ActionCtx, turnProps: TurnProps) => {
+  const { sourceTeam, targetIds } = turnProps;
+  const { characters, maneuver } = ctx;
+
+  switch (maneuver.targetMethod) {
+    case "select":
+      return targetIds;
+    case "self":
+      return [ctx.sourceId];
+    case "all":
+      return validTargets(characters, sourceTeam, maneuver.perspective);
+    case "random":
+      return [
+        randEntry(validTargets(characters, sourceTeam, maneuver.perspective))
+          .pick,
+      ] as string[];
+    default:
+      return [];
+  }
+};
+
+const resetCtxStep = (ctx: ActionCtx, turnProps: TurnProps): ActionCtx => {
   return {
     ...ctx,
+    targetIds: assignTargets(ctx, turnProps),
     toHit: 0,
     accuracy: 0,
     damage: 0,
@@ -31,9 +60,9 @@ const turnLog = (
   actionName: string,
   weaponName: string | undefined,
 ) => {
-  const weaponClause = weaponName ? ` (${weaponName}` : "";
+  const weaponClause = weaponName ? ` (${toCaps(weaponName)})` : "";
   return {
-    headline: `${sourceName} used ${actionName}${weaponClause}.`,
+    headline: `${sourceName} used ${toCaps(actionName)}${weaponClause}.`,
     steps: [],
   };
 };
@@ -43,27 +72,29 @@ export function handleTurn(
   turn: PlayerTurnType | EnemyTurnType,
 ) {
   const game = connection.meta.games.get(turn.gameId);
+  console.debug(`TURN: ${game?.characters?.[turn.sourceId].name}`);
   if (game && game.characters) {
     const source = game.characters[turn.sourceId];
     const isPlayerTurn = turn.team === "player";
-    const action = isPlayerTurn
-      ? maneuverMap.get(turn.maneuver)
-      : tacticMap.get(turn.tactic);
+    const maneuver = maneuverMap.get(turn.maneuver);
 
-    if (!source || !action || !game.battle) {
-      return; // TODO: Better error handling
+    console.debug(turn);
+    console.debug(source);
+    console.debug(maneuver);
+    if (!source || !maneuver || !game.battle) {
+      return;
     }
 
-    const weapon = turn.team === "player" ? turn.weapon : undefined;
+    const sourceTeam = turn.team;
+    const weapon = sourceTeam === "player" ? turn.weapon : "";
 
     let ctx: ActionCtx = {
       characters: game.characters,
       sourceId: turn.sourceId,
-      playerTargetIds: turn.playerTargetIds,
-      enemyTargetIds: turn.enemyTargetIds,
-      actionName: action.name,
-      speed: action.speedCost,
-      messages: turnLog(source.name, action.name, weapon),
+      maneuver: maneuver,
+      targetIds: [],
+      speed: maneuver.speedCost,
+      messages: turnLog(source.name, maneuver.name, weapon),
       toHit: 0,
       accuracy: 0,
       damage: 0,
@@ -77,8 +108,10 @@ export function handleTurn(
     }
 
     /* Action */
-    action?.steps.forEach((step) => {
-      ctx = resetCtxStep(ctx);
+    maneuver?.steps.forEach((step, index) => {
+      console.debug(`STEP: ${index}`);
+      ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
+      console.debug(`TARGETS: ${ctx.targetIds}`);
 
       if (step.type === "hit") {
         ctx = calcDamage(step, ctx);

@@ -1,13 +1,12 @@
-import {
-  ManeuverName,
-  ManeuverType,
-} from "../../../../types/equipables/actions.ts";
+import { ManeuverType } from "../../../../types/equipables/actions.ts";
 
 const ache: ManeuverType = {
-  name: ManeuverName.ACHE,
+  name: "ache",
+  team: "player",
   description: "Ache description",
-  speedCost: 11,
-  targetTeam: "enemy",
+  speedCost: 7,
+  perspective: "other",
+  targetMethod: "select",
   maxTargets: 1,
   steps: [
     {

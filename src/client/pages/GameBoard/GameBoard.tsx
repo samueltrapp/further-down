@@ -5,7 +5,7 @@ import TurnTracker from "../../components/hud/TurnTracker.tsx";
 import ConfirmButton from "../../components/hud/ConfirmButton.tsx";
 import BattleLog from "../../components/hud/BattleLog.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
-import { selectEnemies } from "../../contexts/contextActions.ts";
+import { selectCharacters } from "../../contexts/contextActions.ts";
 import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
 import GraphicsCanvas from "../../components/hud/GraphicsCanvas.tsx";
 import TurnMenu from "../../components/hud/TurnMenu.tsx";
@@ -21,6 +21,7 @@ function GameBoard() {
     players: [],
     enemies: [],
   };
+
   Object.entries(characters).reduce((arrs, curr) => {
     if (curr[1].team === "player") {
       arrs.players.push(curr[1] as PlayerType);
@@ -32,15 +33,15 @@ function GameBoard() {
 
   const handleSelect = (enemyId: string) => {
     if (dispatch && game.client.selectedManeuver) {
-      const updatedEnemyIds = selectEnemies(
+      const updatedEnemyIds = selectCharacters(
         enemyId,
-        game?.client?.selectedEnemyIds,
-        game?.client?.maxEnemySelections,
+        game?.client?.selectedIds,
+        game?.client?.maxSelections,
       );
       dispatch({
         type: GameAction.PLAYER_ACTION,
         payload: {
-          selectedEnemyIds: updatedEnemyIds,
+          selectedIds: updatedEnemyIds,
         },
       });
     }

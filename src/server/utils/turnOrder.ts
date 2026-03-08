@@ -13,11 +13,13 @@ export const resolveTurnOrder = (characters: CharactersType): string[] => {
   const charTurns: { id: string; lastTurn: number; speed: number }[] = [];
   const charEntries = Object.entries(characters);
   for (const charEntry of charEntries) {
-    charTurns.push({
-      id: charEntry[0],
-      lastTurn: charEntry[1].lastTurn,
-      speed: charEntry[1].stats.speed,
-    });
+    if (!charEntry[1].isDead) {
+      charTurns.push({
+        id: charEntry[0],
+        lastTurn: charEntry[1].lastTurn,
+        speed: charEntry[1].stats.speed,
+      });
+    }
   }
 
   charTurns.sort((a: CharTurnType, b: CharTurnType) => {

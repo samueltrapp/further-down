@@ -23,9 +23,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       },
     },
     client: {
-      maxEnemySelections: 0,
-      selectedEnemyIds: [],
-      selectedFriendlyIds: [],
+      maxSelections: 0,
+      selectionType: "select",
+      selectedIds: [],
       selectedManeuver: "",
       selectedWeapon: "",
     },
@@ -46,16 +46,16 @@ function resetTurn(state: GameType): GameClientType {
     if (turn) {
       const character = state?.characters?.[turn];
       if (character && character?.team === "player") {
-        return character?.rewards?.equippedWeapon || "";
+        return character?.equipped.weapon || "";
       }
     }
     return "";
   })();
 
   return {
-    maxEnemySelections: 0,
-    selectedEnemyIds: [],
-    selectedFriendlyIds: [],
+    maxSelections: 0,
+    selectionType: "select",
+    selectedIds: [],
     selectedManeuver: "",
     selectedWeapon: equippedWeapon,
   };
@@ -77,15 +77,6 @@ function gameReducer(game: GameStateType, action: GameActionType) {
         },
       };
     }
-    // case GameAction.LOG: {
-    //   return {
-    //     ...game,
-    //     client: {
-    //       ...game.client,
-    //       logHistory: [...game.client.logHistory, ...action.payload],
-    //     },
-    //   };
-    // }
     default:
       return game;
   }

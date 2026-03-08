@@ -42,3 +42,18 @@
 .speed-display {
   color: var(--white);
 }
+
+.right-text {
+  text-align: right;
+}
+
+.left-text {
+  text-align: left;
+}
+
+.health-bar {
+  display: inline-flex;
+  justify-content: space-between;
+  padding: 0.125rem 0.75rem;
+  font-size: 0.75rem;
+}

@@ -13,7 +13,7 @@ import { checkOwnership } from "../../utils/checkOwnership.ts";
 
 function PersonalMenu({ character }: { character: PlayerType }) {
   const { game, dispatch } = useGame();
-  const { maneuvers, weapons } = character.rewards.owned;
+  const { maneuvers, weapons } = character.loadout;
   const isUserTurn = checkOwnership(character);
   const equippedWeapon = game?.client?.selectedWeapon;
   const filledManeuvers: (ManeuverName | "")[] =
@@ -28,9 +28,10 @@ function PersonalMenu({ character }: { character: PlayerType }) {
       dispatch({
         type: GameAction.PLAYER_ACTION,
         payload: {
-          selectedEnemyIds: [],
+          selectedIds: [],
+          selectionType: selectedManeuver?.targetMethod,
           selectedManeuver: value,
-          maxEnemySelections: selectedManeuver?.maxTargets || 0,
+          maxSelections: selectedManeuver?.maxTargets || 0,
         },
       });
     }

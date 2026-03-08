@@ -1,7 +1,8 @@
-import { ArmorName, ArmorType } from "../../../../types/equipables/armors.ts";
+import { ArmorType } from "../../../../types/equipables/armors.ts";
 
 export const robe: ArmorType = {
-  name: ArmorName.ROBE,
+  name: "robe",
+  team: "player",
   constitution: 5,
   protection: 1,
   affinities: {

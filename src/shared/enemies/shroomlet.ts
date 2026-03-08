@@ -1,5 +1,4 @@
 import { EnemyType } from "../../types/individual/characters.ts";
-import { TacticName } from "../../types/equipables/actions.ts";
 
 const numToChar = (num: number) => {
   switch (num) {
@@ -41,13 +40,22 @@ const shroomlet = (id: string, index: number): EnemyType => ({
     evasion: 0,
     accuracy: 0,
   },
-  base: 6,
+  equipped: {
+    weapon: "fungal appendage",
+    armor: "porous body",
+    enchantments: [],
+  },
+  loadout: {
+    armors: ["porous body"],
+    enchantments: [],
+    maneuvers: ["bonk"],
+    weapons: ["fungal appendage"],
+  },
   effects: {
     burdens: {},
     favors: {},
   },
   lastTurn: 0,
-  tactics: [TacticName.BONK],
   isDead: false,
 });
 

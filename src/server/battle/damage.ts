@@ -2,14 +2,13 @@ import { HitStep } from "../../types/equipables/actions.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { randNum } from "../../shared/utils.ts";
 import { limitToZero, trunc } from "../utils/battle.ts";
-import { randomInt } from "node:crypto";
 import { weaponMap } from "../../shared/definitions/weapons/sets.ts";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
 export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
-  const { damageType, strength } = step;
-  const { characters, sourceId } = ctx;
+  const { damageType, strength } = { ...step };
+  const { characters, sourceId } = { ...ctx };
   const source = characters[sourceId];
 
   if (!source) {
@@ -17,27 +16,15 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   }
 
   const stats = source.stats;
+  const weaponName = source?.equipped.weapon;
+  const weapon = weaponName && weaponMap.get(weaponName);
 
-  /* Initialize weapon stats for weaponless enemies */
-  let affinities = {
-    physical: 1,
-    magical: 1,
-    bladed: 1,
-    blunt: 1,
-    elemental: 1,
-    psychic: 1,
-  };
-  let baseDamage = 0;
-
-  if (source.team === "player") {
-    const weaponName = source?.rewards.equippedWeapon;
-    const weapon = weaponName && weaponMap.get(weaponName);
-    if (!weapon) {
-      return ctx;
-    }
-    affinities = weapon.affinities;
-    baseDamage = weapon.power + createSpread(weapon.spread);
+  if (!weapon) {
+    return ctx;
   }
+
+  const affinities = weapon.affinities;
+  const baseDamage = weapon.power + createSpread(weapon.spread);
 
   const {
     physical: phAff,
@@ -65,7 +52,7 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
 
   const damageInstance = trunc(strength * damage());
   const stepAccuracy = source.stats.accuracy + step.accuracy;
-  const stepRoll = randomInt(100);
+  const stepRoll = randNum(100);
 
   return {
     ...ctx,
@@ -76,27 +63,25 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
 };
 
 export const applyDamage = (ctx: ActionCtx) => {
-  const { actionName, characters, damage, messages, mitigation, sourceId } =
-    ctx;
-  const sourceName = characters[sourceId].name;
+  const { characters, damage, messages, mitigation } = { ...ctx };
 
   mitigation.forEach((mitigationFactor, charId) => {
     /* Total threshold for attacker to hit */
     const revisedAccuracy = ctx.accuracy - mitigationFactor.evasion;
 
     if (ctx.toHit > revisedAccuracy) {
-      messages.steps?.push(
-        `${sourceName} missed ${characters[charId].name} with ${actionName}.`,
-      );
+      messages.steps?.push(`Missed ${characters[charId].name}.`);
     } else {
       const character = characters[charId];
-      const reducedDamage = limitToZero(damage - mitigationFactor.reduction);
+      const reducedDamage = damage - mitigationFactor.reduction;
       if (character?.stats?.life) {
-        character.stats.life -= reducedDamage;
+        character.stats.life = limitToZero(
+          character.stats.life - reducedDamage,
+        );
       }
 
       messages.steps?.push(
-        `${sourceName} hit ${characters[charId].name} with ${actionName} for ${reducedDamage} (${damage} - ${mitigationFactor.reduction}).`,
+        `Hit ${characters[charId].name} for ${reducedDamage} damage (${damage} - ${mitigationFactor.reduction}).`,
       );
     }
   });

@@ -18,7 +18,7 @@ export const applyDeath = (ctx: ActionCtx) => {
   const { characters } = ctx;
 
   for (const character of Object.values(characters)) {
-    if (character.stats.life <= 0) {
+    if (!character.isDead && character.stats.life <= 0) {
       character.isDead = true;
       ctx.messages.steps?.push(`${character.name} fell in battle!`);
     }
@@ -34,12 +34,16 @@ export const switchWeapon = (ctx: ActionCtx, weapon: WeaponName) => {
     return ctx;
   }
 
-  source.rewards.equippedWeapon = weapon;
+  source.equipped.weapon = weapon;
   return ctx;
 };
 
 /* Check if it's now an enemy's turn, generating turn details if it is */
-export const checkNextTurn = (connection: ConnectionType, gameId: string) => {
+export const checkNextTurn = (
+  connection: ConnectionType,
+  gameId: string,
+  loadDelay?: number,
+) => {
   const game = connection.meta.games.get(gameId);
   if (game) {
     const turn = game.battle?.turnOrder[0];
@@ -47,7 +51,10 @@ export const checkNextTurn = (connection: ConnectionType, gameId: string) => {
       const character = game.characters?.[turn];
       const isEnemyTurn = character?.team === "enemy";
       if (isEnemyTurn && character) {
-        decideEnemyTurn(connection, gameId, game, character.id);
+        setTimeout(
+          () => decideEnemyTurn(connection, gameId, game, character.id),
+          loadDelay || 0,
+        );
       }
     }
   }

@@ -1,30 +1,61 @@
 import { HitStep } from "../../types/equipables/actions.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { StatsType } from "../../types/individual/stats.ts";
+import { ArmorType } from "../../types/equipables/armors.ts";
+import { armorMap } from "../../shared/definitions/armors/sets.ts";
+import { trunc } from "../utils/battle.ts";
 
 export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
   const { damageType } = step;
-  const { characters, enemyTargetIds, playerTargetIds } = ctx;
-  const defenders = (playerTargetIds || enemyTargetIds)?.map((id) => ({
+  const { characters, targetIds } = ctx;
+  const defenders = targetIds?.map((id) => ({
     id: id,
     stats: characters[id]?.stats,
+    armor: characters[id]?.equipped.armor,
   }));
 
   if (!defenders || defenders.length === 0) {
     return ctx;
   }
 
-  // TODO: Fix mitigation to rely on armor
-  const mitigation = (targetStat: StatsType) => {
+  const mitigation = (targetStat: StatsType, armor: ArmorType) => {
+    const affinities = armor.affinities;
+    const baseMitigation = armor.protection;
+
+    const {
+      defense: dfAff,
+      resistance: rsAff,
+      padding: pddAff,
+      plating: pltAff,
+      dampening: dmpAff,
+      warding: wrdAff,
+    } = affinities;
+
     switch (damageType) {
       case "blunt":
-        return targetStat.defense + targetStat.plating;
+        return (
+          baseMitigation +
+          dfAff * targetStat.defense +
+          pddAff * targetStat.plating
+        );
       case "bladed":
-        return targetStat.defense + targetStat.padding;
+        return (
+          baseMitigation +
+          dfAff * targetStat.defense +
+          pltAff * targetStat.padding
+        );
       case "elemental":
-        return targetStat.resistance + targetStat.dampening;
+        return (
+          baseMitigation +
+          rsAff * targetStat.resistance +
+          dmpAff * targetStat.dampening
+        );
       case "psychic":
-        return targetStat.resistance + targetStat.warding;
+        return (
+          baseMitigation +
+          rsAff * targetStat.resistance +
+          wrdAff * targetStat.warding
+        );
       default:
         return 0;
     }
@@ -32,10 +63,11 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
 
   const mitigationMap = new Map();
   defenders?.forEach((defender) => {
-    if (defender.stats) {
+    const armor = defender.armor ? armorMap.get(defender.armor) : null;
+    if (defender.stats && armor) {
       const defensiveStats = {
         evasion: defender.stats.evasion,
-        reduction: mitigation(defender.stats),
+        reduction: trunc(mitigation(defender.stats, armor)),
       };
 
       mitigationMap.set(defender.id, defensiveStats);

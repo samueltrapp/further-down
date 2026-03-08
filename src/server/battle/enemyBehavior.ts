@@ -1,14 +1,14 @@
 import { GameType } from "../../types/game.ts";
-import { TacticName } from "../../types/equipables/actions.ts";
-import { tacticMap } from "../../shared/definitions/tactics/sets.ts";
-import { randEntry, randNum } from "../../shared/utils.ts";
+import { randEntry, randNum, validTargets } from "../../shared/utils.ts";
 import { handleTurn } from "../meta/turnHandler.ts";
 import { ConnectionType } from "../../types/server.ts";
 import { EnemyTurnType } from "../../types/events/turn.ts";
+import { ManeuverName } from "../../types/equipables/actions.ts";
+import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 
 type DecisionType = {
   priority: number;
-  tactic: TacticName;
+  maneuver: ManeuverName;
 };
 
 // candidate: TacticName, game: GameType
@@ -16,24 +16,20 @@ const assessTactic = () => {
   return randNum(30);
 };
 
-const pickTargets = (candidate: TacticName, game: GameType) => {
+const pickTargets = (candidate: ManeuverName, game: GameType) => {
   const selectedTargets: string[] = [];
-  const tactic = tacticMap.get(candidate);
-  if (tactic && game.characters) {
+  const maneuver = maneuverMap.get(candidate);
+  if (maneuver && game.characters) {
     /* Get list of all potential targets based on tactic details */
-    let viableTargets = Object.values(game.characters).reduce(
-      (targets: string[], character) => {
-        if (character.team === tactic.targetTeam && !character.isDead) {
-          targets.push(character.id);
-        }
-        return targets;
-      },
-      [],
+    let viableTargets = validTargets(
+      game.characters,
+      "enemy",
+      maneuver.perspective,
     );
 
     /* Pick actual targets */
     while (
-      selectedTargets.length < tactic.maxTargets &&
+      selectedTargets.length < maneuver.maxTargets &&
       viableTargets.length > 0
     ) {
       const { pick, altered } = randEntry(viableTargets) as {
@@ -59,29 +55,28 @@ export const decideEnemyTurn = (
     return null;
   }
 
-  const decision = character.tactics.reduce(
+  const decision = character.loadout.maneuvers.reduce(
     (decision: DecisionType, candidate) => {
       const candidatePriority = assessTactic(); // TODO: Actual assessment
       return candidatePriority > decision.priority
         ? {
             priority: candidatePriority,
-            tactic: candidate,
+            maneuver: candidate,
           }
         : decision;
     },
     {
-      priority: 0,
-      tactic: TacticName.PASS,
+      priority: -1,
+      maneuver: "pass" as ManeuverName,
     },
   );
 
-  const targets = pickTargets(decision.tactic, game);
+  const targets = pickTargets(decision.maneuver, game);
   const turn: EnemyTurnType = {
     gameId,
     sourceId,
-    playerTargetIds: targets,
-    enemyTargetIds: [],
-    tactic: decision.tactic,
+    targetIds: targets,
+    maneuver: decision.maneuver,
     team: "enemy",
   };
 
