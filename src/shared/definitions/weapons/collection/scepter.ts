@@ -1,10 +1,8 @@
-import {
-  WeaponName,
-  WeaponType,
-} from "../../../../types/equipables/weapons.ts";
+import { WeaponType } from "../../../../types/equipables/weapons.ts";
 
 export const scepter: WeaponType = {
-  name: WeaponName.SCEPTER,
+  name: "scepter",
+  team: "player",
   power: 3,
   spread: 0,
   affinities: {
@@ -17,6 +15,5 @@ export const scepter: WeaponType = {
   },
   level: 1,
   rarity: 0,
-  equipped: false,
   description: "Scepter description",
 };

@@ -5,7 +5,7 @@ import {
 import { quicksilver } from "./collection/quicksilver.ts";
 
 const maneuvers: [ManeuverName, ManeuverType][] = [
-  [ManeuverName.QUICKSILVER, quicksilver],
+  ["quicksilver", quicksilver],
 ];
 
 export const maneuverMap = new Map<ManeuverName, ManeuverType>(maneuvers);

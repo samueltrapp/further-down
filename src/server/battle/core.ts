@@ -34,7 +34,7 @@ export const switchWeapon = (ctx: ActionCtx, weapon: WeaponName) => {
     return ctx;
   }
 
-  source.rewards.equippedWeapon = weapon;
+  source.equipped.weapon = weapon;
   return ctx;
 };
 

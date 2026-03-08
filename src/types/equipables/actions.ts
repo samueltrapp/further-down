@@ -1,19 +1,15 @@
+import { TeamType } from "../individual/characters.ts";
+
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
 // All maneuvers
-export enum ManeuverName {
-  ACHE = "ache",
-  DELUGE = "deluge",
-  PUMMEL = "pummel",
-  QUICKSILVER = "quicksilver",
-}
+const PlayerManeuvers = ["ache", "deluge", "pummel", "quicksilver"] as const;
+type PlayerManeuvers = (typeof PlayerManeuvers)[number];
 
-// All tactics
-export enum TacticName {
-  PASS = "pass",
-  BONK = "bonk",
-  SPORE_BURST = "sporeBurst",
-}
+const EnemyManeuvers = ["bonk", "pass"] as const;
+type EnemyManeuvers = (typeof EnemyManeuvers)[number];
+
+export type ManeuverName = PlayerManeuvers | EnemyManeuvers;
 
 export type TagType =
   | "attack" // Damages life
@@ -46,19 +42,13 @@ export type EffectStep = {
 
 export type StepType = HitStep | HealStep | EffectStep;
 
-type BaseActionType = {
+export type ManeuverType = {
+  name: ManeuverName;
+  team: TeamType;
   description: string;
   speedCost: number;
-  targetTeam: "player" | "enemy";
+  targetTeam: TeamType;
   maxTargets: number;
   steps: StepType[];
   tags: TagType[];
-};
-
-export type ManeuverType = BaseActionType & {
-  name: ManeuverName;
-};
-
-export type TacticType = BaseActionType & {
-  name: TacticName;
 };

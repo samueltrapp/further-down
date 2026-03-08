@@ -64,9 +64,8 @@ export type GameStateType = {
 };
 
 export type GameClientType = {
-  maxEnemySelections: number;
-  selectedEnemyIds: string[];
-  selectedFriendlyIds: string[];
+  maxSelections: number;
+  selectedIds: string[];
   selectedManeuver: ManeuverName | "";
   selectedWeapon: WeaponName | "";
 };

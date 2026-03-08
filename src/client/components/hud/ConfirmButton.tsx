@@ -16,7 +16,7 @@ export default function ConfirmButton() {
     lobby?.gameId &&
     client?.selectedManeuver &&
     client?.selectedWeapon &&
-    client?.selectedEnemyIds.length > 0 &&
+    client?.selectedIds.length > 0 &&
     character &&
     isUserTurn
   );
@@ -28,8 +28,7 @@ export default function ConfirmButton() {
       weapon: client.selectedWeapon as WeaponName,
       team: "player",
       gameId: lobby.gameId,
-      enemyTargetIds: client.selectedEnemyIds,
-      playerTargetIds: client.selectedEnemyIds,
+      targetIds: client.selectedIds,
       sourceId: character.id,
     });
   }

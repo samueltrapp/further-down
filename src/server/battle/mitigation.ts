@@ -4,8 +4,8 @@ import { StatsType } from "../../types/individual/stats.ts";
 
 export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
   const { damageType } = step;
-  const { characters, enemyTargetIds, playerTargetIds } = ctx;
-  const defenders = (playerTargetIds || enemyTargetIds)?.map((id) => ({
+  const { characters, targetIds } = ctx;
+  const defenders = targetIds?.map((id) => ({
     id: id,
     stats: characters[id]?.stats,
   }));

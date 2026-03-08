@@ -1,10 +1,8 @@
-import {
-  WeaponName,
-  WeaponType,
-} from "../../../../types/equipables/weapons.ts";
+import { WeaponType } from "../../../../types/equipables/weapons.ts";
 
 export const hammer: WeaponType = {
-  name: WeaponName.HAMMER,
+  name: "hammer",
+  team: "player",
   power: 5,
   spread: 1,
   affinities: {
@@ -17,6 +15,5 @@ export const hammer: WeaponType = {
   },
   level: 1,
   rarity: 0,
-  equipped: false,
   description: "Hammer description",
 };

@@ -22,7 +22,7 @@ function RewardSelection({
   character: PlayerType;
   gameId: string;
 }) {
-  const options = character.rewards.queue[rewardType].slice(0, 3);
+  const options = character.private.queue[rewardType].slice(0, 3);
 
   const submitSelectedReward = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
@@ -76,7 +76,7 @@ export function Rewards() {
       return (
         <NamePrompt gameId={gameId} characterId={currentPlayerCharacter.id} />
       );
-    } else if (currentPlayerCharacter.rewards.pending.maneuvers > 0) {
+    } else if (currentPlayerCharacter.pending.maneuvers > 0) {
       return (
         <RewardSelection
           rewardType="maneuvers"
@@ -84,7 +84,7 @@ export function Rewards() {
           character={currentPlayerCharacter}
         />
       );
-    } else if (currentPlayerCharacter.rewards.pending.weapons > 0) {
+    } else if (currentPlayerCharacter.pending.weapons > 0) {
       return (
         <RewardSelection
           rewardType="weapons"
@@ -92,7 +92,7 @@ export function Rewards() {
           character={currentPlayerCharacter}
         />
       );
-    } else if (currentPlayerCharacter.rewards.pending.armors > 0) {
+    } else if (currentPlayerCharacter.pending.armors > 0) {
       return (
         <RewardSelection
           rewardType="armors"
@@ -100,7 +100,7 @@ export function Rewards() {
           character={currentPlayerCharacter}
         />
       );
-    } else if (currentPlayerCharacter.rewards.pending.enchantments > 0) {
+    } else if (currentPlayerCharacter.pending.enchantments > 0) {
       return (
         <RewardSelection
           rewardType="enchantments"
@@ -108,10 +108,10 @@ export function Rewards() {
           character={currentPlayerCharacter}
         />
       );
-    } else if (currentPlayerCharacter.rewards.pending.stats > 0) {
+    } else if (currentPlayerCharacter.pending.stats > 0) {
       return (
         <StatGrowth
-          points={currentPlayerCharacter.rewards.pending.stats}
+          points={currentPlayerCharacter.pending.stats}
           gameId={gameId}
           character={currentPlayerCharacter}
         />

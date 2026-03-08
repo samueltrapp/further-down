@@ -1,12 +1,11 @@
 import { CharactersType, TurnLog } from "../game.ts";
-import { ManeuverName, TacticName } from "../equipables/actions.ts";
+import { ManeuverName } from "../equipables/actions.ts";
 
 export type ActionCtx = {
   characters: CharactersType;
   sourceId: string;
-  playerTargetIds: string[] | undefined;
-  enemyTargetIds: string[] | undefined;
-  actionName: ManeuverName | TacticName;
+  targetIds: string[] | undefined;
+  maneuverName: ManeuverName;
   speed: number;
   messages: TurnLog;
   toHit: number;

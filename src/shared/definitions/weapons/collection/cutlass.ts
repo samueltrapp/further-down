@@ -1,10 +1,8 @@
-import {
-  WeaponName,
-  WeaponType,
-} from "../../../../types/equipables/weapons.ts";
+import { WeaponType } from "../../../../types/equipables/weapons.ts";
 
 export const cutlass: WeaponType = {
-  name: WeaponName.CUTLASS,
+  name: "cutlass",
+  team: "player",
   power: 7,
   spread: 2,
   affinities: {
@@ -17,6 +15,5 @@ export const cutlass: WeaponType = {
   },
   level: 1,
   rarity: 0,
-  equipped: false,
   description: "Cutlass description",
 };

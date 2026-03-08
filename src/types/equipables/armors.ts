@@ -1,11 +1,13 @@
 import { EnchantmentType } from "./enchantments.ts";
+import { TeamType } from "../individual/characters.ts";
 
-export enum ArmorName {
-  LEATHER = "leather",
-  PLATEMAIL = "platemail",
-  ROBE = "robe",
-  TUNIC = "tunic",
-}
+const PlayerArmorName = ["leather", "platemail", "robe", "tunic"] as const;
+type PlayerArmorName = (typeof PlayerArmorName)[number];
+
+const EnemyArmorName = ["porous body"] as const;
+type EnemyArmorName = (typeof EnemyArmorName)[number];
+
+export type ArmorName = PlayerArmorName | EnemyArmorName;
 
 type DefensiveAffinitiesType = {
   defense: number;
@@ -18,6 +20,7 @@ type DefensiveAffinitiesType = {
 
 export type ArmorType = {
   name: ArmorName;
+  team: TeamType;
   protection: number;
   constitution: number;
   affinities: DefensiveAffinitiesType;

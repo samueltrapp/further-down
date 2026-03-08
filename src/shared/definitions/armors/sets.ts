@@ -5,10 +5,10 @@ import { robe } from "./collection/robe.ts";
 import { tunic } from "./collection/tunic.ts";
 
 const armors: [ArmorName, ArmorType][] = [
-  [ArmorName.LEATHER, leather],
-  [ArmorName.PLATEMAIL, platemail],
-  [ArmorName.ROBE, robe],
-  [ArmorName.TUNIC, tunic],
+  ["leather", leather],
+  ["platemail", platemail],
+  ["robe", robe],
+  ["tunic", tunic],
 ];
 
 export const armorMap = new Map<ArmorName, ArmorType>(armors);

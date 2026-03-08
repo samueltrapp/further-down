@@ -13,7 +13,7 @@ import {
   finishTurn,
   switchWeapon,
 } from "../battle/core.ts";
-import { tacticMap } from "../../shared/definitions/tactics/sets.ts";
+import { toCaps } from "../../client/utils/formatting.ts";
 
 const resetCtxStep = (ctx: ActionCtx): ActionCtx => {
   return {
@@ -31,9 +31,9 @@ const turnLog = (
   actionName: string,
   weaponName: string | undefined,
 ) => {
-  const weaponClause = weaponName ? ` (${weaponName}` : "";
+  const weaponClause = weaponName ? ` (${toCaps(weaponName)})` : "";
   return {
-    headline: `${sourceName} used ${actionName}${weaponClause}.`,
+    headline: `${sourceName} used ${toCaps(actionName)}${weaponClause}.`,
     steps: [],
   };
 };
@@ -46,9 +46,7 @@ export function handleTurn(
   if (game && game.characters) {
     const source = game.characters[turn.sourceId];
     const isPlayerTurn = turn.team === "player";
-    const action = isPlayerTurn
-      ? maneuverMap.get(turn.maneuver)
-      : tacticMap.get(turn.tactic);
+    const action = maneuverMap.get(turn.maneuver);
 
     if (!source || !action || !game.battle) {
       return; // TODO: Better error handling
@@ -59,9 +57,8 @@ export function handleTurn(
     let ctx: ActionCtx = {
       characters: game.characters,
       sourceId: turn.sourceId,
-      playerTargetIds: turn.playerTargetIds,
-      enemyTargetIds: turn.enemyTargetIds,
-      actionName: action.name,
+      targetIds: turn.targetIds,
+      maneuverName: action.name,
       speed: action.speedCost,
       messages: turnLog(source.name, action.name, weapon),
       toHit: 0,

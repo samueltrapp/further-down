@@ -24,7 +24,7 @@ function Enemy(props: EnemyType & { id: string }) {
   const { game } = useGame();
   const client = game?.client;
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
-  const isSelected = client?.selectedEnemyIds.includes(id);
+  const isSelected = client?.selectedIds.includes(id);
 
   return (
     <div

@@ -1,11 +1,14 @@
 import { ActionCtx } from "../events/actionCtx.ts";
 
-export enum EnchantmentName {
-  A_THOUSAND_CUTS = "aThousandCuts",
-  DISCIPLINE = "discipline",
-  KILLER_INSTINCT = "killerInstinct",
-  RED_FANG = "redFang",
-}
+const PlayerEnchantments = [
+  "a thousand cuts",
+  "discipline",
+  "killer instinct",
+  "red fang",
+] as const;
+type PlayerEnchantments = (typeof PlayerEnchantments)[number];
+
+export type EnchantmentName = PlayerEnchantments;
 
 export type EnchantmentType = {
   name: EnchantmentName;

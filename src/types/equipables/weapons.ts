@@ -1,11 +1,13 @@
 import { EnchantmentType } from "./enchantments.ts";
+import { TeamType } from "../individual/characters.ts";
 
-export enum WeaponName {
-  CUTLASS = "cutlass",
-  HAMMER = "hammer",
-  PERIAPT = "periapt",
-  SCEPTER = "scepter",
-}
+const PlayerWeaponName = ["cutlass", "hammer", "periapt", "scepter"] as const;
+type PlayerWeaponName = (typeof PlayerWeaponName)[number];
+
+const EnemyWeaponName = ["fungal appendage"] as const;
+type EnemyWeaponName = (typeof EnemyWeaponName)[number];
+
+export type WeaponName = PlayerWeaponName | EnemyWeaponName;
 
 type OffensiveAffinitiesType = {
   physical: number;
@@ -18,12 +20,12 @@ type OffensiveAffinitiesType = {
 
 export type WeaponType = {
   name: WeaponName;
+  team: TeamType;
   power: number;
   spread: number;
   affinities: OffensiveAffinitiesType;
   level: number;
   rarity: number;
-  equipped: boolean;
   enchantments?: EnchantmentType[];
   description: string;
 };

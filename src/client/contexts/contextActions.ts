@@ -1,10 +1,10 @@
-export const selectEnemies = (
+export const selectCharacters = (
   enemyId: string,
   selectedEnemies: string[],
-  maxEnemySelections: number,
+  maxSelections: number,
 ) => {
   const isNew = !selectedEnemies.includes(enemyId);
-  const isFull = selectedEnemies.length >= maxEnemySelections;
+  const isFull = selectedEnemies.length >= maxSelections;
 
   if (isNew) {
     if (!isFull) {

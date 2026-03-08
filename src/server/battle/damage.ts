@@ -30,7 +30,7 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   let baseDamage = 0;
 
   if (source.team === "player") {
-    const weaponName = source?.rewards.equippedWeapon;
+    const weaponName = source?.equipped.weapon;
     const weapon = weaponName && weaponMap.get(weaponName);
     if (!weapon) {
       return ctx;
@@ -76,18 +76,14 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
 };
 
 export const applyDamage = (ctx: ActionCtx) => {
-  const { actionName, characters, damage, messages, mitigation, sourceId } =
-    ctx;
-  const sourceName = characters[sourceId].name;
+  const { characters, damage, messages, mitigation } = ctx;
 
   mitigation.forEach((mitigationFactor, charId) => {
     /* Total threshold for attacker to hit */
     const revisedAccuracy = ctx.accuracy - mitigationFactor.evasion;
 
     if (ctx.toHit > revisedAccuracy) {
-      messages.steps?.push(
-        `${sourceName} missed ${characters[charId].name} with ${actionName}.`,
-      );
+      messages.steps?.push(`Missed ${characters[charId].name}.`);
     } else {
       const character = characters[charId];
       const reducedDamage = limitToZero(damage - mitigationFactor.reduction);
@@ -96,7 +92,7 @@ export const applyDamage = (ctx: ActionCtx) => {
       }
 
       messages.steps?.push(
-        `${sourceName} hit ${characters[charId].name} with ${actionName} for ${reducedDamage} (${damage} - ${mitigationFactor.reduction}).`,
+        `Hit ${characters[charId].name} for ${reducedDamage} damage (${damage} - ${mitigationFactor.reduction}).`,
       );
     }
   });
