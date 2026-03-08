@@ -42,3 +42,11 @@
 .speed-display {
   color: var(--white);
 }
+
+.right-text {
+  text-align: right;
+}
+
+.left-text {
+  text-align: left;
+}

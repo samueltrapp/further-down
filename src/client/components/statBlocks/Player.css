@@ -12,7 +12,3 @@
 .active-char {
   border: 1px solid var(--white);
 }
-
-.left {
-  text-align: right;
-}

@@ -8,8 +8,8 @@ import { weaponMap } from "../../shared/definitions/weapons/sets.ts";
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
 export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
-  const { damageType, strength } = step;
-  const { characters, sourceId } = ctx;
+  const { damageType, strength } = { ...step };
+  const { characters, sourceId } = { ...ctx };
   const source = characters[sourceId];
 
   if (!source) {
@@ -17,27 +17,15 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   }
 
   const stats = source.stats;
+  const weaponName = source?.equipped.weapon;
+  const weapon = weaponName && weaponMap.get(weaponName);
 
-  /* Initialize weapon stats for weaponless enemies */
-  let affinities = {
-    physical: 1,
-    magical: 1,
-    bladed: 1,
-    blunt: 1,
-    elemental: 1,
-    psychic: 1,
-  };
-  let baseDamage = 0;
-
-  if (source.team === "player") {
-    const weaponName = source?.equipped.weapon;
-    const weapon = weaponName && weaponMap.get(weaponName);
-    if (!weapon) {
-      return ctx;
-    }
-    affinities = weapon.affinities;
-    baseDamage = weapon.power + createSpread(weapon.spread);
+  if (!weapon) {
+    return ctx;
   }
+
+  const affinities = weapon.affinities;
+  const baseDamage = weapon.power + createSpread(weapon.spread);
 
   const {
     physical: phAff,
@@ -76,7 +64,7 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
 };
 
 export const applyDamage = (ctx: ActionCtx) => {
-  const { characters, damage, messages, mitigation } = ctx;
+  const { characters, damage, messages, mitigation } = { ...ctx };
 
   mitigation.forEach((mitigationFactor, charId) => {
     /* Total threshold for attacker to hit */

@@ -18,12 +18,12 @@ const assessTactic = () => {
 
 const pickTargets = (candidate: ManeuverName, game: GameType) => {
   const selectedTargets: string[] = [];
-  const tactic = maneuverMap.get(candidate);
-  if (tactic && game.characters) {
+  const maneuver = maneuverMap.get(candidate);
+  if (maneuver && game.characters) {
     /* Get list of all potential targets based on tactic details */
     let viableTargets = Object.values(game.characters).reduce(
       (targets: string[], character) => {
-        if (character.team === tactic.targetTeam && !character.isDead) {
+        if (character.team === maneuver.targetTeam && !character.isDead) {
           targets.push(character.id);
         }
         return targets;
@@ -33,7 +33,7 @@ const pickTargets = (candidate: ManeuverName, game: GameType) => {
 
     /* Pick actual targets */
     while (
-      selectedTargets.length < tactic.maxTargets &&
+      selectedTargets.length < maneuver.maxTargets &&
       viableTargets.length > 0
     ) {
       const { pick, altered } = randEntry(viableTargets) as {

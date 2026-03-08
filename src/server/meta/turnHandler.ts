@@ -49,7 +49,7 @@ export function handleTurn(
     const action = maneuverMap.get(turn.maneuver);
 
     if (!source || !action || !game.battle) {
-      return; // TODO: Better error handling
+      return;
     }
 
     const weapon = turn.team === "player" ? turn.weapon : undefined;

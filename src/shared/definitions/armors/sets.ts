@@ -3,10 +3,12 @@ import { leather } from "./collection/leather.ts";
 import { platemail } from "./collection/platemail.ts";
 import { robe } from "./collection/robe.ts";
 import { tunic } from "./collection/tunic.ts";
+import { porousBody } from "./collection/porousBody.ts";
 
 const armors: [ArmorName, ArmorType][] = [
   ["leather", leather],
   ["platemail", platemail],
+  ["porous body", porousBody],
   ["robe", robe],
   ["tunic", tunic],
 ];
