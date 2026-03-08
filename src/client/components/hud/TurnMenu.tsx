@@ -29,6 +29,7 @@ function PersonalMenu({ character }: { character: PlayerType }) {
         type: GameAction.PLAYER_ACTION,
         payload: {
           selectedIds: [],
+          selectionType: selectedManeuver?.targetMethod,
           selectedManeuver: value,
           maxSelections: selectedManeuver?.maxTargets || 0,
         },

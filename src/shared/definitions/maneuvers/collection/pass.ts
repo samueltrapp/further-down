@@ -5,7 +5,8 @@ export const pass: ManeuverType = {
   team: "enemy",
   description: "Skips turn",
   speedCost: 10,
-  targetTeam: "enemy",
+  perspective: "own",
+  targetMethod: "self",
   maxTargets: 0,
   steps: [
     {

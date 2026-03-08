@@ -11,12 +11,14 @@ export default function ConfirmButton() {
   const isUserTurn = checkOwnership(character);
   const client = game?.client;
   const lobby = game?.data.lobby;
+  const satisfiesSelection =
+    client?.selectionType === "select" ? client?.selectedIds.length > 0 : true;
 
   const enabled = !!(
     lobby?.gameId &&
     client?.selectedManeuver &&
     client?.selectedWeapon &&
-    client?.selectedIds.length > 0 &&
+    satisfiesSelection &&
     character &&
     isUserTurn
   );

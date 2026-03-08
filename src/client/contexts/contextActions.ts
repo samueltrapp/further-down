@@ -3,6 +3,10 @@ export const selectCharacters = (
   selectedEnemies: string[],
   maxSelections: number,
 ) => {
+  if (maxSelections === 0) {
+    return [];
+  }
+
   const isNew = !selectedEnemies.includes(enemyId);
   const isFull = selectedEnemies.length >= maxSelections;
 

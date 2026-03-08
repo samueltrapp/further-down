@@ -12,6 +12,7 @@ import { WeaponName } from "../../types/equipables/weapons.ts";
 import { ArmorName } from "../../types/equipables/armors.ts";
 import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/actions.ts";
+import { checkNextTurn } from "../battle/core.ts";
 
 export function submitName(
   connection: ConnectionType,
@@ -154,5 +155,8 @@ export function finishSkilling(
     };
     connection.meta.games.set(gameId, newGameState);
     sendGame(connection, gameId);
+
+    /* Immediately go if an enemy has the first turn */
+    checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
   }
 }

@@ -2,7 +2,6 @@ import { HitStep } from "../../types/equipables/actions.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { randNum } from "../../shared/utils.ts";
 import { limitToZero, trunc } from "../utils/battle.ts";
-import { randomInt } from "node:crypto";
 import { weaponMap } from "../../shared/definitions/weapons/sets.ts";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
@@ -53,7 +52,7 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
 
   const damageInstance = trunc(strength * damage());
   const stepAccuracy = source.stats.accuracy + step.accuracy;
-  const stepRoll = randomInt(100);
+  const stepRoll = randNum(100);
 
   return {
     ...ctx,
@@ -74,9 +73,11 @@ export const applyDamage = (ctx: ActionCtx) => {
       messages.steps?.push(`Missed ${characters[charId].name}.`);
     } else {
       const character = characters[charId];
-      const reducedDamage = limitToZero(damage - mitigationFactor.reduction);
+      const reducedDamage = damage - mitigationFactor.reduction;
       if (character?.stats?.life) {
-        character.stats.life -= reducedDamage;
+        character.stats.life = limitToZero(
+          character.stats.life - reducedDamage,
+        );
       }
 
       messages.steps?.push(

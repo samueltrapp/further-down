@@ -14,4 +14,6 @@ const armors: [ArmorName, ArmorType][] = [
 ];
 
 export const armorMap = new Map<ArmorName, ArmorType>(armors);
-export const armorCollection = Array.from(armorMap.keys());
+export const playerArmorCollection = Array.from(armorMap.keys()).filter(
+  (armorName) => armorMap.get(armorName)?.team === "player",
+);

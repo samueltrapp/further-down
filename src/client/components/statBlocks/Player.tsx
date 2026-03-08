@@ -16,7 +16,9 @@ export default function Player(props: PlayerType & { id: string }) {
           $percentHealth={(stats.life / stats.maxLife) * 100}
           className="health-bar"
         >
-          {/*{stats.life} / {stats.maxLife}*/}
+          <div>{stats.life}</div>
+          <div>/</div>
+          <div>{stats.maxLife}</div>
         </HealthBar>
         <div className="right-text special-font">{name}</div>
         <div className="right-text speed-display">

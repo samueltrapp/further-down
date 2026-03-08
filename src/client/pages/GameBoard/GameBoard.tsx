@@ -21,6 +21,7 @@ function GameBoard() {
     players: [],
     enemies: [],
   };
+
   Object.entries(characters).reduce((arrs, curr) => {
     if (curr[1].team === "player") {
       arrs.players.push(curr[1] as PlayerType);

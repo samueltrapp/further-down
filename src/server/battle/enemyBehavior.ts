@@ -1,5 +1,5 @@
 import { GameType } from "../../types/game.ts";
-import { randEntry, randNum } from "../../shared/utils.ts";
+import { randEntry, randNum, validTargets } from "../../shared/utils.ts";
 import { handleTurn } from "../meta/turnHandler.ts";
 import { ConnectionType } from "../../types/server.ts";
 import { EnemyTurnType } from "../../types/events/turn.ts";
@@ -21,14 +21,10 @@ const pickTargets = (candidate: ManeuverName, game: GameType) => {
   const maneuver = maneuverMap.get(candidate);
   if (maneuver && game.characters) {
     /* Get list of all potential targets based on tactic details */
-    let viableTargets = Object.values(game.characters).reduce(
-      (targets: string[], character) => {
-        if (character.team === maneuver.targetTeam && !character.isDead) {
-          targets.push(character.id);
-        }
-        return targets;
-      },
-      [],
+    let viableTargets = validTargets(
+      game.characters,
+      "enemy",
+      maneuver.perspective,
     );
 
     /* Pick actual targets */
@@ -70,7 +66,7 @@ export const decideEnemyTurn = (
         : decision;
     },
     {
-      priority: 0,
+      priority: -1,
       maneuver: "pass" as ManeuverName,
     },
   );

@@ -14,4 +14,6 @@ const weapons: [WeaponName, WeaponType][] = [
 ];
 
 export const weaponMap = new Map<WeaponName, WeaponType>(weapons);
-export const weaponCollection = Array.from(weaponMap.keys());
+export const weaponCollection = Array.from(weaponMap.keys()).filter(
+  (weaponName) => weaponMap.get(weaponName)?.team === "player",
+);

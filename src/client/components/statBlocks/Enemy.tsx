@@ -16,15 +16,19 @@ function Enemy(props: EnemyType & { id: string }) {
     <div
       className={`char-box enemy-box ${activeTurn ? "active-enemy" : ""} ${isSelected ? "selected-enemy" : ""}`}
     >
-      <HealthBar
-        $percentHealth={(stats.life / stats.maxLife) * 100}
-        className="health-bar"
-      >
-        {/*{stats.life} / {stats.maxLife}*/}
-      </HealthBar>
-      <div className="left-text special-font">{name}</div>
-      <div className="left-text speed-display">
-        {stats?.speed} / {stats?.maxSpeed}
+      <div className="id-bar">
+        <HealthBar
+          $percentHealth={(stats.life / stats.maxLife) * 100}
+          className="health-bar"
+        >
+          <div>{stats.life}</div>
+          <div>/</div>
+          <div>{stats.maxLife}</div>
+        </HealthBar>
+        <div className="left-text special-font">{name}</div>
+        <div className="left-text speed-display">
+          {stats?.speed} / {stats?.maxSpeed}
+        </div>
       </div>
     </div>
   );

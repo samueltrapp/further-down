@@ -1,7 +1,7 @@
 import { GameType, LobbyStatus } from "../../types/game.ts";
 import { randomId, randomizeCollection } from "./character.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
-import { armorCollection } from "../../shared/definitions/armors/sets.ts";
+import { playerArmorCollection } from "../../shared/definitions/armors/sets.ts";
 import { enchantmentCollection } from "../../shared/definitions/enchantments/sets.ts";
 import { maneuverCollection } from "../../shared/definitions/maneuvers/sets.ts";
 import { weaponCollection } from "../../shared/definitions/weapons/sets.ts";
@@ -99,7 +99,7 @@ const blankCharacters = (userSpread: string[]) => {
       },
       private: {
         queue: {
-          armors: randomizeCollection(armorCollection) as ArmorName[],
+          armors: randomizeCollection(playerArmorCollection) as ArmorName[],
           enchantments: randomizeCollection(
             enchantmentCollection,
           ) as EnchantmentName[],

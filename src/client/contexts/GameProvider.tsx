@@ -24,6 +24,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     },
     client: {
       maxSelections: 0,
+      selectionType: "select",
       selectedIds: [],
       selectedManeuver: "",
       selectedWeapon: "",
@@ -53,6 +54,7 @@ function resetTurn(state: GameType): GameClientType {
 
   return {
     maxSelections: 0,
+    selectionType: "select",
     selectedIds: [],
     selectedManeuver: "",
     selectedWeapon: equippedWeapon,

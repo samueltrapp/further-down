@@ -5,6 +5,7 @@ import { ArmorName } from "../equipables/armors.ts";
 import { EnchantmentName } from "../equipables/enchantments.ts";
 import { BurdenName, FavorName } from "../equipables/effects.ts";
 
+export type PerspectiveType = "own" | "other";
 export type TeamType = "player" | "enemy";
 
 type RewardSpread = {

@@ -5,7 +5,8 @@ export const quicksilver: ManeuverType = {
   team: "player",
   description: "Quicksilver description",
   speedCost: 4,
-  targetTeam: "enemy",
+  perspective: "other",
+  targetMethod: "select",
   maxTargets: 1,
   steps: [
     {

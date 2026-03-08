@@ -1,4 +1,4 @@
-import { TeamType } from "../individual/characters.ts";
+import { PerspectiveType, TeamType } from "../individual/characters.ts";
 
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
@@ -10,6 +10,8 @@ const EnemyManeuvers = ["bonk", "pass"] as const;
 type EnemyManeuvers = (typeof EnemyManeuvers)[number];
 
 export type ManeuverName = PlayerManeuvers | EnemyManeuvers;
+
+export type TargetMethodType = "select" | "self" | "all" | "random" | "special";
 
 export type TagType =
   | "attack" // Damages life
@@ -47,7 +49,8 @@ export type ManeuverType = {
   team: TeamType;
   description: string;
   speedCost: number;
-  targetTeam: TeamType;
+  perspective: PerspectiveType;
+  targetMethod: TargetMethodType;
   maxTargets: number;
   steps: StepType[];
   tags: TagType[];

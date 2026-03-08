@@ -5,7 +5,8 @@ export const bonk: ManeuverType = {
   team: "enemy",
   description: "A gentle slap",
   speedCost: 5,
-  targetTeam: "player",
+  perspective: "other",
+  targetMethod: "select",
   maxTargets: 1,
   steps: [
     {
