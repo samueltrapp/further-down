@@ -1,6 +1,6 @@
 import { useGame } from "../../hooks/useGame.ts";
 import "./BattleLog.css";
-import "./Hud.css";
+import Button from "../core/Button.tsx";
 
 export default function BattleLog() {
   const { game } = useGame();
@@ -29,9 +29,14 @@ export default function BattleLog() {
           ))}
         </ul>
       </div>
-      <button className="autoscroll" onClick={handleClick}>
+      <Button
+        className="autoscroll"
+        variant="select"
+        size="small"
+        onClick={handleClick}
+      >
         Latest
-      </button>
+      </Button>
     </div>
   );
 }

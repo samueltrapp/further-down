@@ -1,23 +1,23 @@
 import { useGame } from "../../hooks/useGame.ts";
 import styled from "styled-components";
-import "./Hud.css";
+import "./TurnTracker.css";
 
 type RangeThree = 0 | 1 | 2;
 
 const mapColor = (position: RangeThree) => {
   switch (position) {
     case 0:
-      return "var(--gold)";
+      return "var(--sunrise)";
     case 1:
-      return "var(--silver)";
+      return "var(--sunset)";
     case 2:
-      return "var(--bronze)";
+      return "var(--orange)";
     default:
       return "var(--white)";
   }
 };
 
-const TurnTrackerRow = styled.div<{ $position: RangeThree }>`
+const TurnTrackerRow = styled.li<{ $position: RangeThree }>`
   color: ${(props) => mapColor(props.$position)};
   display: flex;
   flex-direction: row;
@@ -44,16 +44,18 @@ export default function TurnTracker() {
 
   return (
     <div className="turn-tracker-container">
-      <div>{`Round ${game.data.battle?.round}`}</div>
-      {turnTracker?.slice(0, 3)?.map((turn, index) => (
-        <TurnTrackerRow
-          key={battle?.turnOrder[index]}
-          $position={index as RangeThree}
-        >
-          <div className="name-label">{turn.name}</div>
-          <div className="speed-label">{turn.speed}</div>
-        </TurnTrackerRow>
-      ))}
+      <div className="m0 mta mba fs3">{`Round ${game.data.battle?.round}`}</div>
+      <ul>
+        {turnTracker?.slice(0, 3)?.map((turn, index) => (
+          <TurnTrackerRow
+            key={battle?.turnOrder[index]}
+            $position={index as RangeThree}
+          >
+            <div className="name-label">{turn.name}</div>
+            <div className="speed-label">{turn.speed}</div>
+          </TurnTrackerRow>
+        ))}
+      </ul>
     </div>
   );
 }

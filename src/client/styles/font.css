@@ -1,0 +1,28 @@
+.spec-font {
+  font-family: "Cinzel Decorative", serif;
+  font-style: normal;
+}
+
+.fs1 {
+  font-size: 0.75rem;
+}
+
+.fs2 {
+  font-size: 1rem;
+}
+
+.fs3 {
+  font-size: 1.75rem;
+}
+
+.fw1 {
+  font-weight: 300;
+}
+
+.fw2 {
+  font-weight: 400;
+}
+
+.fw3 {
+  font-weight: 600;
+}

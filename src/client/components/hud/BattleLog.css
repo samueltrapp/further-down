@@ -1,10 +1,10 @@
 .autoscroll {
-  background-color: rgba(172, 141, 56, 0.7);
   border: none;
   border-radius: 0;
   margin: 0;
   padding: 0;
   width: 100%;
+  font-size: 1rem;
 }
 
 .battle-log {
@@ -17,7 +17,7 @@
   margin: 0.5rem 0;
   font-size: 0.75rem;
   scrollbar-gutter: auto;
-  scrollbar-color: var(--aubergine) transparent;
+  scrollbar-color: var(--black) transparent;
   scrollbar-width: thin;
 
   ul {
@@ -26,7 +26,7 @@
 }
 
 .central-column {
-  background-color: var(--off-white);
+  background-color: var(--tan);
   display: flex;
   flex-direction: column;
   margin: 1rem;

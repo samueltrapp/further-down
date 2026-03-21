@@ -1,36 +1,43 @@
+@import "styles/font.css";
+@import "styles/layout.css";
+@import "styles/spacing.css";
+
 :root {
+  box-sizing: border-box;
+
   /* Neutrals */
-  --white: #ffffff;
   --black: #080607;
-  --brown: #1e0b12;
-  --off-white: #f1f1e2;
-  --gray: #424342;
-  --silver: #c0c0c0;
+  --brown: #1f0e04;
+  --clear: #ffffff33;
+  --glass: #d0d0d01a;
+  --gray: #c0c0c0;
+  --tan: #f9e0d2;
+  --white: #fcfafa;
 
   /* Greens */
-  --black-green: #0e100e;
-  --chartreuse: #bedf43;
-  --dark-green: #183c2b;
+  --evergreen: #242b2e;
+  --forest: #19241c;
+  --teal: #075a68;
 
   /* Reds and Purples */
-  --aubergine: #3e154c;
-  --deep-maroon: #3c1523;
-  --maroon: #451828;
-  --plum: #524059;
-  --red: #ba2626;
+  --plum: #361728;
+  --rose: #601d27;
 
   /* Yellows and Oranges */
-  --bronze: #cd7f32;
-  --gold: #ffd700;
-  --sunrise: #f4a305;
-  --sunset: #cc8500;
-  --yellow: #ffbc42;
+  --orange: #af4f18;
+  --sunrise: #f4af36;
+  --sunset: #d38704;
 
   /* Blues */
-  --blue: #24507f;
-  --teal: #142c2f;
+  --sea: #2b3363;
+  --slate: #242b2e;
+  --sky: #4150a3;
 
-  font-family: "Courier New", Courier, monospace;
+  /* Specific usage */
+  --hpGreen: #194c15;
+  --hpOrange: #803c0b;
+  --hpRed: #430000;
+
   line-height: 1.5;
   font-weight: 400;
 
@@ -38,16 +45,11 @@
   color: var(--white);
   background-color: var(--black);
 
+  font-family: "Metamorphous", serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.special-font {
-  font-family: "Cinzel Decorative", serif;
-  font-weight: 700;
-  font-style: normal;
 }
 
 body {
@@ -56,14 +58,14 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  font-family: "Metamorphous", serif;
   font-weight: 400;
   font-style: normal;
-  background: radial-gradient(
-    circle at center in hsl shorter hue,
-    var(--teal),
-    var(--black)
-  );
+  background: linear-gradient(in oklch, var(--orange), 5%, var(--black));
+}
+
+button {
+  border: none;
+  border-radius: 8px;
 }
 
 h1 {
@@ -75,6 +77,12 @@ html {
   height: 100%;
 }
 
+ul {
+  list-style: none;
+}
+
 #root {
+  height: 100vh;
   width: 100%;
+  overflow: hidden;
 }

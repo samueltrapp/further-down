@@ -76,16 +76,19 @@ export const finishTurn = (
     arePlayersDead = true;
   for (const character of Object.values(game.characters)) {
     /* End early if all statuses are already known */
-    if (!isRoundEnd && !areEnemiesDead && !arePlayersDead) {
+    if (
+      (!isRoundEnd && !areEnemiesDead && !arePlayersDead) ||
+      character.isDead
+    ) {
       break;
     }
     if (character.stats.speed > 0) {
       isRoundEnd = false;
     }
-    if (character.team === "enemy" && !character.isDead) {
+    if (character.team === "enemy") {
       areEnemiesDead = false;
     }
-    if (character.team === "player" && !character.isDead) {
+    if (character.team === "player") {
       arePlayersDead = false;
     }
   }

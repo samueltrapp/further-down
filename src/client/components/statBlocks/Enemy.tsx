@@ -2,35 +2,61 @@ import { EnemyType } from "../../../types/individual/characters.ts";
 import "./StatBlocks.css";
 import "./Enemy.css";
 import { useGame } from "../../hooks/useGame.ts";
-import { HealthBar } from "../core/HealthBar.tsx";
+import StatBar from "../core/StatBar.tsx";
+import { selectCharacters } from "../../contexts/contextActions.ts";
+import { GameAction } from "../../contexts/ContextTypes.ts";
+import { cdcl } from "../../utils/formatting.ts";
 
-function Enemy(props: EnemyType & { id: string }) {
-  const { id, name, stats } = props;
+function Enemy(props: EnemyType & { id: string; index: number }) {
+  const { id, name, stats, isDead } = props;
 
-  const { game } = useGame();
+  const { game, dispatch } = useGame();
   const client = game?.client;
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
   const isSelected = client?.selectedIds.includes(id);
 
+  const handleClick = (enemyId: string) => {
+    if (dispatch && game?.client.selectedManeuver) {
+      const updatedEnemyIds = selectCharacters(
+        enemyId,
+        game?.client?.selectedIds,
+        game?.client?.maxSelections,
+      );
+      dispatch({
+        type: GameAction.PLAYER_ACTION,
+        payload: {
+          selectedIds: updatedEnemyIds,
+        },
+      });
+    }
+  };
+
   return (
-    <div
-      className={`char-box enemy-box ${activeTurn ? "active-enemy" : ""} ${isSelected ? "selected-enemy" : ""}`}
+    <button
+      className={cdcl(
+        "enemy-box",
+        "id-bar",
+        `right-row-${props.index}`,
+        { "active-enemy": activeTurn },
+        { "selected-enemy": isSelected },
+        { "death-filter": isDead },
+      )}
+      onClick={() => handleClick(props.id)}
     >
-      <div className="id-bar">
-        <HealthBar
-          $percentHealth={(stats.life / stats.maxLife) * 100}
-          className="health-bar"
-        >
-          <div>{stats.life}</div>
-          <div>/</div>
-          <div>{stats.maxLife}</div>
-        </HealthBar>
-        <div className="left-text special-font">{name}</div>
-        <div className="left-text speed-display">
-          {stats?.speed} / {stats?.maxSpeed}
-        </div>
-      </div>
-    </div>
+      <StatBar
+        id={id}
+        stat="life"
+        maxStat={stats.maxLife}
+        currentStat={stats.life}
+      />
+      <StatBar
+        id={id}
+        stat="speed"
+        maxStat={stats.maxSpeed}
+        currentStat={stats.speed}
+      />
+      <div className="left-text special-font">{name}</div>
+    </button>
   );
 }
 

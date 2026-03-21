@@ -20,18 +20,21 @@
   margin: 0 0.125rem;
   padding: 0.75rem 0;
   text-align: center;
-  transition: background-color 0.33s ease-in-out;
+  transition:
+    background-color 0.33s ease-in-out,
+    box-shadow 0.33s ease-in-out;
 
   &:hover {
-    background-color: var(--silver);
-    box-shadow: 0 0 0.25rem var(--white);
+    background-color: var(--sunset);
+    box-shadow: 0 0 1.5rem var(--orange);
   }
 }
 
 .equipped-weapon {
-  background-color: var(--bronze);
-  box-shadow: 0 0 0.25rem var(--yellow);
+  background-color: var(--sunrise);
+  color: var(--black);
   transition: background-color 0.33s ease-in-out;
+  box-shadow: 0 0 1rem var(--sunrise);
 
   &:hover {
     background-color: var(--sunset);
@@ -39,16 +42,15 @@
 }
 
 .maneuver-track {
-  border: 2px solid var(--white);
   display: grid;
   grid-auto-rows: 1fr;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   background-color: var(--black);
+  gap: 0.25rem;
 }
 
 .maneuver-button {
   background-color: var(--black);
-  border: 1px solid var(--silver);
   border-top: none;
   color: var(--sunset);
   padding: 0.5rem;
@@ -62,7 +64,6 @@
 
 .maneuver-button:hover {
   background-color: var(--sunset);
-  border-bottom: 1px solid transparent;
   color: var(--white);
   transition: background-color 0.3s ease-in-out;
 }

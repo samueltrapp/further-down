@@ -1,0 +1,23 @@
+.name-input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--white);
+  height: 2rem;
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.reward-card {
+  border: 1px var(--white);
+  border-radius: 0.5rem;
+}
+
+.name-container {
+  width: 60%;
+  @media (width >= 768px) {
+    width: 50%;
+  }
+  @media (width >= 1200px) {
+    width: 40%;
+  }
+}

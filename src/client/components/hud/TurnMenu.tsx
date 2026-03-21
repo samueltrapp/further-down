@@ -4,14 +4,14 @@ import { MouseEvent } from "react";
 import { GameAction } from "../../contexts/ContextTypes.ts";
 import { useGame } from "../../hooks/useGame.ts";
 import { ManeuverName } from "../../../types/equipables/actions.ts";
-import { PlayerType } from "../../../types/individual/characters.ts";
+import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
 import { weaponMap } from "../../../shared/definitions/weapons/sets.ts";
 import { maneuverMap } from "../../../shared/definitions/maneuvers/sets.ts";
 import { toCaps } from "../../utils/formatting.ts";
 import { checkOwnership } from "../../utils/checkOwnership.ts";
 
-function PersonalMenu({ character }: { character: PlayerType }) {
+function PersonalMenu({ character }: { character: PlayerType | EnemyType }) {
   const { game, dispatch } = useGame();
   const { maneuvers, weapons } = character.loadout;
   const isUserTurn = checkOwnership(character);
@@ -83,13 +83,11 @@ function PersonalMenu({ character }: { character: PlayerType }) {
 function TurnMenu() {
   const character = useTurnOrder();
 
-  return (
+  return character ? (
     <div className="menu-container">
-      {character?.team === "player" ? (
-        <PersonalMenu character={character} />
-      ) : null}
+      <PersonalMenu character={character} />
     </div>
-  );
+  ) : null;
 }
 
 export default TurnMenu;
