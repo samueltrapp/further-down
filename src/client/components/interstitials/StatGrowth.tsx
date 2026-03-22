@@ -46,7 +46,7 @@ const StatSlot = ({
 
   return (
     <div>
-      {stat === "life" ? "LIFE" : stat.toUpperCase()}
+      {stat.toUpperCase()}
       <button
         disabled={chosenStat <= baseline}
         onClick={() => handleClick(stat, false)}
@@ -98,7 +98,7 @@ export function StatGrowth({
       <h2>Remaining Points: {remainingPoints}</h2>
       <h3>CORE STATS</h3>
       <div className="stat-cluster core">
-        {["vitality", "speed"].map((stat) => (
+        {["life", "speed"].map((stat) => (
           <StatSlot
             key={stat}
             stats={stats}

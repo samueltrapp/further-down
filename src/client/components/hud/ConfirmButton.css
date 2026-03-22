@@ -1,0 +1,12 @@
+.confirm-button {
+  background-color: var(--sunset);
+  border: none;
+  display: block;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  width: 100%;
+
+  &[disabled] {
+    background-color: var(--gray);
+  }
+}

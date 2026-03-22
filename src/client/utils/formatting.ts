@@ -13,3 +13,20 @@ export const contextualIndefinite = (consequent: string) => {
 
 export const singularize = (word: string) =>
   word.endsWith("s") ? word.substring(0, word.length - 1) : word;
+
+export const cdcl = (
+  ...conditionalClass: ({ [key: string]: boolean | undefined } | string)[]
+) => {
+  let classList = "";
+  conditionalClass.forEach((item) => {
+    if (typeof item === "string") {
+      classList += ` ${item}`;
+    } else {
+      const entry = Object.entries(item);
+      if (entry[1]) {
+        classList += ` ${entry[0]}`;
+      }
+    }
+  });
+  return classList.trim();
+};

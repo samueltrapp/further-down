@@ -1,0 +1,19 @@
+.ta-center {
+  text-align: center;
+}
+
+.df {
+  display: flex;
+}
+
+.fdr {
+  flex-direction: row;
+}
+
+.fdc {
+  flex-direction: column;
+}
+
+.jc-center {
+  justify-content: center;
+}

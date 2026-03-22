@@ -58,12 +58,6 @@ function App() {
           payload: update.game,
         });
       }
-      // if (dispatch && update.logMessages) {
-      //   dispatch({
-      //     type: GameAction.LOG,
-      //     payload: update.logMessages,
-      //   });
-      // }
     }
 
     socket.connect();
@@ -80,20 +74,9 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
-      <button
-        onClick={() => {
-          localStorage.removeItem("gameId");
-          localStorage.removeItem("userId");
-          location.reload();
-        }}
-      >
-        Leave Game
-      </button>
-      <div className="container">
-        {loaded && <GameScreen lobbyStatus={lobbyStatus} />}
-      </div>
-    </>
+    <div className={`container${lobbyStatus !== "battle" ? " interior" : ""}`}>
+      {loaded && <GameScreen lobbyStatus={lobbyStatus} />}
+    </div>
   );
 }
 

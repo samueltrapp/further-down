@@ -1,15 +1,26 @@
-.board {
-  display: flex;
-  flex-direction: row;
-  cursor: default;
-  user-select: none;
+.board-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 4fr 1fr 1fr;
+  grid-template-rows: 3rem repeat(4, 1fr);
+  grid-gap: 1.5rem;
+}
+
+.left-spacer {
+  grid-column: 1;
+  grid-row: 2 / 6;
+}
+
+.right-spacer {
+  grid-column: 6;
+  grid-row: 2 / 6;
 }
 
 .hub-column {
+  grid-column: 3;
+  grid-row: 2 / 6;
   display: flex;
   flex-direction: column;
   justify-items: flex-start;
-  width: 28%;
 }
 
 .inner-hub {
@@ -18,16 +29,4 @@
   align-items: center;
   width: calc(100% - 2rem);
   margin: 0 auto;
-}
-
-.filler-column {
-  width: 16%;
-}
-
-.player-column {
-  width: 20%;
-}
-
-.enemy-column {
-  width: 20%;
 }

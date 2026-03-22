@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { randomId } from "../../../server/utils/character.ts";
 import { socket } from "../../socket.ts";
-import "./Lobby.scss";
+import "./Lobby.css";
 import { useGame } from "../../hooks/useGame.ts";
+import Button from "../../components/core/Button.tsx";
 
 const Unjoined = () => {
   const { game } = useGame();
-  const [roomCode, setRoomCode] = useState("");
+  const [roomCode] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("userId") === null) {
@@ -36,21 +37,21 @@ const Unjoined = () => {
       </div>
       <div className="controls">
         <div className="option">
-          <button className="lobby-btn" onClick={handleCreateRoom}>
-            Create a New Game
+          <button className="special-font lobby-btn" onClick={handleCreateRoom}>
+            New Game
           </button>
         </div>
         <div className="option">
-          <button className="lobby-btn" onClick={handleJoinRoom}>
-            Join
+          <button className="special-font lobby-btn" onClick={handleJoinRoom}>
+            Join Game
           </button>
-          <input
-            className="room-input"
-            type="text"
-            onChange={(event) => setRoomCode(event.target.value)}
-            placeholder="Room Code"
-            value={roomCode}
-          />
+          {/*<input*/}
+          {/*  className="room-input"*/}
+          {/*  type="text"*/}
+          {/*  onChange={(event) => setRoomCode(event.target.value)}*/}
+          {/*  placeholder="Room Code"*/}
+          {/*  value={roomCode}*/}
+          {/*/>*/}
         </div>
       </div>
     </div>
@@ -79,13 +80,15 @@ const Waiting = () => {
   };
 
   return (
-    <div>
-      <h2>{`Room Code: ${lobby?.gameId}`}</h2>
-      <div>{`${lobby?.users.length}/4 Players`}</div>
+    <section className="controls">
+      <h2 className="mb2 fw1">{`Room Code: ${lobby?.gameId}`}</h2>
+      <div className="mb5">{`${lobby?.users.length}/4 Players`}</div>
       <div>
-        <button onClick={handleStart}>{!voteToStart ? "Start" : "Wait"}</button>
+        <Button variant="confirm" size="large" onClick={handleStart}>
+          {!voteToStart ? "Start" : "Wait"}
+        </Button>
       </div>
-    </div>
+    </section>
   );
 };
 

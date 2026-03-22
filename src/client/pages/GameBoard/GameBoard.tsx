@@ -1,18 +1,16 @@
 import Player from "../../components/statBlocks/Player.tsx";
 import Enemy from "../../components/statBlocks/Enemy.tsx";
 import "./GameBoard.css";
-import TurnTracker from "../../components/hud/TurnTracker.tsx";
 import ConfirmButton from "../../components/hud/ConfirmButton.tsx";
 import BattleLog from "../../components/hud/BattleLog.tsx";
-import { GameAction } from "../../contexts/ContextTypes.ts";
-import { selectCharacters } from "../../contexts/contextActions.ts";
 import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
 import GraphicsCanvas from "../../components/hud/GraphicsCanvas.tsx";
 import TurnMenu from "../../components/hud/TurnMenu.tsx";
 import { useGame } from "../../hooks/useGame.ts";
+import TurnTracker from "../../components/hud/TurnTracker.tsx";
 
 function GameBoard() {
-  const { game, dispatch } = useGame();
+  const { game } = useGame();
   const battle = game?.data.battle;
   const characters = game?.data.characters;
 
@@ -31,35 +29,14 @@ function GameBoard() {
     return arrs;
   }, splitChars);
 
-  const handleSelect = (enemyId: string) => {
-    if (dispatch && game.client.selectedManeuver) {
-      const updatedEnemyIds = selectCharacters(
-        enemyId,
-        game?.client?.selectedIds,
-        game?.client?.maxSelections,
-      );
-      dispatch({
-        type: GameAction.PLAYER_ACTION,
-        payload: {
-          selectedIds: updatedEnemyIds,
-        },
-      });
-    }
-  };
-
   return (
     <>
       <TurnTracker />
-      <div className="board">
-        <div className="filler-column" />
-        <div className="player-column">
-          {Object.values(splitChars.players).map((player) => (
-            <div key={player.id}>
-              <Player {...player} />
-            </div>
-          ))}
-        </div>
-
+      <div className="board-grid">
+        <div className="left-spacer" />
+        {Object.values(splitChars.players).map((player, index) => (
+          <Player key={player.id} index={index} {...player} />
+        ))}
         <div className="hub-column">
           <div className="inner-hub">
             <GraphicsCanvas />
@@ -68,14 +45,10 @@ function GameBoard() {
             <BattleLog />
           </div>
         </div>
-        <div className="enemy-column">
-          {Object.values(splitChars.enemies).map((enemy) => (
-            <div key={enemy.id} onClick={() => handleSelect(enemy.id)}>
-              <Enemy {...enemy} />
-            </div>
-          ))}
-        </div>
-        <div className="filler-column" />
+        {Object.values(splitChars.enemies).map((enemy, index) => (
+          <Enemy key={enemy.id} index={index} {...enemy} />
+        ))}
+        <div className="left-spacer" />
       </div>
     </>
   );

@@ -2,29 +2,32 @@ import "./StatBlocks.css";
 import "./Player.css";
 import { PlayerType } from "../../../types/individual/characters.ts";
 import { useGame } from "../../hooks/useGame.ts";
-import { HealthBar } from "../core/HealthBar.tsx";
+import StatBar from "../core/StatBar.tsx";
 
-export default function Player(props: PlayerType & { id: string }) {
+export default function Player(
+  props: PlayerType & { id: string; index: number },
+) {
   const { id, name, stats } = props;
   const { game } = useGame();
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
 
   return (
-    <div className={`char-box player-box ${activeTurn ? "active-char" : ""}`}>
-      <div className="id-bar">
-        <HealthBar
-          $percentHealth={(stats.life / stats.maxLife) * 100}
-          className="health-bar"
-        >
-          <div>{stats.life}</div>
-          <div>/</div>
-          <div>{stats.maxLife}</div>
-        </HealthBar>
-        <div className="right-text special-font">{name}</div>
-        <div className="right-text speed-display">
-          {stats.speed} / {stats.maxSpeed}
-        </div>
-      </div>
-    </div>
+    <button
+      className={`char-box player-box id-bar left-row-${props.index} ${activeTurn ? "active-char" : ""}`}
+    >
+      <StatBar
+        id={id}
+        stat="life"
+        maxStat={stats.maxLife}
+        currentStat={stats.life}
+      />
+      <StatBar
+        id={id}
+        stat="speed"
+        maxStat={stats.maxSpeed}
+        currentStat={stats.speed}
+      />
+      <div className="right-text special-font">{name}</div>
+    </button>
   );
 }

@@ -1,19 +1,8 @@
-.char-box {
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 36px;
-  div:last-of-type {
-    margin-bottom: 0;
-  }
-}
-
 .id-bar {
   display: flex;
   flex-direction: column;
   font-size: 1.25rem;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
+  justify-content: flex-start;
   width: 100%;
 }
 
@@ -44,16 +33,15 @@
 }
 
 .right-text {
+  flex-grow: 1;
   text-align: right;
 }
 
 .left-text {
+  flex-grow: 1;
   text-align: left;
 }
 
-.health-bar {
-  display: inline-flex;
-  justify-content: space-between;
-  padding: 0.125rem 0.75rem;
-  font-size: 0.75rem;
+.death-filter {
+  filter: grayscale(100%);
 }
