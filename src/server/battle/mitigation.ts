@@ -1,4 +1,4 @@
-import { HitStep } from "../../types/equipables/actions.ts";
+import { HitStep } from "../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { StatsType } from "../../types/individual/stats.ts";
 import { ArmorType } from "../../types/equipables/armors.ts";
@@ -65,8 +65,10 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
   defenders?.forEach((defender) => {
     const armor = defender.armor ? armorMap.get(defender.armor) : null;
     if (defender.stats && armor) {
+      const evaded = ctx.toHit > ctx.accuracy - defender.stats.evasion;
+      console.log(evaded, ctx.toHit, ctx.accuracy, defender.stats.evasion);
       const defensiveStats = {
-        evasion: defender.stats.evasion,
+        evaded,
         reduction: trunc(mitigation(defender.stats, armor)),
       };
 

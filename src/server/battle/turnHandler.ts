@@ -2,20 +2,16 @@ import { EnemyTurnType, PlayerTurnType } from "../../types/events/turn.ts";
 import { ConnectionType } from "../../types/server.ts";
 import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
-import { applyDamage, calcDamage } from "../battle/damage.ts";
-import { calcMitigation } from "../battle/mitigation.ts";
-import { expendSpeed } from "../battle/speed.ts";
-import { sendGame } from "./gameManagement.ts";
+import { applyDamage, calcDamage } from "./damage.ts";
+import { calcMitigation } from "./mitigation.ts";
+import { expendSpeed } from "./speed.ts";
+import { sendGame } from "../meta/gameManagement.ts";
 import { Victor } from "../../types/game.ts";
-import {
-  applyDeath,
-  checkNextTurn,
-  finishTurn,
-  switchWeapon,
-} from "../battle/core.ts";
+import { applyDeath, checkNextTurn, finishTurn, switchWeapon } from "./core.ts";
 import { toCaps } from "../../client/utils/formatting.ts";
 import { TeamType } from "../../types/individual/characters.ts";
 import { randEntry, validTargets } from "../../shared/utils.ts";
+import { applyEffect } from "./effect.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
@@ -78,9 +74,6 @@ export function handleTurn(
     const isPlayerTurn = turn.team === "player";
     const maneuver = maneuverMap.get(turn.maneuver);
 
-    console.debug(turn);
-    console.debug(source);
-    console.debug(maneuver);
     if (!source || !maneuver || !game.battle) {
       return;
     }
@@ -108,20 +101,17 @@ export function handleTurn(
     }
 
     /* Action */
-    maneuver?.steps.forEach((step, index) => {
-      console.debug(`STEP: ${index}`);
+    maneuver?.steps.forEach((step) => {
       ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
-      console.debug(`TARGETS: ${ctx.targetIds}`);
 
       if (step.type === "hit") {
         ctx = calcDamage(step, ctx);
         ctx = calcMitigation(step, ctx);
-
         ctx = applyDamage(ctx);
       } else if (step.type === "heal") {
         ctx = { ...ctx };
       } else if (step.type === "effect") {
-        ctx = { ...ctx };
+        ctx = applyEffect(step, ctx);
       }
       // on-hit
       // on-defend

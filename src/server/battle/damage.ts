@@ -1,4 +1,4 @@
-import { HitStep } from "../../types/equipables/actions.ts";
+import { HitStep } from "../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { randNum } from "../../shared/utils.ts";
 import { limitToZero, trunc } from "../utils/battle.ts";
@@ -66,10 +66,7 @@ export const applyDamage = (ctx: ActionCtx) => {
   const { characters, damage, messages, mitigation } = { ...ctx };
 
   mitigation.forEach((mitigationFactor, charId) => {
-    /* Total threshold for attacker to hit */
-    const revisedAccuracy = ctx.accuracy - mitigationFactor.evasion;
-
-    if (ctx.toHit > revisedAccuracy) {
+    if (mitigationFactor.evaded) {
       messages.steps?.push(`Missed ${characters[charId].name}.`);
     } else {
       const character = characters[charId];

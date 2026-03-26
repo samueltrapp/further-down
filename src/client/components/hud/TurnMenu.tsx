@@ -3,7 +3,7 @@ import { useTurnOrder } from "../../hooks/useTurnOrder.ts";
 import { MouseEvent } from "react";
 import { GameAction } from "../../contexts/ContextTypes.ts";
 import { useGame } from "../../hooks/useGame.ts";
-import { ManeuverName } from "../../../types/equipables/actions.ts";
+import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
 import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
 import { weaponMap } from "../../../shared/definitions/weapons/sets.ts";

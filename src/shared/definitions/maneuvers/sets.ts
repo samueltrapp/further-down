@@ -1,7 +1,7 @@
 import {
   ManeuverName,
   ManeuverType,
-} from "../../../types/equipables/actions.ts";
+} from "../../../types/equipables/maneuvers.ts";
 import { quicksilver } from "./collection/quicksilver.ts";
 import { bonk } from "./collection/bonk.ts";
 import { deluge } from "./collection/deluge.ts";

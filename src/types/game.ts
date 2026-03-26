@@ -1,5 +1,5 @@
 import { EnemyType, PlayerType } from "./individual/characters.ts";
-import { ManeuverName, TargetMethodType } from "./equipables/actions.ts";
+import { ManeuverName, TargetMethodType } from "./equipables/maneuvers.ts";
 import { WeaponName } from "./equipables/weapons.ts";
 
 export enum BattleGrade {

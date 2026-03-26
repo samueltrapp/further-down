@@ -11,7 +11,7 @@ import { pickEnemies, setBlankBattle } from "../battle/generator.ts";
 import { WeaponName } from "../../types/equipables/weapons.ts";
 import { ArmorName } from "../../types/equipables/armors.ts";
 import { EnchantmentName } from "../../types/equipables/enchantments.ts";
-import { ManeuverName } from "../../types/equipables/actions.ts";
+import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { checkNextTurn } from "../battle/core.ts";
 
 export function submitName(

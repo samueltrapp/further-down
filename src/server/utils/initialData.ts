@@ -7,7 +7,7 @@ import { maneuverCollection } from "../../shared/definitions/maneuvers/sets.ts";
 import { weaponCollection } from "../../shared/definitions/weapons/sets.ts";
 import { ArmorName } from "../../types/equipables/armors.ts";
 import { EnchantmentName } from "../../types/equipables/enchantments.ts";
-import { ManeuverName } from "../../types/equipables/actions.ts";
+import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { WeaponName } from "../../types/equipables/weapons.ts";
 
 const baseStats = {

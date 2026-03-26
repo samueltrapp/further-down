@@ -21,7 +21,7 @@ import {
   TakeRewardType,
   TakeStatsType,
 } from "../types/events/skill.ts";
-import { handleTurn } from "./meta/turnHandler.ts";
+import { handleTurn } from "./battle/turnHandler.ts";
 import dotenv from "dotenv";
 
 const port = 8080;

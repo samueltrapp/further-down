@@ -1,5 +1,5 @@
 import { StatsType } from "./stats.ts";
-import { ManeuverName } from "../equipables/actions.ts";
+import { ManeuverName } from "../equipables/maneuvers.ts";
 import { WeaponName } from "../equipables/weapons.ts";
 import { ArmorName } from "../equipables/armors.ts";
 import { EnchantmentName } from "../equipables/enchantments.ts";
@@ -17,32 +17,14 @@ type RewardSpread = {
   weapons: WeaponName[];
 };
 
-type EffectType = {
-  stacks: number;
-  duration: DurationType;
-  trigger: TriggerType;
-  tooltip: string;
-};
-
-type FavorType = Partial<Record<FavorName, EffectType>>;
-type BurdenType = Partial<Record<BurdenName, EffectType>>;
 type EffectsType = {
-  favors: FavorType;
-  burdens: BurdenType;
+  favors: Partial<Record<FavorName, number>>;
+  burdens: Partial<Record<BurdenName, number>>;
 };
 
 export type RewardTypes = "maneuvers" | "weapons" | "armors" | "enchantments";
 
 export type PendingRewardType = Record<RewardTypes, number>;
-
-type TriggerType = "hit" | "turn" | "round" | "battle";
-type DurationType =
-  | "instant"
-  | "hit"
-  | "turn"
-  | "round"
-  | "battle"
-  | "permanent";
 
 type CharacterType = {
   id: string;

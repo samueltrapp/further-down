@@ -1,4 +1,4 @@
-import { ManeuverType } from "../../../../types/equipables/actions.ts";
+import { ManeuverType } from "../../../../types/equipables/maneuvers.ts";
 
 const ache: ManeuverType = {
   name: "ache",
@@ -10,13 +10,15 @@ const ache: ManeuverType = {
   maxTargets: 1,
   steps: [
     {
+      type: "effect",
+      burden: "anguish",
+      stacks: 1,
+    },
+    {
       type: "hit",
       accuracy: 85,
       damageType: "psychic",
       strength: 1.1,
-    },
-    {
-      type: "effect",
     },
   ],
   tags: ["attack", "single", "pure", "psychic", "burden"],

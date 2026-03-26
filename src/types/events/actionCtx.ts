@@ -1,5 +1,5 @@
 import { CharactersType, TurnLog } from "../game.ts";
-import { ManeuverType } from "../equipables/actions.ts";
+import { ManeuverType } from "../equipables/maneuvers.ts";
 
 export type ActionCtx = {
   characters: CharactersType;
@@ -14,7 +14,7 @@ export type ActionCtx = {
   mitigation: Map<
     string,
     {
-      evasion: number;
+      evaded: boolean;
       reduction: number;
     }
   >;

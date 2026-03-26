@@ -1,4 +1,5 @@
 import { PerspectiveType, TeamType } from "../individual/characters.ts";
+import { BurdenName, FavorName } from "./effects.ts";
 
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
@@ -10,7 +11,6 @@ const EnemyManeuvers = ["bonk", "pass"] as const;
 type EnemyManeuvers = (typeof EnemyManeuvers)[number];
 
 export type ManeuverName = PlayerManeuvers | EnemyManeuvers;
-
 export type TargetMethodType = "select" | "self" | "all" | "random" | "special";
 
 export type TagType =
@@ -40,6 +40,9 @@ export type HealStep = {
 
 export type EffectStep = {
   type: "effect";
+  burden?: BurdenName;
+  favor?: FavorName;
+  stacks?: number;
 };
 
 export type StepType = HitStep | HealStep | EffectStep;

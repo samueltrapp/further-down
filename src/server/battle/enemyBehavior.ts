@@ -1,9 +1,9 @@
 import { GameType } from "../../types/game.ts";
 import { randEntry, randNum, validTargets } from "../../shared/utils.ts";
-import { handleTurn } from "../meta/turnHandler.ts";
+import { handleTurn } from "./turnHandler.ts";
 import { ConnectionType } from "../../types/server.ts";
 import { EnemyTurnType } from "../../types/events/turn.ts";
-import { ManeuverName } from "../../types/equipables/actions.ts";
+import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 
 type DecisionType = {

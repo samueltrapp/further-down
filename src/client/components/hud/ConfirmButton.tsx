@@ -1,5 +1,5 @@
 import { playerTurn } from "../../services/turn.ts";
-import { ManeuverName } from "../../../types/equipables/actions.ts";
+import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
 import { useGame } from "../../hooks/useGame.ts";
 import { useTurnOrder } from "../../hooks/useTurnOrder.ts";
