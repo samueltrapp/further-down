@@ -2,7 +2,7 @@ import { WeaponType } from "../../../../types/equipables/weapons.ts";
 
 export const fungalAppendage: WeaponType = {
   name: "fungal appendage",
-  team: "player",
+  team: "enemy",
   power: 4,
   spread: 1,
   affinities: {

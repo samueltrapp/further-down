@@ -10,12 +10,13 @@ export type ActionCtx = {
   messages: TurnLog;
   toHit: number;
   accuracy: number;
-  damage: number;
-  mitigation: Map<
+  instance: Map<
     string,
     {
+      damage: number;
+      mitigation: number;
+      heal: number;
       evaded: boolean;
-      reduction: number;
     }
   >;
   heal: number;

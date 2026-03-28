@@ -8,7 +8,7 @@ const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
 export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   const { damageType, strength } = { ...step };
-  const { characters, sourceId } = { ...ctx };
+  const { characters, sourceId, targetIds } = { ...ctx };
   const source = characters[sourceId];
 
   if (!source) {
@@ -50,7 +50,16 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
     }
   };
 
-  const damageInstance = trunc(strength * damage());
+  const damageInstance = strength * damage();
+  const freshMap = new Map();
+  targetIds?.forEach((targetId) => {
+    const existingInstance = ctx.instance.get(targetId);
+    freshMap.set(targetId, {
+      ...existingInstance,
+      damage: trunc((existingInstance?.damage || 0) + damageInstance),
+    });
+  });
+
   const stepAccuracy = source.stats.accuracy + step.accuracy;
   const stepRoll = randNum(100);
 
@@ -58,27 +67,28 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
     ...ctx,
     toHit: stepRoll,
     accuracy: stepAccuracy,
-    damage: damageInstance,
+    instance: freshMap,
   };
 };
 
 export const applyDamage = (ctx: ActionCtx) => {
-  const { characters, damage, messages, mitigation } = { ...ctx };
+  const { characters, instance, messages } = { ...ctx };
 
-  mitigation.forEach((mitigationFactor, charId) => {
-    if (mitigationFactor.evaded) {
-      messages.steps?.push(`Missed ${characters[charId].name}.`);
+  instance.forEach((instanceDtl, targetId) => {
+    if (instanceDtl.evaded) {
+      messages.steps?.push(`Missed ${characters[targetId].name}.`);
     } else {
-      const character = characters[charId];
-      const reducedDamage = damage - mitigationFactor.reduction;
+      const character = characters[targetId];
+      const reducedDamage = limitToZero(
+        trunc(instanceDtl.damage - instanceDtl.mitigation),
+      );
       if (character?.stats?.life) {
         character.stats.life = limitToZero(
           character.stats.life - reducedDamage,
         );
       }
-
       messages.steps?.push(
-        `Hit ${characters[charId].name} for ${reducedDamage} damage (${damage} - ${mitigationFactor.reduction}).`,
+        `Hit ${characters[targetId].name} for ${reducedDamage} damage (${instanceDtl.damage} - ${instanceDtl.mitigation}).`,
       );
     }
   });

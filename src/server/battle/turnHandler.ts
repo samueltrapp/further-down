@@ -45,8 +45,7 @@ const resetCtxStep = (ctx: ActionCtx, turnProps: TurnProps): ActionCtx => {
     targetIds: assignTargets(ctx, turnProps),
     toHit: 0,
     accuracy: 0,
-    damage: 0,
-    mitigation: new Map(),
+    instance: new Map(),
     heal: 0,
   };
 };
@@ -90,8 +89,7 @@ export function handleTurn(
       messages: turnLog(source.name, maneuver.name, weapon),
       toHit: 0,
       accuracy: 0,
-      damage: 0,
-      mitigation: new Map(),
+      instance: new Map(),
       heal: 0,
     };
 
@@ -106,6 +104,9 @@ export function handleTurn(
 
       if (step.type === "hit") {
         ctx = calcDamage(step, ctx);
+        if (step.customHitFn) {
+          ctx = step.customHitFn(ctx);
+        }
         ctx = calcMitigation(step, ctx);
         ctx = applyDamage(ctx);
       } else if (step.type === "heal") {

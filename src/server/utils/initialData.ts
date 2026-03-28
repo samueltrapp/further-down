@@ -114,7 +114,7 @@ const blankCharacters = (userSpread: string[]) => {
         enchantments: 0,
         maneuvers: 1,
         weapons: 2,
-        stats: 0,
+        stats: 20,
       },
       team: "player",
       isDead: false,

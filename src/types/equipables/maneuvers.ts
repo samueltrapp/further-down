@@ -1,5 +1,6 @@
 import { PerspectiveType, TeamType } from "../individual/characters.ts";
 import { BurdenName, FavorName } from "./effects.ts";
+import { ActionCtx } from "../events/actionCtx.ts";
 
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
@@ -31,6 +32,7 @@ export type HitStep = {
   accuracy: number;
   damageType: DamageType;
   strength: number;
+  customHitFn?: (ctx: ActionCtx) => ActionCtx;
 };
 
 export type HealStep = {

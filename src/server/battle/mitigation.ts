@@ -6,15 +6,10 @@ import { armorMap } from "../../shared/definitions/armors/sets.ts";
 import { trunc } from "../utils/battle.ts";
 
 export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
-  const { damageType } = step;
-  const { characters, targetIds } = ctx;
-  const defenders = targetIds?.map((id) => ({
-    id: id,
-    stats: characters[id]?.stats,
-    armor: characters[id]?.equipped.armor,
-  }));
+  const { damageType } = { ...step };
+  const { characters, instance } = { ...ctx };
 
-  if (!defenders || defenders.length === 0) {
+  if (!instance || instance.size === 0) {
     return ctx;
   }
 
@@ -61,23 +56,26 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
     }
   };
 
-  const mitigationMap = new Map();
-  defenders?.forEach((defender) => {
-    const armor = defender.armor ? armorMap.get(defender.armor) : null;
-    if (defender.stats && armor) {
-      const evaded = ctx.toHit > ctx.accuracy - defender.stats.evasion;
-      console.log(evaded, ctx.toHit, ctx.accuracy, defender.stats.evasion);
-      const defensiveStats = {
-        evaded,
-        reduction: trunc(mitigation(defender.stats, armor)),
-      };
+  const freshMap = new Map();
+  instance?.forEach((instanceDtl, targetId) => {
+    const character = characters[targetId];
+    const armor = character.equipped.armor
+      ? armorMap.get(character.equipped.armor)
+      : null;
+    if (character.stats && armor) {
+      const evaded = ctx.toHit > ctx.accuracy - character.stats.evasion;
+      const mitigationInstance = mitigation(character.stats, armor);
 
-      mitigationMap.set(defender.id, defensiveStats);
+      freshMap.set(targetId, {
+        ...instanceDtl,
+        evaded,
+        mitigation: trunc((instanceDtl?.mitigation || 0) + mitigationInstance),
+      });
     }
   });
 
   return {
     ...ctx,
-    mitigation: mitigationMap,
+    instance: freshMap,
   };
 };
