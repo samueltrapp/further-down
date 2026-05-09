@@ -56,7 +56,7 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
     }
   };
 
-  const freshMap = new Map();
+  const newInstance = new Map();
   instance?.forEach((instanceDtl, targetId) => {
     const character = characters[targetId];
     const armor = character.equipped.armor
@@ -66,7 +66,7 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
       const evaded = ctx.toHit > ctx.accuracy - character.stats.evasion;
       const mitigationInstance = mitigation(character.stats, armor);
 
-      freshMap.set(targetId, {
+      newInstance.set(targetId, {
         ...instanceDtl,
         evaded,
         mitigation: trunc((instanceDtl?.mitigation || 0) + mitigationInstance),
@@ -76,6 +76,6 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
 
   return {
     ...ctx,
-    instance: freshMap,
+    instance: newInstance,
   };
 };

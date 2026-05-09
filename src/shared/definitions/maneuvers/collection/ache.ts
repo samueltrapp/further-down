@@ -5,17 +5,21 @@ import { trunc } from "../../../../server/utils/battle.ts";
 const addAnguish = (ctx: ActionCtx) => {
   const { characters, instance, sourceId } = { ...ctx };
 
+  const newInstance = new Map();
   instance.forEach((instanceDtl, targetId) => {
     const anguishStacks = characters[targetId].effects.burdens.anguish || 0;
     const damagePerStack = characters[sourceId].stats.psychic * 0.15;
     const anguishDamage = anguishStacks * damagePerStack;
-    instance.set(targetId, {
+    newInstance.set(targetId, {
       ...instanceDtl,
       damage: trunc((instanceDtl.damage || 0) + anguishDamage),
     });
   });
 
-  return ctx;
+  return {
+    ...ctx,
+    instance: newInstance
+  };
 };
 
 const ache: ManeuverType = {

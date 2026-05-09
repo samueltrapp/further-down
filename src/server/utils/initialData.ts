@@ -123,245 +123,301 @@ const blankCharacters = (userSpread: string[]) => {
   return initialCharacters;
 };
 
-const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
-  XVGbnfui: {
-    id: "XVGbnfui",
-    name: "Alvin",
-    userId: userId,
-    effects: {
-      burdens: {},
-      favors: {},
-    },
-    lastTurn: 0,
-    equipped: {
-      armor: "platemail",
-      weapon: "hammer",
-      enchantments: [],
-    },
-    loadout: {
-      armors: ["platemail"],
-      enchantments: [],
-      maneuvers: ["quicksilver"],
-      weapons: ["hammer", "scepter"],
-    },
-    private: {
-      queue: {
-        armors: ["leather", "robe", "tunic"],
-        enchantments: [],
-        maneuvers: [],
-        weapons: ["cutlass", "periapt"],
+const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => (
+    {
+      "aQNgmuOa": {
+        "id": "aQNgmuOa",
+        "name": "Player",
+        "userId": userId,
+        "effects": {
+          "burdens": {},
+          "favors": {}
+        },
+        "lastTurn": 0,
+        "equipped": {
+          "weapon": "cutlass",
+          "armor": "leather",
+          "enchantments": []
+        },
+        "loadout": {
+          "armors": [
+            "leather"
+          ],
+          "enchantments": [],
+          "maneuvers": [
+            "quicksilver"
+          ],
+          "weapons": [
+            "cutlass",
+            "scepter"
+          ]
+        },
+        "private": {
+          "queue": {
+            "armors": [
+              "robe",
+              "tunic",
+              "platemail"
+            ],
+            "enchantments": [],
+            "maneuvers": [
+              "ache",
+              "deluge",
+              "pummel"
+            ],
+            "weapons": [
+              "hammer",
+              "periapt"
+            ]
+          },
+          "savedStats": {
+            "life": 100,
+            "maxLife": 100,
+            "vitality": 20,
+            "speed": 20,
+            "maxSpeed": 20,
+            "bladed": 0,
+            "blunt": 0,
+            "dampening": 0,
+            "defense": 0,
+            "elemental": 0,
+            "magical": 5,
+            "padding": 0,
+            "physical": 5,
+            "plating": 0,
+            "psychic": 0,
+            "resistance": 0,
+            "warding": 0,
+            "evasion": 0,
+            "accuracy": 0
+          }
+        },
+        "stats": {
+          "life": 100,
+          "maxLife": 100,
+          "vitality": 20,
+          "speed": 23,
+          "maxSpeed": 20,
+          "bladed": 7,
+          "blunt": 0,
+          "dampening": 0,
+          "defense": 3,
+          "elemental": 0,
+          "magical": 7,
+          "padding": 0,
+          "physical": 8,
+          "plating": 0,
+          "psychic": 0,
+          "resistance": 2,
+          "warding": 0,
+          "evasion": 0,
+          "accuracy": 0
+        },
+        "pending": {
+          "armors": 0,
+          "enchantments": 0,
+          "maneuvers": 0,
+          "weapons": 0,
+          "stats": 0
+        },
+        "team": "player",
+        "isDead": false
       },
-      savedStats: {
-        life: 100,
-        maxLife: 100,
-        vitality: 20,
-        speed: 21,
-        maxSpeed: 21,
-        bladed: 0,
-        blunt: 0,
-        dampening: 0,
-        defense: 0,
-        elemental: 0,
-        magical: 5,
-        padding: 0,
-        physical: 5,
-        plating: 0,
-        psychic: 0,
-        resistance: 0,
-        warding: 0,
-        evasion: 0,
-        accuracy: 0,
+      "sfmVNDFl": {
+        "id": "sfmVNDFl",
+        "name": "Player2",
+        "userId": userId,
+        "effects": {
+          "burdens": {},
+          "favors": {}
+        },
+        "lastTurn": 0,
+        "equipped": {
+          "weapon": "periapt",
+          "armor": "robe",
+          "enchantments": []
+        },
+        "loadout": {
+          "armors": [
+            "robe"
+          ],
+          "enchantments": [],
+          "maneuvers": [
+            "ache"
+          ],
+          "weapons": [
+            "periapt",
+            "scepter"
+          ]
+        },
+        "private": {
+          "queue": {
+            "armors": [
+              "tunic",
+              "platemail",
+              "leather"
+            ],
+            "enchantments": [],
+            "maneuvers": [
+              "deluge",
+              "pummel",
+              "quicksilver"
+            ],
+            "weapons": [
+              "hammer",
+              "cutlass"
+            ]
+          },
+          "savedStats": {
+            "life": 100,
+            "maxLife": 100,
+            "vitality": 20,
+            "speed": 20,
+            "maxSpeed": 20,
+            "bladed": 0,
+            "blunt": 0,
+            "dampening": 0,
+            "defense": 0,
+            "elemental": 0,
+            "magical": 5,
+            "padding": 0,
+            "physical": 5,
+            "plating": 0,
+            "psychic": 0,
+            "resistance": 0,
+            "warding": 0,
+            "evasion": 0,
+            "accuracy": 0
+          }
+        },
+        "stats": {
+          "life": 100,
+          "maxLife": 100,
+          "vitality": 20,
+          "speed": 22,
+          "maxSpeed": 20,
+          "bladed": 0,
+          "blunt": 0,
+          "dampening": 1,
+          "defense": 1,
+          "elemental": 0,
+          "magical": 10,
+          "padding": 0,
+          "physical": 5,
+          "plating": 1,
+          "psychic": 7,
+          "resistance": 2,
+          "warding": 1,
+          "evasion": 0,
+          "accuracy": 0
+        },
+        "pending": {
+          "armors": 0,
+          "enchantments": 0,
+          "maneuvers": 0,
+          "weapons": 0,
+          "stats": 0
+        },
+        "team": "player",
+        "isDead": false
       },
-    },
-    pending: {
-      armors: 0,
-      enchantments: 0,
-      maneuvers: 0,
-      weapons: 0,
-      stats: 0,
-    },
-    stats: {
-      life: 100,
-      maxLife: 100,
-      vitality: 20,
-      speed: 21,
-      maxSpeed: 21,
-      bladed: 0,
-      blunt: 0,
-      dampening: 0,
-      defense: 0,
-      elemental: 0,
-      magical: 5,
-      padding: 0,
-      physical: 5,
-      plating: 0,
-      psychic: 0,
-      resistance: 0,
-      warding: 0,
-      evasion: 0,
-      accuracy: 0,
-    },
-    team: "player",
-    isDead: false,
-  },
-  "3b9hsrxl": {
-    id: "3b9hsrxl",
-    name: "Berenice",
-    userId: userId,
-    effects: {
-      burdens: {},
-      favors: {},
-    },
-    lastTurn: 0,
-    equipped: {
-      armor: "tunic",
-      weapon: "hammer",
-      enchantments: [],
-    },
-    loadout: {
-      armors: ["tunic"],
-      enchantments: [],
-      maneuvers: ["quicksilver"],
-      weapons: ["hammer", "periapt"],
-    },
-    private: {
-      queue: {
-        armors: ["leather", "robe", "platemail"],
-        enchantments: [],
-        maneuvers: [],
-        weapons: ["cutlass", "scepter"],
+      "IeHCHSPR": {
+        "id": "IeHCHSPR",
+        "name": "Player3",
+        "userId": userId,
+        "effects": {
+          "burdens": {},
+          "favors": {}
+        },
+        "lastTurn": 0,
+        "equipped": {
+          "weapon": "hammer",
+          "armor": "platemail",
+          "enchantments": []
+        },
+        "loadout": {
+          "armors": [
+            "platemail"
+          ],
+          "enchantments": [],
+          "maneuvers": [
+            "pummel"
+          ],
+          "weapons": [
+            "hammer",
+            "scepter"
+          ]
+        },
+        "private": {
+          "queue": {
+            "armors": [
+              "tunic",
+              "leather",
+              "robe"
+            ],
+            "enchantments": [],
+            "maneuvers": [
+              "ache",
+              "quicksilver",
+              "deluge"
+            ],
+            "weapons": [
+              "periapt",
+              "cutlass"
+            ]
+          },
+          "savedStats": {
+            "life": 100,
+            "maxLife": 100,
+            "vitality": 20,
+            "speed": 20,
+            "maxSpeed": 20,
+            "bladed": 0,
+            "blunt": 0,
+            "dampening": 0,
+            "defense": 0,
+            "elemental": 0,
+            "magical": 5,
+            "padding": 0,
+            "physical": 5,
+            "plating": 0,
+            "psychic": 0,
+            "resistance": 0,
+            "warding": 0,
+            "evasion": 0,
+            "accuracy": 0
+          }
+        },
+        "stats": {
+          "life": 100,
+          "maxLife": 100,
+          "vitality": 20,
+          "speed": 21,
+          "maxSpeed": 20,
+          "bladed": 0,
+          "blunt": 12,
+          "dampening": 0,
+          "defense": 1,
+          "elemental": 0,
+          "magical": 5,
+          "padding": 0,
+          "physical": 10,
+          "plating": 0,
+          "psychic": 0,
+          "resistance": 1,
+          "warding": 0,
+          "evasion": 0,
+          "accuracy": 0
+        },
+        "pending": {
+          "armors": 0,
+          "enchantments": 0,
+          "maneuvers": 0,
+          "weapons": 0,
+          "stats": 0
+        },
+        "team": "player",
+        "isDead": false
       },
-      savedStats: {
-        life: 100,
-        maxLife: 100,
-        vitality: 20,
-        speed: 21,
-        maxSpeed: 21,
-        bladed: 0,
-        blunt: 0,
-        dampening: 0,
-        defense: 0,
-        elemental: 0,
-        magical: 5,
-        padding: 0,
-        physical: 5,
-        plating: 0,
-        psychic: 0,
-        resistance: 0,
-        warding: 0,
-        evasion: 0,
-        accuracy: 0,
-      },
-    },
-    pending: {
-      armors: 0,
-      enchantments: 0,
-      maneuvers: 0,
-      weapons: 0,
-      stats: 0,
-    },
-    stats: {
-      life: 100,
-      maxLife: 100,
-      vitality: 20,
-      speed: 21,
-      maxSpeed: 21,
-      bladed: 0,
-      blunt: 0,
-      dampening: 0,
-      defense: 0,
-      elemental: 0,
-      magical: 5,
-      padding: 0,
-      physical: 5,
-      plating: 0,
-      psychic: 0,
-      resistance: 0,
-      warding: 0,
-      evasion: 0,
-      accuracy: 0,
-    },
-    team: "player",
-    isDead: false,
-  },
-  ymukbWJk: {
-    id: "ymukbWJk",
-    name: "Charlie",
-    userId: userId,
-    effects: {
-      burdens: {},
-      favors: {},
-    },
-    lastTurn: 0,
-    equipped: {
-      armor: "tunic",
-      weapon: "cutlass",
-      enchantments: [],
-    },
-    loadout: {
-      armors: ["robe"],
-      enchantments: [],
-      maneuvers: ["quicksilver"],
-      weapons: ["cutlass", "hammer"],
-    },
-    private: {
-      queue: {
-        armors: ["tunic", "platemail", "leather"],
-        enchantments: [],
-        maneuvers: [],
-        weapons: ["scepter", "periapt"],
-      },
-      savedStats: {
-        life: 100,
-        maxLife: 100,
-        vitality: 20,
-        speed: 21,
-        maxSpeed: 21,
-        bladed: 0,
-        blunt: 0,
-        dampening: 0,
-        defense: 0,
-        elemental: 0,
-        magical: 5,
-        padding: 0,
-        physical: 5,
-        plating: 0,
-        psychic: 0,
-        resistance: 0,
-        warding: 0,
-        evasion: 0,
-        accuracy: 0,
-      },
-    },
-    pending: {
-      armors: 0,
-      enchantments: 0,
-      maneuvers: 0,
-      weapons: 0,
-      stats: 0,
-    },
-    stats: {
-      life: 100,
-      maxLife: 100,
-      vitality: 20,
-      speed: 21,
-      maxSpeed: 21,
-      bladed: 0,
-      blunt: 0,
-      dampening: 0,
-      defense: 0,
-      elemental: 0,
-      magical: 5,
-      padding: 0,
-      physical: 5,
-      plating: 0,
-      psychic: 0,
-      resistance: 0,
-      warding: 0,
-      evasion: 0,
-      accuracy: 0,
-    },
-    team: "player",
-    isDead: false,
-  },
-});
+    }
+);

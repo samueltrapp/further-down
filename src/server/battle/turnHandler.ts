@@ -67,7 +67,6 @@ export function handleTurn(
   turn: PlayerTurnType | EnemyTurnType,
 ) {
   const game = connection.meta.games.get(turn.gameId);
-  console.debug(`TURN: ${game?.characters?.[turn.sourceId].name}`);
   if (game && game.characters) {
     const source = game.characters[turn.sourceId];
     const isPlayerTurn = turn.team === "player";

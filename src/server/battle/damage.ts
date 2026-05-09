@@ -51,10 +51,10 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   };
 
   const damageInstance = strength * damage();
-  const freshMap = new Map();
+  const newInstance = new Map();
   targetIds?.forEach((targetId) => {
     const existingInstance = ctx.instance.get(targetId);
-    freshMap.set(targetId, {
+    newInstance.set(targetId, {
       ...existingInstance,
       damage: trunc((existingInstance?.damage || 0) + damageInstance),
     });
@@ -67,7 +67,7 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
     ...ctx,
     toHit: stepRoll,
     accuracy: stepAccuracy,
-    instance: freshMap,
+    instance: newInstance,
   };
 };
 
