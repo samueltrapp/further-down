@@ -18,7 +18,7 @@ const addAnguish = (ctx: ActionCtx) => {
 
   return {
     ...ctx,
-    instance: newInstance
+    instance: newInstance,
   };
 };
 
