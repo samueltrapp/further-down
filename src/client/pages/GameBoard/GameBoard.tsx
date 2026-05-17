@@ -1,13 +1,13 @@
 import Player from "../../components/statBlocks/Player.tsx";
 import Enemy from "../../components/statBlocks/Enemy.tsx";
 import "./GameBoard.css";
-import ConfirmButton from "../../components/hud/ConfirmButton.tsx";
-import BattleLog from "../../components/hud/BattleLog.tsx";
+import ConfirmButton from "../../components/battle/ConfirmButton/ConfirmButton.tsx";
+import BattleLog from "../../components/battle/BattleLog/BattleLog.tsx";
 import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
-import GraphicsCanvas from "../../components/hud/GraphicsCanvas.tsx";
-import TurnMenu from "../../components/hud/TurnMenu.tsx";
+import DetailPanel from "../../components/battle/DetailPanel/DetailPanel.tsx";
+import TurnMenu from "../../components/battle/TurnMenu/TurnMenu.tsx";
 import { useGame } from "../../hooks/useGame.ts";
-import TurnTracker from "../../components/hud/TurnTracker.tsx";
+import TurnTracker from "../../components/battle/TurnTracker/TurnTracker.tsx";
 
 function GameBoard() {
   const { game } = useGame();
@@ -32,23 +32,25 @@ function GameBoard() {
   return (
     <>
       <TurnTracker />
-      <div className="board-grid">
-        <div className="left-spacer" />
-        {Object.values(splitChars.players).map((player, index) => (
-          <Player key={player.id} index={index} {...player} />
-        ))}
-        <div className="hub-column">
-          <div className="inner-hub">
-            <GraphicsCanvas />
-            <TurnMenu />
-            <ConfirmButton />
-            <BattleLog />
+      <div className="container">
+        <div className="board-grid">
+          <div className="left-spacer" />
+          {Object.values(splitChars.players).map((player, index) => (
+            <Player key={player.id} index={index} {...player} />
+          ))}
+          <div className="hub-column">
+            <div className="inner-hub">
+              <DetailPanel />
+              <TurnMenu />
+              <ConfirmButton />
+              <BattleLog />
+            </div>
           </div>
+          {Object.values(splitChars.enemies).map((enemy, index) => (
+            <Enemy key={enemy.id} index={index} {...enemy} />
+          ))}
+          <div className="left-spacer" />
         </div>
-        {Object.values(splitChars.enemies).map((enemy, index) => (
-          <Enemy key={enemy.id} index={index} {...enemy} />
-        ))}
-        <div className="left-spacer" />
       </div>
     </>
   );

@@ -1,9 +1,9 @@
-import { playerTurn } from "../../services/turn.ts";
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
-import { WeaponName } from "../../../types/equipables/weapons.ts";
-import { useGame } from "../../hooks/useGame.ts";
-import { useTurnOrder } from "../../hooks/useTurnOrder.ts";
-import { checkOwnership } from "../../utils/checkOwnership.ts";
+import { playerTurn } from "../../../services/turn.ts";
+import { ManeuverName } from "../../../../types/equipables/maneuvers.ts";
+import { WeaponName } from "../../../../types/equipables/weapons.ts";
+import { useGame } from "../../../hooks/useGame.ts";
+import { useTurnOrder } from "../../../hooks/useTurnOrder.ts";
+import { checkOwnership } from "../../../utils/dataParsing.ts";
 import "./ConfirmButton.css";
 
 export default function ConfirmButton() {

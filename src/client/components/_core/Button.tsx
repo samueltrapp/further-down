@@ -2,7 +2,7 @@ import { MouseEventHandler, ReactNode } from "react";
 import "./Button.css";
 
 type ButtonProps = {
-  variant?: "seamless" | "select" | "confirm";
+  variant?: "seamless" | "outline" | "select" | "confirm";
   size?: "small" | "medium" | "large";
   onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
@@ -12,7 +12,7 @@ type ButtonProps = {
 };
 
 function Button({
-  variant = "select",
+  variant = "seamless",
   size = "medium",
   onClick,
   disabled,

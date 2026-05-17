@@ -2,18 +2,31 @@ import "./StatBlocks.css";
 import "./Player.css";
 import { PlayerType } from "../../../types/individual/characters.ts";
 import { useGame } from "../../hooks/useGame.ts";
-import StatBar from "../core/StatBar.tsx";
+import StatBar from "../_core/StatBar.tsx";
+import { GameAction } from "../../contexts/ContextTypes.ts";
 
 export default function Player(
   props: PlayerType & { id: string; index: number },
 ) {
   const { id, name, stats } = props;
-  const { game } = useGame();
+  const { game, dispatch } = useGame();
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
+
+  const handleMouseOver = () => {
+    if (dispatch) {
+      dispatch({
+        type: GameAction.PLAYER_ACTION,
+        payload: {
+          detailId: id,
+        },
+      });
+    }
+  };
 
   return (
     <button
       className={`char-box player-box id-bar left-row-${props.index} ${activeTurn ? "active-char" : ""}`}
+      onMouseOver={handleMouseOver}
     >
       <StatBar
         id={id}

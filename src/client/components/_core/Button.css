@@ -17,22 +17,28 @@
   }
 }
 
+.outline-btn {
+  background: transparent;
+  border: 1px solid var(--white);
+  border-radius: 0.5rem;
+}
+
 .seamless-btn {
   background-color: transparent;
   color: var(--white);
 }
 
 .small-btn {
-  font-size: 1rem;
+  font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
 }
 
 .medium-btn {
-  font-size: 1.75rem;
+  font-size: 1rem;
   padding: 0.5rem 0.75rem;
 }
 
 .large-btn {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   padding: 0.75rem 1rem;
 }

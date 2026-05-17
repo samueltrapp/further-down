@@ -17,7 +17,7 @@ import { armorMap } from "../../../shared/definitions/armors/sets.ts";
 import { enchantmentMap } from "../../../shared/definitions/enchantments/sets.ts";
 import { maneuverMap } from "../../../shared/definitions/maneuvers/sets.ts";
 import { weaponMap } from "../../../shared/definitions/weapons/sets.ts";
-import Button from "../core/Button.tsx";
+import Button from "../_core/Button.tsx";
 
 function RewardHolding() {
   return <div>Waiting for other players.</div>;

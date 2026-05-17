@@ -7,6 +7,7 @@ import { Rewards } from "./components/interstitials/Rewards";
 import { GameAction } from "./contexts/ContextTypes.ts";
 import { useGame } from "./hooks/useGame.ts";
 import "./App.css";
+import Button from "./components/_core/Button.tsx";
 
 const GameScreen = ({ lobbyStatus }: { lobbyStatus?: LobbyStatus }) => {
   switch (lobbyStatus) {
@@ -74,9 +75,20 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className={`container${lobbyStatus !== "battle" ? " interior" : ""}`}>
+    <>
+      <nav className="nav-bar">
+        <img
+          className="nav-icon"
+          src="/public/images/nav-icon.png"
+          alt="Nav icon"
+        />
+        <div className="nav-links">
+          <Button variant="outline">Rules</Button>
+          <Button variant="outline">Abandon</Button>
+        </div>
+      </nav>
       {loaded && <GameScreen lobbyStatus={lobbyStatus} />}
-    </div>
+    </>
   );
 }
 

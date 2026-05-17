@@ -2,7 +2,7 @@ import { EnemyType } from "../../../types/individual/characters.ts";
 import "./StatBlocks.css";
 import "./Enemy.css";
 import { useGame } from "../../hooks/useGame.ts";
-import StatBar from "../core/StatBar.tsx";
+import StatBar from "../_core/StatBar.tsx";
 import { selectCharacters } from "../../contexts/contextActions.ts";
 import { GameAction } from "../../contexts/ContextTypes.ts";
 import { cdcl } from "../../utils/formatting.ts";
@@ -31,6 +31,17 @@ function Enemy(props: EnemyType & { id: string; index: number }) {
     }
   };
 
+  const handleMouseOver = () => {
+    if (dispatch) {
+      dispatch({
+        type: GameAction.PLAYER_ACTION,
+        payload: {
+          detailId: id,
+        },
+      });
+    }
+  };
+
   return (
     <button
       className={cdcl(
@@ -42,6 +53,7 @@ function Enemy(props: EnemyType & { id: string; index: number }) {
         { "death-filter": isDead },
       )}
       onClick={() => handleClick(props.id)}
+      onMouseOver={handleMouseOver}
     >
       <StatBar
         id={id}

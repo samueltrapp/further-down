@@ -11,6 +11,7 @@
   --clear: #ffffff33;
   --glass: #d0d0d01a;
   --gray: #c0c0c0;
+  --light-black: #151416;
   --tan: #f9e0d2;
   --white: #fcfafa;
 
@@ -60,7 +61,7 @@ body {
   min-height: 100vh;
   font-weight: 400;
   font-style: normal;
-  background: linear-gradient(in oklch, var(--orange), 5%, var(--black));
+  background: linear-gradient(in oklch, #af4f1877, var(--black));
 }
 
 button {

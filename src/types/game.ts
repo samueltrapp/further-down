@@ -69,4 +69,5 @@ export type GameClientType = {
   selectedIds: string[];
   selectedManeuver: ManeuverName | "";
   selectedWeapon: WeaponName | "";
+  detailId: string;
 };

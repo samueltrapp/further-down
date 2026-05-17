@@ -1,7 +1,26 @@
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 10rem;
+  background-color: var(--black);
+}
+
+.nav-icon {
+  height: 37px;
+  width: 37px;
+}
+
+.nav-links button {
+  margin-right: 0.75rem;
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
 .container {
   background-color: rgba(11, 10, 10, 0.88);
-  height: 100%;
-  margin: auto;
+  margin: 0 auto;
+  padding: 0 0 5rem;
   max-width: 100%;
   box-shadow: 0 0 72px rgba(11, 10, 10, 0.82);
 

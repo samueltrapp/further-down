@@ -1,6 +1,6 @@
-import { useGame } from "../../hooks/useGame.ts";
+import { useGame } from "../../../hooks/useGame.ts";
 import "./BattleLog.css";
-import Button from "../core/Button.tsx";
+import Button from "../../_core/Button.tsx";
 
 export default function BattleLog() {
   const { game } = useGame();

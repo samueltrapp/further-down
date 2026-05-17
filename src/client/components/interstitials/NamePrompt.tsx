@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { submitName } from "../../services/skill.ts";
 import "./Rewards.css";
-import Button from "../core/Button.tsx";
+import Button from "../_core/Button.tsx";
 
 const nameValidation = /[^A-za-z -]/;
 

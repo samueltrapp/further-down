@@ -28,15 +28,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       selectedIds: [],
       selectedManeuver: "",
       selectedWeapon: "",
+      detailId: "",
     },
   });
 
   return (
-    <GameContext.Provider value={game}>
-      <GameDispatchContext.Provider value={dispatch}>
-        {children}
-      </GameDispatchContext.Provider>
-    </GameContext.Provider>
+    <GameContext value={game}>
+      <GameDispatchContext value={dispatch}>{children}</GameDispatchContext>
+    </GameContext>
   );
 };
 
@@ -58,6 +57,7 @@ function resetTurn(state: GameType): GameClientType {
     selectedIds: [],
     selectedManeuver: "",
     selectedWeapon: equippedWeapon,
+    detailId: "",
   };
 }
 

@@ -1,15 +1,18 @@
 import "./TurnMenu.css";
-import { useTurnOrder } from "../../hooks/useTurnOrder.ts";
+import { useTurnOrder } from "../../../hooks/useTurnOrder.ts";
 import { MouseEvent } from "react";
-import { GameAction } from "../../contexts/ContextTypes.ts";
-import { useGame } from "../../hooks/useGame.ts";
-import { ManeuverName } from "../../../types/equipables/maneuvers.ts";
-import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
-import { WeaponName } from "../../../types/equipables/weapons.ts";
-import { weaponMap } from "../../../shared/definitions/weapons/sets.ts";
-import { maneuverMap } from "../../../shared/definitions/maneuvers/sets.ts";
-import { toCaps } from "../../utils/formatting.ts";
-import { checkOwnership } from "../../utils/checkOwnership.ts";
+import { GameAction } from "../../../contexts/ContextTypes.ts";
+import { useGame } from "../../../hooks/useGame.ts";
+import { ManeuverName } from "../../../../types/equipables/maneuvers.ts";
+import {
+  EnemyType,
+  PlayerType,
+} from "../../../../types/individual/characters.ts";
+import { WeaponName } from "../../../../types/equipables/weapons.ts";
+import { weaponMap } from "../../../../shared/definitions/weapons/sets.ts";
+import { maneuverMap } from "../../../../shared/definitions/maneuvers/sets.ts";
+import { toCaps } from "../../../utils/formatting.ts";
+import { checkOwnership } from "../../../utils/dataParsing.ts";
 
 function PersonalMenu({ character }: { character: PlayerType | EnemyType }) {
   const { game, dispatch } = useGame();
