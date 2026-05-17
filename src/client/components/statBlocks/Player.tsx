@@ -4,6 +4,7 @@ import { PlayerType } from "../../../types/individual/characters.ts";
 import { useGame } from "../../hooks/useGame.ts";
 import StatBar from "../_core/StatBar.tsx";
 import { GameAction } from "../../contexts/ContextTypes.ts";
+import { cdcl } from "../../utils/formatting.ts";
 
 export default function Player(
   props: PlayerType & { id: string; index: number },
@@ -25,7 +26,9 @@ export default function Player(
 
   return (
     <button
-      className={`char-box player-box id-bar left-row-${props.index} ${activeTurn ? "active-char" : ""}`}
+      className={cdcl("char-box", "player-box", "id-bar", {
+        "active-char": activeTurn,
+      })}
       onMouseOver={handleMouseOver}
     >
       <StatBar

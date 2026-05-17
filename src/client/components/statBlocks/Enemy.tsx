@@ -15,10 +15,10 @@ function Enemy(props: EnemyType & { id: string; index: number }) {
   const activeTurn = game?.data.battle?.turnOrder[0] === id;
   const isSelected = client?.selectedIds.includes(id);
 
-  const handleClick = (enemyId: string) => {
+  const handleClick = () => {
     if (dispatch && game?.client.selectedManeuver) {
       const updatedEnemyIds = selectCharacters(
-        enemyId,
+        id,
         game?.client?.selectedIds,
         game?.client?.maxSelections,
       );
@@ -47,12 +47,11 @@ function Enemy(props: EnemyType & { id: string; index: number }) {
       className={cdcl(
         "enemy-box",
         "id-bar",
-        `right-row-${props.index}`,
         { "active-enemy": activeTurn },
         { "selected-enemy": isSelected },
         { "death-filter": isDead },
       )}
-      onClick={() => handleClick(props.id)}
+      onClick={handleClick}
       onMouseOver={handleMouseOver}
     >
       <StatBar

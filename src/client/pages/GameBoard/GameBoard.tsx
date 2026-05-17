@@ -35,9 +35,11 @@ function GameBoard() {
       <div className="container">
         <div className="board-grid">
           <div className="left-spacer" />
-          {Object.values(splitChars.players).map((player, index) => (
-            <Player key={player.id} index={index} {...player} />
-          ))}
+          <div className="char-grid">
+            {Object.values(splitChars.players).map((player, index) => (
+              <Player key={player.id} index={index} {...player} />
+            ))}
+          </div>
           <div className="hub-column">
             <div className="inner-hub">
               <DetailPanel />
@@ -46,10 +48,12 @@ function GameBoard() {
               <BattleLog />
             </div>
           </div>
-          {Object.values(splitChars.enemies).map((enemy, index) => (
-            <Enemy key={enemy.id} index={index} {...enemy} />
-          ))}
-          <div className="left-spacer" />
+          <div className="char-grid">
+            {Object.values(splitChars.enemies).map((enemy, index) => (
+              <Enemy key={enemy.id} index={index} {...enemy} />
+            ))}
+          </div>
+          <div className="right-spacer" />
         </div>
       </div>
     </>

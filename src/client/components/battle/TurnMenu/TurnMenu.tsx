@@ -58,6 +58,7 @@ function PersonalMenu({ character }: { character: PlayerType | EnemyType }) {
       <div className="weapon-toolbar">
         {weapons.map((weapon) => (
           <button
+            key={weapon}
             className={`weapon-button ${equippedWeapon === weapon && "equipped-weapon"}`}
             onClick={handleSelectWeapon}
             value={weapon}
@@ -69,9 +70,9 @@ function PersonalMenu({ character }: { character: PlayerType | EnemyType }) {
       <div className="maneuver-track">
         {filledManeuvers.map((maneuver, id) => (
           <button
+            key={maneuver || id}
             className={`maneuver-button ${isUserTurn && game?.client.selectedManeuver === maneuver ? "selected-maneuver" : ""}`}
             disabled={!isUserTurn || maneuver === ""}
-            key={maneuver || id}
             onClick={handleClickManeuver}
             value={maneuver}
           >

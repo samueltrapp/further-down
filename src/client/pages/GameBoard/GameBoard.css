@@ -1,23 +1,21 @@
 .board-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 4fr 1fr 1fr;
-  grid-template-rows: 3rem repeat(4, 1fr);
   grid-gap: 1.5rem;
 }
 
-.left-spacer {
-  grid-column: 1;
-  grid-row: 2 / 6;
+.char-grid {
+  display: flex;
+  flex-direction: column;
 }
 
-.right-spacer {
-  grid-column: 6;
-  grid-row: 2 / 6;
+.char-grid button {
+  flex: 1;
+  margin-top: 2rem;
 }
 
 .hub-column {
   grid-column: 3;
-  grid-row: 2 / 6;
   display: flex;
   flex-direction: column;
   justify-items: flex-start;
