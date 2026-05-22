@@ -1,13 +1,15 @@
-import { EnemyType } from "../../../types/individual/characters.ts";
+import { EnemyType } from "../../../../types/individual/characters.ts";
 import "./StatBlocks.css";
 import "./Enemy.css";
-import { useGame } from "../../hooks/useGame.ts";
-import StatBar from "../_core/StatBar.tsx";
-import { selectCharacters } from "../../contexts/contextActions.ts";
-import { GameAction } from "../../contexts/ContextTypes.ts";
-import { cdcl } from "../../utils/formatting.ts";
+import { useGame } from "../../../hooks/useGame.ts";
+import StatBar from "../../_core/StatBar.tsx";
+import { selectCharacters } from "../../../contexts/contextActions.ts";
+import { GameAction } from "../../../contexts/ContextTypes.ts";
+import { cdcl } from "../../../utils/formatting.ts";
 
-function Enemy(props: EnemyType & { id: string; index: number }) {
+export default function Enemy(
+  props: EnemyType & { id: string; index: number },
+) {
   const { id, name, stats, isDead } = props;
 
   const { game, dispatch } = useGame();
@@ -36,7 +38,7 @@ function Enemy(props: EnemyType & { id: string; index: number }) {
       dispatch({
         type: GameAction.PLAYER_ACTION,
         payload: {
-          detailId: id,
+          enemyDetailsId: id,
         },
       });
     }
@@ -70,5 +72,3 @@ function Enemy(props: EnemyType & { id: string; index: number }) {
     </button>
   );
 }
-
-export default Enemy;

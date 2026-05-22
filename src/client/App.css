@@ -18,7 +18,8 @@
 }
 
 .container {
-  background-color: rgba(11, 10, 10, 0.88);
+  height: min(calc(100vh - 250px), 80vh);
+  background-color: rgba(11, 10, 10, 0.94);
   margin: 0 auto;
   padding: 0 0 5rem;
   max-width: 100%;

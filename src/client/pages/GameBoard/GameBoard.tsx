@@ -1,18 +1,24 @@
-import Player from "../../components/statBlocks/Player.tsx";
-import Enemy from "../../components/statBlocks/Enemy.tsx";
+import Player from "../../components/battle/StatBlocks/Player.tsx";
+import Enemy from "../../components/battle/StatBlocks/Enemy.tsx";
 import "./GameBoard.css";
 import ConfirmButton from "../../components/battle/ConfirmButton/ConfirmButton.tsx";
 import BattleLog from "../../components/battle/BattleLog/BattleLog.tsx";
 import { EnemyType, PlayerType } from "../../../types/individual/characters.ts";
-import DetailPanel from "../../components/battle/DetailPanel/DetailPanel.tsx";
 import TurnMenu from "../../components/battle/TurnMenu/TurnMenu.tsx";
 import { useGame } from "../../hooks/useGame.ts";
 import TurnTracker from "../../components/battle/TurnTracker/TurnTracker.tsx";
+import DetailsPanel from "../../components/battle/DetailsPanel/DetailsPanel.tsx";
 
 function GameBoard() {
   const { game } = useGame();
   const battle = game?.data.battle;
   const characters = game?.data.characters;
+  const inspectedPlayerId = game?.client?.playerDetailsId;
+  const inspectedEnemyId = game?.client?.enemyDetailsId;
+  const inspectedPlayer =
+    inspectedPlayerId && characters ? characters[inspectedPlayerId] : null;
+  const inspectedEnemy =
+    inspectedEnemyId && characters ? characters[inspectedEnemyId] : null;
 
   if (!battle || !characters) return;
   const splitChars: { players: PlayerType[]; enemies: EnemyType[] } = {
@@ -20,13 +26,13 @@ function GameBoard() {
     enemies: [],
   };
 
-  Object.entries(characters).reduce((arrs, curr) => {
+  Object.entries(characters).reduce((arrays, curr) => {
     if (curr[1].team === "player") {
-      arrs.players.push(curr[1] as PlayerType);
+      arrays.players.push(curr[1] as PlayerType);
     } else {
-      arrs.enemies.push(curr[1] as EnemyType);
+      arrays.enemies.push(curr[1] as EnemyType);
     }
-    return arrs;
+    return arrays;
   }, splitChars);
 
   return (
@@ -34,7 +40,7 @@ function GameBoard() {
       <TurnTracker />
       <div className="container">
         <div className="board-grid">
-          <div className="left-spacer" />
+          <DetailsPanel character={inspectedPlayer} />
           <div className="char-grid">
             {Object.values(splitChars.players).map((player, index) => (
               <Player key={player.id} index={index} {...player} />
@@ -42,7 +48,6 @@ function GameBoard() {
           </div>
           <div className="hub-column">
             <div className="inner-hub">
-              <DetailPanel />
               <TurnMenu />
               <ConfirmButton />
               <BattleLog />
@@ -53,7 +58,7 @@ function GameBoard() {
               <Enemy key={enemy.id} index={index} {...enemy} />
             ))}
           </div>
-          <div className="right-spacer" />
+          <DetailsPanel character={inspectedEnemy} />
         </div>
       </div>
     </>

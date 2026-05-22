@@ -1,10 +1,10 @@
 import "./StatBlocks.css";
 import "./Player.css";
-import { PlayerType } from "../../../types/individual/characters.ts";
-import { useGame } from "../../hooks/useGame.ts";
-import StatBar from "../_core/StatBar.tsx";
-import { GameAction } from "../../contexts/ContextTypes.ts";
-import { cdcl } from "../../utils/formatting.ts";
+import { PlayerType } from "../../../../types/individual/characters.ts";
+import { useGame } from "../../../hooks/useGame.ts";
+import StatBar from "../../_core/StatBar.tsx";
+import { GameAction } from "../../../contexts/ContextTypes.ts";
+import { cdcl } from "../../../utils/formatting.ts";
 
 export default function Player(
   props: PlayerType & { id: string; index: number },
@@ -18,7 +18,7 @@ export default function Player(
       dispatch({
         type: GameAction.PLAYER_ACTION,
         payload: {
-          detailId: id,
+          playerDetailsId: id,
         },
       });
     }

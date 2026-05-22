@@ -77,11 +77,7 @@ function App() {
   return (
     <>
       <nav className="nav-bar">
-        <img
-          className="nav-icon"
-          src="/public/images/nav-icon.png"
-          alt="Nav icon"
-        />
+        <img className="nav-icon" src="/images/nav-icon.png" alt="Nav icon" />
         <div className="nav-links">
           <Button variant="outline">Rules</Button>
           <Button variant="outline">Abandon</Button>

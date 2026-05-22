@@ -6,10 +6,9 @@
 }
 
 .weapon-toolbar {
-  background-color: #101314;
   display: flex;
   flex-direction: row;
-  padding: 1rem 0;
+  padding: 2rem 0 1rem;
   width: 100%;
 }
 

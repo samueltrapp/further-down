@@ -16,11 +16,11 @@ function StatBar({
   const percentage = trunc((currentStat / maxStat) * 100);
   const chosenColor = (() => {
     if (percentage >= 66) {
-      return "var(--hpGreen)";
+      return stat === "life" ? "var(--lifeGreen)" : "var(--speedTeal)";
     } else if (percentage >= 33) {
-      return "var(--hpOrange)";
+      return stat === "life" ? "var(--lifeOrange)" : "var(--speedCyan)";
     } else {
-      return "var(--hpRed)";
+      return stat === "life" ? "var(--lifeRed)" : "var(--speedPurple)";
     }
   })();
   const statBarId = stat + "_" + id;

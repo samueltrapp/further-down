@@ -2,6 +2,8 @@ import { EnemyType, PlayerType } from "./individual/characters.ts";
 import { ManeuverName, TargetMethodType } from "./equipables/maneuvers.ts";
 import { WeaponName } from "./equipables/weapons.ts";
 
+export type DetailOptions = "stats" | "maneuvers" | "equipment" | "effects";
+
 export enum BattleGrade {
   BOSS = "boss",
   MINI = "mini",
@@ -69,5 +71,6 @@ export type GameClientType = {
   selectedIds: string[];
   selectedManeuver: ManeuverName | "";
   selectedWeapon: WeaponName | "";
-  detailId: string;
+  playerDetailsId: string;
+  enemyDetailsId: string;
 };

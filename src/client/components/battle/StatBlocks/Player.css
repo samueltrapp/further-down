@@ -11,6 +11,6 @@
 .active-char {
   background: var(--sky);
   box-shadow: 0 0 1rem var(--sky);
-  transform: scale(1.1);
+  transform: scale(1.05);
   transition: transform 0.2s ease-in-out;
 }
