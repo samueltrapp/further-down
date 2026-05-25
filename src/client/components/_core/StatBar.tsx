@@ -1,17 +1,19 @@
 import "./StatBar.css";
 import { trunc } from "../../../server/utils/battle.ts";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 
 function StatBar({
   id,
   maxStat,
   currentStat,
   stat,
+  children,
 }: {
   id: string;
   maxStat: number;
   currentStat: number;
   stat: "life" | "speed";
+  children: ReactNode;
 }) {
   const percentage = trunc((currentStat / maxStat) * 100);
   const chosenColor = (() => {
@@ -33,9 +35,9 @@ function StatBar({
 
   return (
     <div id={statBarId} className={`stat-bar ${stat}-bar`}>
-      <div>{currentStat}</div>
-      <div>/</div>
-      <div>{maxStat}</div>
+      <div className="stat-blur">
+        <span className="name-text">{children}</span>
+      </div>
     </div>
   );
 }

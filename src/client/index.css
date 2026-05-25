@@ -36,10 +36,10 @@
 
   /* Specific usage */
   --lifeGreen: #194c15;
-  --lifeOrange: #803c0b;
+  --lifeOrange: #853e0e;
   --lifeRed: #430000;
   --speedPurple: #37266a;
-  --speedCyan: #27768c;
+  --speedCyan: #1e728a;
   --speedTeal: #07c185;
 
   color-scheme: light dark;
@@ -63,7 +63,7 @@ body {
   min-height: 100vh;
   font-weight: 400;
   font-style: normal;
-  background: linear-gradient(in oklch, var(--sunrise), var(--black));
+  background: linear-gradient(135deg in oklch, var(--sunrise), var(--black));
 }
 
 button {

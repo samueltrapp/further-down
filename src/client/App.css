@@ -18,10 +18,11 @@
 }
 
 .container {
-  height: min(calc(100vh - 250px), 80vh);
+  height: calc(100vh - 250px);
+  overflow: scroll;
   background-color: rgba(11, 10, 10, 0.94);
   margin: 0 auto;
-  padding: 0 0 5rem;
+  padding: 2rem 0;
   max-width: 100%;
   box-shadow: 0 0 72px rgba(11, 10, 10, 0.82);
 

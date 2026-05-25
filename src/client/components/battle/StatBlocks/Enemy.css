@@ -1,4 +1,4 @@
-@import "StatBlocks.css";
+@import "CharacterBlock.css";
 
 .enemy-box {
   background: var(--plum);

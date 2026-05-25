@@ -1,5 +1,3 @@
-import Player from "../../components/battle/StatBlocks/Player.tsx";
-import Enemy from "../../components/battle/StatBlocks/Enemy.tsx";
 import "./GameBoard.css";
 import ConfirmButton from "../../components/battle/ConfirmButton/ConfirmButton.tsx";
 import BattleLog from "../../components/battle/BattleLog/BattleLog.tsx";
@@ -8,6 +6,7 @@ import TurnMenu from "../../components/battle/TurnMenu/TurnMenu.tsx";
 import { useGame } from "../../hooks/useGame.ts";
 import TurnTracker from "../../components/battle/TurnTracker/TurnTracker.tsx";
 import DetailsPanel from "../../components/battle/DetailsPanel/DetailsPanel.tsx";
+import CharacterMenu from "../../components/battle/StatBlocks/CharacterMenu.tsx";
 
 function GameBoard() {
   const { game } = useGame();
@@ -38,28 +37,18 @@ function GameBoard() {
   return (
     <>
       <TurnTracker />
-      <div className="container">
-        <div className="board-grid">
-          <DetailsPanel character={inspectedPlayer} />
-          <div className="char-grid">
-            {Object.values(splitChars.players).map((player, index) => (
-              <Player key={player.id} index={index} {...player} />
-            ))}
-          </div>
-          <div className="hub-column">
-            <div className="inner-hub">
-              <TurnMenu />
-              <ConfirmButton />
-              <BattleLog />
-            </div>
-          </div>
-          <div className="char-grid">
-            {Object.values(splitChars.enemies).map((enemy, index) => (
-              <Enemy key={enemy.id} index={index} {...enemy} />
-            ))}
-          </div>
-          <DetailsPanel character={inspectedEnemy} />
+      <div className="container board-grid">
+        <DetailsPanel character={inspectedPlayer} />
+        <div className="control-hub">
+          <CharacterMenu
+            players={splitChars.players}
+            enemies={splitChars.enemies}
+          />
+          <TurnMenu />
+          <ConfirmButton />
+          <BattleLog />
         </div>
+        <DetailsPanel character={inspectedEnemy} />
       </div>
     </>
   );

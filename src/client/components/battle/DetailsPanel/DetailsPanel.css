@@ -1,6 +1,5 @@
 .dt-panel {
-  padding: 1rem;
-  margin-top: 1rem;
+  padding: 0 1rem 1rem;
 }
 
 .panel-btn {
@@ -25,7 +24,7 @@
   background-color: var(--forest);
 }
 
-.var-panel {
+.dt-panel-controls {
   display: flex;
   background-color: var(--black);
   border: 1px solid var(--white);

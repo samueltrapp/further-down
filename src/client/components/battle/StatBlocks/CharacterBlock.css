@@ -1,0 +1,111 @@
+.character-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template:
+    "player-0 enemy-0"
+    "player-1 enemy-1"
+    "player-2 enemy-2"
+    "player-3 enemy-3";
+  width: 100%;
+}
+
+.char-bar {
+  flex: 1;
+}
+
+.char-btn {
+  border-radius: 0;
+  height: 2rem;
+  width: 2rem;
+  background-color: transparent;
+}
+
+.char-ins-btn-active {
+  color: var(--teal);
+}
+
+.char-sel-btn-active {
+  color: var(--sunrise);
+}
+
+.id-bar {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.25rem;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: row;
+}
+
+.action-column {
+  display: flex;
+  font-size: 12px;
+  flex-direction: column;
+  width: 50%;
+
+  button {
+    font-size: 16px;
+    margin-bottom: 6px;
+    text-align: start;
+  }
+
+  button:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.speed-display {
+  color: var(--white);
+}
+
+.right-text {
+  flex-grow: 1;
+  text-align: right;
+  padding: 0.5rem 0.5rem 0 0;
+}
+
+.left-text {
+  flex-grow: 1;
+  text-align: left;
+  padding: 0.5rem 0 0 0.5rem;
+}
+
+.death-filter {
+  filter: grayscale(100%);
+}
+
+.player-grid-0 {
+  grid-area: player-0;
+}
+
+.player-grid-1 {
+  grid-area: player-1;
+}
+
+.player-grid-2 {
+  grid-area: player-2;
+}
+
+.player-grid-3 {
+  grid-area: player-3;
+}
+
+.enemy-grid-0 {
+  grid-area: enemy-0;
+}
+
+.enemy-grid-1 {
+  grid-area: enemy-1;
+}
+
+.enemy-grid-2 {
+  grid-area: enemy-2;
+}
+
+.enemy-grid-3 {
+  grid-area: enemy-3;
+}

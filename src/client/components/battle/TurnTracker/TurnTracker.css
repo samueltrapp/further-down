@@ -1,6 +1,6 @@
 .turn-tracker-container {
   display: inline-flex;
-  background: linear-gradient(var(--black), 60%, var(--light-black));
+  background: linear-gradient(130deg, var(--black), 60%, var(--light-black));
   border-bottom: 2px solid var(--rose);
   flex-direction: row;
   justify-content: space-evenly;
@@ -16,4 +16,8 @@
 
 .third-place {
   color: var(--orange);
+}
+
+.later {
+  color: var(--tan);
 }

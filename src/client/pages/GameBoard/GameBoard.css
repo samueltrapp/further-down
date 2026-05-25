@@ -1,6 +1,6 @@
 .board-grid {
   display: grid;
-  grid-template-columns: 3fr 1fr 6fr 1fr 3fr;
+  grid-template-columns: 1fr 2fr 1fr;
   grid-gap: 1.5rem;
   height: 100%;
 }
@@ -15,14 +15,7 @@
   margin-top: 2rem;
 }
 
-.hub-column {
-  grid-column: 3;
-  display: flex;
-  flex-direction: column;
-  justify-items: flex-start;
-}
-
-.inner-hub {
+.control-hub {
   display: flex;
   flex-direction: column;
   align-items: center;

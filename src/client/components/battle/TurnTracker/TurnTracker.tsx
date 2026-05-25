@@ -10,7 +10,7 @@ const mapColor = (index: number) => {
     case 2:
       return "third-place";
     default:
-      return "";
+      return "later";
   }
 };
 
@@ -35,7 +35,7 @@ export default function TurnTracker() {
     <div className="pb3 turn-tracker-container">
       <div className="m0 mta mba fs3">{`Round ${game.data.battle?.round}`}</div>
       <ul className="m0 df">
-        {turnTracker?.slice(0, 3)?.map((turn, index) => (
+        {turnTracker?.map((turn, index) => (
           <div
             key={battle?.turnOrder[index]}
             className={`pl6 ${mapColor(index)}`}

@@ -1,4 +1,4 @@
-@import "StatBlocks.css";
+@import "CharacterBlock.css";
 
 .player-box {
   background: var(--sea);

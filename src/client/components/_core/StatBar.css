@@ -22,25 +22,39 @@
   initial-value: #000000;
 }
 
-.stat-bar {
+.stat-blur {
+  backdrop-filter: blur(1px);
   display: inline-flex;
-  height: 1rem;
-  justify-content: space-between;
-  padding: 0.125rem 0.75rem;
-  font-size: 0.75rem;
+  margin-top: -2px;
+  height: calc(100% + 4px);
+  width: 100%;
+}
+
+.name-text {
+  align-self: center;
+  margin: auto;
+  text-shadow: 4px 4px 8px var(--black);
+}
+
+.stat-bar {
+  font-size: 1rem;
+  margin-top: 2px;
+  height: calc(100% - 4px);
+  width: 100%;
 }
 
 .life-bar {
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: 0;
   background: linear-gradient(
     to right,
-    var(--life-bg) 0% var(--life-percent),
-    var(--black) var(--life-percent)
+    var(--life-bg) var(--life-percent),
+    var(--glass) var(--life-percent)
   );
   transition: 0.5s;
   transition-property: --life-percent, --life-bg;
 }
 
+/* TODO: Add speed bar option */
 .speed-bar {
   border-radius: 0 0 0.5rem 0.5rem;
   background: linear-gradient(
