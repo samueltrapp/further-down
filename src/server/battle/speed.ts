@@ -1,5 +1,4 @@
 import { ActionCtx } from "../../types/events/actionCtx.ts";
-import { CharactersType } from "../../types/game.ts";
 
 export const expendSpeed = (ctx: ActionCtx): ActionCtx => {
   const { characters, sourceId } = ctx;
@@ -17,9 +16,15 @@ export const expendSpeed = (ctx: ActionCtx): ActionCtx => {
   };
 };
 
-export const restoreSpeed = (characters: CharactersType) => {
-  Array.from(Object.values(characters)).forEach((character) => {
-    characters[character.id].stats.speed += character.stats.maxSpeed;
-  });
-  return characters;
+export const restoreSpeed = (ctx: ActionCtx) => {
+  const { characters } = ctx;
+  for (const characterId in characters) {
+    const character = characters[characterId];
+    character.stats.speed += character.stats.maxSpeed;
+  }
+
+  return {
+    ...ctx,
+    characters,
+  };
 };

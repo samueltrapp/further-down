@@ -8,7 +8,7 @@ const addAnguish = (ctx: ActionCtx) => {
   const newInstance = new Map();
   instance.forEach((instanceDtl, targetId) => {
     const anguishStacks = characters[targetId].effects.burdens.anguish || 0;
-    const damagePerStack = characters[sourceId].stats.psychic * 0.15;
+    const damagePerStack = characters[sourceId].stats.psychic * 0.3;
     const anguishDamage = anguishStacks * damagePerStack;
     newInstance.set(targetId, {
       ...instanceDtl,
@@ -41,7 +41,7 @@ const ache: ManeuverType = {
       accuracy: 85,
       damageType: "psychic",
       strength: 1.1,
-      customHitFn: (ctx) => addAnguish(ctx),
+      hitFn: (ctx) => addAnguish(ctx),
     },
   ],
   tags: ["attack", "single", "pure", "psychic", "burden"],

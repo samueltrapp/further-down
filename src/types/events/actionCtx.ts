@@ -4,7 +4,7 @@ import { ManeuverType } from "../equipables/maneuvers.ts";
 export type ActionCtx = {
   characters: CharactersType;
   sourceId: string;
-  targetIds: string[] | undefined;
+  targetIds: string[];
   maneuver: ManeuverType;
   speed: number;
   messages: TurnLog;

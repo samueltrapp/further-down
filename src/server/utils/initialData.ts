@@ -136,7 +136,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     equipped: {
       weapon: "cutlass",
       armor: "leather",
-      enchantments: [],
+      enchantments: ["sharpen the blade"],
     },
     loadout: {
       armors: ["leather"],

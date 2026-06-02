@@ -11,7 +11,6 @@ import {
   Victor,
 } from "../../types/game.ts";
 import { resolveRoundCount, resolveTurnOrder } from "../utils/turnOrder.ts";
-import { restoreSpeed } from "./speed.ts";
 
 /* Mark characters with 0 Life as dead */
 export const applyDeath = (ctx: ActionCtx) => {
@@ -60,27 +59,22 @@ export const checkNextTurn = (
   }
 };
 
-/* Perform end of turn clean up and checks */
-export const finishTurn = (
-  game: GameType,
-  characters: CharactersType,
-  messages: TurnLog,
-): GameType => {
-  if (!game.characters || !game.battle) {
-    return game;
-  }
+export const checkProgressStatus = (ctx: ActionCtx) => {
+  const { characters } = ctx;
 
   /* Check end of turn statuses */
   let isRoundEnd = true,
     areEnemiesDead = true,
     arePlayersDead = true;
-  for (const character of Object.values(game.characters)) {
+  for (const characterId in characters) {
+    const character = characters[characterId];
+
     /* End early if all statuses are already known */
     if (
       (!isRoundEnd && !areEnemiesDead && !arePlayersDead) ||
       character.isDead
     ) {
-      break;
+      continue;
     }
     if (character.stats.speed > 0) {
       isRoundEnd = false;
@@ -93,26 +87,42 @@ export const finishTurn = (
     }
   }
 
-  /* Mark winner if one team is defeated */
   const victor = (() => {
     if (areEnemiesDead && !arePlayersDead) {
-      messages.steps?.push("PLAYERS WIN.");
       return Victor.PLAYER;
     } else if (arePlayersDead) {
-      messages.steps?.push("ENEMIES WIN.");
       return Victor.ENEMY;
-    } else return Victor.NONE;
+    } else {
+      return Victor.NONE;
+    }
   })();
+
+  return {
+    isRoundEnd,
+    victor,
+  };
+};
+
+/* Apply changes at end of turn */
+export const finishTurn = (
+  game: GameType,
+  characters: CharactersType,
+  isRoundEnd: boolean,
+  messages: TurnLog,
+  victor: Victor,
+): GameType => {
+  if (!game.characters || !game.battle) {
+    return game;
+  }
 
   const separatedMessages = game.battle.messages;
   separatedMessages.push(messages);
-
-  /* Replenish speed at end of round */
-  if (victor === Victor.NONE && isRoundEnd) {
-    separatedMessages.push({
-      headline: `End of round ${game.battle.round}.`,
-    });
-    characters = restoreSpeed(characters);
+  if (victor === Victor.PLAYER) {
+    separatedMessages.push({ headline: "VICTORY" });
+  } else if (victor === Victor.ENEMY) {
+    separatedMessages.push({ headline: "DEFEAT" });
+  } else if (isRoundEnd) {
+    separatedMessages.push({ headline: `END OF ROUND ${game.battle.round}` });
   }
 
   /* Create new game state */

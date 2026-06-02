@@ -15,7 +15,6 @@ type DurationType =
 export type EffectType = {
   stackable: boolean;
   duration: DurationType;
-  onTrigger: () => void;
-  onExpire: () => void;
   tooltip: string;
+  owner: string;
 };

@@ -1,9 +1,9 @@
 import { EffectType, FavorName } from "../../../types/equipables/effects.ts";
 import verve from "./collection/verve.ts";
-import sharpenTheBlade from "./collection/sharpenTheBlade.ts";
+import sharpenTheBladeFv from "./collection/sharpenTheBlade.ts";
 
 const favors: [FavorName, EffectType][] = [
-  ["sharpen the blade", sharpenTheBlade],
+  ["sharpen the blade", sharpenTheBladeFv],
   ["verve", verve],
 ];
 

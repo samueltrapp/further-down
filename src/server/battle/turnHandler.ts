@@ -4,14 +4,21 @@ import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { applyDamage, calcDamage } from "./damage.ts";
 import { calcMitigation } from "./mitigation.ts";
-import { expendSpeed } from "./speed.ts";
+import { expendSpeed, restoreSpeed } from "./speed.ts";
 import { sendGame } from "../meta/gameManagement.ts";
 import { Victor } from "../../types/game.ts";
-import { applyDeath, checkNextTurn, finishTurn, switchWeapon } from "./core.ts";
+import {
+  applyDeath,
+  checkNextTurn,
+  checkProgressStatus,
+  finishTurn,
+  switchWeapon,
+} from "./core.ts";
 import { toCaps } from "../../client/utils/formatting.ts";
 import { TeamType } from "../../types/individual/characters.ts";
 import { randEntry, validTargets } from "../../shared/utils.ts";
 import { applyEffect } from "./effect.ts";
+import { applyEnchantments } from "./enchantments.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
@@ -103,25 +110,48 @@ export function handleTurn(
 
       if (step.type === "hit") {
         ctx = calcDamage(step, ctx);
-        if (step.customHitFn) {
-          ctx = step.customHitFn(ctx);
+        if (step.hitFn) {
+          ctx = step.hitFn(ctx);
         }
+        ctx = applyEnchantments(ctx, "attack", "trigger", step);
         ctx = calcMitigation(step, ctx);
+        ctx = applyEnchantments(ctx, "defend", "trigger", step);
         ctx = applyDamage(ctx);
       } else if (step.type === "heal") {
         ctx = { ...ctx };
       } else if (step.type === "effect") {
         ctx = applyEffect(step, ctx);
       }
-      // on-hit
-      // on-defend
     });
 
     /* Post-action */
     ctx = expendSpeed(ctx);
     ctx = applyDeath(ctx);
 
-    const updatedGame = finishTurn(game, ctx.characters, ctx.messages);
+    const { isRoundEnd, victor } = checkProgressStatus(ctx);
+
+    /* End of turn */
+    ctx = applyEnchantments(ctx, "turn-end", "combined");
+
+    /* End of round */
+    if (isRoundEnd) {
+      ctx = applyEnchantments(ctx, "round-end", "combined");
+      ctx = restoreSpeed(ctx);
+      ctx = applyEnchantments(ctx, "round-start", "trigger");
+    }
+
+    /* End of battle */
+    if (victor !== Victor.NONE) {
+      ctx = applyEnchantments(ctx, "battle-end", "combined");
+    }
+
+    const updatedGame = finishTurn(
+      game,
+      ctx.characters,
+      isRoundEnd,
+      ctx.messages,
+      victor,
+    );
     connection.meta.games.set(turn.gameId, updatedGame);
     sendGame(connection, turn.gameId);
 

@@ -32,7 +32,7 @@ export type HitStep = {
   accuracy: number;
   damageType: DamageType;
   strength: number;
-  customHitFn?: (ctx: ActionCtx) => ActionCtx;
+  hitFn?: (ctx: ActionCtx) => ActionCtx;
 };
 
 export type HealStep = {
