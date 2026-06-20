@@ -1,10 +1,13 @@
 import { EffectType } from "../../../../types/equipables/effects.ts";
 
-const anguish: EffectType = {
+const verve: EffectType = {
+  type: "favor",
   duration: "battle",
   stackable: true,
   tooltip: "",
   owner: "",
+  onApply: (ctx) => ctx,
+  onRemove: (ctx) => ctx,
 };
 
-export default anguish;
+export default verve;

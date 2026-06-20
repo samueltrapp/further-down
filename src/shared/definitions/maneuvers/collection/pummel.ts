@@ -11,9 +11,9 @@ const pummel: ManeuverType = {
   steps: [
     {
       type: "hit",
-      accuracy: 70,
+      accuracy: 50,
       damageType: "blunt",
-      strength: 1.4,
+      strength: 2,
     },
   ],
   tags: ["attack", "blunt", "single", "pure", "burden"],

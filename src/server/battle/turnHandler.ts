@@ -17,8 +17,8 @@ import {
 import { toCaps } from "../../client/utils/formatting.ts";
 import { TeamType } from "../../types/individual/characters.ts";
 import { randEntry, validTargets } from "../../shared/utils.ts";
-import { applyEffect } from "./effect.ts";
-import { applyEnchantments } from "./enchantments.ts";
+import { applyEffect, removeEffects } from "./effect.ts";
+import { handleEnchantments } from "./enchantments.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
@@ -108,19 +108,24 @@ export function handleTurn(
     maneuver?.steps.forEach((step) => {
       ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
 
+      /* Process hits */
       if (step.type === "hit") {
-        ctx = calcDamage(step, ctx);
+        ctx = calcDamage(ctx, step);
         if (step.hitFn) {
           ctx = step.hitFn(ctx);
         }
-        ctx = applyEnchantments(ctx, "attack", "trigger", step);
+        ctx = handleEnchantments(ctx, "attack", step);
         ctx = calcMitigation(step, ctx);
-        ctx = applyEnchantments(ctx, "defend", "trigger", step);
+        ctx = handleEnchantments(ctx, "defend", step);
         ctx = applyDamage(ctx);
       } else if (step.type === "heal") {
+
+      /* Process healing */
         ctx = { ...ctx };
       } else if (step.type === "effect") {
-        ctx = applyEffect(step, ctx);
+
+      /* Process effects */
+        ctx = applyEffect(ctx, step);
       }
     });
 
@@ -131,18 +136,21 @@ export function handleTurn(
     const { isRoundEnd, victor } = checkProgressStatus(ctx);
 
     /* End of turn */
-    ctx = applyEnchantments(ctx, "turn-end", "combined");
+    ctx = handleEnchantments(ctx, "turn-end");
+    ctx = removeEffects(ctx, "turn");
 
     /* End of round */
     if (isRoundEnd) {
-      ctx = applyEnchantments(ctx, "round-end", "combined");
+      ctx = handleEnchantments(ctx, "round-end");
+      ctx = removeEffects(ctx, "round");
       ctx = restoreSpeed(ctx);
-      ctx = applyEnchantments(ctx, "round-start", "trigger");
+      ctx = handleEnchantments(ctx, "round-start");
     }
 
     /* End of battle */
     if (victor !== Victor.NONE) {
-      ctx = applyEnchantments(ctx, "battle-end", "combined");
+      ctx = handleEnchantments(ctx, "battle-end");
+      ctx = removeEffects(ctx, "battle");
     }
 
     const updatedGame = finishTurn(

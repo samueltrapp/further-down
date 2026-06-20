@@ -1,11 +1,17 @@
 import { PerspectiveType, TeamType } from "../individual/characters.ts";
-import { BurdenName, FavorName } from "./effects.ts";
+import { EffectName } from "./effects.ts";
 import { ActionCtx } from "../events/actionCtx.ts";
 
 export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 
 // All maneuvers
-const PlayerManeuvers = ["ache", "deluge", "pummel", "quicksilver"] as const;
+const PlayerManeuvers = [
+  "ache",
+  "deluge",
+  "headbutt",
+  "pummel",
+  "quicksilver",
+] as const;
 type PlayerManeuvers = (typeof PlayerManeuvers)[number];
 
 const EnemyManeuvers = ["bonk", "pass"] as const;
@@ -42,8 +48,7 @@ export type HealStep = {
 
 export type EffectStep = {
   type: "effect";
-  burden?: BurdenName;
-  favor?: FavorName;
+  effect: EffectName;
   stacks?: number;
 };
 

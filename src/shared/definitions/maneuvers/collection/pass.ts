@@ -8,10 +8,6 @@ export const pass: ManeuverType = {
   perspective: "own",
   targetMethod: "self",
   maxTargets: 0,
-  steps: [
-    {
-      type: "effect",
-    },
-  ],
+  steps: [],
   tags: [],
 };

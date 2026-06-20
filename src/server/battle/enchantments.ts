@@ -31,45 +31,34 @@ const applicableIds = (ctx: ActionCtx, trigger: Activation) => {
   }
 };
 
-export const applyEnchantments = (
+export const handleEnchantments = (
   ctx: ActionCtx,
   activation: Activation,
-  situation: "trigger" | "expire" | "combined",
   step?: StepType,
 ) => {
   const ids = applicableIds(ctx, activation);
-
   const charEnchantments = ids.map(
     (id) => ctx.characters[id].equipped.enchantments,
   );
 
   charEnchantments.forEach((char) => {
-    let triggeringEnchantments: EnchantmentType[] = [];
-    let expiringEnchantments: EnchantmentType[] = [];
-    const isTriggering = situation === "trigger" || situation === "combined";
-    const isExpiring = situation === "expire" || situation === "combined";
+    let enchantments: EnchantmentType[] = [];
 
     char.forEach((enchantment) => {
       const enchantmentDfn = enchantmentMap.get(enchantment);
-      if (isTriggering && enchantmentDfn?.trigger === activation) {
-        triggeringEnchantments.push(enchantmentDfn);
-        triggeringEnchantments = triggeringEnchantments.sort(
-          (a, b) => b.priority - a.priority,
-        );
-      }
-      if (isExpiring && enchantmentDfn?.expiration === activation) {
-        expiringEnchantments.push(enchantmentDfn);
-        expiringEnchantments = expiringEnchantments.sort(
-          (a, b) => b.priority - a.priority,
-        );
+      if (enchantmentDfn?.trigger === activation) {
+        enchantments.push(enchantmentDfn);
+        enchantments = enchantments.sort((a, b) => a.priority - b.priority);
       }
     });
 
-    triggeringEnchantments.forEach((enchantment) => {
-      ctx = enchantment.onTrigger(ctx, ids, step);
-    });
-    expiringEnchantments.forEach((enchantment) => {
-      ctx = enchantment.onExpire(ctx, ids, step);
+    enchantments.forEach((enchantment) => {
+      if (enchantment.onTrigger) {
+        ctx = enchantment.onTrigger(ctx, ids, step);
+      }
+      if (enchantment.effect) {
+        ctx = enchantment.effect.onApply(ctx, ids, step);
+      }
     });
   }, [] as EnchantmentType[]);
 

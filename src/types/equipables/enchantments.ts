@@ -1,3 +1,4 @@
+import { EffectType } from "./effects.ts";
 import { ActionCtx } from "../events/actionCtx.ts";
 import { StepType } from "./maneuvers.ts";
 
@@ -7,6 +8,7 @@ const PlayerEnchantments = [
   "killer instinct",
   "red fang",
   "sharpen the blade",
+  "tall shadow",
 ] as const;
 type PlayerEnchantments = (typeof PlayerEnchantments)[number];
 
@@ -32,7 +34,10 @@ export type EnchantmentType = {
   description: string;
   priority: number;
   trigger: Activation;
-  expiration: Activation;
-  onTrigger: (ctx: ActionCtx, ids: string[], step?: StepType) => ActionCtx;
-  onExpire: (ctx: ActionCtx, ids: string[], step?: StepType) => ActionCtx;
+  effect?: EffectType;
+  onTrigger?: (
+    ctx: ActionCtx,
+    applicableIds: string[],
+    step?: StepType,
+  ) => ActionCtx;
 };

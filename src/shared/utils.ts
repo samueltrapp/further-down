@@ -9,6 +9,7 @@ export const randEntry = (arr: unknown[]) => {
     altered: [...arr].splice(index, 1),
   };
 };
+export const roll = (chance: number) => randNum(100) < chance;
 
 const resolveTargetTeam = (team: TeamType, perspective: PerspectiveType) => {
   if (perspective === "own") {

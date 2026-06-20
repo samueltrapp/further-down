@@ -81,10 +81,7 @@ const blankCharacters = (userSpread: string[]) => {
       id,
       name: "",
       userId: user,
-      effects: {
-        burdens: {},
-        favors: {},
-      },
+      effects: {},
       lastTurn: 0,
       equipped: {
         weapon: null,
@@ -128,19 +125,16 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     id: "aQNgmuOa",
     name: "Player",
     userId: userId,
-    effects: {
-      burdens: {},
-      favors: {},
-    },
+    effects: {},
     lastTurn: 0,
     equipped: {
       weapon: "cutlass",
       armor: "leather",
-      enchantments: ["sharpen the blade"],
+      enchantments: ["sharpen the blade", "red fang"],
     },
     loadout: {
       armors: ["leather"],
-      enchantments: [],
+      enchantments: ["red fang"],
       maneuvers: ["quicksilver"],
       weapons: ["cutlass", "scepter"],
     },
@@ -208,10 +202,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     id: "sfmVNDFl",
     name: "Player2",
     userId: userId,
-    effects: {
-      burdens: {},
-      favors: {},
-    },
+    effects: {},
     lastTurn: 0,
     equipped: {
       weapon: "periapt",
@@ -288,10 +279,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     id: "IeHCHSPR",
     name: "Player3",
     userId: userId,
-    effects: {
-      burdens: {},
-      favors: {},
-    },
+    effects: {},
     lastTurn: 0,
     equipped: {
       weapon: "hammer",

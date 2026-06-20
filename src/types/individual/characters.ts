@@ -3,7 +3,7 @@ import { ManeuverName } from "../equipables/maneuvers.ts";
 import { WeaponName } from "../equipables/weapons.ts";
 import { ArmorName } from "../equipables/armors.ts";
 import { EnchantmentName } from "../equipables/enchantments.ts";
-import { BurdenName, FavorName } from "../equipables/effects.ts";
+import { EffectName } from "../equipables/effects.ts";
 
 export type PerspectiveType = "own" | "other";
 export type TeamType = "player" | "enemy";
@@ -15,11 +15,6 @@ type RewardSpread = {
   enchantments: EnchantmentName[];
   maneuvers: ManeuverName[];
   weapons: WeaponName[];
-};
-
-type EffectsType = {
-  favors: Partial<Record<FavorName, number>>;
-  burdens: Partial<Record<BurdenName, number>>;
 };
 
 export type RewardTypes = "maneuvers" | "weapons" | "armors" | "enchantments";
@@ -41,7 +36,7 @@ type CharacterType = {
     weapons: WeaponName[];
   };
   stats: StatsType;
-  effects: EffectsType;
+  effects: Partial<Record<EffectName, number>>;
   lastTurn: number;
   isDead: boolean;
 };

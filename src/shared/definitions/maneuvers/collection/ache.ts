@@ -7,7 +7,7 @@ const addAnguish = (ctx: ActionCtx) => {
 
   const newInstance = new Map();
   instance.forEach((instanceDtl, targetId) => {
-    const anguishStacks = characters[targetId].effects.burdens.anguish || 0;
+    const anguishStacks = characters[targetId].effects.anguish || 0;
     const damagePerStack = characters[sourceId].stats.psychic * 0.3;
     const anguishDamage = anguishStacks * damagePerStack;
     newInstance.set(targetId, {
@@ -16,10 +16,8 @@ const addAnguish = (ctx: ActionCtx) => {
     });
   });
 
-  return {
-    ...ctx,
-    instance: newInstance,
-  };
+  ctx.instance = newInstance;
+  return ctx;
 };
 
 const ache: ManeuverType = {
@@ -33,7 +31,7 @@ const ache: ManeuverType = {
   steps: [
     {
       type: "effect",
-      burden: "anguish",
+      effect: "anguish",
       stacks: 1,
     },
     {

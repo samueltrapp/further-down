@@ -1,39 +1,55 @@
 import { EffectStep } from "../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
-import { burdenMap } from "../../shared/definitions/burdens/sets.ts";
-import { favorMap } from "../../shared/definitions/favors/sets.ts";
+import { effectMap } from "../../shared/definitions/effects/sets.ts";
+import { DurationType, EffectName } from "../../types/equipables/effects.ts";
 
-export const applyEffect = (step: EffectStep, ctx: ActionCtx) => {
-  const { burden, favor, stacks } = step;
+export const applyEffect = (ctx: ActionCtx, step: EffectStep) => {
   const { characters, targetIds } = { ...ctx };
+  const { effect, stacks = 1 } = step;
 
   targetIds?.forEach((targetId) => {
     const target = characters[targetId];
-    if (burden) {
-      const burdenDtl = burdenMap.get(burden);
-      const stackable = burdenDtl?.stackable;
-      const burdenValue = target.effects.burdens[burden];
-      if (!burdenValue || !stackable) {
-        target.effects.burdens[burden] = 1;
-      } else if (stacks) {
-        target.effects.burdens[burden] = burdenValue + stacks;
-      }
+    const flatEffect = effectMap.get(effect);
+    const effectDtl = { ...flatEffect, owner: ctx.sourceId };
+    const stackable = effectDtl?.stackable;
+    const effectValue = target.effects[effect];
+    if (!effectValue || !stackable) {
+      target.effects[effect] = 1;
+    } else if (stacks) {
+      target.effects[effect] = effectValue + stacks;
     }
 
-    if (favor) {
-      const favorDtl = favorMap.get(favor);
-      const stackable = favorDtl?.stackable;
-      const favorValue = target.effects.favors[favor];
-      if (!favorValue || !stackable) {
-        target.effects.favors[favor] = 1;
-      } else if (stacks) {
-        target.effects.favors[favor] = favorValue + stacks;
-      }
+    if (effectDtl?.onApply) {
+      ctx = effectDtl?.onApply(ctx, targetIds, step);
     }
   });
 
-  return {
-    ...ctx,
-    characters,
-  };
+  return ctx;
+};
+
+export const removeEffects = (
+  ctx: ActionCtx,
+  trigger: DurationType,
+): ActionCtx => {
+  const { characters } = ctx;
+
+  Object.values(characters).forEach((character) => {
+    Object.entries(character.effects).forEach((effect) => {
+      const effectName = effect[0] as EffectName;
+      const effectDef = effectMap.get(effectName);
+
+      if (!effectDef) {
+        return;
+      }
+
+      if (effectDef.duration === trigger) {
+        if (effectDef.onRemove) {
+          effectDef.onRemove(ctx, [character.id]);
+        }
+        delete character.effects[effectName];
+      }
+    });
+  });
+
+  return ctx;
 };

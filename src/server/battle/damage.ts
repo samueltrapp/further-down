@@ -6,7 +6,7 @@ import { weaponMap } from "../../shared/definitions/weapons/sets.ts";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
-export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
+export const calcDamage = (ctx: ActionCtx, step: HitStep) => {
   const { damageType, strength } = { ...step };
   const { characters, sourceId, targetIds } = { ...ctx };
   const source = characters[sourceId];
@@ -61,14 +61,11 @@ export const calcDamage = (step: HitStep, ctx: ActionCtx) => {
   });
 
   const stepAccuracy = source.stats.accuracy + step.accuracy;
-  const stepRoll = randNum(100);
+  ctx.toHit = randNum(100);
+  ctx.accuracy = stepAccuracy;
+  ctx.instance = newInstance;
 
-  return {
-    ...ctx,
-    toHit: stepRoll,
-    accuracy: stepAccuracy,
-    instance: newInstance,
-  };
+  return ctx;
 };
 
 export const applyDamage = (ctx: ActionCtx) => {

@@ -2,61 +2,59 @@ import {
   EnemyType,
   PlayerType,
 } from "../../../../types/individual/characters.ts";
-import { BurdenName, FavorName } from "../../../../types/equipables/effects.ts";
-import { favorMap } from "../../../../shared/definitions/favors/sets.ts";
+import { EffectName } from "../../../../types/equipables/effects.ts";
 import { toCaps } from "../../../utils/formatting.ts";
-import { burdenMap } from "../../../../shared/definitions/burdens/sets.ts";
+import { effectMap } from "../../../../shared/definitions/effects/sets.ts";
 
-const FavorText = ({
-  favorName,
+const EffectText = ({
+  effectName,
   stacks,
 }: {
-  favorName: FavorName;
+  effectName: EffectName;
   stacks: number;
 }) => {
-  const favor = favorMap.get(favorName);
-  return !favor ? null : EffectText(favorName, favor.stackable, stacks);
+  const effect = effectMap.get(effectName);
+  return !effect ? null : (
+    <span>{`${toCaps(effectName)}${effect.stackable ? `: ${stacks}` : ""}`}</span>
+  );
 };
-
-const BurdenText = ({
-  burdenName,
-  stacks,
-}: {
-  burdenName: BurdenName;
-  stacks: number;
-}) => {
-  const burden = burdenMap.get(burdenName);
-  return !burden ? null : EffectText(burdenName, burden.stackable, stacks);
-};
-
-const EffectText = (name: string, stackable: boolean, stacks: number) => (
-  <span>{`${toCaps(name)}${stackable ? `: ${stacks}` : ""}`}</span>
-);
 
 export default function EffectsPanel({
   character,
 }: {
   character: PlayerType | EnemyType;
 }) {
-  const favors = character.effects.favors;
-  const burdens = character.effects.burdens;
+  const effects = character.effects;
 
-  const favorsList = Object.entries(favors) as [FavorName, number][];
-  const burdensList = Object.entries(burdens) as [BurdenName, number][];
+  const blankEffectsList: {
+    burdens: [EffectName, number][];
+    favors: [EffectName, number][];
+  } = { burdens: [], favors: [] };
+  const effectsList = (
+    Object.entries(effects) as [EffectName, number][]
+  ).reduce((effectsList, currentEffect) => {
+    const effectDtl = effectMap.get(currentEffect[0]);
+    if (effectDtl?.type === "burden") {
+      effectsList.burdens.push(currentEffect);
+    } else if (effectDtl?.type === "favor") {
+      effectsList.favors.push(currentEffect);
+    }
+    return effectsList;
+  }, blankEffectsList);
 
   return (
     <div>
       <h2>Effects</h2>
       <h3>Favors</h3>
-      {favorsList.map((favor) => (
-        <div>
-          <FavorText favorName={favor[0]} stacks={favor[1]} />
+      {effectsList.favors.map((favor) => (
+        <div key={favor[0]}>
+          <EffectText effectName={favor[0]} stacks={favor[1]} />
         </div>
       ))}
       <h3>Burdens</h3>
-      {burdensList.map((burden) => (
-        <div>
-          <BurdenText burdenName={burden[0]} stacks={burden[1]} />
+      {effectsList.burdens.map((burden) => (
+        <div key={burden[0]}>
+          <EffectText effectName={burden[0]} stacks={burden[1]} />
         </div>
       ))}
     </div>
