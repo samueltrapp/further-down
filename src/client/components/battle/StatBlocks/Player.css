@@ -1,0 +1,16 @@
+@import "CharacterBlock.css";
+
+.player-box {
+  background: var(--sea);
+  border: 1px solid var(--clear);
+  border-radius: 0.5rem;
+  padding: 0;
+  transform: scale(1);
+}
+
+.active-char {
+  background: var(--sky);
+  box-shadow: 0 0 1rem var(--sky);
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+}

@@ -13,6 +13,7 @@ export const tunic: ArmorType = {
     dampening: 1.2,
     warding: 1.7,
   },
+  socketSize: 2,
   level: 1,
   rarity: 0,
   description: "Medium magical armor",

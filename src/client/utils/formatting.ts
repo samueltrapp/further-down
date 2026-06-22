@@ -22,7 +22,7 @@ export const cdcl = (
     if (typeof item === "string") {
       classList += ` ${item}`;
     } else {
-      const entry = Object.entries(item);
+      const entry = Object.entries(item)[0];
       if (entry[1]) {
         classList += ` ${entry[0]}`;
       }

@@ -7,9 +7,29 @@
   margin-bottom: 1rem;
 }
 
+.reward-option-container {
+  margin: 0 0.5rem;
+  width: 100%;
+}
+
 .reward-card {
-  border: 1px var(--white);
+  border: 1px solid var(--white);
   border-radius: 0.5rem;
+  flex: 1;
+  height: 100%;
+  width: 100%;
+}
+
+.reward-grid {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  width: 40%;
+
+  @media (width < 1200px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 .name-container {

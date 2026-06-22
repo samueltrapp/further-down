@@ -56,18 +56,15 @@ export function startVote(
       return;
     }
 
-    const lobbyStatus = votedToStart ? LobbyStatus.REWARD : game.lobby.status;
+    game.lobby.votes = totalVotes;
 
-    const newGameState = {
-      ...game,
-      characters,
-      lobby: {
-        ...game.lobby,
-        status: lobbyStatus,
-        votes: votedToStart ? [] : totalVotes,
-      },
-    };
-    connection.meta.games.set(gameId, <GameType>newGameState);
+    if (votedToStart) {
+      game.lobby.status = LobbyStatus.REWARD;
+      game.lobby.votes = [];
+      game.characters = initializeCharacters(game);
+    }
+
+    connection.meta.games.set(gameId, game);
   }
   sendGame(connection, gameId);
 }

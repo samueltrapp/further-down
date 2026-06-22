@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { submitName } from "../../services/skill.ts";
 import "./Rewards.css";
-import Button from "../core/Button.tsx";
+import Button from "../_core/Button.tsx";
 
 const nameValidation = /[^A-za-z -]/;
 
@@ -12,7 +12,7 @@ export function NamePrompt({
   gameId: string;
   characterId: string;
 }) {
-  const [name, setName] = useState("Player");
+  const [name, setName] = useState("Character");
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;

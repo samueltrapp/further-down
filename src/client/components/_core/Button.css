@@ -1,0 +1,44 @@
+.select-btn {
+  background-color: var(--teal);
+  color: var(--white);
+
+  &:hover {
+    background-color: var(--evergreen);
+  }
+}
+
+.confirm-btn {
+  background: var(--sunrise);
+  color: var(--black);
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: var(--sunset);
+  }
+}
+
+.outline-btn {
+  background: transparent;
+  border: 1px solid var(--white);
+  border-radius: 0.5rem;
+}
+
+.seamless-btn {
+  background-color: transparent;
+  color: var(--white);
+}
+
+.small-btn {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.medium-btn {
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.large-btn {
+  font-size: 1.5rem;
+  padding: 0.75rem 1rem;
+}

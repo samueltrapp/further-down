@@ -18,11 +18,13 @@ import {
 } from "./meta/gameManagement.ts";
 import {
   SetNameType,
+  SubmitPrepareType,
   TakeRewardType,
   TakeStatsType,
 } from "../types/events/skill.ts";
-import { handleTurn } from "./meta/turnHandler.ts";
+import { handleTurn } from "./battle/turnHandler.ts";
 import dotenv from "dotenv";
+import { submitPrepare } from "./events/preparation.ts";
 
 const port = 8080;
 const app = express();
@@ -72,6 +74,9 @@ io.on("connection", (socket) => {
   );
   socket.on("char:skill", (stats: TakeStatsType) =>
     takeStats(connection, stats),
+  );
+  socket.on("char:prepare", (data: SubmitPrepareType) =>
+    submitPrepare(connection, data),
   );
 
   // Battle events

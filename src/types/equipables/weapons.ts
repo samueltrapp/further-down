@@ -1,4 +1,3 @@
-import { EnchantmentType } from "./enchantments.ts";
 import { TeamType } from "../individual/characters.ts";
 
 const PlayerWeaponName = ["cutlass", "hammer", "periapt", "scepter"] as const;
@@ -10,8 +9,8 @@ type EnemyWeaponName = (typeof EnemyWeaponName)[number];
 export type WeaponName = PlayerWeaponName | EnemyWeaponName;
 
 type OffensiveAffinitiesType = {
-  physical: number;
-  magical: number;
+  martial: number;
+  mystic: number;
   bladed: number;
   blunt: number;
   elemental: number;
@@ -26,6 +25,6 @@ export type WeaponType = {
   affinities: OffensiveAffinitiesType;
   level: number;
   rarity: number;
-  enchantments?: EnchantmentType[];
+  socketSize: number;
   description: string;
 };

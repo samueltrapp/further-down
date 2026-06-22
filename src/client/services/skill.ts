@@ -1,6 +1,7 @@
 import { socket } from "../socket.ts";
 import {
   SetNameType,
+  SubmitPrepareType,
   TakeRewardType,
   TakeStatsType,
 } from "../../types/events/skill.ts";
@@ -19,4 +20,8 @@ export const takeStats = (stats: TakeStatsType) => {
 
 export const finishSkilling = (skill: { gameId: string; userId: string }) => {
   socket.emit("lobby:skill", skill);
+};
+
+export const submitPrepare = (data: SubmitPrepareType) => {
+  socket.emit("char:prepare", data);
 };

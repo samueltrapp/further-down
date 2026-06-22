@@ -1,23 +1,17 @@
-.stat-cluster {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-  width: 50%;
+.stat-splash {
+  margin: 0 auto;
+  width: 40%;
 }
 
-.stat-section {
+.stat-cluster {
   display: flex;
   flex-direction: row;
 }
 
-.core {
-  width: 100%;
-}
-
-.stat-splash {
+.stat-column {
   display: flex;
   flex-direction: column;
-  margin: 2rem 5rem;
+  flex: 1;
 }
 
 h3 {

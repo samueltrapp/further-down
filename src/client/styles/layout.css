@@ -1,3 +1,7 @@
+.w100 {
+  width: 100%;
+}
+
 .ta-center {
   text-align: center;
 }
@@ -10,10 +14,18 @@
   flex-direction: row;
 }
 
+.fdrr {
+  flex-direction: row-reverse;
+}
+
 .fdc {
   flex-direction: column;
 }
 
 .jc-center {
   justify-content: center;
+}
+
+.pe-none {
+  pointer-events: none;
 }

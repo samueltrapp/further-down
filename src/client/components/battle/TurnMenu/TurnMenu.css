@@ -1,0 +1,76 @@
+.menu-container {
+  background-color: transparent;
+  border-radius: 0 0 32px 32px;
+  margin-bottom: calc(1rem + 2px);
+  width: 100%;
+}
+
+.weapon-toolbar {
+  display: flex;
+  flex-direction: row;
+  padding: 2rem 0 1rem;
+  width: 100%;
+}
+
+.weapon-button {
+  background-color: var(--black);
+  border: none;
+  flex: 1;
+  margin: 0 0.125rem;
+  padding: 0.75rem 0;
+  text-align: center;
+  transition:
+    background-color 0.33s ease-in-out,
+    box-shadow 0.33s ease-in-out;
+
+  &:hover {
+    background-color: var(--sunset);
+    box-shadow: 0 0 1.5rem var(--orange);
+  }
+}
+
+.equipped-weapon {
+  background-color: var(--sunrise);
+  color: var(--black);
+  transition: background-color 0.33s ease-in-out;
+  box-shadow: 0 0 1rem var(--sunrise);
+
+  &:hover {
+    background-color: var(--sunset);
+  }
+}
+
+.maneuver-track {
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: var(--black);
+  gap: 0.25rem;
+}
+
+.maneuver-button {
+  background-color: var(--black);
+  border-top: none;
+  color: var(--sunset);
+  padding: 0.5rem;
+
+  &[disabled] {
+    background-color: var(--gray);
+    pointer-events: none;
+    outline: none;
+  }
+}
+
+.maneuver-button:hover {
+  background-color: var(--sunset);
+  color: var(--white);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.selected-maneuver {
+  background-color: var(--sunset);
+  color: var(--white);
+  font-style: italic;
+  outline: 1px dashed var(--white);
+  transition: background-color 0.3s ease-out;
+}

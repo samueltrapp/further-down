@@ -11,6 +11,7 @@
   --clear: #ffffff33;
   --glass: #d0d0d01a;
   --gray: #c0c0c0;
+  --light-black: #151416;
   --tan: #f9e0d2;
   --white: #fcfafa;
 
@@ -34,18 +35,20 @@
   --sky: #4150a3;
 
   /* Specific usage */
-  --hpGreen: #194c15;
-  --hpOrange: #803c0b;
-  --hpRed: #430000;
-
-  line-height: 1.5;
-  font-weight: 400;
+  --lifeGreen: #194c15;
+  --lifeOrange: #853e0e;
+  --lifeRed: #430000;
+  --speedPurple: #37266a;
+  --speedCyan: #1e728a;
+  --speedTeal: #07c185;
 
   color-scheme: light dark;
   color: var(--white);
   background-color: var(--black);
 
-  font-family: "Metamorphous", serif;
+  font-family: "Commissioner", sans-serif;
+  font-weight: 300;
+  font-style: normal;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -60,7 +63,7 @@ body {
   min-height: 100vh;
   font-weight: 400;
   font-style: normal;
-  background: linear-gradient(in oklch, var(--orange), 5%, var(--black));
+  background: linear-gradient(135deg in oklch, var(--sunrise), var(--black));
 }
 
 button {

@@ -28,19 +28,21 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       selectedIds: [],
       selectedManeuver: "",
       selectedWeapon: "",
+      playerDetailsId: "",
+      enemyDetailsId: "",
     },
   });
 
   return (
-    <GameContext.Provider value={game}>
-      <GameDispatchContext.Provider value={dispatch}>
-        {children}
-      </GameDispatchContext.Provider>
-    </GameContext.Provider>
+    <GameContext value={game}>
+      <GameDispatchContext value={dispatch}>{children}</GameDispatchContext>
+    </GameContext>
   );
 };
 
-function resetTurn(state: GameType): GameClientType {
+function resetTurn(
+  state: GameType,
+): Omit<GameClientType, "enemyDetailsId" | "playerDetailsId"> {
   const turn = state?.battle?.turnOrder[0];
   const equippedWeapon = (() => {
     if (turn) {
@@ -65,7 +67,10 @@ function gameReducer(game: GameStateType, action: GameActionType) {
   switch (action.type) {
     case GameAction.SYNC:
       return {
-        client: resetTurn(action.payload),
+        client: {
+          ...game.client,
+          ...resetTurn(action.payload),
+        },
         data: action.payload,
       };
     case GameAction.PLAYER_ACTION: {

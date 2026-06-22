@@ -1,4 +1,4 @@
-import { HitStep } from "../../types/equipables/actions.ts";
+import { HitStep } from "../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { StatsType } from "../../types/individual/stats.ts";
 import { ArmorType } from "../../types/equipables/armors.ts";
@@ -6,15 +6,12 @@ import { armorMap } from "../../shared/definitions/armors/sets.ts";
 import { trunc } from "../utils/battle.ts";
 
 export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
-  const { damageType } = step;
-  const { characters, targetIds } = ctx;
-  const defenders = targetIds?.map((id) => ({
-    id: id,
-    stats: characters[id]?.stats,
-    armor: characters[id]?.equipped.armor,
-  }));
+  const { damageType } = { ...step };
+  const { characters, instance } = { ...ctx };
 
-  if (!defenders || defenders.length === 0) {
+  console.log(characters);
+
+  if (!instance || instance.size === 0) {
     return ctx;
   }
 
@@ -35,47 +32,53 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
       case "blunt":
         return (
           baseMitigation +
-          dfAff * targetStat.defense +
-          pddAff * targetStat.plating
+          dfAff * targetStat.discipline.defense +
+          pddAff * targetStat.mastery.plating
         );
       case "bladed":
         return (
           baseMitigation +
-          dfAff * targetStat.defense +
-          pltAff * targetStat.padding
+          dfAff * targetStat.discipline.defense +
+          pltAff * targetStat.mastery.padding
         );
       case "elemental":
         return (
           baseMitigation +
-          rsAff * targetStat.resistance +
-          dmpAff * targetStat.dampening
+          rsAff * targetStat.discipline.resistance +
+          dmpAff * targetStat.mastery.dampening
         );
       case "psychic":
         return (
           baseMitigation +
-          rsAff * targetStat.resistance +
-          wrdAff * targetStat.warding
+          rsAff * targetStat.discipline.resistance +
+          wrdAff * targetStat.mastery.warding
         );
       default:
         return 0;
     }
   };
 
-  const mitigationMap = new Map();
-  defenders?.forEach((defender) => {
-    const armor = defender.armor ? armorMap.get(defender.armor) : null;
-    if (defender.stats && armor) {
-      const defensiveStats = {
-        evasion: defender.stats.evasion,
-        reduction: trunc(mitigation(defender.stats, armor)),
-      };
+  const newInstance = new Map();
+  instance?.forEach((instanceDtl, targetId) => {
+    const character = characters[targetId];
+    const armor = character.equipped.armor
+      ? armorMap.get(character.equipped.armor)
+      : null;
+    if (character.stats && armor) {
+      const evaded =
+        ctx.toHit > ctx.accuracy - character.stats.discipline.evasion;
+      const mitigationInstance = mitigation(character.stats, armor);
 
-      mitigationMap.set(defender.id, defensiveStats);
+      newInstance.set(targetId, {
+        ...instanceDtl,
+        evaded,
+        mitigation: trunc((instanceDtl?.mitigation || 0) + mitigationInstance),
+      });
     }
   });
 
   return {
     ...ctx,
-    mitigation: mitigationMap,
+    instance: newInstance,
   };
 };

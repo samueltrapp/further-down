@@ -13,6 +13,7 @@ export const porousBody: ArmorType = {
     dampening: 1.4,
     warding: 1.8,
   },
+  socketSize: 2,
   level: 1,
   rarity: 0,
   description: "A mushroom's squishy little body.",

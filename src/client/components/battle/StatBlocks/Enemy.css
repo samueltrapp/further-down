@@ -1,0 +1,21 @@
+@import "CharacterBlock.css";
+
+.enemy-box {
+  background: var(--plum);
+  border: 1px solid var(--clear);
+  border-radius: 0.5rem;
+  padding: 0;
+  transition: transform 0.2s ease-in-out;
+}
+
+.active-enemy {
+  background-color: var(--rose);
+  border: 1px solid var(--white);
+  box-shadow: 0 0 1rem var(--rose);
+  transform: scale(1.1);
+}
+
+.selected-enemy {
+  border-color: var(--sunrise);
+  transform: translateX(0.5rem);
+}

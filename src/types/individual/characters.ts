@@ -1,9 +1,9 @@
 import { StatsType } from "./stats.ts";
-import { ManeuverName } from "../equipables/actions.ts";
+import { ManeuverName } from "../equipables/maneuvers.ts";
 import { WeaponName } from "../equipables/weapons.ts";
 import { ArmorName } from "../equipables/armors.ts";
 import { EnchantmentName } from "../equipables/enchantments.ts";
-import { BurdenName, FavorName } from "../equipables/effects.ts";
+import { EffectName } from "../equipables/effects.ts";
 
 export type PerspectiveType = "own" | "other";
 export type TeamType = "player" | "enemy";
@@ -17,32 +17,24 @@ type RewardSpread = {
   weapons: WeaponName[];
 };
 
-type EffectType = {
-  stacks: number;
-  duration: DurationType;
-  trigger: TriggerType;
-  tooltip: string;
-};
-
-type FavorType = Partial<Record<FavorName, EffectType>>;
-type BurdenType = Partial<Record<BurdenName, EffectType>>;
-type EffectsType = {
-  favors: FavorType;
-  burdens: BurdenType;
-};
-
 export type RewardTypes = "maneuvers" | "weapons" | "armors" | "enchantments";
 
 export type PendingRewardType = Record<RewardTypes, number>;
 
-type TriggerType = "hit" | "turn" | "round" | "battle";
-type DurationType =
-  | "instant"
-  | "hit"
-  | "turn"
-  | "round"
-  | "battle"
-  | "permanent";
+export type PendingStatsType = {
+  core: number;
+  discipline: number;
+  mastery: number;
+};
+
+export type PendingPrepareType = { prepare: number };
+
+export type EnchantmentSocket = WeaponName | ArmorName | null;
+
+export type EnchantmentBinding = {
+  name: EnchantmentName;
+  socket: EnchantmentSocket;
+};
 
 type CharacterType = {
   id: string;
@@ -54,12 +46,12 @@ type CharacterType = {
   };
   loadout: {
     armors: ArmorName[];
-    enchantments: EnchantmentName[];
+    enchantments: EnchantmentBinding[];
     maneuvers: ManeuverName[];
     weapons: WeaponName[];
   };
   stats: StatsType;
-  effects: EffectsType;
+  effects: Partial<Record<EffectName, number>>;
   lastTurn: number;
   isDead: boolean;
 };
@@ -67,7 +59,7 @@ type CharacterType = {
 export type PlayerType = CharacterType & {
   userId: string;
   team: "player";
-  pending: PendingRewardType & { stats: number };
+  pending: PendingRewardType & PendingStatsType & PendingPrepareType;
   private: {
     queue: RewardSpread;
     savedStats: StatsType;

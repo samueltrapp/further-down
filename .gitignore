@@ -8,7 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 .env
-concept.txt
 node_modules
 dist
 dist-ssr
@@ -26,3 +25,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+/AGENTS.md

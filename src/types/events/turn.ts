@@ -1,4 +1,4 @@
-import { ManeuverName } from "../equipables/actions.ts";
+import { ManeuverName } from "../equipables/maneuvers.ts";
 import { WeaponName } from "../equipables/weapons.ts";
 
 type BaseTurnType = {

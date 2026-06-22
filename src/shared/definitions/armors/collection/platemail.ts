@@ -13,6 +13,7 @@ export const platemail: ArmorType = {
     dampening: 0.2,
     warding: 0.4,
   },
+  socketSize: 2,
   level: 1,
   rarity: 0,
   description: "Heavy physical armor",

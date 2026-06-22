@@ -1,4 +1,4 @@
-import { ManeuverType } from "../../../../types/equipables/actions.ts";
+import { ManeuverType } from "../../../../types/equipables/maneuvers.ts";
 
 export const quicksilver: ManeuverType = {
   name: "quicksilver",

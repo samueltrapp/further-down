@@ -1,0 +1,23 @@
+.turn-tracker-container {
+  display: inline-flex;
+  background: linear-gradient(130deg, var(--black), 60%, var(--light-black));
+  border-bottom: 2px solid var(--rose);
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.first-place {
+  color: var(--sunrise);
+}
+.second-place {
+  color: var(--sunset);
+}
+
+.third-place {
+  color: var(--orange);
+}
+
+.later {
+  color: var(--tan);
+}

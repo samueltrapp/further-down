@@ -4,15 +4,19 @@ import { GameType, LobbyStatus } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard/GameBoard.tsx";
 import { Lobby } from "./pages/Lobby/Lobby.tsx";
 import { Rewards } from "./components/interstitials/Rewards";
+import { Preparation } from "./pages/Preparation/Preparation";
 import { GameAction } from "./contexts/ContextTypes.ts";
 import { useGame } from "./hooks/useGame.ts";
 import "./App.css";
+import Button from "./components/_core/Button.tsx";
 
 const GameScreen = ({ lobbyStatus }: { lobbyStatus?: LobbyStatus }) => {
   switch (lobbyStatus) {
     case LobbyStatus.UNJOINED:
     case LobbyStatus.WAITING:
       return <Lobby />;
+    case LobbyStatus.PREPARE:
+      return <Preparation />;
     case LobbyStatus.REWARD:
       return <Rewards />;
     case LobbyStatus.BATTLE:
@@ -74,9 +78,20 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className={`container${lobbyStatus !== "battle" ? " interior" : ""}`}>
-      {loaded && <GameScreen lobbyStatus={lobbyStatus} />}
-    </div>
+    <>
+      <nav className="nav-bar">
+        <img className="nav-icon" src="/images/nav-icon.png" alt="Nav icon" />
+        <div className="nav-links">
+          <Button variant="outline">Rules</Button>
+          <Button variant="outline">Abandon</Button>
+        </div>
+      </nav>
+      {loaded && (
+        <div className="container">
+          <GameScreen lobbyStatus={lobbyStatus} />
+        </div>
+      )}
+    </>
   );
 }
 

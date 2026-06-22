@@ -3,7 +3,7 @@ import { randomId } from "../../../server/utils/character.ts";
 import { socket } from "../../socket.ts";
 import "./Lobby.css";
 import { useGame } from "../../hooks/useGame.ts";
-import Button from "../../components/core/Button.tsx";
+import Button from "../../components/_core/Button.tsx";
 
 const Unjoined = () => {
   const { game } = useGame();
