@@ -8,7 +8,7 @@ export const expendSpeed = (ctx: ActionCtx): ActionCtx => {
     return ctx;
   }
 
-  source.stats.speed -= ctx.speed;
+  source.stats.core.speed -= ctx.speed;
   ctx.characters[sourceId] = source;
   return {
     ...ctx,
@@ -20,7 +20,7 @@ export const restoreSpeed = (ctx: ActionCtx) => {
   const { characters } = ctx;
   for (const characterId in characters) {
     const character = characters[characterId];
-    character.stats.speed += character.stats.maxSpeed;
+    character.stats.core.speed += character.stats.core.maxSpeed;
   }
 
   return {

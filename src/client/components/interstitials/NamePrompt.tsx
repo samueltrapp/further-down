@@ -12,7 +12,7 @@ export function NamePrompt({
   gameId: string;
   characterId: string;
 }) {
-  const [name, setName] = useState("CharacterBlock");
+  const [name, setName] = useState("Character");
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;

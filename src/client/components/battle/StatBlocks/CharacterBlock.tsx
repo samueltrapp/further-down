@@ -69,8 +69,8 @@ export default function CharacterBlock(
       <div className="char-bar">
         <StatBar
           id={id}
-          maxStat={stats.maxLife}
-          currentStat={stats.life}
+          maxStat={stats.core.maxLife}
+          currentStat={stats.core.life}
           stat="life"
         >
           {name}

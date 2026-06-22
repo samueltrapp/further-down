@@ -1,5 +1,10 @@
 import { RewardTypes } from "../individual/characters.ts";
 import { StatsType } from "../individual/stats.ts";
+import { WeaponName } from "../equipables/weapons.ts";
+import { ArmorName } from "../equipables/armors.ts";
+import { EnchantmentName } from "../equipables/enchantments.ts";
+
+export type StatCategory = keyof StatsType;
 
 export type SetNameType = {
   name: string;
@@ -16,6 +21,16 @@ export type TakeRewardType = {
 
 export type TakeStatsType = {
   newStats: StatsType;
+  category: StatCategory;
   gameId: string;
   characterId: string;
+};
+
+export type SubmitPrepareType = {
+  gameId: string;
+  characterId: string;
+  weaponSockets: Partial<Record<WeaponName, EnchantmentName[]>>;
+  armorSockets: Partial<Record<ArmorName, EnchantmentName[]>>;
+  weapon: WeaponName;
+  armor: ArmorName;
 };

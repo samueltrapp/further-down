@@ -21,6 +21,21 @@ export type RewardTypes = "maneuvers" | "weapons" | "armors" | "enchantments";
 
 export type PendingRewardType = Record<RewardTypes, number>;
 
+export type PendingStatsType = {
+  core: number;
+  discipline: number;
+  mastery: number;
+};
+
+export type PendingPrepareType = { prepare: number };
+
+export type EnchantmentSocket = WeaponName | ArmorName | null;
+
+export type EnchantmentBinding = {
+  name: EnchantmentName;
+  socket: EnchantmentSocket;
+};
+
 type CharacterType = {
   id: string;
   name: string;
@@ -31,7 +46,7 @@ type CharacterType = {
   };
   loadout: {
     armors: ArmorName[];
-    enchantments: EnchantmentName[];
+    enchantments: EnchantmentBinding[];
     maneuvers: ManeuverName[];
     weapons: WeaponName[];
   };
@@ -44,7 +59,7 @@ type CharacterType = {
 export type PlayerType = CharacterType & {
   userId: string;
   team: "player";
-  pending: PendingRewardType & { stats: number };
+  pending: PendingRewardType & PendingStatsType & PendingPrepareType;
   private: {
     queue: RewardSpread;
     savedStats: StatsType;

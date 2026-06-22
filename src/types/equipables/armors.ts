@@ -1,4 +1,3 @@
-import { EnchantmentType } from "./enchantments.ts";
 import { TeamType } from "../individual/characters.ts";
 
 const PlayerArmorName = ["leather", "platemail", "robe", "tunic"] as const;
@@ -26,6 +25,6 @@ export type ArmorType = {
   affinities: DefensiveAffinitiesType;
   level: number;
   rarity: number;
-  enchantments?: EnchantmentType[];
+  socketSize: number;
   description: string;
 };

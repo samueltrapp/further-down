@@ -33,6 +33,7 @@ export type EnchantmentType = {
   name: EnchantmentName;
   description: string;
   priority: number;
+  socketType: "weapon" | "armor";
   trigger: Activation;
   effect?: EffectType;
   onTrigger?: (

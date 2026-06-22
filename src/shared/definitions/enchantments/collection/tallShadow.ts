@@ -26,6 +26,7 @@ export const tallShadowEnch: EnchantmentType = {
   name: "tall shadow",
   description:
     "When an attack misses you, gain a shadow stack that increases your EVA by 5. Stacks persist until the end of battle.",
+  socketType: "armor",
   trigger: "defend",
   priority: 15,
   effect: tallShadow,

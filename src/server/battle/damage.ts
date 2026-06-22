@@ -27,8 +27,8 @@ export const calcDamage = (ctx: ActionCtx, step: HitStep) => {
   const baseDamage = weapon.power + createSpread(weapon.spread);
 
   const {
-    physical: phAff,
-    magical: mgAff,
+    martial: mrAff,
+    mystic: msAff,
     bladed: bldAff,
     blunt: bltAff,
     elemental: eleAff,
@@ -38,13 +38,29 @@ export const calcDamage = (ctx: ActionCtx, step: HitStep) => {
   const damage = () => {
     switch (damageType) {
       case "bladed":
-        return baseDamage + phAff * stats.physical + bltAff * stats.bladed;
+        return (
+          baseDamage +
+          mrAff * stats.discipline.martial +
+          bltAff * stats.mastery.bladed
+        );
       case "blunt":
-        return baseDamage + phAff * stats.physical + bldAff * stats.blunt;
+        return (
+          baseDamage +
+          mrAff * stats.discipline.martial +
+          bldAff * stats.mastery.blunt
+        );
       case "elemental":
-        return baseDamage + mgAff * stats.magical + eleAff * stats.elemental;
+        return (
+          baseDamage +
+          msAff * stats.discipline.mystic +
+          eleAff * stats.mastery.elemental
+        );
       case "psychic":
-        return baseDamage + mgAff * stats.magical + psyAff * stats.psychic;
+        return (
+          baseDamage +
+          msAff * stats.discipline.mystic +
+          psyAff * stats.mastery.psychic
+        );
       default:
         return 0;
     }
@@ -60,7 +76,7 @@ export const calcDamage = (ctx: ActionCtx, step: HitStep) => {
     });
   });
 
-  const stepAccuracy = source.stats.accuracy + step.accuracy;
+  const stepAccuracy = source.stats.discipline.accuracy + step.accuracy;
   ctx.toHit = randNum(100);
   ctx.accuracy = stepAccuracy;
   ctx.instance = newInstance;
@@ -79,9 +95,9 @@ export const applyDamage = (ctx: ActionCtx) => {
       const reducedDamage = limitToZero(
         trunc(instanceDtl.damage - instanceDtl.mitigation),
       );
-      if (character?.stats?.life) {
-        character.stats.life = limitToZero(
-          character.stats.life - reducedDamage,
+      if (character?.stats?.core.life) {
+        character.stats.core.life = limitToZero(
+          character.stats.core.life - reducedDamage,
         );
       }
       messages.steps?.push(

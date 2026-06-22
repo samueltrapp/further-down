@@ -4,6 +4,7 @@ import { GameType, LobbyStatus } from "../types/game.ts";
 import GameBoard from "./pages/GameBoard/GameBoard.tsx";
 import { Lobby } from "./pages/Lobby/Lobby.tsx";
 import { Rewards } from "./components/interstitials/Rewards";
+import { Preparation } from "./pages/Preparation/Preparation";
 import { GameAction } from "./contexts/ContextTypes.ts";
 import { useGame } from "./hooks/useGame.ts";
 import "./App.css";
@@ -14,6 +15,8 @@ const GameScreen = ({ lobbyStatus }: { lobbyStatus?: LobbyStatus }) => {
     case LobbyStatus.UNJOINED:
     case LobbyStatus.WAITING:
       return <Lobby />;
+    case LobbyStatus.PREPARE:
+      return <Preparation />;
     case LobbyStatus.REWARD:
       return <Rewards />;
     case LobbyStatus.BATTLE:
@@ -83,7 +86,11 @@ function App() {
           <Button variant="outline">Abandon</Button>
         </div>
       </nav>
-      {loaded && <GameScreen lobbyStatus={lobbyStatus} />}
+      {loaded && (
+        <div className="container">
+          <GameScreen lobbyStatus={lobbyStatus} />
+        </div>
+      )}
     </>
   );
 }

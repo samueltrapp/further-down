@@ -1,6 +1,8 @@
-import { useState, MouseEvent } from "react";
+import { useEffect, MouseEvent } from "react";
 import {
   PlayerType,
+  PendingRewardType,
+  PendingStatsType,
   RewardTypes,
 } from "../../../types/individual/characters.ts";
 import { finishSkilling, takeReward } from "../../services/skill.ts";
@@ -18,6 +20,55 @@ import { enchantmentMap } from "../../../shared/definitions/enchantments/sets.ts
 import { maneuverMap } from "../../../shared/definitions/maneuvers/sets.ts";
 import { weaponMap } from "../../../shared/definitions/weapons/sets.ts";
 import Button from "../_core/Button.tsx";
+import { StatCategory } from "../../../types/events/skill.ts";
+
+const REWARD_ORDER: RewardTypes[] = [
+  "maneuvers",
+  "weapons",
+  "armors",
+  "enchantments",
+];
+const STAT_ORDER: StatCategory[] = ["core", "discipline", "mastery"];
+
+type ActiveStep =
+  | { kind: "name" }
+  | { kind: "reward"; rewardType: RewardTypes }
+  | { kind: "stat"; category: StatCategory };
+
+/* Returns the first uncompleted step for a character, or null if all done. */
+function resolveActiveStep(character: PlayerType): ActiveStep | null {
+  if (!character.name) return { kind: "name" };
+
+  const pendingReward = REWARD_ORDER.find(
+    (reward) => (character.pending as PendingRewardType)[reward] > 0,
+  );
+  if (pendingReward) return { kind: "reward", rewardType: pendingReward };
+
+  const pendingStat = STAT_ORDER.find(
+    (stat) => (character.pending as PendingStatsType)[stat] > 0,
+  );
+  if (pendingStat) return { kind: "stat", category: pendingStat };
+
+  return null;
+}
+
+/* True when a character still has any work left in the reward phase. */
+function hasPending(character: PlayerType): boolean {
+  return resolveActiveStep(character) !== null;
+}
+
+const REWARD_MAPS: Record<
+  RewardTypes,
+  Map<string, { name: string; description: string }>
+> = {
+  armors: armorMap as Map<string, { name: string; description: string }>,
+  enchantments: enchantmentMap as Map<
+    string,
+    { name: string; description: string }
+  >,
+  maneuvers: maneuverMap as Map<string, { name: string; description: string }>,
+  weapons: weaponMap as Map<string, { name: string; description: string }>,
+};
 
 function RewardHolding() {
   return <div>Waiting for other players.</div>;
@@ -33,24 +84,11 @@ function RewardSelection({
   gameId: string;
 }) {
   const options = character.private.queue[rewardType].slice(0, 3);
-
-  const rewardMap = (() => {
-    switch (rewardType) {
-      case "armors":
-        return armorMap;
-      case "enchantments":
-        return enchantmentMap;
-      case "maneuvers":
-        return maneuverMap;
-      case "weapons":
-        return weaponMap;
-      default:
-        return new Map();
-    }
-  })();
+  const rewardMap = REWARD_MAPS[rewardType];
 
   const submitSelectedReward = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
+    console.log(target);
     takeReward({
       rewardType,
       rewardName: target.value,
@@ -62,19 +100,23 @@ function RewardSelection({
   return (
     <section className="m0 ta-center">
       <h2>{`Select ${contextualIndefinite(rewardType)} ${singularize(rewardType)}`}</h2>
-      <ul className="df fdr jc-center">
+      <ul className="reward-grid pl0">
         {options.map((option) => {
           const optionDetails = rewardMap.get(option);
+          if (!optionDetails) return null;
           return (
-            <li key={option} className="ml4 mr4 reward-card">
-              <div>
-                <span className="fs3 fw3">{toCaps(optionDetails.name)}</span>
-              </div>
-              <div>
-                <span>{optionDetails.description}</span>
-              </div>
-              <Button value={option} onClick={submitSelectedReward}>
-                Select
+            <li key={option} className="reward-option-container">
+              <Button
+                className="w100 pl4 pr4 reward-card"
+                value={option}
+                onClick={submitSelectedReward}
+              >
+                <div className="pt4 pb3 pe-none">
+                  <span className="fs3 fw3">{toCaps(optionDetails.name)}</span>
+                </div>
+                <div className="pb4 pe-none">
+                  <span>{optionDetails.description}</span>
+                </div>
               </Button>
             </li>
           );
@@ -86,58 +128,62 @@ function RewardSelection({
 
 export function Rewards() {
   const { game } = useGame();
-  const [currentIndex, setCurrentIndex] = useState(0);
   const userId = localStorage.getItem("userId");
 
-  if (!game || !game.data.characters) {
-    return null;
-  }
+  const gameId = game?.data.lobby.gameId;
+  const votes = game?.data.lobby.votes;
 
-  /* Retrieve all characters controlled by the player and grab the current one */
-  const allCharacters = Object.values(game.data.characters);
-  const playerCharacters = Array.from(allCharacters).filter(
-    (playerCharacter) =>
-      playerCharacter.team === "player" && playerCharacter.userId === userId,
-  );
-  const playerCharacter =
-    currentIndex < playerCharacters.length
-      ? (playerCharacters[currentIndex] as PlayerType)
-      : null;
+  /* First character belonging to this user that still has pending work. */
+  const activeCharacter = game?.data.characters
+    ? (Object.values(game.data.characters).find(
+        (character) =>
+          character.team === "player" &&
+          character.userId === userId &&
+          hasPending(character as PlayerType),
+      ) as PlayerType | undefined)
+    : undefined;
 
-  const gameId = game.data.lobby.gameId;
-  const votes = game.data.lobby.votes;
-
-  const otherProps = {
-    gameId,
-    character: playerCharacter as PlayerType,
-  };
-
-  if (playerCharacter === null) {
-    if (gameId && userId && !votes.includes(userId)) {
+  /* Once all this user's characters are clear, cast a vote to advance. */
+  useEffect(() => {
+    if (
+      !activeCharacter &&
+      gameId &&
+      userId &&
+      !(votes ?? []).includes(userId)
+    ) {
       finishSkilling({ gameId, userId });
     }
-    return <RewardHolding />;
-  } else {
-    if (!playerCharacter.name) {
-      return <NamePrompt gameId={gameId} characterId={playerCharacter.id} />;
-    } else if (playerCharacter.pending.maneuvers > 0) {
-      return <RewardSelection rewardType="maneuvers" {...otherProps} />;
-    } else if (playerCharacter.pending.weapons > 0) {
-      return <RewardSelection rewardType="weapons" {...otherProps} />;
-    } else if (playerCharacter.pending.armors > 0) {
-      return <RewardSelection rewardType="armors" {...otherProps} />;
-    } else if (playerCharacter.pending.enchantments > 0) {
-      return <RewardSelection rewardType="enchantments" {...otherProps} />;
-    } else if (playerCharacter.pending.stats > 0) {
-      return (
-        <StatGrowth
-          points={playerCharacter.pending.stats}
-          gameId={gameId}
-          character={playerCharacter}
-        />
-      );
-    }
-    /* Move to next character when nothing is pending */
-    setCurrentIndex(currentIndex + 1);
+  }, [activeCharacter, gameId, userId, votes]);
+
+  if (!game?.data.characters || !gameId) return null;
+  if (!activeCharacter) return <RewardHolding />;
+
+  const step = resolveActiveStep(activeCharacter);
+
+  if (step?.kind === "name") {
+    return <NamePrompt gameId={gameId} characterId={activeCharacter.id} />;
   }
+
+  if (step?.kind === "reward") {
+    return (
+      <RewardSelection
+        rewardType={step.rewardType}
+        character={activeCharacter}
+        gameId={gameId}
+      />
+    );
+  }
+
+  if (step?.kind === "stat") {
+    return (
+      <StatGrowth
+        points={activeCharacter.pending[step.category]}
+        category={step.category}
+        gameId={gameId}
+        character={activeCharacter}
+      />
+    );
+  }
+
+  return null;
 }

@@ -16,28 +16,28 @@ export default function StatsPanel({
       <h2 className="spec-font fs4 ta-center mt2 mb3">{character.name}</h2>
       <h3 className="fs3">Core</h3>
       <div className="stat-category">
-        <div>Life: {stats.life}</div>
-        <div>Speed: {stats.speed}</div>
-        <div>Max Life: {stats.maxLife}</div>
-        <div>Max Speed: {stats.maxSpeed}</div>
+        <div>Life: {stats.core.life}</div>
+        <div>Speed: {stats.core.speed}</div>
+        <div>Max Life: {stats.core.maxLife}</div>
+        <div>Max Speed: {stats.core.maxSpeed}</div>
       </div>
       <h3 className="fs3">Discipline</h3>
       <div className="stat-category">
-        <div>Physical: {stats.physical}</div>
-        <div>Defense: {stats.defense}</div>
-        <div>Magical: {stats.magical}</div>
-        <div>Resistance: {stats.resistance}</div>
+        <div>Martial: {stats.discipline.martial}</div>
+        <div>Defense: {stats.discipline.defense}</div>
+        <div>Mystic: {stats.discipline.mystic}</div>
+        <div>Resistance: {stats.discipline.resistance}</div>
       </div>
-      <h3 className="fs3">Specialty</h3>
+      <h3 className="fs3">Mastery</h3>
       <div className="stat-category">
-        <div>Bladed: {stats.bladed}</div>
-        <div>Plating: {stats.plating}</div>
-        <div>Blunt: {stats.blunt}</div>
-        <div>Padding: {stats.padding}</div>
-        <div>Elemental: {stats.elemental}</div>
-        <div>Dampening: {stats.dampening}</div>
-        <div>Psychic: {stats.psychic}</div>
-        <div>Warding: {stats.warding}</div>
+        <div>Bladed: {stats.mastery.bladed}</div>
+        <div>Plating: {stats.mastery.plating}</div>
+        <div>Blunt: {stats.mastery.blunt}</div>
+        <div>Padding: {stats.mastery.padding}</div>
+        <div>Elemental: {stats.mastery.elemental}</div>
+        <div>Dampening: {stats.mastery.dampening}</div>
+        <div>Psychic: {stats.mastery.psychic}</div>
+        <div>Warding: {stats.mastery.warding}</div>
       </div>
     </div>
   );

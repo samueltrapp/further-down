@@ -17,7 +17,7 @@ export const applyDeath = (ctx: ActionCtx) => {
   const { characters } = ctx;
 
   for (const character of Object.values(characters)) {
-    if (!character.isDead && character.stats.life <= 0) {
+    if (!character.isDead && character.stats.core.life <= 0) {
       character.isDead = true;
       ctx.messages.steps?.push(`${character.name} fell in battle!`);
     }
@@ -76,7 +76,7 @@ export const checkProgressStatus = (ctx: ActionCtx) => {
     ) {
       continue;
     }
-    if (character.stats.speed > 0) {
+    if (character.stats.core.speed > 0) {
       isRoundEnd = false;
     }
     if (character.team === "enemy") {

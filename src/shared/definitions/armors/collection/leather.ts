@@ -13,6 +13,7 @@ export const leather: ArmorType = {
     dampening: 0.8,
     warding: 0.5,
   },
+  socketSize: 2,
   level: 1,
   rarity: 0,
   description: "Medium physical armor",

@@ -13,6 +13,7 @@ export const robe: ArmorType = {
     dampening: 2,
     warding: 0.8,
   },
+  socketSize: 2,
   level: 1,
   rarity: 0,
   description: "Light magical armor",

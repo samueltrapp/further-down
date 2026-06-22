@@ -19,7 +19,7 @@ const applyFn = (ctx: ActionCtx, ids: string[], step: StepType | undefined) => {
   }
 
   if (hit) {
-    characters[id].stats.bladed += 1;
+    characters[id].stats.mastery.bladed += 1;
   }
 
   return ctx;
@@ -30,7 +30,7 @@ const removeFn = (ctx: ActionCtx, ids: string[]) => {
   ids.forEach((id) => {
     const stacks = characters[id].effects["sharpen the blade"] || 0;
     characters[id].effects["sharpen the blade"] = 0;
-    characters[id].stats.bladed -= stacks;
+    characters[id].stats.mastery.bladed -= stacks;
   });
 
   return ctx;

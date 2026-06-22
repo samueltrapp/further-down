@@ -10,7 +10,7 @@ const applyFn = (ctx: ActionCtx, ids: string[]): ActionCtx => {
     // Only add evasion if the attack actually missed
     if (targetInstance?.evaded) {
       const stacks = characters[id].effects["tall shadow"] || 0;
-      characters[id].stats.evasion += stacks * EVASION_PER_STACK;
+      characters[id].stats.discipline.evasion += stacks * EVASION_PER_STACK;
     }
   });
   return ctx;
@@ -20,7 +20,7 @@ const removeFn = (ctx: ActionCtx, ids: string[]): ActionCtx => {
   const { characters } = ctx;
   ids.forEach((id) => {
     const stacks = characters[id].effects["tall shadow"] || 0;
-    characters[id].stats.evasion -= stacks * EVASION_PER_STACK;
+    characters[id].stats.discipline.evasion -= stacks * EVASION_PER_STACK;
   });
   return ctx;
 };

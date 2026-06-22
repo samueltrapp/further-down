@@ -13,6 +13,7 @@ import { ArmorName } from "../../types/equipables/armors.ts";
 import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { checkNextTurn } from "../battle/core.ts";
+import { PlayerType } from "../../types/individual/characters.ts";
 
 export function submitName(
   connection: ConnectionType,
@@ -56,7 +57,10 @@ export function takeReward(
           reducedQueue as ArmorName[],
         ) as ArmorName[];
       } else if (rewardType === "enchantments") {
-        character.loadout.enchantments.push(rewardName as EnchantmentName);
+        character.loadout.enchantments.push({
+          name: rewardName as EnchantmentName,
+          socket: null,
+        });
         character.private.queue.enchantments = randomizeCollection(
           reducedQueue as EnchantmentName[],
         ) as EnchantmentName[];
@@ -72,13 +76,6 @@ export function takeReward(
         ) as WeaponName[];
       }
       character.pending[rewardType] = character.pending[rewardType] - 1;
-
-      /* Auto-equip */
-      if (rewardType === "weapons" && character.equipped.weapon === null) {
-        character.equipped.weapon = rewardName as WeaponName;
-      } else if (rewardType === "armors") {
-        character.equipped.armor = rewardName as ArmorName;
-      }
 
       /* Update game */
       const newGameState = {
@@ -96,7 +93,7 @@ export function takeReward(
 
 export function takeStats(
   connection: ConnectionType,
-  { newStats, gameId, characterId }: TakeStatsType,
+  { newStats, category, gameId, characterId }: TakeStatsType,
 ) {
   const game = connection.meta.games.get(gameId);
   if (game && game.characters) {
@@ -104,7 +101,7 @@ export function takeStats(
 
     if (character && character.team === "player") {
       character.stats = newStats;
-      character.pending.stats = 0;
+      character.pending[category] = 0;
 
       const newGameState = {
         ...game,
@@ -143,6 +140,12 @@ export function finishSkilling(
       battle = setBlankBattle(characters);
     }
 
+    /* Skip preparation if all player characters already have prepare cleared. */
+    const allPrepared = Object.values(characters).every(
+      (char) =>
+        char.team !== "player" || (char as PlayerType).pending.prepare === 0,
+    );
+
     const newGameState: GameType = {
       ...game,
       battle,
@@ -150,7 +153,11 @@ export function finishSkilling(
       lobby: {
         ...game.lobby,
         votes: votedToAdvance ? [] : totalVotes,
-        status: votedToAdvance ? LobbyStatus.BATTLE : game.lobby.status,
+        status: votedToAdvance
+          ? allPrepared
+            ? LobbyStatus.BATTLE
+            : LobbyStatus.PREPARE
+          : game.lobby.status,
       },
     };
     connection.meta.games.set(gameId, newGameState);

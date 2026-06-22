@@ -25,3 +25,7 @@
 .jc-center {
   justify-content: center;
 }
+
+.pe-none {
+  pointer-events: none;
+}

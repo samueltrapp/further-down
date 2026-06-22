@@ -17,7 +17,7 @@ export const resolveTurnOrder = (characters: CharactersType): string[] => {
       charTurns.push({
         id: charEntry[0],
         lastTurn: charEntry[1].lastTurn,
-        speed: charEntry[1].stats.speed,
+        speed: charEntry[1].stats.core.speed,
       });
     }
   }

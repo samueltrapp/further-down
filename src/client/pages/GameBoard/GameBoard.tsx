@@ -37,7 +37,7 @@ function GameBoard() {
   return (
     <>
       <TurnTracker />
-      <div className="container board-grid">
+      <div className="board-grid">
         <DetailsPanel character={inspectedPlayer} />
         <div className="control-hub">
           <CharacterMenu

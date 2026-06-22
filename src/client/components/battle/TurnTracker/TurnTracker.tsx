@@ -27,7 +27,7 @@ export default function TurnTracker() {
     const turnChar = characters[turnId];
     return {
       name: turnChar?.name,
-      speed: turnChar?.stats.speed,
+      speed: turnChar?.stats.core.speed,
     };
   });
 
