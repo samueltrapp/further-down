@@ -76,7 +76,11 @@ export const calcDamage = (ctx: ActionCtx, step: HitStep) => {
     });
   });
 
-  const stepAccuracy = source.stats.discipline.accuracy + step.accuracy;
+  const statAcc =
+    step.damageType === "bladed" || step.damageType === "blunt"
+      ? source.stats.discipline.precision
+      : source.stats.discipline.control;
+  const stepAccuracy = statAcc + step.accuracy;
   ctx.toHit = randNum(100);
   ctx.accuracy = stepAccuracy;
   ctx.instance = newInstance;

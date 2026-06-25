@@ -35,9 +35,9 @@ const shroomlet = (id: string, index: number): EnemyType => ({
       mystic: 5,
       defense: 1,
       resistance: 3,
-      accuracy: 0,
+      precision: 0,
       control: 0,
-      evasion: 0,
+      dodge: 0,
       negation: 0,
     },
     mastery: {

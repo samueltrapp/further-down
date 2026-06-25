@@ -65,8 +65,11 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
       ? armorMap.get(character.equipped.armor)
       : null;
     if (character.stats && armor) {
-      const evaded =
-        ctx.toHit > ctx.accuracy - character.stats.discipline.evasion;
+      const evasion =
+        step.damageType === "bladed" || step.damageType === "blunt"
+          ? character.stats.discipline.dodge
+          : character.stats.discipline.negation;
+      const evaded = ctx.toHit > ctx.accuracy - evasion;
       const mitigationInstance = mitigation(character.stats, armor);
 
       newInstance.set(targetId, {
