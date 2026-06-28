@@ -5,22 +5,26 @@ import { DurationType, EffectName } from "../../types/equipables/effects.ts";
 
 export const applyEffect = (ctx: ActionCtx, step: EffectStep) => {
   const { characters, targetIds } = { ...ctx };
-  const { effect, stacks = 1 } = step;
+  const { effect: effectName, stacks = 1 } = step;
 
   targetIds?.forEach((targetId) => {
     const target = characters[targetId];
-    const flatEffect = effectMap.get(effect);
-    const effectDtl = { ...flatEffect, owner: ctx.sourceId };
-    const stackable = effectDtl?.stackable;
-    const effectValue = target.effects[effect];
+    const effect = effectMap.get(effectName);
+    if (!effect) return ctx;
+
+    effect.owner = ctx.sourceId;
+    const stackable = effect?.stackable;
+    const effectValue = target.effects[effectName];
+
+    /* Apply fresh stacks if none exist or add new stacks */
     if (!effectValue || !stackable) {
-      target.effects[effect] = 1;
+      target.effects[effectName] = stacks;
     } else if (stacks) {
-      target.effects[effect] = effectValue + stacks;
+      target.effects[effectName] = effectValue + stacks;
     }
 
-    if (effectDtl?.onApply) {
-      ctx = effectDtl?.onApply(ctx, targetIds, step);
+    if (effect?.onApply) {
+      ctx = effect?.onApply(ctx, targetIds, step);
     }
   });
 

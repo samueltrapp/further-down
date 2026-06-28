@@ -6,6 +6,8 @@ import { LobbyStatus } from "../../types/game.ts";
 import { sendGame } from "../meta/gameManagement.ts";
 import { WeaponName } from "../../types/equipables/weapons.ts";
 import { ArmorName } from "../../types/equipables/armors.ts";
+import { armorMap } from "../../shared/definitions/armors/sets.ts";
+import { deriveArmorStats } from "../utils/stats.ts";
 
 export function submitPrepare(
   connection: ConnectionType,
@@ -59,10 +61,7 @@ export function submitPrepare(
       },
     );
 
-    character.loadout = {
-      ...character.loadout,
-      enchantments: updatedEnchantments,
-    };
+    character.loadout.enchantments = updatedEnchantments;
     character.equipped = {
       weapon,
       armor,
@@ -73,18 +72,20 @@ export function submitPrepare(
         )
         .map((binding) => binding.name),
     };
-    character.pending = { ...character.pending, prepare: 0 };
+    character.stats = deriveArmorStats(
+      character.stats,
+      armor ? (armorMap.get(armor) ?? null) : null,
+    );
+    character.pending.prepare = 0;
 
-    const updatedCharacters = { ...game.characters, [characterId]: character };
+    game.characters[characterId] = character;
 
-    const allPrepared = Object.values(updatedCharacters).every(
+    const finished = Object.values(game.characters).every(
       (char) =>
         char.team !== "player" || (char as PlayerType).pending.prepare === 0,
     );
 
-    game.characters = updatedCharacters;
-
-    if (allPrepared) {
+    if (finished) {
       game.lobby.status = LobbyStatus.BATTLE;
     }
 

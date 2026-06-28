@@ -19,6 +19,7 @@ import { TeamType } from "../../types/individual/characters.ts";
 import { randEntry, validTargets } from "../../shared/utils.ts";
 import { applyEffect, removeEffects } from "./effect.ts";
 import { handleEnchantments } from "./enchantments.ts";
+import { processBurnDamage } from "./burn.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
@@ -92,6 +93,7 @@ export function handleTurn(
       maneuver: maneuver,
       targetIds: [],
       speed: maneuver.speedCost,
+      speedElapsed: game.battle.speedElapsed,
       messages: turnLog(source.name, maneuver.name, weapon),
       toHit: 0,
       accuracy: 0,
@@ -104,34 +106,39 @@ export function handleTurn(
       ctx = switchWeapon(ctx, turn.weapon);
     }
 
+    /* Turn-start burn; ends turn early if lethal */
+    ctx = processBurnDamage(ctx);
+    ctx = applyDeath(ctx);
+    const sourceKilledByBurn = ctx.characters[ctx.sourceId]?.isDead;
+
     /* Action */
-    maneuver?.steps.forEach((step) => {
-      ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
+    if (!sourceKilledByBurn) {
+      maneuver?.steps.forEach((step) => {
+        ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
 
-      /* Process hits */
-      if (step.type === "hit") {
-        ctx = calcDamage(ctx, step);
-        if (step.hitFn) {
-          ctx = step.hitFn(ctx);
+        /* Process hits */
+        if (step.type === "hit") {
+          ctx = calcDamage(ctx, step);
+          if (step.hitFn) {
+            ctx = step.hitFn(ctx);
+          }
+          ctx = handleEnchantments(ctx, "attack", step);
+          ctx = calcMitigation(step, ctx);
+          ctx = handleEnchantments(ctx, "defend", step);
+          ctx = applyDamage(ctx);
+        } else if (step.type === "heal") {
+          /* Process healing */
+          ctx = { ...ctx };
+        } else if (step.type === "effect") {
+          /* Process effects */
+          ctx = applyEffect(ctx, step);
         }
-        ctx = handleEnchantments(ctx, "attack", step);
-        ctx = calcMitigation(step, ctx);
-        ctx = handleEnchantments(ctx, "defend", step);
-        ctx = applyDamage(ctx);
-      } else if (step.type === "heal") {
-
-      /* Process healing */
-        ctx = { ...ctx };
-      } else if (step.type === "effect") {
-
-      /* Process effects */
-        ctx = applyEffect(ctx, step);
-      }
-    });
+      });
+    }
 
     /* Post-action */
     ctx = expendSpeed(ctx);
-    ctx = applyDeath(ctx);
+    game.battle.speedElapsed += ctx.speed;
 
     const { isRoundEnd, victor } = checkProgressStatus(ctx);
 
@@ -146,6 +153,8 @@ export function handleTurn(
       ctx = restoreSpeed(ctx);
       ctx = handleEnchantments(ctx, "round-start");
     }
+
+    ctx = applyDeath(ctx);
 
     /* End of battle */
     if (victor !== Victor.NONE) {

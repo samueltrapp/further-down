@@ -9,15 +9,13 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
   const { damageType } = { ...step };
   const { characters, instance } = { ...ctx };
 
-  console.log(characters);
-
   if (!instance || instance.size === 0) {
     return ctx;
   }
 
   const mitigation = (targetStat: StatsType, armor: ArmorType) => {
     const affinities = armor.affinities;
-    const baseMitigation = armor.protection;
+    const baseMitigation = armor.block;
 
     const {
       defense: dfAff,
@@ -80,8 +78,6 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
     }
   });
 
-  return {
-    ...ctx,
-    instance: newInstance,
-  };
+  ctx.instance = newInstance;
+  return ctx;
 };

@@ -36,6 +36,11 @@ export type EnchantmentBinding = {
   socket: EnchantmentSocket;
 };
 
+export type BurnSourceState = {
+  damagePerSpeed: number;
+  lastSpeedElapsed: number;
+};
+
 type CharacterType = {
   id: string;
   name: string;
@@ -52,6 +57,7 @@ type CharacterType = {
   };
   stats: StatsType;
   effects: Partial<Record<EffectName, number>>;
+  burnSources: Record<string, BurnSourceState>;
   lastTurn: number;
   isDead: boolean;
 };

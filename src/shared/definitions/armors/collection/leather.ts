@@ -3,8 +3,9 @@ import { ArmorType } from "../../../../types/equipables/armors.ts";
 export const leather: ArmorType = {
   name: "leather",
   team: "player",
-  constitution: 5,
-  protection: 2,
+  block: 4,
+  finesse: 6,
+  protection: 5,
   affinities: {
     defense: 1.8,
     resistance: 1.3,
@@ -14,7 +15,7 @@ export const leather: ArmorType = {
     warding: 0.5,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "Medium physical armor",
 };

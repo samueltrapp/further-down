@@ -14,7 +14,7 @@ export const cutlass: WeaponType = {
     psychic: 0.5,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "Cutlass description",
 };

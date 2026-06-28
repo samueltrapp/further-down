@@ -20,10 +20,11 @@ type DefensiveAffinitiesType = {
 export type ArmorType = {
   name: ArmorName;
   team: TeamType;
+  block: number;
   protection: number;
-  constitution: number;
+  finesse: number;
   affinities: DefensiveAffinitiesType;
-  level: number;
+  tier: number;
   rarity: number;
   socketSize: number;
   description: string;

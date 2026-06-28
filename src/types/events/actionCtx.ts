@@ -7,6 +7,7 @@ export type ActionCtx = {
   targetIds: string[];
   maneuver: ManeuverType;
   speed: number;
+  speedElapsed: number;
   messages: TurnLog;
   toHit: number;
   accuracy: number;

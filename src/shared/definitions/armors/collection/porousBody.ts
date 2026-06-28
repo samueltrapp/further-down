@@ -3,8 +3,9 @@ import { ArmorType } from "../../../../types/equipables/armors.ts";
 export const porousBody: ArmorType = {
   name: "porous body",
   team: "enemy",
-  constitution: 1,
-  protection: 0,
+  block: 1,
+  finesse: 7,
+  protection: 2,
   affinities: {
     defense: 0.1,
     resistance: 1,
@@ -14,7 +15,7 @@ export const porousBody: ArmorType = {
     warding: 1.8,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "A mushroom's squishy little body.",
 };
