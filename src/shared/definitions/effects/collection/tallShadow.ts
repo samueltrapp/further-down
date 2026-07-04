@@ -1,7 +1,7 @@
 import { EffectType } from "../../../../types/equipables/effects.ts";
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
 
-const EVASION_PER_STACK = 5;
+const EVASION_PER_STACK = 3;
 
 const applyFn = (ctx: ActionCtx, ids: string[]): ActionCtx => {
   const { characters, instance } = ctx;
@@ -27,7 +27,7 @@ const removeFn = (ctx: ActionCtx, ids: string[]): ActionCtx => {
 
 const tallShadow: EffectType = {
   type: "favor",
-  duration: "battle",
+  durationType: "battle",
   stackable: true,
   tooltip:
     "Gain evasion every time an attack misses you. Lasts until end of battle.",

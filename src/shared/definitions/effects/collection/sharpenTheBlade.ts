@@ -28,9 +28,10 @@ const applyFn = (ctx: ActionCtx, ids: string[], step: StepType | undefined) => {
 const removeFn = (ctx: ActionCtx, ids: string[]) => {
   const { characters } = ctx;
   ids.forEach((id) => {
-    const stacks = characters[id].effects["sharpen the blade"] || 0;
-    characters[id].effects["sharpen the blade"] = 0;
-    characters[id].stats.mastery.bladed -= stacks;
+    /* Called once per expired stack; reduces one bladed point per call */
+    if ((characters[id].effects["sharpen the blade"] ?? 0) > 0) {
+      characters[id].stats.mastery.bladed -= 1;
+    }
   });
 
   return ctx;
@@ -38,7 +39,7 @@ const removeFn = (ctx: ActionCtx, ids: string[]) => {
 
 const sharpenTheBlade: EffectType = {
   type: "favor",
-  duration: "round",
+  durationType: "rounds",
   stackable: true,
   tooltip:
     "Gain 1 BLD every time you hit with a BLD maneuver. Lasts until end of round.",

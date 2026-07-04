@@ -37,8 +37,14 @@ export type EnchantmentBinding = {
 };
 
 export type BurnSourceState = {
-  damagePerSpeed: number;
+  flatDamage: number;
+  scalingDamage: number;
   lastSpeedElapsed: number;
+};
+
+export type BleedSourceState = {
+  flatDamage: number;
+  scalingDamage: number;
 };
 
 type CharacterType = {
@@ -57,7 +63,9 @@ type CharacterType = {
   };
   stats: StatsType;
   effects: Partial<Record<EffectName, number>>;
+  effectDurations: Partial<Record<EffectName, number[]>>;
   burnSources: Record<string, BurnSourceState>;
+  bleedSources: Record<string, BleedSourceState>;
   lastTurn: number;
   isDead: boolean;
 };

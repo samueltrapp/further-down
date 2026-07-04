@@ -63,7 +63,9 @@ const shroomlet = (id: string, index: number): EnemyType => ({
     weapons: ["fungal appendage"],
   },
   effects: {},
+  effectDurations: {},
   burnSources: {},
+  bleedSources: {},
   lastTurn: 0,
   isDead: false,
 });

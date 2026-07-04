@@ -20,9 +20,9 @@ type DefensiveAffinitiesType = {
 export type ArmorType = {
   name: ArmorName;
   team: TeamType;
-  block: number;
-  protection: number;
-  finesse: number;
+  block: number; // Flat damage block
+  protection: number; // Life modifier
+  finesse: number; //  Speed modifier
   affinities: DefensiveAffinitiesType;
   tier: number;
   rarity: number;

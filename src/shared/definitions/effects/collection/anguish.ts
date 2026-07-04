@@ -9,7 +9,7 @@ const removeFn: RemoveFnType = (ctx) => ctx;
 
 const anguish: EffectType = {
   type: "burden",
-  duration: "battle",
+  durationType: "battle",
   stackable: true,
   tooltip: "Used by various PSY maneuvers and enchantments.",
   owner: "",

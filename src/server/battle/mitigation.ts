@@ -31,13 +31,13 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
         return (
           baseMitigation +
           dfAff * targetStat.discipline.defense +
-          pddAff * targetStat.mastery.plating
+          pltAff * targetStat.mastery.padding
         );
       case "bladed":
         return (
           baseMitigation +
           dfAff * targetStat.discipline.defense +
-          pltAff * targetStat.mastery.padding
+          pddAff * targetStat.mastery.plating
         );
       case "elemental":
         return (

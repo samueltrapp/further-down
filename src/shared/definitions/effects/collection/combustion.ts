@@ -8,17 +8,23 @@ import {
   removeBurnSource,
 } from "../../../../server/battle/burn.ts";
 
-const FLAT_DAMAGE = 1;
-const SCALING_DAMAGE = 0.5;
+const FLAT_DAMAGE = 0.2;
+const SCALING_DAMAGE = 0.15;
 
 const applyFn: ApplyFnType = (ctx, ids) =>
-  applyBurnSource(ctx, ids, DAMAGE_PER_SPEED);
+  applyBurnSource(ctx, ids, FLAT_DAMAGE, SCALING_DAMAGE);
 
 /* On removal, subtracts this owner's total contribution from each target's burn sources */
 const removeFn: RemoveFnType = (ctx, ids) => {
   ids.forEach((id) => {
     const stacks = ctx.characters[id]?.effects["combustion"] ?? 0;
-    removeBurnSource(ctx, [id], combustion.owner, stacks * DAMAGE_PER_SPEED);
+    removeBurnSource(
+      ctx,
+      [id],
+      combustion.owner,
+      stacks * FLAT_DAMAGE,
+      stacks * SCALING_DAMAGE,
+    );
   });
   return ctx;
 };
@@ -27,7 +33,7 @@ const combustion: EffectType = {
   type: "burden",
   special: "burn",
   stackable: true,
-  duration: "round",
+  durationType: "rounds",
   flatDamage: FLAT_DAMAGE,
   scalingDamage: SCALING_DAMAGE,
   tooltip:

@@ -2,19 +2,19 @@ import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { armorMap } from "../../shared/definitions/armors/sets.ts";
 import { limitToZero, trunc } from "../utils/battle.ts";
 
-const calcElementalMitigation = (ctx: ActionCtx, targetId: string): number => {
+const calcBladedMitigation = (ctx: ActionCtx, targetId: string): number => {
   const character = ctx.characters[targetId];
   if (!character?.stats || !character.equipped.armor) return 0;
   const armor = armorMap.get(character.equipped.armor);
   if (!armor) return 0;
   return trunc(
     armor.block +
-      armor.affinities.resistance * character.stats.discipline.resistance +
-      armor.affinities.dampening * character.stats.mastery.dampening,
+      armor.affinities.defense * character.stats.discipline.defense +
+      armor.affinities.plating * character.stats.mastery.plating,
   );
 };
 
-export const applyBurnSource = (
+export const applyBleedSource = (
   ctx: ActionCtx,
   targetIds: string[],
   flatDamage: number,
@@ -24,22 +24,21 @@ export const applyBurnSource = (
   targetIds.forEach((targetId) => {
     const target = ctx.characters[targetId];
     if (!target) return;
-    const existing = target.burnSources[ownerId];
+    const existing = target.bleedSources[ownerId];
     if (existing) {
       existing.flatDamage += flatDamage;
       existing.scalingDamage += scalingDamage;
     } else {
-      target.burnSources[ownerId] = {
+      target.bleedSources[ownerId] = {
         flatDamage,
         scalingDamage,
-        lastSpeedElapsed: ctx.speedElapsed,
       };
     }
   });
   return ctx;
 };
 
-export const removeBurnSource = (
+export const removeBleedSource = (
   ctx: ActionCtx,
   targetIds: string[],
   ownerId: string,
@@ -49,40 +48,34 @@ export const removeBurnSource = (
   targetIds.forEach((targetId) => {
     const target = ctx.characters[targetId];
     if (!target) return;
-    const source = target.burnSources[ownerId];
+    const source = target.bleedSources[ownerId];
     if (!source) return;
     source.flatDamage -= flatDamage;
     source.scalingDamage -= scalingDamage;
     if (source.flatDamage <= 0 && source.scalingDamage <= 0)
-      delete target.burnSources[ownerId];
+      delete target.bleedSources[ownerId];
   });
   return ctx;
 };
 
-export const processBurnDamage = (ctx: ActionCtx): ActionCtx => {
+export const processBleedDamage = (ctx: ActionCtx): ActionCtx => {
   const targetId = ctx.sourceId;
   const target = ctx.characters[targetId];
-  if (!target || Object.keys(target.burnSources).length === 0) return ctx;
+  if (!target || Object.keys(target.bleedSources).length === 0) return ctx;
 
-  const mitigation = calcElementalMitigation(ctx, targetId);
+  const mitigation = calcBladedMitigation(ctx, targetId);
 
-  Object.entries(target.burnSources).forEach(([ownerId, source]) => {
-    const elapsed = ctx.speedElapsed - source.lastSpeedElapsed;
-    if (elapsed <= 0) return;
-
-    const ownerElemental =
-      ctx.characters[ownerId]?.stats.mastery.elemental ?? 0;
-    const damagePerSpeed =
-      source.flatDamage + ownerElemental * source.scalingDamage;
-    const rawDamage = trunc(damagePerSpeed * elapsed);
-    const actualDamage = limitToZero(rawDamage - mitigation);
+  Object.entries(target.bleedSources).forEach(([ownerId, source]) => {
+    const ownerPadding = ctx.characters[ownerId]?.stats.mastery.padding ?? 0;
+    const damagePerTick =
+      source.flatDamage + ownerPadding * source.scalingDamage;
+    const actualDamage = limitToZero(trunc(damagePerTick) - mitigation);
 
     target.stats.core.life = limitToZero(target.stats.core.life - actualDamage);
     const ownerName = ctx.characters[ownerId]?.name ?? "unknown";
     ctx.messages.steps?.push(
-      `${target.name} burns for ${actualDamage} (${rawDamage} - ${mitigation}) from ${ownerName}.`,
+      `${target.name} bleeds for ${actualDamage} (${trunc(damagePerTick)} - ${mitigation}) from ${ownerName}.`,
     );
-    source.lastSpeedElapsed = ctx.speedElapsed;
   });
 
   return ctx;

@@ -20,6 +20,7 @@ import { randEntry, validTargets } from "../../shared/utils.ts";
 import { applyEffect, removeEffects } from "./effect.ts";
 import { handleEnchantments } from "./enchantments.ts";
 import { processBurnDamage } from "./burn.ts";
+import { processBleedDamage } from "./bleed.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
@@ -140,16 +141,19 @@ export function handleTurn(
     ctx = expendSpeed(ctx);
     game.battle.speedElapsed += ctx.speed;
 
+    ctx = processBleedDamage(ctx);
+    ctx = applyDeath(ctx);
+
     const { isRoundEnd, victor } = checkProgressStatus(ctx);
 
     /* End of turn */
     ctx = handleEnchantments(ctx, "turn-end");
-    ctx = removeEffects(ctx, "turn");
+    ctx = removeEffects(ctx, "turns");
 
     /* End of round */
     if (isRoundEnd) {
       ctx = handleEnchantments(ctx, "round-end");
-      ctx = removeEffects(ctx, "round");
+      ctx = removeEffects(ctx, "rounds");
       ctx = restoreSpeed(ctx);
       ctx = handleEnchantments(ctx, "round-start");
     }

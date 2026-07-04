@@ -145,19 +145,6 @@ function EquipStep({
   const [selectedArmor, setSelectedArmor] = useState<ArmorName | null>(null);
 
   const handleConfirm = () => {
-    console.log("ran");
-    console.log({
-      gameId,
-      characterId: character.id,
-      weaponSockets: weaponSockets as Partial<
-        Record<WeaponName, EnchantmentName[]>
-      >,
-      armorSockets: armorSockets as Partial<
-        Record<ArmorName, EnchantmentName[]>
-      >,
-      weapon: selectedWeapon,
-      armor: selectedArmor,
-    });
     if (selectedWeapon && selectedArmor) {
       submitPrepare({
         gameId,

@@ -88,7 +88,6 @@ function RewardSelection({
 
   const submitSelectedReward = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
-    console.log(target);
     takeReward({
       rewardType,
       rewardName: target.value,

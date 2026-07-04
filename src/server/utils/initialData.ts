@@ -92,7 +92,9 @@ const blankCharacters = (userSpread: string[]) => {
       name: "",
       userId: user,
       effects: {},
+      effectDurations: {},
       burnSources: {},
+      bleedSources: {},
       lastTurn: 0,
       equipped: {
         weapon: null,
@@ -137,10 +139,12 @@ const blankCharacters = (userSpread: string[]) => {
 const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
   "0aY7sxjZ": {
     id: "0aY7sxjZ",
-    name: "Character",
+    name: "Character1",
     userId: userId,
     effects: {},
+    effectDurations: {},
     burnSources: {},
+    bleedSources: {},
     lastTurn: 0,
     equipped: {
       weapon: "periapt",
@@ -162,7 +166,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
       queue: {
         armors: ["tunic", "platemail"],
         enchantments: ["tall shadow", "sharpen the blade"],
-        maneuvers: ["pummel", "headbutt", "deluge", "ache"],
+        maneuvers: ["combustion", "headbutt", "deluge", "ache"],
         weapons: ["hammer", "scepter"],
       },
       savedStats: {
@@ -245,10 +249,12 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
   },
   D6DzT5a8: {
     id: "D6DzT5a8",
-    name: "Character",
+    name: "Character2",
     userId: userId,
     effects: {},
+    effectDurations: {},
     burnSources: {},
+    bleedSources: {},
     lastTurn: 0,
     equipped: {
       weapon: "scepter",
@@ -353,10 +359,12 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
   },
   lKTPjmtP: {
     id: "lKTPjmtP",
-    name: "Character",
+    name: "Character3",
     userId: userId,
     effects: {},
+    effectDurations: {},
     burnSources: {},
+    bleedSources: {},
     lastTurn: 0,
     equipped: {
       weapon: "periapt",

@@ -7,8 +7,10 @@ export type DamageType = "blunt" | "bladed" | "elemental" | "psychic";
 // All maneuvers
 const PlayerManeuvers = [
   "ache",
+  "combustion",
   "deluge",
   "headbutt",
+  "lacerate",
   "pummel",
   "quicksilver",
 ] as const;
@@ -22,11 +24,12 @@ export type TargetMethodType = "select" | "self" | "all" | "random" | "special";
 
 export type TagType =
   | "attack" // Damages life
-  | "protect" // In response to losing life
+  | "defend" // In response to losing life
   | "pure" // Only deals one type of damage
   | "mixed" // Deals multiple types of damage
   | "single" // One hit
   | "multi" // Multiple hits
+  | "dot" // Damage over time
   | "heal" // Increases life actively
   | "regeneration" // Restores life passively
   | "favor" // Applies favor
