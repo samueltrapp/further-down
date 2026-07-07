@@ -53,11 +53,13 @@ const shroomlet = (id: string, index: number): EnemyType => ({
   },
   equipped: {
     weapon: "fungal appendage",
+    blessings: [],
     armor: "porous body",
     enchantments: [],
   },
   loadout: {
     armors: ["porous body"],
+    blessings: [],
     enchantments: [],
     maneuvers: ["bonk"],
     weapons: ["fungal appendage"],

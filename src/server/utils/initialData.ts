@@ -10,6 +10,8 @@ import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { WeaponName } from "../../types/equipables/weapons.ts";
 import { StatsType } from "../../types/individual/stats.ts";
+import {blessingCollection} from "../../shared/definitions/blessings/sets.ts";
+import {BlessingName} from "../../types/equipables/blessings.ts";
 
 const baseStats: StatsType = {
   core: {
@@ -98,11 +100,13 @@ const blankCharacters = (userSpread: string[]) => {
       lastTurn: 0,
       equipped: {
         weapon: null,
+        blessings: [],
         armor: null,
         enchantments: [],
       },
       loadout: {
         armors: [],
+        blessings: [],
         enchantments: [],
         maneuvers: [],
         weapons: [],
@@ -110,9 +114,8 @@ const blankCharacters = (userSpread: string[]) => {
       private: {
         queue: {
           armors: randomizeCollection(playerArmorCollection) as ArmorName[],
-          enchantments: randomizeCollection(
-            enchantmentCollection,
-          ) as EnchantmentName[],
+          blessings: randomizeCollection(blessingCollection) as BlessingName[],
+          enchantments: randomizeCollection(enchantmentCollection,) as EnchantmentName[],
           maneuvers: randomizeCollection(maneuverCollection) as ManeuverName[],
           weapons: randomizeCollection(weaponCollection) as WeaponName[],
         },
@@ -121,6 +124,7 @@ const blankCharacters = (userSpread: string[]) => {
       stats: baseStats,
       pending: {
         armors: 2,
+        blessings: 1,
         enchantments: 1,
         maneuvers: 1,
         weapons: 2,
@@ -148,11 +152,13 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     lastTurn: 0,
     equipped: {
       weapon: "periapt",
+      blessings: [],
       armor: "robe",
       enchantments: ["red fang"],
     },
     loadout: {
       armors: ["leather", "robe"],
+      blessings: [],
       enchantments: [
         {
           name: "red fang",
@@ -165,6 +171,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     private: {
       queue: {
         armors: ["tunic", "platemail"],
+        blessings: ["eternal flame"],
         enchantments: ["tall shadow", "sharpen the blade"],
         maneuvers: ["combustion", "headbutt", "deluge", "ache"],
         weapons: ["hammer", "scepter"],
@@ -236,6 +243,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     },
     pending: {
       armors: 0,
+      blessings: 0,
       enchantments: 0,
       maneuvers: 0,
       weapons: 0,
@@ -258,11 +266,13 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     lastTurn: 0,
     equipped: {
       weapon: "scepter",
+      blessings: [],
       armor: "leather",
       enchantments: ["red fang"],
     },
     loadout: {
       armors: ["platemail", "leather"],
+      blessings: [],
       enchantments: [
         {
           name: "red fang",
@@ -275,6 +285,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     private: {
       queue: {
         armors: ["tunic", "robe"],
+        blessings: ["eternal flame"],
         enchantments: ["sharpen the blade", "tall shadow"],
         maneuvers: ["headbutt", "pummel", "deluge", "ache"],
         weapons: ["cutlass", "hammer"],
@@ -346,6 +357,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     },
     pending: {
       armors: 0,
+      blessings: 0,
       enchantments: 0,
       maneuvers: 0,
       weapons: 0,
@@ -368,11 +380,13 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     lastTurn: 0,
     equipped: {
       weapon: "periapt",
+      blessings: [],
       armor: "platemail",
       enchantments: [],
     },
     loadout: {
       armors: ["tunic", "platemail"],
+      blessings: [],
       enchantments: [
         {
           name: "red fang",
@@ -385,6 +399,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     private: {
       queue: {
         armors: ["leather", "robe"],
+        blessings: ["eternal flame"],
         enchantments: ["sharpen the blade", "tall shadow"],
         maneuvers: ["ache", "deluge", "quicksilver", "pummel"],
         weapons: ["scepter", "cutlass"],
@@ -456,6 +471,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     },
     pending: {
       armors: 0,
+      blessings: 0,
       enchantments: 0,
       maneuvers: 0,
       weapons: 0,

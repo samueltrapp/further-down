@@ -18,12 +18,18 @@ export function submitPrepare(
     armorSockets,
     weapon,
     armor,
+    blessings,
   }: SubmitPrepareType,
 ) {
   const game = connection.meta.games.get(gameId);
   if (game?.characters) {
     const character = { ...game.characters[characterId] } as PlayerType;
     if (character?.team !== "player") return;
+
+    /* Guard against a client sending more than the allowed cap or blessings outside the loadout. */
+    const validBlessings = blessings
+      .filter((name) => character.loadout.blessings.includes(name))
+      .slice(0, 3);
 
     /* Consume copies of the socket maps to correctly handle duplicate enchantment names. */
     const remainingWeapon: Record<string, EnchantmentName[]> =
@@ -65,6 +71,7 @@ export function submitPrepare(
     character.equipped = {
       weapon,
       armor,
+      blessings: validBlessings,
       /* Collect enchantments whose socket matches either equipped item. */
       enchantments: updatedEnchantments
         .filter(

@@ -3,16 +3,20 @@ import { PlayerType } from "../../../types/individual/characters.ts";
 import { WeaponName } from "../../../types/equipables/weapons.ts";
 import { ArmorName } from "../../../types/equipables/armors.ts";
 import { EnchantmentName } from "../../../types/equipables/enchantments.ts";
+import { BlessingName } from "../../../types/equipables/blessings.ts";
 import { weaponMap } from "../../../shared/definitions/weapons/sets.ts";
 import { armorMap } from "../../../shared/definitions/armors/sets.ts";
 import { enchantmentMap } from "../../../shared/definitions/enchantments/sets.ts";
+import { blessingMap } from "../../../shared/definitions/blessings/sets.ts";
 import { cdcl, toCaps } from "../../utils/formatting.ts";
 import { useGame } from "../../hooks/useGame.ts";
 import { submitPrepare } from "../../services/skill.ts";
 import "./Preparation.css";
 
-type PrepStep = "weapon-sockets" | "armor-sockets" | "equip";
+type PrepStep = "weapon-sockets" | "armor-sockets" | "equip" | "blessings";
 type SocketMap = Partial<Record<string, EnchantmentName[]>>;
+
+const MAX_BLESSINGS = 3;
 
 function SocketStep({
   title,
@@ -134,30 +138,19 @@ function EquipStep({
   character,
   weaponSockets,
   armorSockets,
-  gameId,
+  onNext,
 }: {
   character: PlayerType;
   weaponSockets: SocketMap;
   armorSockets: SocketMap;
-  gameId: string;
+  onNext: (weapon: WeaponName, armor: ArmorName) => void;
 }) {
   const [selectedWeapon, setSelectedWeapon] = useState<WeaponName | null>(null);
   const [selectedArmor, setSelectedArmor] = useState<ArmorName | null>(null);
 
   const handleConfirm = () => {
     if (selectedWeapon && selectedArmor) {
-      submitPrepare({
-        gameId,
-        characterId: character.id,
-        weaponSockets: weaponSockets as Partial<
-          Record<WeaponName, EnchantmentName[]>
-        >,
-        armorSockets: armorSockets as Partial<
-          Record<ArmorName, EnchantmentName[]>
-        >,
-        weapon: selectedWeapon,
-        armor: selectedArmor,
-      });
+      onNext(selectedWeapon, selectedArmor);
     }
   };
 
@@ -227,7 +220,62 @@ function EquipStep({
   );
 }
 
-/* Manages all three steps for a single character; keyed by character ID so
+/* Only rendered when the loadout has more blessings than can be equipped;
+   otherwise every loadout blessing is equipped automatically. */
+function BlessingStep({
+  character,
+  onConfirm,
+}: {
+  character: PlayerType;
+  onConfirm: (blessings: BlessingName[]) => void;
+}) {
+  const [selected, setSelected] = useState<BlessingName[]>([]);
+
+  const toggle = (name: BlessingName) => {
+    setSelected((prev) =>
+      prev.includes(name)
+        ? prev.filter((n) => n !== name)
+        : prev.length < MAX_BLESSINGS
+          ? [...prev, name]
+          : prev,
+    );
+  };
+
+  return (
+    <section className="prep-section">
+      <h2>
+        {toCaps(character.name)}: Choose {MAX_BLESSINGS} Blessings (
+        {selected.length}/{MAX_BLESSINGS})
+      </h2>
+      <div className="equip-options">
+        {character.loadout.blessings.map((name) => {
+          const def = blessingMap.get(name);
+          const isSelected = selected.includes(name);
+          return (
+            <button
+              key={name}
+              className={cdcl("equip-card", { selected: isSelected })}
+              disabled={!isSelected && selected.length >= MAX_BLESSINGS}
+              onClick={() => toggle(name)}
+            >
+              <div>{toCaps(name)}</div>
+              {def && <div className="enchantment-desc">{def.description}</div>}
+            </button>
+          );
+        })}
+      </div>
+      <button
+        className="prep-confirm-btn"
+        disabled={selected.length === 0}
+        onClick={() => onConfirm(selected)}
+      >
+        Confirm
+      </button>
+    </section>
+  );
+}
+
+/* Manages all steps for a single character; keyed by character ID so
    state resets automatically when the active character advances. */
 function CharacterPrep({
   character,
@@ -264,10 +312,34 @@ function CharacterPrep({
   );
 
   const [step, setStep] = useState<PrepStep>("weapon-sockets");
+  const [equipment, setEquipment] = useState<{
+    weapon: WeaponName;
+    armor: ArmorName;
+  } | null>(null);
 
   const enchantmentNames = character.loadout.enchantments.map(
     (binding) => binding.name,
   );
+
+  const finishPrepare = (
+    weapon: WeaponName,
+    armor: ArmorName,
+    blessings: BlessingName[],
+  ) => {
+    submitPrepare({
+      gameId,
+      characterId: character.id,
+      weaponSockets: weaponSockets as Partial<
+        Record<WeaponName, EnchantmentName[]>
+      >,
+      armorSockets: armorSockets as Partial<
+        Record<ArmorName, EnchantmentName[]>
+      >,
+      weapon,
+      armor,
+      blessings,
+    });
+  };
 
   if (step === "weapon-sockets") {
     return (
@@ -297,15 +369,37 @@ function CharacterPrep({
     );
   }
 
+  if (step === "equip") {
+    return (
+      <EquipStep
+        character={character}
+        weaponSockets={weaponSockets}
+        armorSockets={armorSockets}
+        onNext={(weapon, armor) => {
+          /* Skip the selection screen entirely when there's nothing to choose between. */
+          if (character.loadout.blessings.length <= MAX_BLESSINGS) {
+            finishPrepare(weapon, armor, character.loadout.blessings);
+          } else {
+            setEquipment({ weapon, armor });
+            setStep("blessings");
+          }
+        }}
+      />
+    );
+  }
+
   return (
-    <EquipStep
+    <BlessingStep
       character={character}
-      weaponSockets={weaponSockets}
-      armorSockets={armorSockets}
-      gameId={gameId}
+      onConfirm={(blessings) => {
+        if (equipment) {
+          finishPrepare(equipment.weapon, equipment.armor, blessings);
+        }
+      }}
     />
   );
 }
+
 
 export function Preparation() {
   const { game } = useGame();

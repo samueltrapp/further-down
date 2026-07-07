@@ -3,6 +3,7 @@ import { StatsType } from "../individual/stats.ts";
 import { WeaponName } from "../equipables/weapons.ts";
 import { ArmorName } from "../equipables/armors.ts";
 import { EnchantmentName } from "../equipables/enchantments.ts";
+import { BlessingName } from "../equipables/blessings.ts";
 
 export type StatCategory = keyof StatsType;
 
@@ -33,4 +34,5 @@ export type SubmitPrepareType = {
   armorSockets: Partial<Record<ArmorName, EnchantmentName[]>>;
   weapon: WeaponName;
   armor: ArmorName;
+  blessings: BlessingName[];
 };

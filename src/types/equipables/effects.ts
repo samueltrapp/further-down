@@ -1,7 +1,7 @@
 import { ActionCtx } from "../events/actionCtx.ts";
 import { StepType } from "./maneuvers.ts";
 
-const BurdenName = ["anguish", "combustion", "headbutt", "lacerate"] as const;
+const BurdenName = ["anguish", "combustion", "eternal flame", "headbutt", "lacerate"] as const;
 const FavorName = ["sharpen the blade", "tall shadow", "verve"] as const;
 
 export type BurdenName = (typeof BurdenName)[number];

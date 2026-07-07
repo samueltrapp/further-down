@@ -14,6 +14,7 @@ import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { checkNextTurn } from "../battle/core.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
+import {BlessingName} from "../../types/equipables/blessings.ts";
 
 export function submitName(
   connection: ConnectionType,
@@ -56,6 +57,8 @@ export function takeReward(
         character.private.queue.armors = randomizeCollection(
           reducedQueue as ArmorName[],
         ) as ArmorName[];
+      } else if (rewardType === "blessings") {
+       character.loadout.blessings.push(rewardName as BlessingName);
       } else if (rewardType === "enchantments") {
         character.loadout.enchantments.push({
           name: rewardName as EnchantmentName,
@@ -75,17 +78,11 @@ export function takeReward(
           reducedQueue as WeaponName[],
         ) as WeaponName[];
       }
-      character.pending[rewardType] = character.pending[rewardType] - 1;
+      character.pending[rewardType]--;
 
       /* Update game */
-      const newGameState = {
-        ...game,
-        characters: {
-          ...game.characters,
-          [characterId]: character,
-        },
-      };
-      connection.meta.games.set(gameId, newGameState);
+      game.characters[characterId] = character;
+      connection.meta.games.set(gameId, game);
       sendGame(connection, gameId);
     }
   }

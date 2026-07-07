@@ -21,6 +21,7 @@ import { applyEffect, removeEffects } from "./effect.ts";
 import { handleEnchantments } from "./enchantments.ts";
 import { processBurnDamage } from "./burn.ts";
 import { processBleedDamage } from "./bleed.ts";
+import {handleBlessings} from "./blessings.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
@@ -106,6 +107,9 @@ export function handleTurn(
     if (isPlayerTurn) {
       ctx = switchWeapon(ctx, turn.weapon);
     }
+
+    /* Turn-start blessings (e.g. eternal flame) fire before any other effects */
+    ctx = handleBlessings(ctx, "turn-start");
 
     /* Turn-start burn; ends turn early if lethal */
     ctx = processBurnDamage(ctx);

@@ -4,20 +4,21 @@ import { WeaponName } from "../equipables/weapons.ts";
 import { ArmorName } from "../equipables/armors.ts";
 import { EnchantmentName } from "../equipables/enchantments.ts";
 import { EffectName } from "../equipables/effects.ts";
+import { BlessingName } from "../equipables/blessings.ts";
 
 export type PerspectiveType = "own" | "other";
 export type TeamType = "player" | "enemy";
 
 type RewardSpread = {
   armors: ArmorName[];
-  // blessings: BlessingType[];
+  blessings: BlessingName[];
   // curses: CurseType[];
   enchantments: EnchantmentName[];
   maneuvers: ManeuverName[];
   weapons: WeaponName[];
 };
 
-export type RewardTypes = "maneuvers" | "weapons" | "armors" | "enchantments";
+export type RewardTypes = "armors" | "blessings" | "enchantments" | "maneuvers" | "weapons";
 
 export type PendingRewardType = Record<RewardTypes, number>;
 
@@ -37,12 +38,16 @@ export type EnchantmentBinding = {
 };
 
 export type BurnSourceState = {
+  name: EffectName;
+  stacks: number;
   flatDamage: number;
   scalingDamage: number;
   lastSpeedElapsed: number;
 };
 
 export type BleedSourceState = {
+  name: EffectName;
+  stacks: number;
   flatDamage: number;
   scalingDamage: number;
 };
@@ -52,11 +57,13 @@ type CharacterType = {
   name: string;
   equipped: {
     armor: ArmorName | null;
+    blessings: BlessingName[];
     enchantments: EnchantmentName[];
     weapon: WeaponName | null;
   };
   loadout: {
     armors: ArmorName[];
+    blessings: BlessingName[];
     enchantments: EnchantmentBinding[];
     maneuvers: ManeuverName[];
     weapons: WeaponName[];
@@ -64,8 +71,8 @@ type CharacterType = {
   stats: StatsType;
   effects: Partial<Record<EffectName, number>>;
   effectDurations: Partial<Record<EffectName, number[]>>;
-  burnSources: Record<string, BurnSourceState>;
-  bleedSources: Record<string, BleedSourceState>;
+  burnSources: Record<string, BurnSourceState[]>;
+  bleedSources: Record<string, BleedSourceState[]>;
   lastTurn: number;
   isDead: boolean;
 };

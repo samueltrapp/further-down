@@ -21,8 +21,10 @@ import { maneuverMap } from "../../../shared/definitions/maneuvers/sets.ts";
 import { weaponMap } from "../../../shared/definitions/weapons/sets.ts";
 import Button from "../_core/Button.tsx";
 import { StatCategory } from "../../../types/events/skill.ts";
+import {blessingMap} from "../../../shared/definitions/blessings/sets.ts";
 
 const REWARD_ORDER: RewardTypes[] = [
+  "blessings",
   "maneuvers",
   "weapons",
   "armors",
@@ -52,7 +54,6 @@ function resolveActiveStep(character: PlayerType): ActiveStep | null {
   return null;
 }
 
-/* True when a character still has any work left in the reward phase. */
 function hasPending(character: PlayerType): boolean {
   return resolveActiveStep(character) !== null;
 }
@@ -62,10 +63,8 @@ const REWARD_MAPS: Record<
   Map<string, { name: string; description: string }>
 > = {
   armors: armorMap as Map<string, { name: string; description: string }>,
-  enchantments: enchantmentMap as Map<
-    string,
-    { name: string; description: string }
-  >,
+  blessings: blessingMap as Map<string, {name: string, description: string}>,
+  enchantments: enchantmentMap as Map<string, { name: string; description: string }>,
   maneuvers: maneuverMap as Map<string, { name: string; description: string }>,
   weapons: weaponMap as Map<string, { name: string; description: string }>,
 };
