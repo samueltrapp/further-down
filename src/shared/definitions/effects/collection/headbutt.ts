@@ -8,15 +8,15 @@ import { ActionCtx } from "../../../../types/events/actionCtx.ts";
 const FIXED_DDG_REDUCTION = 20;
 const SCALING_DDG_REDUCTION = 1;
 
-const applyFn: ApplyFnType = (ctx: ActionCtx, ids: string[]) => {
-  const id = ids[0];
-  const { characters, sourceId } = ctx;
-  const sourceBlt = characters[sourceId].stats.mastery.blunt;
+const applyFn: ApplyFnType = (ctx: ActionCtx, selection: string) => {
+  const character = ctx.characters[selection];
+  const sourceBlt = character.stats.mastery.blunt;
 
-  characters[id].stats.discipline.dodge -=
+  character.stats.discipline.dodge -=
     FIXED_DDG_REDUCTION + sourceBlt * SCALING_DDG_REDUCTION;
   return ctx;
 };
+
 const removeFn: RemoveFnType = (ctx, ids) => {
   const id = ids[0];
   const { characters, sourceId } = ctx;

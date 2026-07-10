@@ -1,7 +1,13 @@
 import { ActionCtx } from "../events/actionCtx.ts";
 import { StepType } from "./maneuvers.ts";
 
-const BurdenName = ["anguish", "combustion", "eternal flame", "headbutt", "lacerate"] as const;
+const BurdenName = [
+  "anguish",
+  "combustion",
+  "eternal flame",
+  "headbutt",
+  "lacerate",
+] as const;
 const FavorName = ["sharpen the blade", "tall shadow", "verve"] as const;
 
 export type BurdenName = (typeof BurdenName)[number];
@@ -12,10 +18,15 @@ export type DurationType = "turns" | "rounds" | "battle" | "permanent";
 
 export type ApplyFnType = (
   ctx: ActionCtx,
-  ids: string[],
+  sourceId: string,
+  targetId: string,
   step?: StepType,
 ) => ActionCtx;
-export type RemoveFnType = (ctx: ActionCtx, ids: string[]) => ActionCtx;
+export type RemoveFnType = (
+  ctx: ActionCtx,
+  sourceId: string,
+  targetId: string,
+) => ActionCtx;
 
 export type EffectType = {
   type: "burden" | "favor";

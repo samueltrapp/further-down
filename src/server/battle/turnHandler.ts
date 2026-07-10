@@ -18,10 +18,9 @@ import { toCaps } from "../../client/utils/formatting.ts";
 import { TeamType } from "../../types/individual/characters.ts";
 import { randEntry, validTargets } from "../../shared/utils.ts";
 import { applyEffect, removeEffects } from "./effect.ts";
-import { handleEnchantments } from "./enchantments.ts";
 import { processBurnDamage } from "./burn.ts";
 import { processBleedDamage } from "./bleed.ts";
-import {handleBlessings} from "./blessings.ts";
+import { handleSideEffects } from "./sideEffects.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
@@ -108,16 +107,15 @@ export function handleTurn(
       ctx = switchWeapon(ctx, turn.weapon);
     }
 
-    /* Turn-start blessings (e.g. eternal flame) fire before any other effects */
-    ctx = handleBlessings(ctx, "turn-start");
-
-    /* Turn-start burn; ends turn early if lethal */
+    /* Turn-start blessings and enchantments, apply burn damage */
+    ctx = handleSideEffects(ctx, "turn-start");
     ctx = processBurnDamage(ctx);
     ctx = applyDeath(ctx);
-    const sourceKilledByBurn = ctx.characters[ctx.sourceId]?.isDead;
+
+    const dead = ctx.characters[ctx.sourceId]?.isDead;
 
     /* Action */
-    if (!sourceKilledByBurn) {
+    if (!dead) {
       maneuver?.steps.forEach((step) => {
         ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
 
@@ -127,46 +125,45 @@ export function handleTurn(
           if (step.hitFn) {
             ctx = step.hitFn(ctx);
           }
-          ctx = handleEnchantments(ctx, "attack", step);
+          ctx = handleSideEffects(ctx, "attack", step);
           ctx = calcMitigation(step, ctx);
-          ctx = handleEnchantments(ctx, "defend", step);
+          ctx = handleSideEffects(ctx, "defend", step);
           ctx = applyDamage(ctx);
         } else if (step.type === "heal") {
           /* Process healing */
           ctx = { ...ctx };
         } else if (step.type === "effect") {
           /* Process effects */
-          ctx = applyEffect(ctx, step);
+          ctx = applyEffect(ctx, ctx.sourceId, step);
         }
       });
     }
 
     /* Post-action */
     ctx = expendSpeed(ctx);
-    game.battle.speedElapsed += ctx.speed;
-
     ctx = processBleedDamage(ctx);
     ctx = applyDeath(ctx);
+    game.battle.speedElapsed += ctx.speed;
 
     const { isRoundEnd, victor } = checkProgressStatus(ctx);
 
     /* End of turn */
-    ctx = handleEnchantments(ctx, "turn-end");
+    ctx = handleSideEffects(ctx, "turn-end");
     ctx = removeEffects(ctx, "turns");
 
     /* End of round */
     if (isRoundEnd) {
-      ctx = handleEnchantments(ctx, "round-end");
+      ctx = handleSideEffects(ctx, "round-end");
       ctx = removeEffects(ctx, "rounds");
       ctx = restoreSpeed(ctx);
-      ctx = handleEnchantments(ctx, "round-start");
+      ctx = handleSideEffects(ctx, "round-start");
     }
 
     ctx = applyDeath(ctx);
 
     /* End of battle */
     if (victor !== Victor.NONE) {
-      ctx = handleEnchantments(ctx, "battle-end");
+      ctx = handleSideEffects(ctx, "battle-end");
       ctx = removeEffects(ctx, "battle");
     }
 

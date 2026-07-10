@@ -3,7 +3,11 @@ import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { effectMap } from "../../shared/definitions/effects/sets.ts";
 import { DurationType, EffectName } from "../../types/equipables/effects.ts";
 
-export const applyEffect = (ctx: ActionCtx, step: EffectStep) => {
+export const applyEffect = (
+  ctx: ActionCtx,
+  sourceId: string,
+  step: EffectStep,
+) => {
   const { characters, targetIds } = { ...ctx };
   const { effect: effectName, stacks = 1 } = step;
 
@@ -12,35 +16,36 @@ export const applyEffect = (ctx: ActionCtx, step: EffectStep) => {
     const effect = effectMap.get(effectName);
     if (!effect) return ctx;
 
-    effect.owner = ctx.sourceId;
+    effect.owner = ctx.sourceId; // TODO: This is weird
     const stackable = effect?.stackable;
-    const effectValue = target.effects[effectName];
+    const existingState = target.effects[effectName];
     const tickDuration =
       effect.durationType === "turns" || effect.durationType === "rounds";
-    const defaultDuration = effect.duration ?? 1;
+    const duration = effect.duration ?? 1;
 
     /* Apply fresh stacks if none exist or add new stacks */
-    if (!effectValue || !stackable) {
-      target.effects[effectName] = stacks;
+    if (!existingState || !stackable) {
+      target.effects[effectName] = { value: stacks, durations: [] };
     } else if (stacks) {
-      target.effects[effectName] = effectValue + stacks;
+      existingState.value += stacks;
     }
 
     /* Track remaining ticks for turns/rounds effects */
     if (tickDuration) {
+      const state = target.effects[effectName]!;
       if (!stackable) {
-        target.effectDurations[effectName] = [defaultDuration];
+        state.durations = [duration];
       } else {
-        const existing = target.effectDurations[effectName] ?? [];
         for (let i = 0; i < stacks; i++) {
-          existing.push(defaultDuration);
+          state.durations.push(duration);
         }
-        target.effectDurations[effectName] = existing;
       }
     }
 
     if (effect?.onApply) {
-      ctx = effect?.onApply(ctx, targetIds, step);
+      targetIds.forEach((targetId) => {
+        ctx = effect?.onApply(ctx, sourceId, targetId, step);
+      });
     }
   });
 
@@ -56,6 +61,7 @@ export const removeEffects = (
   Object.values(characters).forEach((character) => {
     Object.entries(character.effects).forEach((effect) => {
       const effectName = effect[0] as EffectName;
+      const state = effect[1];
       const effectDef = effectMap.get(effectName);
 
       if (!effectDef) {
@@ -72,12 +78,11 @@ export const removeEffects = (
           effectDef.onRemove(ctx, [character.id]);
         }
         delete character.effects[effectName];
-        delete character.effectDurations[effectName];
         return;
       }
 
       /* turns/rounds: decrement each stack's remaining count */
-      const durations = character.effectDurations[effectName];
+      const durations = state.durations;
       if (!durations || durations.length === 0) {
         delete character.effects[effectName];
         return;
@@ -93,14 +98,13 @@ export const removeEffects = (
       }
 
       if (expiredCount > 0) {
-        const remaining = (character.effects[effectName] ?? 0) - expiredCount;
+        const remaining = state.value - expiredCount;
         if (remaining <= 0) {
           /* All stacks expired — call onRemove once for the full cleanup */
           if (effectDef.onRemove) {
             effectDef.onRemove(ctx, [character.id]);
           }
           delete character.effects[effectName];
-          delete character.effectDurations[effectName];
         } else {
           /* Partial expiry — call onRemove once per expired stack */
           for (let i = 0; i < expiredCount; i++) {
@@ -108,7 +112,7 @@ export const removeEffects = (
               effectDef.onRemove(ctx, [character.id]);
             }
           }
-          character.effects[effectName] = remaining;
+          state.value = remaining;
         }
       }
     });

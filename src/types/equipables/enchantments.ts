@@ -29,16 +29,28 @@ const Activation = [
 ] as const;
 export type Activation = (typeof Activation)[number];
 
+const Selection = [
+  "self",
+  "targets",
+  "allAllies",
+  "allEnemies",
+  "randomAlly",
+  "randomEnemy",
+];
+export type Selection = (typeof Selection)[number];
+
 export type EnchantmentType = {
   name: EnchantmentName;
   description: string;
   priority: number;
   socketType: "weapon" | "armor";
   trigger: Activation;
+  selection: Selection;
   effect?: EffectType;
   onTrigger?: (
     ctx: ActionCtx,
-    applicableIds: string[],
+    source: string,
+    target: string,
     step?: StepType,
   ) => ActionCtx;
 };

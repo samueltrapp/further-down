@@ -10,8 +10,8 @@ import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { WeaponName } from "../../types/equipables/weapons.ts";
 import { StatsType } from "../../types/individual/stats.ts";
-import {blessingCollection} from "../../shared/definitions/blessings/sets.ts";
-import {BlessingName} from "../../types/equipables/blessings.ts";
+import { blessingCollection } from "../../shared/definitions/blessings/sets.ts";
+import { BlessingName } from "../../types/equipables/blessings.ts";
 
 const baseStats: StatsType = {
   core: {
@@ -94,7 +94,6 @@ const blankCharacters = (userSpread: string[]) => {
       name: "",
       userId: user,
       effects: {},
-      effectDurations: {},
       burnSources: {},
       bleedSources: {},
       lastTurn: 0,
@@ -115,7 +114,9 @@ const blankCharacters = (userSpread: string[]) => {
         queue: {
           armors: randomizeCollection(playerArmorCollection) as ArmorName[],
           blessings: randomizeCollection(blessingCollection) as BlessingName[],
-          enchantments: randomizeCollection(enchantmentCollection,) as EnchantmentName[],
+          enchantments: randomizeCollection(
+            enchantmentCollection,
+          ) as EnchantmentName[],
           maneuvers: randomizeCollection(maneuverCollection) as ManeuverName[],
           weapons: randomizeCollection(weaponCollection) as WeaponName[],
         },
@@ -146,7 +147,6 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     name: "Character1",
     userId: userId,
     effects: {},
-    effectDurations: {},
     burnSources: {},
     bleedSources: {},
     lastTurn: 0,
@@ -260,7 +260,6 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     name: "Character2",
     userId: userId,
     effects: {},
-    effectDurations: {},
     burnSources: {},
     bleedSources: {},
     lastTurn: 0,
@@ -374,7 +373,6 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     name: "Character3",
     userId: userId,
     effects: {},
-    effectDurations: {},
     burnSources: {},
     bleedSources: {},
     lastTurn: 0,

@@ -3,6 +3,7 @@ import {
   EffectType,
   RemoveFnType,
 } from "../../../../types/equipables/effects.ts";
+import { EffectStep } from "../../../../types/equipables/maneuvers.ts";
 import {
   applyBurnSource,
   removeBurnSource,
@@ -11,21 +12,22 @@ import {
 const FLAT_DAMAGE = 0.2;
 const SCALING_DAMAGE = 0.15;
 
-const applyFn: ApplyFnType = (ctx, ids) =>
-  applyBurnSource(ctx, ids, FLAT_DAMAGE, SCALING_DAMAGE);
+const applyFn: ApplyFnType = (ctx, sourceId, targetId, step) => {
+  const stacks = (step as EffectStep | undefined)?.stacks ?? 1;
+  return applyBurnSource(
+    ctx,
+    sourceId,
+    targetId,
+    "combustion",
+    FLAT_DAMAGE,
+    SCALING_DAMAGE,
+    stacks,
+  );
+};
 
-/* On removal, subtracts this owner's total contribution from each target's burn sources */
-const removeFn: RemoveFnType = (ctx, ids) => {
-  ids.forEach((id) => {
-    const stacks = ctx.characters[id]?.effects["combustion"] ?? 0;
-    removeBurnSource(
-      ctx,
-      [id],
-      combustion.owner,
-      stacks * FLAT_DAMAGE,
-      stacks * SCALING_DAMAGE,
-    );
-  });
+const removeFn: RemoveFnType = (ctx, sourceId, targetId) => {
+  const stacks = ctx.characters[targetId]?.effects["combustion"]?.value ?? 0;
+  removeBurnSource(ctx, sourceId, targetId, "combustion", stacks);
   return ctx;
 };
 

@@ -1,38 +1,31 @@
 import { EffectType } from "../../../../types/equipables/effects.ts";
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
-import { StepType } from "../../../../types/equipables/maneuvers.ts";
 
-const applyFn = (ctx: ActionCtx, ids: string[], step: StepType | undefined) => {
-  if (step?.type === "hit" && step.damageType !== "bladed") {
-    return ctx;
-  }
-
-  const id = ids[0];
+const applyFn = (ctx: ActionCtx, sourceId: string) => {
   const { characters } = ctx;
 
   let hit = false;
   for (const instance of ctx.instance) {
-    if (!instance[1].evaded) {
+    const instanceDtl = instance[1];
+    if (!instanceDtl.evaded) {
       hit = true;
       break;
     }
   }
 
   if (hit) {
-    characters[id].stats.mastery.bladed += 1;
+    characters[sourceId].stats.mastery.bladed += 1;
   }
 
   return ctx;
 };
 
-const removeFn = (ctx: ActionCtx, ids: string[]) => {
+const removeFn = (ctx: ActionCtx, sourceId: string) => {
   const { characters } = ctx;
-  ids.forEach((id) => {
-    /* Called once per expired stack; reduces one bladed point per call */
-    if ((characters[id].effects["sharpen the blade"] ?? 0) > 0) {
-      characters[id].stats.mastery.bladed -= 1;
-    }
-  });
+  /* Called once per expired stack; reduces one bladed point per call */
+  if ((characters[sourceId].effects["sharpen the blade"]?.value ?? 0) > 0) {
+    characters[sourceId].stats.mastery.bladed -= 1;
+  }
 
   return ctx;
 };

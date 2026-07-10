@@ -3,6 +3,7 @@ import {
   EffectType,
   RemoveFnType,
 } from "../../../../types/equipables/effects.ts";
+import { EffectStep } from "../../../../types/equipables/maneuvers.ts";
 import {
   applyBleedSource,
   removeBleedSource,
@@ -11,20 +12,22 @@ import {
 const FLAT_DAMAGE = 5;
 const SCALING_DAMAGE = 1;
 
-const applyFn: ApplyFnType = (ctx, ids) =>
-  applyBleedSource(ctx, ids, FLAT_DAMAGE, SCALING_DAMAGE);
+const applyFn: ApplyFnType = (ctx, sourceId, targetId, step) => {
+  const stacks = (step as EffectStep | undefined)?.stacks ?? 1;
+  return applyBleedSource(
+    ctx,
+    sourceId,
+    targetId,
+    "lacerate",
+    FLAT_DAMAGE,
+    SCALING_DAMAGE,
+    stacks,
+  );
+};
 
-const removeFn: RemoveFnType = (ctx, ids) => {
-  ids.forEach((id) => {
-    const stacks = ctx.characters[id]?.effects["lacerate"] ?? 0;
-    removeBleedSource(
-      ctx,
-      [id],
-      lacerate.owner,
-      stacks * FLAT_DAMAGE,
-      stacks * SCALING_DAMAGE,
-    );
-  });
+const removeFn: RemoveFnType = (ctx, sourceId, targetId) => {
+  const stacks = ctx.characters[targetId]?.effects["lacerate"]?.value ?? 0;
+  removeBleedSource(ctx, sourceId, targetId, "lacerate", stacks);
   return ctx;
 };
 

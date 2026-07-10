@@ -18,7 +18,12 @@ type RewardSpread = {
   weapons: WeaponName[];
 };
 
-export type RewardTypes = "armors" | "blessings" | "enchantments" | "maneuvers" | "weapons";
+export type RewardTypes =
+  | "armors"
+  | "blessings"
+  | "enchantments"
+  | "maneuvers"
+  | "weapons";
 
 export type PendingRewardType = Record<RewardTypes, number>;
 
@@ -52,6 +57,13 @@ export type BleedSourceState = {
   scalingDamage: number;
 };
 
+/* Durations is per-stack remaining ticks, so partial expiry can be tracked
+   for stackable effects (e.g. 3 stacks applied on different turns). */
+export type EffectState = {
+  value: number;
+  durations: number[];
+};
+
 type CharacterType = {
   id: string;
   name: string;
@@ -69,8 +81,7 @@ type CharacterType = {
     weapons: WeaponName[];
   };
   stats: StatsType;
-  effects: Partial<Record<EffectName, number>>;
-  effectDurations: Partial<Record<EffectName, number[]>>;
+  effects: Partial<Record<EffectName, EffectState>>;
   burnSources: Record<string, BurnSourceState[]>;
   bleedSources: Record<string, BleedSourceState[]>;
   lastTurn: number;

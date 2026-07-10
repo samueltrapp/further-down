@@ -6,6 +6,7 @@ export const sharpenTheBladeEnch: EnchantmentType = {
   description:
     "Each hit with BLD damage increases your BLD by 1 until the end of the round.",
   socketType: "weapon",
+  selection: "self",
   trigger: "attack",
   priority: 0,
   effect: sharpenTheBlade,

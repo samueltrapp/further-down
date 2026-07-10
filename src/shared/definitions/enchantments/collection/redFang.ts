@@ -12,8 +12,7 @@ const DISCIPLINE_CHANCE_SCALING = 0.1;
 const BASE_EFFICACY = 50;
 const MASTERY_EFFICACY_SCALING = 0.05;
 
-const onTrigger = (ctx: ActionCtx, applicableIds: string[]) => {
-  const sourceId = applicableIds[0]; // For "attack" trigger, only the attacker
+const onTrigger = (ctx: ActionCtx, sourceId: string) => {
   const source = ctx.characters[sourceId];
   const procChance =
     BASE_CHANCE + DISCIPLINE_CHANCE_SCALING * source.stats.discipline.martial;
@@ -49,6 +48,7 @@ export const redFangEnch: EnchantmentType = {
   description: "Restore some life on a physical hit",
   socketType: "weapon",
   trigger: "attack",
+  selection: "self",
   priority: 10,
   onTrigger,
 };

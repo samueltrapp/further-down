@@ -1,32 +1,14 @@
 import { BlessingType } from "../../../../types/equipables/blessings.ts";
-import { ActionCtx } from "../../../../types/events/actionCtx.ts";
-
-const FLAT_DAMAGE = 0.05;
-const SCALING_DAMAGE = 0.03;
-
-const applyEternalFlame = (
-  ctx: ActionCtx,
-  targetIds: string[],
-): ActionCtx => {
-  const ownerId = ctx.sourceId;
-  targetIds.forEach((targetId) => {
-    const target = ctx.characters[targetId];
-    if (!target) return;
-    target.burnSources[ownerId] = {
-      flatDamage: FLAT_DAMAGE,
-      scalingDamage: SCALING_DAMAGE,
-      lastSpeedElapsed: ctx.speedElapsed,
-    };
-  });
-  return ctx;
-};
+import eternalFlameEffect from "../../effects/collection/eternalFlame.ts";
 
 const eternalFlame: BlessingType = {
   name: "eternal flame",
-  description: "At the start of your turn, sears every enemy with a small, lingering burn.",
+  description:
+    "At the start of your turn, sears every enemy with a small, lingering burn.",
   trigger: "turn-start",
-  onTrigger: applyEternalFlame,
+  selection: "allEnemies",
+  effect: eternalFlameEffect,
+  priority: 0,
 };
 
 export default eternalFlame;
-
