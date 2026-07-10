@@ -57,11 +57,10 @@ export type BleedSourceState = {
   scalingDamage: number;
 };
 
-/* Durations is per-stack remaining ticks, so partial expiry can be tracked
-   for stackable effects (e.g. 3 stacks applied on different turns). */
 export type EffectState = {
   value: number;
   durations: number[];
+  owner: string;
 };
 
 type CharacterType = {

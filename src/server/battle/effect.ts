@@ -1,4 +1,4 @@
-import { EffectStep } from "../../types/equipables/maneuvers.ts";
+import { StepType } from "../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { effectMap } from "../../shared/definitions/effects/sets.ts";
 import { DurationType, EffectName } from "../../types/equipables/effects.ts";
@@ -6,18 +6,19 @@ import { DurationType, EffectName } from "../../types/equipables/effects.ts";
 export const applyEffect = (
   ctx: ActionCtx,
   sourceId: string,
-  step: EffectStep,
-) => {
-  const { characters, targetIds } = { ...ctx };
-  const { effect: effectName, stacks = 1 } = step;
+  targetIds: string[],
+  effectName: EffectName,
+  stacks = 1,
+  step?: StepType,
+): ActionCtx => {
+  const { characters } = ctx;
 
-  targetIds?.forEach((targetId) => {
+  targetIds.forEach((targetId) => {
     const target = characters[targetId];
     const effect = effectMap.get(effectName);
-    if (!effect) return ctx;
+    if (!target || !effect) return;
 
-    effect.owner = ctx.sourceId; // TODO: This is weird
-    const stackable = effect?.stackable;
+    const stackable = effect.stackable;
     const existingState = target.effects[effectName];
     const tickDuration =
       effect.durationType === "turns" || effect.durationType === "rounds";
@@ -25,9 +26,14 @@ export const applyEffect = (
 
     /* Apply fresh stacks if none exist or add new stacks */
     if (!existingState || !stackable) {
-      target.effects[effectName] = { value: stacks, durations: [] };
-    } else if (stacks) {
+      target.effects[effectName] = {
+        value: stacks,
+        durations: [],
+        owner: sourceId,
+      };
+    } else {
       existingState.value += stacks;
+      existingState.owner = sourceId;
     }
 
     /* Track remaining ticks for turns/rounds effects */
@@ -42,10 +48,8 @@ export const applyEffect = (
       }
     }
 
-    if (effect?.onApply) {
-      targetIds.forEach((targetId) => {
-        ctx = effect?.onApply(ctx, sourceId, targetId, step);
-      });
+    if (effect.onApply) {
+      ctx = effect.onApply(ctx, sourceId, targetId, step);
     }
   });
 
@@ -59,12 +63,11 @@ export const removeEffects = (
   const { characters } = ctx;
 
   Object.values(characters).forEach((character) => {
-    Object.entries(character.effects).forEach((effect) => {
-      const effectName = effect[0] as EffectName;
-      const state = effect[1];
+    Object.entries(character.effects).forEach(([name, state]) => {
+      const effectName = name as EffectName;
       const effectDef = effectMap.get(effectName);
 
-      if (!effectDef) {
+      if (!effectDef || !state) {
         return;
       }
 
@@ -72,11 +75,11 @@ export const removeEffects = (
         return;
       }
 
+      const ownerId = state.owner;
+
       /* battle trigger removes all matching effects immediately */
       if (trigger === "battle") {
-        if (effectDef.onRemove) {
-          effectDef.onRemove(ctx, [character.id]);
-        }
+        effectDef.onRemove(ctx, ownerId, character.id);
         delete character.effects[effectName];
         return;
       }
@@ -101,16 +104,12 @@ export const removeEffects = (
         const remaining = state.value - expiredCount;
         if (remaining <= 0) {
           /* All stacks expired — call onRemove once for the full cleanup */
-          if (effectDef.onRemove) {
-            effectDef.onRemove(ctx, [character.id]);
-          }
+          effectDef.onRemove(ctx, ownerId, character.id);
           delete character.effects[effectName];
         } else {
           /* Partial expiry — call onRemove once per expired stack */
           for (let i = 0; i < expiredCount; i++) {
-            if (effectDef.onRemove) {
-              effectDef.onRemove(ctx, [character.id]);
-            }
+            effectDef.onRemove(ctx, ownerId, character.id);
           }
           state.value = remaining;
         }

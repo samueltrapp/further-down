@@ -8,6 +8,8 @@ import { blessingMap } from "../../shared/definitions/blessings/sets.ts";
 import { enchantmentMap } from "../../shared/definitions/enchantments/sets.ts";
 import { StepType } from "../../types/equipables/maneuvers.ts";
 import { BlessingType } from "../../types/equipables/blessings.ts";
+import { applyEffect } from "./effect.ts";
+import { EffectName } from "../../types/equipables/effects.ts";
 
 const getRelevantIds = (ctx: ActionCtx, trigger: Activation) => {
   const allIds = Object.keys(ctx.characters);
@@ -59,6 +61,41 @@ const getSelectionIds = (
   }
 };
 
+/* Resolves a set of triggered enchantments/blessings owned by one character.
+   Both share the same trigger/selection/effect shape, so they're processed
+   identically here. `ownerId` is the character whose equipment is triggering,
+   not ctx.sourceId — round/battle triggers sweep every character in turn,
+   so ctx.sourceId only reflects whoever's turn is currently resolving. */
+const resolveTriggered = (
+  ctx: ActionCtx,
+  ownerId: string,
+  entries: (EnchantmentType | BlessingType)[],
+  step?: StepType,
+): ActionCtx => {
+  const sorted = [...entries].sort((a, b) => a.priority - b.priority);
+
+  sorted.forEach((entry) => {
+    const selections = getSelectionIds(ctx, ownerId, entry.selection);
+    selections?.forEach((selection) => {
+      if (entry.onTrigger) {
+        ctx = entry.onTrigger(ctx, ownerId, selection, step);
+      }
+      if (entry.effect) {
+        ctx = applyEffect(
+          ctx,
+          ownerId,
+          [selection],
+          entry.name as EffectName,
+          1,
+          step,
+        );
+      }
+    });
+  });
+
+  return ctx;
+};
+
 export const handleSideEffects = (
   ctx: ActionCtx,
   activation: Activation,
@@ -68,66 +105,26 @@ export const handleSideEffects = (
   const relevantIds = getRelevantIds(ctx, activation);
 
   Object.values(characters).forEach((character) => {
-    // Enchantments
-    if (relevantIds.includes(character.id)) {
-      let enchantments: EnchantmentType[] = [];
+    if (!relevantIds.includes(character.id)) return;
 
-      character.equipped.enchantments.forEach((enchantment) => {
-        const enchantmentDfn = enchantmentMap.get(enchantment);
-        if (enchantmentDfn?.trigger === activation) {
-          enchantments.push(enchantmentDfn);
-        }
-      });
+    const enchantments: EnchantmentType[] = [];
+    character.equipped.enchantments.forEach((enchantment) => {
+      const enchantmentDfn = enchantmentMap.get(enchantment);
+      if (enchantmentDfn?.trigger === activation) {
+        enchantments.push(enchantmentDfn);
+      }
+    });
 
-      // Set resolution order by priority
-      enchantments = enchantments.sort((a, b) => a.priority - b.priority);
-
-      enchantments.forEach((enchantment) => {
-        const selections = getSelectionIds(
-          ctx,
-          ctx.sourceId,
-          enchantment.selection,
-        );
-        selections?.forEach((selection) => {
-          if (enchantment.onTrigger) {
-            ctx = enchantment.onTrigger(ctx, character.id, selection, step);
-          }
-          if (enchantment.effect) {
-            ctx = enchantment.effect.onApply(
-              ctx,
-              character.id,
-              selection,
-              step,
-            );
-          }
-        });
-      });
-    }
-
-    // Blessings
-    let blessings: BlessingType[] = [];
-
-    character.equipped.blessings.forEach((enchantment) => {
-      const blessingDfn = blessingMap.get(enchantment);
+    const blessings: BlessingType[] = [];
+    character.equipped.blessings.forEach((blessing) => {
+      const blessingDfn = blessingMap.get(blessing);
       if (blessingDfn?.trigger === activation) {
         blessings.push(blessingDfn);
       }
     });
 
-    // Set resolution order by priority
-    blessings = blessings.sort((a, b) => a.priority - b.priority);
-
-    blessings.forEach((blessing) => {
-      const selections = getSelectionIds(ctx, ctx.sourceId, blessing.selection);
-      selections?.forEach((selection) => {
-        if (blessing.onTrigger) {
-          ctx = blessing.onTrigger(ctx, character.id, selection, step);
-        }
-        if (blessing.effect) {
-          ctx = blessing.effect.onApply(ctx, character.id, selection, step);
-        }
-      });
-    });
+    ctx = resolveTriggered(ctx, character.id, enchantments, step);
+    ctx = resolveTriggered(ctx, character.id, blessings, step);
   });
 
   return ctx;

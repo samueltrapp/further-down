@@ -12,7 +12,6 @@ const anguish: EffectType = {
   durationType: "battle",
   stackable: true,
   tooltip: "Used by various PSY maneuvers and enchantments.",
-  owner: "",
   onApply: applyFn,
   onRemove: removeFn,
 };

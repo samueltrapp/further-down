@@ -5,6 +5,33 @@ import { ArmorType } from "../../types/equipables/armors.ts";
 import { armorMap } from "../../shared/definitions/armors/sets.ts";
 import { trunc } from "../utils/battle.ts";
 
+/* Resolves whether each target evaded the hit, independent of mitigation
+   (which depends on armor). Runs before "attack" side effects so hooks like
+   sharpen the blade can check ctx.instance.evaded reliably. */
+export const calcEvasion = (step: HitStep, ctx: ActionCtx) => {
+  const { characters, instance } = { ...ctx };
+
+  if (!instance || instance.size === 0) {
+    return ctx;
+  }
+
+  const newInstance = new Map();
+  instance.forEach((instanceDtl, targetId) => {
+    const character = characters[targetId];
+    const evasion = character?.stats
+      ? step.damageType === "bladed" || step.damageType === "blunt"
+        ? character.stats.discipline.dodge
+        : character.stats.discipline.negation
+      : 0;
+    const evaded = ctx.toHit > ctx.accuracy - evasion;
+
+    newInstance.set(targetId, { ...instanceDtl, evaded });
+  });
+
+  ctx.instance = newInstance;
+  return ctx;
+};
+
 export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
   const { damageType } = { ...step };
   const { characters, instance } = { ...ctx };
@@ -59,23 +86,16 @@ export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
   const newInstance = new Map();
   instance?.forEach((instanceDtl, targetId) => {
     const character = characters[targetId];
-    const armor = character.equipped.armor
+    const armor = character?.equipped.armor
       ? armorMap.get(character.equipped.armor)
       : null;
-    if (character.stats && armor) {
-      const evasion =
-        step.damageType === "bladed" || step.damageType === "blunt"
-          ? character.stats.discipline.dodge
-          : character.stats.discipline.negation;
-      const evaded = ctx.toHit > ctx.accuracy - evasion;
-      const mitigationInstance = mitigation(character.stats, armor);
+    const mitigationInstance =
+      character?.stats && armor ? mitigation(character.stats, armor) : 0;
 
-      newInstance.set(targetId, {
-        ...instanceDtl,
-        evaded,
-        mitigation: trunc((instanceDtl?.mitigation || 0) + mitigationInstance),
-      });
-    }
+    newInstance.set(targetId, {
+      ...instanceDtl,
+      mitigation: trunc((instanceDtl?.mitigation || 0) + mitigationInstance),
+    });
   });
 
   ctx.instance = newInstance;

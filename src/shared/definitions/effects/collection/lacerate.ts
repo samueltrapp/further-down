@@ -39,7 +39,6 @@ const lacerate: EffectType = {
   flatDamage: FLAT_DAMAGE,
   scalingDamage: SCALING_DAMAGE,
   tooltip: "Bleeds for bladed damage each turn. Stacks increase damage.",
-  owner: "",
   onApply: applyFn,
   onRemove: removeFn,
 };

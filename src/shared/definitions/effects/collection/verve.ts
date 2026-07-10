@@ -5,7 +5,6 @@ const verve: EffectType = {
   durationType: "battle",
   stackable: true,
   tooltip: "",
-  owner: "",
   onApply: (ctx) => ctx,
   onRemove: (ctx) => ctx,
 };

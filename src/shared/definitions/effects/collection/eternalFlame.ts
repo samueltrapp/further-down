@@ -38,7 +38,6 @@ const eternalFlame: EffectType = {
   scalingDamage: SCALING_DAMAGE,
   tooltip:
     "Burns for elemental damage each turn. Stacks increase damage per speed.",
-  owner: "",
   onApply: applyFn,
   onRemove: removeFn,
 };

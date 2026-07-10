@@ -32,7 +32,6 @@ const tallShadow: EffectType = {
   stackable: true,
   tooltip:
     "Gain evasion every time an attack misses you. Lasts until end of battle.",
-  owner: "",
   onApply: applyFn,
   onRemove: removeFn,
 };

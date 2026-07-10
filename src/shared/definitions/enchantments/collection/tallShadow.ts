@@ -12,7 +12,11 @@ const onTrigger = (ctx: ActionCtx, selection: string): ActionCtx => {
     if (currentState) {
       currentState.value += 1;
     } else {
-      defender.effects["tall shadow"] = { value: 1, durations: [] };
+      defender.effects["tall shadow"] = {
+        value: 1,
+        durations: [1],
+        owner: selection,
+      };
     }
 
     // Log the effect

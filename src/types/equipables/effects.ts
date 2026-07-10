@@ -37,7 +37,6 @@ export type EffectType = {
   flatDamage?: number;
   scalingDamage?: number;
   tooltip: string;
-  owner: string;
   onApply: ApplyFnType;
   onRemove: RemoveFnType;
 };

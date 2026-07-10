@@ -3,7 +3,7 @@ import { ConnectionType } from "../../types/server.ts";
 import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { applyDamage, calcDamage } from "./damage.ts";
-import { calcMitigation } from "./mitigation.ts";
+import { calcEvasion, calcMitigation } from "./mitigation.ts";
 import { expendSpeed, restoreSpeed } from "./speed.ts";
 import { sendGame } from "../meta/gameManagement.ts";
 import { Victor } from "../../types/game.ts";
@@ -122,9 +122,10 @@ export function handleTurn(
         /* Process hits */
         if (step.type === "hit") {
           ctx = calcDamage(ctx, step);
-          if (step.hitFn) {
-            ctx = step.hitFn(ctx);
-          }
+          // if (step.hitFn) {
+          //   ctx = step.hitFn(ctx);
+          // }
+          ctx = calcEvasion(step, ctx);
           ctx = handleSideEffects(ctx, "attack", step);
           ctx = calcMitigation(step, ctx);
           ctx = handleSideEffects(ctx, "defend", step);
@@ -134,7 +135,13 @@ export function handleTurn(
           ctx = { ...ctx };
         } else if (step.type === "effect") {
           /* Process effects */
-          ctx = applyEffect(ctx, ctx.sourceId, step);
+          ctx = applyEffect(
+            ctx,
+            ctx.sourceId,
+            ctx.targetIds,
+            step.effect,
+            step.stacks,
+          );
         }
       });
     }

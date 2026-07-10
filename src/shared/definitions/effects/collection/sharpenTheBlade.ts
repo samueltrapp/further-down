@@ -36,7 +36,6 @@ const sharpenTheBlade: EffectType = {
   stackable: true,
   tooltip:
     "Gain 1 BLD every time you hit with a BLD maneuver. Lasts until end of round.",
-  owner: "",
   onApply: applyFn,
   onRemove: removeFn,
 };
