@@ -1,30 +1,23 @@
-import { HitStep } from "../../types/equipables/maneuvers.ts";
+import { DamageType, HitStep } from "../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { randNum } from "../../shared/utils.ts";
 import { limitToZero, trunc } from "../utils/battle.ts";
 import { weaponMap } from "../../shared/definitions/weapons/sets.ts";
+import { WeaponType } from "../../types/equipables/weapons.ts";
+import { StatsType } from "../../types/individual/stats.ts";
 
 const createSpread = (spread: number) => randNum(spread * 2) - spread;
 
-export const calcDamage = (ctx: ActionCtx, step: HitStep) => {
-  const { damageType, strength } = { ...step };
-  const { characters, sourceId, targetIds } = { ...ctx };
-  const source = characters[sourceId];
+function getBaseDamage(weapon: WeaponType) {
+  return weapon.power + createSpread(weapon.spread);
+}
 
-  if (!source) {
-    return ctx;
-  }
-
-  const stats = source.stats;
-  const weaponName = source?.equipped.weapon;
-  const weapon = weaponName && weaponMap.get(weaponName);
-
-  if (!weapon) {
-    return ctx;
-  }
-
+function getModifiedDamage(
+  weapon: WeaponType,
+  damageType: DamageType,
+  stats: StatsType,
+) {
   const affinities = weapon.affinities;
-  const baseDamage = weapon.power + createSpread(weapon.spread);
 
   const {
     martial: mrAff,
@@ -35,56 +28,100 @@ export const calcDamage = (ctx: ActionCtx, step: HitStep) => {
     psychic: psyAff,
   } = affinities;
 
-  const damage = () => {
-    switch (damageType) {
-      case "bladed":
-        return (
-          baseDamage +
-          mrAff * stats.discipline.martial +
-          bltAff * stats.mastery.bladed
-        );
-      case "blunt":
-        return (
-          baseDamage +
-          mrAff * stats.discipline.martial +
-          bldAff * stats.mastery.blunt
-        );
-      case "elemental":
-        return (
-          baseDamage +
-          msAff * stats.discipline.mystic +
-          eleAff * stats.mastery.elemental
-        );
-      case "psychic":
-        return (
-          baseDamage +
-          msAff * stats.discipline.mystic +
-          psyAff * stats.mastery.psychic
-        );
-      default:
-        return 0;
-    }
-  };
+  switch (damageType) {
+    case "bladed":
+      return mrAff * stats.discipline.martial + bltAff * stats.mastery.bladed;
+    case "blunt":
+      return mrAff * stats.discipline.martial + bldAff * stats.mastery.blunt;
+    case "elemental":
+      return msAff * stats.discipline.mystic + eleAff * stats.mastery.elemental;
+    case "psychic":
+      return msAff * stats.discipline.mystic + psyAff * stats.mastery.psychic;
+    default:
+      return 0;
+  }
+}
 
-  const damageInstance = strength * damage();
-  const newInstance = new Map();
+function getModifiedAccuracy(damageType: DamageType, stats: StatsType) {
+  switch (damageType) {
+    case "bladed":
+    case "blunt":
+      return stats.discipline.precision;
+    case "elemental":
+    case "psychic":
+      return stats.discipline.control;
+    default:
+      return 0;
+  }
+}
+
+export const calcDamage = (
+  ctx: ActionCtx,
+  damageType: DamageType,
+  strength: number,
+) => {
+  const { characters, sourceId } = { ...ctx };
+  const source = characters[sourceId];
+
+  if (!source) {
+    return 0;
+  }
+
+  const stats = source.stats;
+  const weaponName = source?.equipped.weapon;
+  const weapon = weaponName && weaponMap.get(weaponName);
+
+  if (!weapon) {
+    return 0;
+  }
+
+  const baseDamage = getBaseDamage(weapon);
+  const modifiedDamage = getModifiedDamage(weapon, damageType, stats);
+  return (baseDamage + modifiedDamage) * strength;
+};
+
+export const calcAccuracy = (
+  ctx: ActionCtx,
+  damageType: DamageType,
+  accuracy: number,
+) => {
+  const { characters, sourceId } = { ...ctx };
+  const source = characters[sourceId];
+
+  if (!source) {
+    return 0;
+  }
+
+  const stats = source.stats;
+  const modifiedAccuracy = getModifiedAccuracy(damageType, stats);
+  return modifiedAccuracy + accuracy;
+};
+
+export const handleDamage = (ctx: ActionCtx, step: HitStep) => {
+  const { targetIds } = ctx;
+
+  const totalDamage = calcDamage(ctx, step.damageType, step.strength);
   targetIds?.forEach((targetId) => {
     const existingInstance = ctx.instance.get(targetId);
-    newInstance.set(targetId, {
-      ...existingInstance,
-      damage: trunc((existingInstance?.damage || 0) + damageInstance),
-    });
+    if (existingInstance) {
+      existingInstance.damage = trunc(
+        (existingInstance?.damage || 0) + totalDamage,
+      );
+    }
   });
 
-  const statAcc =
-    step.damageType === "bladed" || step.damageType === "blunt"
-      ? source.stats.discipline.precision
-      : source.stats.discipline.control;
-  const stepAccuracy = statAcc + step.accuracy;
-  ctx.toHit = randNum(100);
-  ctx.accuracy = stepAccuracy;
-  ctx.instance = newInstance;
+  return ctx;
+};
 
+export const handleAccuracy = (ctx: ActionCtx, step: HitStep) => {
+  ctx.accuracy = calcAccuracy(ctx, step.damageType, step.accuracy);
+  return ctx;
+};
+
+export const handleAttack = (ctx: ActionCtx, step: HitStep) => {
+  ctx = handleDamage(ctx, step);
+  ctx = handleAccuracy(ctx, step);
+  ctx.toHit = randNum(100);
   return ctx;
 };
 

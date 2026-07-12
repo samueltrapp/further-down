@@ -8,6 +8,8 @@ import { WeaponName } from "../../types/equipables/weapons.ts";
 import { ArmorName } from "../../types/equipables/armors.ts";
 import { armorMap } from "../../shared/definitions/armors/sets.ts";
 import { deriveArmorStats } from "../utils/stats.ts";
+import { resolveTurnOrder } from "../utils/turnOrder.ts";
+import { checkNextTurn } from "../battle/core.ts";
 
 export function submitPrepare(
   connection: ConnectionType,
@@ -87,6 +89,13 @@ export function submitPrepare(
 
     game.characters[characterId] = character;
 
+    /* Equipping armor can change a character's speed, so the turn order
+       needs to be recalculated to reflect it, especially before the first
+       turn of the battle is taken. */
+    if (game.battle) {
+      game.battle.turnOrder = resolveTurnOrder(game.characters);
+    }
+
     const finished = Object.values(game.characters).every(
       (char) =>
         char.team !== "player" || (char as PlayerType).pending.prepare === 0,
@@ -98,5 +107,11 @@ export function submitPrepare(
 
     connection.meta.games.set(gameId, game);
     sendGame(connection, gameId);
+
+    /* Now that every player has locked in their equipment (and turn order
+       reflects final speed stats), take an enemy's first turn if applicable. */
+    if (finished) {
+      checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
+    }
   }
 }

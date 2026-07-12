@@ -124,10 +124,10 @@ const blankCharacters = (userSpread: string[]) => {
       },
       stats: baseStats,
       pending: {
-        armors: 2,
+        armors: 1,
         blessings: 1,
         enchantments: 1,
-        maneuvers: 1,
+        maneuvers: 2,
         weapons: 2,
         core: 0,
         discipline: 0,

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { handleSideEffects } from "../../../../server/battle/sideEffects.ts";
+import { removeEffects } from "../../../../server/battle/effect.ts";
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
 import { PlayerType } from "../../../../types/individual/characters.ts";
 import { StatsType } from "../../../../types/individual/stats.ts";
@@ -102,6 +103,7 @@ describe("sharpen the blade enchantment", () => {
         ["target", { damage: 10, mitigation: 0, heal: 0, evaded: false }],
       ]),
       heal: 0,
+      round: 0,
     };
 
     const result = handleSideEffects(ctx, "attack");
@@ -130,10 +132,47 @@ describe("sharpen the blade enchantment", () => {
         ["target", { damage: 0, mitigation: 0, heal: 0, evaded: true }],
       ]),
       heal: 0,
+      round: 0,
     };
 
     const result = handleSideEffects(ctx, "attack");
 
     expect(result.characters.attacker.stats.mastery.bladed).toBe(0);
+  });
+
+  it("resets the effect and bladed mastery bonus at the end of the round", () => {
+    const attacker = makePlayer("attacker", ["sharpen the blade"]);
+    const target = makePlayer("target");
+
+    const ctx: ActionCtx = {
+      characters: { attacker, target },
+      sourceId: "attacker",
+      targetIds: ["target"],
+      maneuver: {} as ManeuverType,
+      speed: 0,
+      speedElapsed: 0,
+      messages: { headline: "", steps: [] },
+      toHit: 0,
+      accuracy: 0,
+      instance: new Map([
+        ["target", { damage: 10, mitigation: 0, heal: 0, evaded: false }],
+      ]),
+      heal: 0,
+      round: 0,
+    };
+
+    const afterHit = handleSideEffects(ctx, "attack");
+
+    expect(
+      afterHit.characters.attacker.effects["sharpen the blade"]?.value,
+    ).toBe(1);
+    expect(afterHit.characters.attacker.stats.mastery.bladed).toBe(1);
+
+    const afterRoundEnd = removeEffects(afterHit, "rounds");
+
+    expect(
+      afterRoundEnd.characters.attacker.effects["sharpen the blade"],
+    ).toBeUndefined();
+    expect(afterRoundEnd.characters.attacker.stats.mastery.bladed).toBe(0);
   });
 });

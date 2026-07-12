@@ -21,4 +21,5 @@ export type ActionCtx = {
     }
   >;
   heal: number;
+  round: number;
 };

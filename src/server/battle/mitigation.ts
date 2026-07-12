@@ -5,9 +5,6 @@ import { ArmorType } from "../../types/equipables/armors.ts";
 import { armorMap } from "../../shared/definitions/armors/sets.ts";
 import { trunc } from "../utils/battle.ts";
 
-/* Resolves whether each target evaded the hit, independent of mitigation
-   (which depends on armor). Runs before "attack" side effects so hooks like
-   sharpen the blade can check ctx.instance.evaded reliably. */
 export const calcEvasion = (step: HitStep, ctx: ActionCtx) => {
   const { characters, instance } = { ...ctx };
 

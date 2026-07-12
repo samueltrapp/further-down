@@ -1,6 +1,7 @@
 import { EnchantmentType } from "./enchantments.ts";
 
-export type BlessingName = "eternal flame";
+const BlessingName = ["eternal flame", "tempest"] as const;
+export type BlessingName = (typeof BlessingName)[number];
 
 export type BlessingType = Omit<EnchantmentType, "name" | "socketType"> & {
   name: BlessingName;

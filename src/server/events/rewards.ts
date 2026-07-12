@@ -12,9 +12,8 @@ import { WeaponName } from "../../types/equipables/weapons.ts";
 import { ArmorName } from "../../types/equipables/armors.ts";
 import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/maneuvers.ts";
-import { checkNextTurn } from "../battle/core.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
-import {BlessingName} from "../../types/equipables/blessings.ts";
+import { BlessingName } from "../../types/equipables/blessings.ts";
 
 export function submitName(
   connection: ConnectionType,
@@ -58,7 +57,7 @@ export function takeReward(
           reducedQueue as ArmorName[],
         ) as ArmorName[];
       } else if (rewardType === "blessings") {
-       character.loadout.blessings.push(rewardName as BlessingName);
+        character.loadout.blessings.push(rewardName as BlessingName);
       } else if (rewardType === "enchantments") {
         character.loadout.enchantments.push({
           name: rewardName as EnchantmentName,
@@ -160,7 +159,8 @@ export function finishSkilling(
     connection.meta.games.set(gameId, newGameState);
     sendGame(connection, gameId);
 
-    /* Immediately go if an enemy has the first turn */
-    checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
+    // if (votedToAdvance && allPrepared) {
+    //   checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
+    // }
   }
 }

@@ -2,6 +2,13 @@ import { EffectType } from "./effects.ts";
 import { ActionCtx } from "../events/actionCtx.ts";
 import { StepType } from "./maneuvers.ts";
 
+export type TriggerFn = (
+  ctx: ActionCtx,
+  sourceId: string,
+  targetId: string,
+  step?: StepType,
+) => ActionCtx;
+
 const PlayerEnchantments = [
   "a thousand cuts",
   "discipline",
@@ -32,10 +39,10 @@ export type Activation = (typeof Activation)[number];
 const Selection = [
   "self",
   "targets",
-  "allAllies",
-  "allEnemies",
-  "randomAlly",
-  "randomEnemy",
+  "all-allies",
+  "all-enemies",
+  "random-ally",
+  "random-enemy",
 ];
 export type Selection = (typeof Selection)[number];
 
@@ -47,10 +54,5 @@ export type EnchantmentType = {
   trigger: Activation;
   selection: Selection;
   effect?: EffectType;
-  onTrigger?: (
-    ctx: ActionCtx,
-    source: string,
-    target: string,
-    step?: StepType,
-  ) => ActionCtx;
+  onTrigger?: TriggerFn;
 };

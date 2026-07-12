@@ -2,7 +2,7 @@ import { EnemyTurnType, PlayerTurnType } from "../../types/events/turn.ts";
 import { ConnectionType } from "../../types/server.ts";
 import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
-import { applyDamage, calcDamage } from "./damage.ts";
+import { applyDamage, handleAttack } from "./damage.ts";
 import { calcEvasion, calcMitigation } from "./mitigation.ts";
 import { expendSpeed, restoreSpeed } from "./speed.ts";
 import { sendGame } from "../meta/gameManagement.ts";
@@ -87,6 +87,7 @@ export function handleTurn(
 
     const sourceTeam = turn.team;
     const weapon = sourceTeam === "player" ? turn.weapon : "";
+    const isBattleStart = game.battle.isFresh;
 
     let ctx: ActionCtx = {
       characters: game.characters,
@@ -100,6 +101,7 @@ export function handleTurn(
       accuracy: 0,
       instance: new Map(),
       heal: 0,
+      round: game.battle.round,
     };
 
     /* Pre-action */
@@ -107,24 +109,30 @@ export function handleTurn(
       ctx = switchWeapon(ctx, turn.weapon);
     }
 
+    /* Battle-start and round-start side effects only trigger on the very first turn of a fresh battle. */
+    if (isBattleStart) {
+      ctx = handleSideEffects(ctx, "battle-start");
+      ctx = handleSideEffects(ctx, "round-start");
+    }
+
     /* Turn-start blessings and enchantments, apply burn damage */
     ctx = handleSideEffects(ctx, "turn-start");
     ctx = processBurnDamage(ctx);
     ctx = applyDeath(ctx);
 
-    const dead = ctx.characters[ctx.sourceId]?.isDead;
+    const isDead = ctx.characters[ctx.sourceId]?.isDead;
 
     /* Action */
-    if (!dead) {
+    if (!isDead) {
       maneuver?.steps.forEach((step) => {
         ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
 
         /* Process hits */
         if (step.type === "hit") {
-          ctx = calcDamage(ctx, step);
-          // if (step.hitFn) {
-          //   ctx = step.hitFn(ctx);
-          // }
+          ctx = handleAttack(ctx, step);
+          if (step.hitFn) {
+            ctx = step.hitFn(ctx);
+          }
           ctx = calcEvasion(step, ctx);
           ctx = handleSideEffects(ctx, "attack", step);
           ctx = calcMitigation(step, ctx);

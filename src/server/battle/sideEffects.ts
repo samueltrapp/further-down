@@ -50,9 +50,9 @@ const getSelectionIds = (
       return [ctx.sourceId];
     case "targets":
       return ctx.targetIds;
-    case "allAllies":
+    case "all-allies":
       return allAllies;
-    case "allEnemies":
+    case "all-enemies":
       return allEnemies;
     // case "randomAlly":
     // case "randomEnemy":

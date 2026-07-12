@@ -36,6 +36,7 @@ export type TurnLog = {
 
 export type BattleType = {
   grade: BattleGrade;
+  isFresh: boolean;
   messages: TurnLog[];
   round: number;
   speedElapsed: number;

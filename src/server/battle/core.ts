@@ -130,6 +130,7 @@ export const finishTurn = (
     ...game,
     battle: {
       ...(game.battle as BattleType),
+      isFresh: false,
       messages: separatedMessages,
       round: resolveRoundCount(game.battle.round, isRoundEnd),
       turnOrder: resolveTurnOrder(game.characters),

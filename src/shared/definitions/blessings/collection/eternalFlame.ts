@@ -6,7 +6,7 @@ const eternalFlame: BlessingType = {
   description:
     "At the start of your turn, sears every enemy with a small, lingering burn.",
   trigger: "round-start",
-  selection: "allEnemies",
+  selection: "all-enemies",
   effect: eternalFlameEffect,
   priority: 0,
 };
