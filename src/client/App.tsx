@@ -82,6 +82,9 @@ function App() {
       <nav className="nav-bar">
         <img className="nav-icon" src="/images/nav-icon.png" alt="Nav icon" />
         <div className="nav-links">
+          <Button variant="outline" onClick={() => console.log(game?.data)}>
+            Snapshot
+          </Button>
           <Button variant="outline">Rules</Button>
           <Button variant="outline">Abandon</Button>
         </div>

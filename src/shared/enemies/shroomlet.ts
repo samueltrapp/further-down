@@ -22,11 +22,9 @@ const shroomlet = (id: string, index: number): EnemyType => ({
   stats: {
     core: {
       vitality: 0,
-      protection: 0,
       life: 400,
       maxLife: 400,
       initiative: 0,
-      finesse: 0,
       speed: 20,
       maxSpeed: 20,
     },

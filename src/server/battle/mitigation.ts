@@ -1,4 +1,4 @@
-import { HitStep } from "../../types/equipables/maneuvers.ts";
+import { DamageType, HitStep } from "../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { StatsType } from "../../types/individual/stats.ts";
 import { ArmorType } from "../../types/equipables/armors.ts";
@@ -12,7 +12,6 @@ export const calcEvasion = (step: HitStep, ctx: ActionCtx) => {
     return ctx;
   }
 
-  const newInstance = new Map();
   instance.forEach((instanceDtl, targetId) => {
     const character = characters[targetId];
     const evasion = character?.stats
@@ -20,81 +19,76 @@ export const calcEvasion = (step: HitStep, ctx: ActionCtx) => {
         ? character.stats.discipline.dodge
         : character.stats.discipline.negation
       : 0;
-    const evaded = ctx.toHit > ctx.accuracy - evasion;
-
-    newInstance.set(targetId, { ...instanceDtl, evaded });
+    instanceDtl.evaded = ctx.toHit > ctx.accuracy - evasion;
   });
 
-  ctx.instance = newInstance;
   return ctx;
 };
 
-export const calcMitigation = (step: HitStep, ctx: ActionCtx) => {
-  const { damageType } = { ...step };
+function getModifiedMitigation(
+  armor: ArmorType,
+  damageType: DamageType,
+  stats: StatsType,
+) {
+  const affinities = armor.affinities;
+
+  const {
+    defense: dfAff,
+    resistance: rsAff,
+    padding: pddAff,
+    plating: pltAff,
+    dampening: dmpAff,
+    warding: wrdAff,
+  } = affinities;
+
+  switch (damageType) {
+    case "blunt":
+      return dfAff * stats.discipline.defense + pltAff * stats.mastery.padding;
+    case "bladed":
+      return dfAff * stats.discipline.defense + pddAff * stats.mastery.plating;
+    case "elemental":
+      return (
+        rsAff * stats.discipline.resistance + dmpAff * stats.mastery.dampening
+      );
+    case "psychic":
+      return (
+        rsAff * stats.discipline.resistance + wrdAff * stats.mastery.warding
+      );
+    default:
+      return 0;
+  }
+}
+
+export const calcMitigation = (ctx: ActionCtx, damageType: DamageType) => {
   const { characters, instance } = { ...ctx };
 
   if (!instance || instance.size === 0) {
     return ctx;
   }
 
-  const mitigation = (targetStat: StatsType, armor: ArmorType) => {
-    const affinities = armor.affinities;
-    const baseMitigation = armor.block;
-
-    const {
-      defense: dfAff,
-      resistance: rsAff,
-      padding: pddAff,
-      plating: pltAff,
-      dampening: dmpAff,
-      warding: wrdAff,
-    } = affinities;
-
-    switch (damageType) {
-      case "blunt":
-        return (
-          baseMitigation +
-          dfAff * targetStat.discipline.defense +
-          pltAff * targetStat.mastery.padding
-        );
-      case "bladed":
-        return (
-          baseMitigation +
-          dfAff * targetStat.discipline.defense +
-          pddAff * targetStat.mastery.plating
-        );
-      case "elemental":
-        return (
-          baseMitigation +
-          rsAff * targetStat.discipline.resistance +
-          dmpAff * targetStat.mastery.dampening
-        );
-      case "psychic":
-        return (
-          baseMitigation +
-          rsAff * targetStat.discipline.resistance +
-          wrdAff * targetStat.mastery.warding
-        );
-      default:
-        return 0;
-    }
-  };
-
-  const newInstance = new Map();
   instance?.forEach((instanceDtl, targetId) => {
     const character = characters[targetId];
     const armor = character?.equipped.armor
       ? armorMap.get(character.equipped.armor)
       : null;
-    const mitigationInstance =
-      character?.stats && armor ? mitigation(character.stats, armor) : 0;
-
-    newInstance.set(targetId, {
-      ...instanceDtl,
-      mitigation: trunc((instanceDtl?.mitigation || 0) + mitigationInstance),
-    });
+    let totalMitigation = 0;
+    if (armor) {
+      const baseMitigation = armor?.block ?? 0;
+      const modifiedMitigation = getModifiedMitigation(
+        armor,
+        damageType,
+        character.stats,
+      );
+      totalMitigation = baseMitigation + modifiedMitigation;
+    }
+    instanceDtl.mitigation = trunc(
+      (instanceDtl?.mitigation || 0) + totalMitigation,
+    );
   });
 
-  ctx.instance = newInstance;
   return ctx;
+};
+
+export const handleMitigation = (ctx: ActionCtx, step: HitStep) => {
+  return calcMitigation(ctx, step.damageType);
 };

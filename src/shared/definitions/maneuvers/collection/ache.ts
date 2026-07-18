@@ -2,21 +2,19 @@ import { ManeuverType } from "../../../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
 import { trunc } from "../../../../server/utils/battle.ts";
 
+const SCALING_PSY_MOD = 0.3;
+
 const addAnguish = (ctx: ActionCtx) => {
   const { characters, instance, sourceId } = { ...ctx };
 
-  const newInstance = new Map();
   instance.forEach((instanceDtl, targetId) => {
     const anguishStacks = characters[targetId].effects.anguish?.value ?? 0;
-    const damagePerStack = characters[sourceId].stats.mastery.psychic * 0.3;
+    const damagePerStack =
+      characters[sourceId].stats.mastery.psychic * SCALING_PSY_MOD;
     const anguishDamage = anguishStacks * damagePerStack;
-    newInstance.set(targetId, {
-      ...instanceDtl,
-      damage: trunc((instanceDtl.damage || 0) + anguishDamage),
-    });
+    instanceDtl.damage = trunc((instanceDtl.damage || 0) + anguishDamage);
   });
 
-  ctx.instance = newInstance;
   return ctx;
 };
 
@@ -24,7 +22,7 @@ const ache: ManeuverType = {
   name: "ache",
   team: "player",
   description: "Ache description",
-  speedCost: 7,
+  speedCost: 5,
   perspective: "other",
   targetMethod: "select",
   maxTargets: 1,
@@ -38,7 +36,7 @@ const ache: ManeuverType = {
       type: "hit",
       accuracy: 85,
       damageType: "psychic",
-      strength: 1.1,
+      strength: 0.9,
       hitFn: (ctx) => addAnguish(ctx),
     },
   ],

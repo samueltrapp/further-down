@@ -1,11 +1,9 @@
 export type StatsType = {
   core: {
-    vitality: number; // Base life stat
-    protection: number; // Life stat modifier from armor
+    vitality: number;
     life: number;
     maxLife: number;
     initiative: number; // Base speed stat
-    finesse: number; // Speed stat modifier from armor
     speed: number;
     maxSpeed: number;
   };

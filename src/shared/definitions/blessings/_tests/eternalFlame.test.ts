@@ -13,11 +13,9 @@ import { ManeuverType } from "../../../../types/equipables/maneuvers.ts";
 const blankStats = (): StatsType => ({
   core: {
     vitality: 20,
-    protection: 0,
     life: 100,
     maxLife: 100,
     initiative: 20,
-    finesse: 0,
     speed: 20,
     maxSpeed: 20,
   },

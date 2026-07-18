@@ -4,7 +4,7 @@ export const deluge: ManeuverType = {
   name: "deluge",
   team: "player",
   description: "Deluge description",
-  speedCost: 8,
+  speedCost: 6,
   perspective: "other",
   targetMethod: "all",
   maxTargets: 0,

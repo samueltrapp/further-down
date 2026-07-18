@@ -19,8 +19,6 @@ export function deriveArmorStats(
     stats.core.initiative * speedMultiplier(armor.finesse),
   );
 
-  stats.core.protection = armor.protection;
-  stats.core.finesse = armor.finesse;
   stats.core.life = currentLife;
   stats.core.maxLife = maxLife;
   stats.core.speed = maxSpeed;

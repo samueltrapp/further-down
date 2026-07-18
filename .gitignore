@@ -13,6 +13,7 @@ dist
 dist-ssr
 *.local
 **/_template.ts
+game.json
 
 # Editor directories and files
 .vscode/*

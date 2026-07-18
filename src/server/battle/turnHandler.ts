@@ -3,7 +3,7 @@ import { ConnectionType } from "../../types/server.ts";
 import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { applyDamage, handleAttack } from "./damage.ts";
-import { calcEvasion, calcMitigation } from "./mitigation.ts";
+import { calcEvasion, handleMitigation } from "./mitigation.ts";
 import { expendSpeed, restoreSpeed } from "./speed.ts";
 import { sendGame } from "../meta/gameManagement.ts";
 import { Victor } from "../../types/game.ts";
@@ -49,12 +49,20 @@ const assignTargets = (ctx: ActionCtx, turnProps: TurnProps) => {
 };
 
 const resetCtxStep = (ctx: ActionCtx, turnProps: TurnProps): ActionCtx => {
+  const targetIds = assignTargets(ctx, turnProps);
+  const instance = new Map(
+    targetIds.map((targetId) => [
+      targetId,
+      { damage: 0, mitigation: 0, heal: 0, evaded: false },
+    ]),
+  );
+
   return {
     ...ctx,
-    targetIds: assignTargets(ctx, turnProps),
+    targetIds,
     toHit: 0,
     accuracy: 0,
-    instance: new Map(),
+    instance,
     heal: 0,
   };
 };
@@ -135,7 +143,7 @@ export function handleTurn(
           }
           ctx = calcEvasion(step, ctx);
           ctx = handleSideEffects(ctx, "attack", step);
-          ctx = calcMitigation(step, ctx);
+          ctx = handleMitigation(ctx, step);
           ctx = handleSideEffects(ctx, "defend", step);
           ctx = applyDamage(ctx);
         } else if (step.type === "heal") {

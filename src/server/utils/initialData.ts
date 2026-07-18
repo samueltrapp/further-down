@@ -16,11 +16,9 @@ import { BlessingName } from "../../types/equipables/blessings.ts";
 const baseStats: StatsType = {
   core: {
     vitality: 20,
-    protection: 5,
     life: 100,
     maxLife: 100,
     initiative: 20,
-    finesse: 1,
     speed: 20,
     maxSpeed: 20,
   },
@@ -129,9 +127,9 @@ const blankCharacters = (userSpread: string[]) => {
         enchantments: 1,
         maneuvers: 2,
         weapons: 2,
-        core: 0,
-        discipline: 0,
-        mastery: 0,
+        core: 2,
+        discipline: 8,
+        mastery: 8,
         prepare: 1,
       },
       team: "player",
@@ -179,11 +177,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
       savedStats: {
         core: {
           vitality: 20,
-          protection: 5,
           life: 100,
           maxLife: 100,
           initiative: 20,
-          finesse: 1,
           speed: 20,
           maxSpeed: 20,
         },
@@ -212,11 +208,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     stats: {
       core: {
         vitality: 20,
-        protection: 5,
         life: 100,
         maxLife: 100,
         initiative: 20,
-        finesse: 1,
         speed: 20,
         maxSpeed: 20,
       },
@@ -292,11 +286,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
       savedStats: {
         core: {
           vitality: 20,
-          protection: 5,
           life: 100,
           maxLife: 100,
           initiative: 20,
-          finesse: 1,
           speed: 20,
           maxSpeed: 20,
         },
@@ -325,11 +317,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     stats: {
       core: {
         vitality: 20,
-        protection: 5,
         life: 100,
         maxLife: 100,
         initiative: 20,
-        finesse: 1,
         speed: 20,
         maxSpeed: 20,
       },
@@ -405,11 +395,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
       savedStats: {
         core: {
           vitality: 20,
-          protection: 5,
           life: 100,
           maxLife: 100,
           initiative: 20,
-          finesse: 1,
           speed: 20,
           maxSpeed: 20,
         },
@@ -438,11 +426,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     stats: {
       core: {
         vitality: 20,
-        protection: 5,
         life: 100,
         maxLife: 100,
         initiative: 20,
-        finesse: 1,
         speed: 20,
         maxSpeed: 20,
       },
