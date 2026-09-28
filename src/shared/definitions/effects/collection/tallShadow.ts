@@ -7,29 +7,34 @@ const applyFn = (
   ctx: ActionCtx,
   _source: string,
   targetId: string,
-): ActionCtx => {
+): { ctx: ActionCtx; value: number } => {
   const { characters, instance } = ctx;
   const target = characters[targetId];
 
   const targetInstance = instance.get(targetId);
+  let gained = 0;
   if (targetInstance?.evaded) {
-    const stacks = target.effects["tall shadow"]?.value ?? 0;
-    target.stats.discipline.dodge += stacks * EVASION_PER_STACK;
+    gained = EVASION_PER_STACK;
+    target.stats.discipline.dodge += gained;
   }
-  return ctx;
+  return { ctx, value: gained };
 };
 
-const removeFn = (ctx: ActionCtx, sourceId: string): ActionCtx => {
+const removeFn = (
+  ctx: ActionCtx,
+  _sourceId: string,
+  targetId: string,
+  value: number,
+): ActionCtx => {
   const { characters } = ctx;
-  const stacks = characters[sourceId].effects["tall shadow"]?.value ?? 0;
-  characters[sourceId].stats.discipline.dodge -= stacks * EVASION_PER_STACK;
+  characters[targetId].stats.discipline.dodge -= value;
   return ctx;
 };
 
 const tallShadow: EffectType = {
   type: "favor",
   durationType: "rounds",
-  stackable: true,
+  stackType: "escalate",
   tooltip:
     "Gain evasion every time an attack misses you. Lasts until end of battle.",
   onApply: applyFn,

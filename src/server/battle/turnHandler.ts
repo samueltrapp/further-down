@@ -156,7 +156,7 @@ export function handleTurn(
             ctx.sourceId,
             ctx.targetIds,
             step.effect,
-            step.stacks,
+            step,
           );
         }
       });

@@ -58,8 +58,6 @@ const makePlayer = (
   },
   stats: blankStats(),
   effects: {},
-  burnSources: {},
-  bleedSources: {},
   lastTurn: 0,
   isDead: false,
   pending: {

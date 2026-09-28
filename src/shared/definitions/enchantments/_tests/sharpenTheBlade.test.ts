@@ -55,8 +55,6 @@ const makePlayer = (
   },
   stats: blankStats(),
   effects: {},
-  burnSources: {},
-  bleedSources: {},
   lastTurn: 0,
   isDead: false,
   pending: {
@@ -106,9 +104,9 @@ describe("sharpen the blade enchantment", () => {
 
     const result = handleSideEffects(ctx, "attack");
 
-    expect(result.characters.attacker.effects["sharpen the blade"]?.value).toBe(
-      1,
-    );
+    expect(
+      result.characters.attacker.effects["sharpen the blade"]?.stacks[0].value,
+    ).toBe(1);
     expect(result.characters.attacker.stats.mastery.bladed).toBe(1);
   });
 
@@ -162,7 +160,8 @@ describe("sharpen the blade enchantment", () => {
     const afterHit = handleSideEffects(ctx, "attack");
 
     expect(
-      afterHit.characters.attacker.effects["sharpen the blade"]?.value,
+      afterHit.characters.attacker.effects["sharpen the blade"]?.stacks[0]
+        .value,
     ).toBe(1);
     expect(afterHit.characters.attacker.stats.mastery.bladed).toBe(1);
 

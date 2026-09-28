@@ -92,8 +92,6 @@ const blankCharacters = (userSpread: string[]) => {
       name: "",
       userId: user,
       effects: {},
-      burnSources: {},
-      bleedSources: {},
       lastTurn: 0,
       equipped: {
         weapon: null,
@@ -145,8 +143,6 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     name: "Character1",
     userId: userId,
     effects: {},
-    burnSources: {},
-    bleedSources: {},
     lastTurn: 0,
     equipped: {
       weapon: "periapt",
@@ -254,8 +250,6 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     name: "Character2",
     userId: userId,
     effects: {},
-    burnSources: {},
-    bleedSources: {},
     lastTurn: 0,
     equipped: {
       weapon: "scepter",
@@ -363,8 +357,6 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     name: "Character3",
     userId: userId,
     effects: {},
-    burnSources: {},
-    bleedSources: {},
     lastTurn: 0,
     equipped: {
       weapon: "periapt",

@@ -19,24 +19,22 @@ const applyFn: ApplyFnType = (
   const target = characters[targetId];
   const sourceBlt = characters[sourceId]?.stats.mastery.blunt ?? 0;
 
-  target.stats.discipline.dodge -=
-    FIXED_DDG_REDUCTION + sourceBlt * SCALING_DDG_REDUCTION;
-  return ctx;
+  const reduction = FIXED_DDG_REDUCTION + sourceBlt * SCALING_DDG_REDUCTION;
+  target.stats.discipline.dodge -= reduction;
+  return { ctx, value: reduction };
 };
 
-const removeFn: RemoveFnType = (ctx, sourceId, targetId) => {
+const removeFn: RemoveFnType = (ctx, _sourceId, targetId, value) => {
   const { characters } = ctx;
-  const sourceBlt = characters[sourceId]?.stats.mastery.blunt ?? 0;
 
-  characters[targetId].stats.discipline.dodge +=
-    FIXED_DDG_REDUCTION + sourceBlt * SCALING_DDG_REDUCTION;
+  characters[targetId].stats.discipline.dodge += value;
   return ctx;
 };
 
 const headbutt: EffectType = {
   type: "burden",
   durationType: "rounds",
-  stackable: false,
+  stackType: "escalate",
   tooltip: "Reduces EVA by 20 + 1.0[DF]",
   onApply: applyFn,
   onRemove: removeFn,

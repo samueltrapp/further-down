@@ -11,6 +11,14 @@ export const randEntry = (arr: unknown[]) => {
 };
 export const roll = (chance: number) => randNum(100) < chance;
 
+/**
+ * Sums stacks from an effect state's stack list.
+ *
+ * @param stacks
+ */
+export const stackSum = (stacks: { value: number }[] | undefined) =>
+  stacks?.reduce((total, stack) => total + stack.value, 0) ?? 0;
+
 const resolveTargetTeam = (team: TeamType, perspective: PerspectiveType) => {
   if (perspective === "own") {
     return team;

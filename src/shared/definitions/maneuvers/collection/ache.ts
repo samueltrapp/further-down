@@ -1,6 +1,7 @@
 import { ManeuverType } from "../../../../types/equipables/maneuvers.ts";
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
 import { trunc } from "../../../../server/utils/battle.ts";
+import { stackSum } from "../../../utils.ts";
 
 const SCALING_PSY_MOD = 0.3;
 
@@ -8,7 +9,9 @@ const addAnguish = (ctx: ActionCtx) => {
   const { characters, instance, sourceId } = { ...ctx };
 
   instance.forEach((instanceDtl, targetId) => {
-    const anguishStacks = characters[targetId].effects.anguish?.value ?? 0;
+    const anguishStacks = stackSum(
+      characters[targetId].effects.anguish?.stacks,
+    );
     const damagePerStack =
       characters[sourceId].stats.mastery.psychic * SCALING_PSY_MOD;
     const anguishDamage = anguishStacks * damagePerStack;

@@ -7,11 +7,13 @@ import lacerate from "./collection/lacerate.ts";
 import sharpenTheBlade from "./collection/sharpenTheBlade.ts";
 import verve from "./collection/verve.ts";
 import tallShadow from "./collection/tallShadow.ts";
+import gossamer from "./collection/gossamer.ts";
 
 const effects: [EffectName, EffectType][] = [
   ["anguish", anguish],
   ["combustion", combustion],
   ["eternal flame", eternalFlame],
+  ["gossamer", gossamer],
   ["headbutt", headbutt],
   ["lacerate", lacerate],
   ["sharpen the blade", sharpenTheBlade],

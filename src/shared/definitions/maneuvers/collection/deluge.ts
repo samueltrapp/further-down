@@ -13,7 +13,7 @@ export const deluge: ManeuverType = {
       type: "hit",
       accuracy: 80,
       damageType: "elemental",
-      strength: 0.5,
+      strength: 0.25,
     },
   ],
   tags: ["attack"],

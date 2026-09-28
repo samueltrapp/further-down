@@ -59,8 +59,6 @@ const makePlayer = (
   },
   stats: blankStats(),
   effects: {},
-  burnSources: {},
-  bleedSources: {},
   lastTurn: 0,
   isDead: false,
   pending: {
@@ -100,8 +98,6 @@ const makeEnemy = (id: string): EnemyType => ({
   },
   stats: blankStats(),
   effects: {},
-  burnSources: {},
-  bleedSources: {},
   lastTurn: 0,
   isDead: false,
 });
@@ -135,10 +131,12 @@ describe("eternal flame blessing", () => {
 
     const result = handleSideEffects(ctx, "round-start");
 
-    expect(result.characters.enemyOne.effects["eternal flame"]?.value).toBe(1);
-    expect(result.characters.enemyTwo.effects["eternal flame"]?.value).toBe(1);
-    expect(result.characters.enemyOne.burnSources["owner"]).toBeDefined();
-    expect(result.characters.enemyTwo.burnSources["owner"]).toBeDefined();
+    expect(
+      result.characters.enemyOne.effects["eternal flame"]?.stacks[0].value,
+    ).toBe(1);
+    expect(
+      result.characters.enemyTwo.effects["eternal flame"]?.stacks[0].value,
+    ).toBe(1);
 
     /* Ally/owner should not be affected — selection is "all-enemies" only */
     expect(result.characters.owner.effects["eternal flame"]).toBeUndefined();
@@ -167,20 +165,22 @@ describe("eternal flame blessing", () => {
 
     /* Round 1 start */
     ctx = handleSideEffects(ctx, "round-start");
-    expect(ctx.characters.enemy.effects["eternal flame"]?.value).toBe(1);
+    expect(ctx.characters.enemy.effects["eternal flame"]?.stacks[0].value).toBe(
+      1,
+    );
 
     /* Round 1 end: the stack applied at round-start should be removed */
     ctx = handleSideEffects(ctx, "round-end");
     ctx = removeEffects(ctx, "rounds");
 
     expect(ctx.characters.enemy.effects["eternal flame"]).toBeUndefined();
-    expect(ctx.characters.enemy.burnSources["owner"]).toBeUndefined();
 
     /* Round 2 start: a fresh stack is applied */
     ctx = { ...ctx, round: 1 };
     ctx = handleSideEffects(ctx, "round-start");
 
-    expect(ctx.characters.enemy.effects["eternal flame"]?.value).toBe(1);
-    expect(ctx.characters.enemy.burnSources["owner"]).toBeDefined();
+    expect(ctx.characters.enemy.effects["eternal flame"]?.stacks[0].value).toBe(
+      1,
+    );
   });
 });

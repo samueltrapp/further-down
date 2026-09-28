@@ -42,25 +42,16 @@ export type EnchantmentBinding = {
   socket: EnchantmentSocket;
 };
 
-export type BurnSourceState = {
-  name: EffectName;
-  stacks: number;
-  flatDamage: number;
-  scalingDamage: number;
-  lastSpeedElapsed: number;
-};
-
-export type BleedSourceState = {
-  name: EffectName;
-  stacks: number;
-  flatDamage: number;
-  scalingDamage: number;
+export type EffectStack = {
+  value: number;
+  duration: number;
+  owner: string;
+  /* Only used by burn effects, to compute damage since the last tick. */
+  lastSpeedElapsed?: number;
 };
 
 export type EffectState = {
-  value: number;
-  durations: number[];
-  owner: string;
+  stacks: EffectStack[];
 };
 
 type CharacterType = {
@@ -81,8 +72,6 @@ type CharacterType = {
   };
   stats: StatsType;
   effects: Partial<Record<EffectName, EffectState>>;
-  burnSources: Record<string, BurnSourceState[]>;
-  bleedSources: Record<string, BleedSourceState[]>;
   lastTurn: number;
   isDead: boolean;
 };

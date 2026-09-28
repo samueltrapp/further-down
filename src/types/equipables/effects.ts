@@ -8,7 +8,12 @@ const BurdenName = [
   "headbutt",
   "lacerate",
 ] as const;
-const FavorName = ["sharpen the blade", "tall shadow", "verve"] as const;
+const FavorName = [
+  "sharpen the blade",
+  "tall shadow",
+  "verve",
+  "gossamer",
+] as const;
 
 export type BurdenName = (typeof BurdenName)[number];
 export type FavorName = (typeof FavorName)[number];
@@ -21,17 +26,18 @@ export type ApplyFnType = (
   sourceId: string,
   targetId: string,
   step?: StepType,
-) => ActionCtx;
+) => { ctx: ActionCtx; value: number };
 export type RemoveFnType = (
   ctx: ActionCtx,
   sourceId: string,
   targetId: string,
+  value: number,
 ) => ActionCtx;
 
 export type EffectType = {
   type: "burden" | "favor";
   special?: "burn" | "bleed";
-  stackable: boolean;
+  stackType: "independent" | "refresh" | "escalate" | "none";
   durationType: DurationType;
   duration?: number;
   flatDamage?: number;

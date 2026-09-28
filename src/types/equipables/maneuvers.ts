@@ -9,6 +9,7 @@ const PlayerManeuvers = [
   "ache",
   "combustion",
   "deluge",
+  "gossamer",
   "headbutt",
   "lacerate",
   "pummel",

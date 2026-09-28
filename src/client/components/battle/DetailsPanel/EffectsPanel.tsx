@@ -7,6 +7,7 @@ import { EffectName } from "../../../../types/equipables/effects.ts";
 import { toCaps } from "../../../utils/formatting.ts";
 import { effectMap } from "../../../../shared/definitions/effects/sets.ts";
 import { useGame } from "../../../hooks/useGame.ts";
+import { stackSum } from "../../../../shared/utils.ts";
 
 const EffectText = ({
   effectName,
@@ -30,7 +31,7 @@ const EffectText = ({
         : null;
 
   let label = toCaps(effectName);
-  if (effect.stackable) {
+  if (effect.stackType !== "none") {
     label += `: ${stacks}`;
   }
   if (tickDuration && durations && unit) {
@@ -41,8 +42,9 @@ const EffectText = ({
   return <span>{label}</span>;
 };
 
-/* Burn/bleed burdens are tracked per owner, so each source is rendered as its
-   own entry labelled with whoever applied it rather than merged into one total. */
+/* Burn/bleed burdens are tracked per-stack (each stack has its own owner), so
+   each stack is rendered as its own entry labelled with whoever applied it
+   rather than merged into one total. */
 const SourceText = ({
   effectName,
   stacks,
@@ -56,7 +58,7 @@ const SourceText = ({
   if (!effect) return null;
 
   let label = toCaps(effectName);
-  if (effect.stackable) {
+  if (effect.stackType !== "none") {
     label += `: ${stacks}`;
   }
   label += ` (from ${ownerName})`;
@@ -77,13 +79,34 @@ export default function EffectsPanel({
   const blankEffectsList: {
     burdens: [EffectName, EffectState][];
     favors: [EffectName, EffectState][];
-  } = { burdens: [], favors: [] };
+    burnEntries: { effectName: EffectName; owner: string; value: number }[];
+    bleedEntries: { effectName: EffectName; owner: string; value: number }[];
+  } = { burdens: [], favors: [], burnEntries: [], bleedEntries: [] };
   const effectsList = (
     Object.entries(effects) as [EffectName, EffectState][]
   ).reduce((effectsList, currentEffect) => {
-    const effectDtl = effectMap.get(currentEffect[0]);
-    /* Burn/bleed burdens are rendered separately below, per owner */
-    if (effectDtl?.special === "burn" || effectDtl?.special === "bleed") {
+    const [effectName, state] = currentEffect;
+    const effectDtl = effectMap.get(effectName);
+
+    /* Burn/bleed burdens are rendered separately below, per stack/owner */
+    if (effectDtl?.special === "burn") {
+      state.stacks.forEach((stack) =>
+        effectsList.burnEntries.push({
+          effectName,
+          owner: stack.owner,
+          value: stack.value,
+        }),
+      );
+      return effectsList;
+    }
+    if (effectDtl?.special === "bleed") {
+      state.stacks.forEach((stack) =>
+        effectsList.bleedEntries.push({
+          effectName,
+          owner: stack.owner,
+          value: stack.value,
+        }),
+      );
       return effectsList;
     }
     if (effectDtl?.type === "burden") {
@@ -94,13 +117,6 @@ export default function EffectsPanel({
     return effectsList;
   }, blankEffectsList);
 
-  const burnEntries = Object.entries(character.burnSources).flatMap(
-    ([ownerId, sources]) => sources.map((source) => ({ ownerId, source })),
-  );
-  const bleedEntries = Object.entries(character.bleedSources).flatMap(
-    ([ownerId, sources]) => sources.map((source) => ({ ownerId, source })),
-  );
-
   return (
     <div>
       <h2>Effects</h2>
@@ -109,8 +125,8 @@ export default function EffectsPanel({
         <div key={favor[0]}>
           <EffectText
             effectName={favor[0]}
-            stacks={favor[1].value}
-            durations={favor[1].durations}
+            stacks={stackSum(favor[1].stacks)}
+            durations={favor[1].stacks.map((stack) => stack.duration)}
           />
         </div>
       ))}
@@ -119,26 +135,26 @@ export default function EffectsPanel({
         <div key={burden[0]}>
           <EffectText
             effectName={burden[0]}
-            stacks={burden[1].value}
-            durations={burden[1].durations}
+            stacks={stackSum(burden[1].stacks)}
+            durations={burden[1].stacks.map((stack) => stack.duration)}
           />
         </div>
       ))}
-      {burnEntries.map(({ ownerId, source }) => (
-        <div key={`burn-${ownerId}-${source.name}`}>
+      {effectsList.burnEntries.map(({ effectName, owner, value }, index) => (
+        <div key={`burn-${owner}-${effectName}-${index}`}>
           <SourceText
-            effectName={source.name}
-            stacks={source.stacks}
-            ownerName={characters[ownerId]?.name ?? "unknown"}
+            effectName={effectName}
+            stacks={value}
+            ownerName={characters[owner]?.name ?? "unknown"}
           />
         </div>
       ))}
-      {bleedEntries.map(({ ownerId, source }) => (
-        <div key={`bleed-${ownerId}-${source.name}`}>
+      {effectsList.bleedEntries.map(({ effectName, owner, value }, index) => (
+        <div key={`bleed-${owner}-${effectName}-${index}`}>
           <SourceText
-            effectName={source.name}
-            stacks={source.stacks}
-            ownerName={characters[ownerId]?.name ?? "unknown"}
+            effectName={effectName}
+            stacks={value}
+            ownerName={characters[owner]?.name ?? "unknown"}
           />
         </div>
       ))}

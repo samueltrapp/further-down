@@ -6,20 +6,7 @@ const onTrigger = (ctx: ActionCtx, selection: string): ActionCtx => {
   const { instance, characters } = ctx;
   const defenderInstance = instance.get(selection);
   if (defenderInstance?.evaded) {
-    // Attack missed this target
     const defender = characters[selection];
-    const currentState = defender.effects["tall shadow"];
-    if (currentState) {
-      currentState.value += 1;
-    } else {
-      defender.effects["tall shadow"] = {
-        value: 1,
-        durations: [1],
-        owner: selection,
-      };
-    }
-
-    // Log the effect
     ctx.messages.steps?.push(`${defender.name} // TALL SHADOW`);
   }
 

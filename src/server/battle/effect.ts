@@ -8,7 +8,6 @@ export const applyEffect = (
   sourceId: string,
   targetIds: string[],
   effectName: EffectName,
-  stacks = 1,
   step?: StepType,
 ): ActionCtx => {
   const { characters } = ctx;
@@ -18,38 +17,43 @@ export const applyEffect = (
     const effect = effectMap.get(effectName);
     if (!target || !effect) return;
 
-    const stackable = effect.stackable;
     const existingState = target.effects[effectName];
-    const tickDuration =
-      effect.durationType === "turns" || effect.durationType === "rounds";
     const duration = effect.duration ?? 1;
 
-    /* Apply fresh stacks if none exist or add new stacks */
-    if (!existingState || !stackable) {
+    const { ctx: newCtx, value } = effect.onApply(
+      ctx,
+      sourceId,
+      targetId,
+      step,
+    );
+    ctx = newCtx;
+
+    /* Apply fresh stacks if none exist or override existing value */
+    if (!existingState || effect.stackType === "none") {
       target.effects[effectName] = {
-        value: stacks,
-        durations: [],
-        owner: sourceId,
+        stacks: [
+          {
+            value,
+            duration,
+            owner: sourceId,
+          },
+        ],
       };
-    } else {
-      existingState.value += stacks;
-      existingState.owner = sourceId;
-    }
-
-    /* Track remaining ticks for turns/rounds effects */
-    if (tickDuration) {
-      const state = target.effects[effectName]!;
-      if (!stackable) {
-        state.durations = [duration];
-      } else {
-        for (let i = 0; i < stacks; i++) {
-          state.durations.push(duration);
-        }
-      }
-    }
-
-    if (effect.onApply) {
-      ctx = effect.onApply(ctx, sourceId, targetId, step);
+      // Reset effect duration
+    } else if (effect.stackType === "refresh") {
+      existingState.stacks[0].duration = duration;
+      existingState.stacks[0].owner = sourceId;
+      // Increase effect magnitude
+    } else if (effect.stackType === "escalate") {
+      existingState.stacks[0].value += value;
+      existingState.stacks[0].owner = sourceId;
+      // Add new effect instance
+    } else if (effect.stackType === "independent") {
+      existingState.stacks.push({
+        value,
+        duration,
+        owner: sourceId,
+      });
     }
   });
 
@@ -75,44 +79,28 @@ export const removeEffects = (
         return;
       }
 
-      const ownerId = state.owner;
-
       /* battle trigger removes all matching effects immediately */
       if (trigger === "battle") {
-        effectDef.onRemove(ctx, ownerId, character.id);
+        state.stacks.forEach((stack) => {
+          effectDef.onRemove(ctx, stack.owner, character.id, stack.value);
+        });
         delete character.effects[effectName];
         return;
       }
 
-      /* turns/rounds: decrement each stack's remaining count */
-      const durations = state.durations;
-      if (!durations || durations.length === 0) {
+      /* turns/rounds: decrement each stack's remaining duration, removing
+         and reversing each expired stack individually */
+      for (let i = state.stacks.length - 1; i >= 0; i--) {
+        const stack = state.stacks[i];
+        stack.duration -= 1;
+        if (stack.duration <= 0) {
+          effectDef.onRemove(ctx, stack.owner, character.id, stack.value);
+          state.stacks.splice(i, 1);
+        }
+      }
+
+      if (state.stacks.length === 0) {
         delete character.effects[effectName];
-        return;
-      }
-
-      let expiredCount = 0;
-      for (let i = durations.length - 1; i >= 0; i--) {
-        durations[i] -= 1;
-        if (durations[i] <= 0) {
-          durations.splice(i, 1);
-          expiredCount++;
-        }
-      }
-
-      if (expiredCount > 0) {
-        const remaining = state.value - expiredCount;
-        if (remaining <= 0) {
-          /* All stacks expired — call onRemove once for the full cleanup */
-          effectDef.onRemove(ctx, ownerId, character.id);
-          delete character.effects[effectName];
-        } else {
-          /* Partial expiry — call onRemove once per expired stack */
-          for (let i = 0; i < expiredCount; i++) {
-            effectDef.onRemove(ctx, ownerId, character.id);
-          }
-          state.value = remaining;
-        }
       }
     });
   });

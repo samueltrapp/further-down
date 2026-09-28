@@ -88,7 +88,7 @@ export function StatGrowth({
 
   const coreSlots = ["vitality", "initiative"];
   const disciplineSlots = [
-    ["martial", "defense", "accuracy", "evasion"],
+    ["martial", "defense", "precision", "dodge"],
     ["mystic", "resistance", "control", "negation"],
   ];
   const masterySlots = [

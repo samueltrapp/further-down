@@ -86,7 +86,6 @@ const resolveTriggered = (
           ownerId,
           [selection],
           entry.name as EffectName,
-          1,
           step,
         );
       }

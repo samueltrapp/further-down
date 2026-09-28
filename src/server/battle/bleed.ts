@@ -2,7 +2,7 @@ import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { armorMap } from "../../shared/definitions/armors/sets.ts";
 import { limitToZero, trunc } from "../utils/battle.ts";
 import { EffectName } from "../../types/equipables/effects.ts";
-import { BleedSourceState } from "../../types/individual/characters.ts";
+import { effectMap } from "../../shared/definitions/effects/sets.ts";
 
 const calcBladedMitigation = (ctx: ActionCtx, targetId: string): number => {
   const character = ctx.characters[targetId];
@@ -16,78 +16,34 @@ const calcBladedMitigation = (ctx: ActionCtx, targetId: string): number => {
   );
 };
 
-export const applyBleedSource = (
-  ctx: ActionCtx,
-  sourceId: string,
-  targetId: string,
-  name: EffectName,
-  flatDamage: number,
-  scalingDamage: number,
-  stacks = 1,
-): ActionCtx => {
-  const target = ctx.characters[targetId];
-  const existingBleed = target.bleedSources[sourceId] ?? [];
-  const bleed = existingBleed.find((source) => source.name === name);
-
-  if (bleed) {
-    bleed.stacks += stacks;
-  } else {
-    existingBleed.push({
-      name,
-      stacks,
-      flatDamage,
-      scalingDamage,
-    });
-  }
-  target.bleedSources[sourceId] = existingBleed;
-  return ctx;
-};
-
-export const removeBleedSource = (
-  ctx: ActionCtx,
-  sourceId: string,
-  targetId: string,
-  name: EffectName,
-  stacks: number,
-): ActionCtx => {
-  const target = ctx.characters[targetId];
-  const existingBleed = target.bleedSources[sourceId];
-  const bleed = existingBleed.find((entry) => entry.name === name);
-  if (!bleed) return ctx;
-
-  bleed.stacks -= stacks;
-  if (bleed.stacks <= 0) {
-    const remaining = existingBleed.filter((entry) => entry !== bleed);
-    if (remaining.length === 0) {
-      delete target.bleedSources[sourceId];
-    } else {
-      target.bleedSources[sourceId] = remaining;
-    }
-  }
-  return ctx;
-};
-
 export const processBleedDamage = (ctx: ActionCtx): ActionCtx => {
   const targetId = ctx.sourceId;
   const target = ctx.characters[targetId];
-  if (!target || Object.keys(target.bleedSources).length === 0) return ctx;
+  if (!target) return ctx;
 
   const mitigation = calcBladedMitigation(ctx, targetId);
 
-  Object.entries(target.bleedSources).forEach(([ownerId, sources]) => {
-    sources.forEach((source: BleedSourceState) => {
-      const ownerPadding = ctx.characters[ownerId]?.stats.mastery.padding ?? 0;
+  Object.entries(target.effects).forEach(([name, state]) => {
+    const effectName = name as EffectName;
+    const effectDef = effectMap.get(effectName);
+    if (!effectDef || effectDef.special !== "bleed" || !state) return;
+
+    const flatDamage = effectDef.flatDamage ?? 0;
+    const scalingDamage = effectDef.scalingDamage ?? 0;
+
+    state.stacks.forEach((stack) => {
+      const ownerPadding =
+        ctx.characters[stack.owner]?.stats.mastery.padding ?? 0;
       const damagePerTick =
-        (source.flatDamage + ownerPadding * source.scalingDamage) *
-        source.stacks;
+        (flatDamage + ownerPadding * scalingDamage) * stack.value;
       const actualDamage = limitToZero(trunc(damagePerTick) - mitigation);
 
       target.stats.core.life = limitToZero(
         target.stats.core.life - actualDamage,
       );
-      const ownerName = ctx.characters[ownerId]?.name ?? "unknown";
+      const ownerName = ctx.characters[stack.owner]?.name ?? "unknown";
       ctx.messages.steps?.push(
-        `${target.name} bleeds for ${actualDamage} (${trunc(damagePerTick)} - ${mitigation}) from ${source.name} (${ownerName}).`,
+        `${target.name} bleeds for ${actualDamage} (${trunc(damagePerTick)} - ${mitigation}) from ${effectName} (${ownerName}).`,
       );
     });
   });

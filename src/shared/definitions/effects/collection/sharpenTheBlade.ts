@@ -17,15 +17,18 @@ const applyFn = (ctx: ActionCtx, sourceId: string) => {
     characters[sourceId].stats.mastery.bladed += 1;
   }
 
-  return ctx;
+  return { ctx, value: hit ? 1 : 0 };
 };
 
-const removeFn = (ctx: ActionCtx, sourceId: string) => {
+const removeFn = (
+  ctx: ActionCtx,
+  sourceId: string,
+  _targetId: string,
+  value: number,
+) => {
   const { characters } = ctx;
-  /* Called once per expired stack; reduces one bladed point per call */
-  if ((characters[sourceId].effects["sharpen the blade"]?.value ?? 0) > 0) {
-    characters[sourceId].stats.mastery.bladed -= 1;
-  }
+  /* Reverses the recorded bladed gain directly, instead of recalculating it. */
+  characters[sourceId].stats.mastery.bladed -= value;
 
   return ctx;
 };
@@ -33,7 +36,7 @@ const removeFn = (ctx: ActionCtx, sourceId: string) => {
 const sharpenTheBlade: EffectType = {
   type: "favor",
   durationType: "rounds",
-  stackable: true,
+  stackType: "escalate",
   tooltip:
     "Gain 1 BLD every time you hit with a BLD maneuver. Lasts until end of round.",
   onApply: applyFn,
