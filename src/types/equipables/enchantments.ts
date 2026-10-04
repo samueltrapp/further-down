@@ -26,6 +26,8 @@ const Activation = [
   "immediate",
   "attack",
   "defend",
+  "heal",
+  "heal-received",
   "turn-start",
   "turn-end",
   "round-start",

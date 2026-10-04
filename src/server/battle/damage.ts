@@ -3,44 +3,8 @@ import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { randNum } from "../../shared/utils.ts";
 import { limitToZero, trunc } from "../utils/battle.ts";
 import { weaponMap } from "../../shared/definitions/weapons/sets.ts";
-import { WeaponType } from "../../types/equipables/weapons.ts";
 import { StatsType } from "../../types/individual/stats.ts";
-
-const createSpread = (spread: number) => randNum(spread * 2) - spread;
-
-function getBaseDamage(weapon: WeaponType) {
-  return weapon.power + createSpread(weapon.spread);
-}
-
-function getModifiedDamage(
-  weapon: WeaponType,
-  damageType: DamageType,
-  stats: StatsType,
-) {
-  const affinities = weapon.affinities;
-
-  const {
-    martial: mrAff,
-    mystic: msAff,
-    bladed: bldAff,
-    blunt: bltAff,
-    elemental: eleAff,
-    psychic: psyAff,
-  } = affinities;
-
-  switch (damageType) {
-    case "bladed":
-      return mrAff * stats.discipline.martial + bltAff * stats.mastery.bladed;
-    case "blunt":
-      return mrAff * stats.discipline.martial + bldAff * stats.mastery.blunt;
-    case "elemental":
-      return msAff * stats.discipline.mystic + eleAff * stats.mastery.elemental;
-    case "psychic":
-      return msAff * stats.discipline.mystic + psyAff * stats.mastery.psychic;
-    default:
-      return 0;
-  }
-}
+import { getBaseWeaponValue, getModifiedWeaponValue } from "./weaponScaling.ts";
 
 function getModifiedAccuracy(damageType: DamageType, stats: StatsType) {
   switch (damageType) {
@@ -75,8 +39,8 @@ export const calcDamage = (
     return 0;
   }
 
-  const baseDamage = getBaseDamage(weapon);
-  const modifiedDamage = getModifiedDamage(weapon, damageType, stats);
+  const baseDamage = getBaseWeaponValue(weapon);
+  const modifiedDamage = getModifiedWeaponValue(weapon, damageType, stats);
   return (baseDamage + modifiedDamage) * strength;
 };
 

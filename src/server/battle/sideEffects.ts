@@ -16,8 +16,10 @@ const getRelevantIds = (ctx: ActionCtx, trigger: Activation) => {
 
   switch (trigger) {
     case "attack":
+    case "heal":
       return [ctx.sourceId];
     case "defend":
+    case "heal-received":
       return ctx.targetIds;
     case "turn-start":
     case "turn-end":

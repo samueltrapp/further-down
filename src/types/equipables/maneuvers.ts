@@ -14,6 +14,8 @@ const PlayerManeuvers = [
   "lacerate",
   "pummel",
   "quicksilver",
+  "siphon",
+  "soothe",
 ] as const;
 type PlayerManeuvers = (typeof PlayerManeuvers)[number];
 
@@ -33,11 +35,16 @@ export type TagType =
   | "dot" // Damage over time
   | "heal" // Increases life actively
   | "regeneration" // Restores life passively
+  | "leech" // Heals based on damage dealt
   | "favor" // Applies favor
   | "burden" // Applies burden
   | DamageType;
 
-export type HitStep = {
+type StepBase = {
+  targetOverride?: TargetMethodType;
+};
+
+export type HitStep = StepBase & {
   type: "hit";
   accuracy: number;
   damageType: DamageType;
@@ -45,12 +52,14 @@ export type HitStep = {
   hitFn?: (ctx: ActionCtx) => ActionCtx;
 };
 
-export type HealStep = {
+export type HealStep = StepBase & {
   type: "heal";
+  healType: DamageType;
   strength: number;
+  healFn?: (ctx: ActionCtx) => ActionCtx;
 };
 
-export type EffectStep = {
+export type EffectStep = StepBase & {
   type: "effect";
   effect: EffectName;
   stacks?: number;

@@ -3,81 +3,7 @@ import {
   applyEffect,
   removeEffects,
 } from "../../../../server/battle/effect.ts";
-import { ActionCtx } from "../../../../types/events/actionCtx.ts";
-import { PlayerType } from "../../../../types/individual/characters.ts";
-import { StatsType } from "../../../../types/individual/stats.ts";
-import { ManeuverType } from "../../../../types/equipables/maneuvers.ts";
-
-const blankStats = (): StatsType => ({
-  core: {
-    vitality: 20,
-    life: 100,
-    maxLife: 100,
-    initiative: 20,
-    speed: 20,
-    maxSpeed: 20,
-  },
-  discipline: {
-    martial: 0,
-    mystic: 0,
-    defense: 0,
-    resistance: 0,
-    precision: 0,
-    control: 0,
-    dodge: 0,
-    negation: 0,
-  },
-  mastery: {
-    bladed: 0,
-    blunt: 0,
-    elemental: 0,
-    psychic: 0,
-    plating: 0,
-    padding: 0,
-    dampening: 0,
-    warding: 0,
-  },
-});
-
-const makePlayer = (id: string): PlayerType => ({
-  id,
-  name: id,
-  userId: id,
-  team: "player",
-  equipped: { weapon: null, armor: null, blessings: [], enchantments: [] },
-  loadout: {
-    armors: [],
-    blessings: [],
-    enchantments: [],
-    maneuvers: [],
-    weapons: [],
-  },
-  stats: blankStats(),
-  effects: {},
-  lastTurn: 0,
-  isDead: false,
-  pending: {
-    armors: 0,
-    blessings: 0,
-    enchantments: 0,
-    maneuvers: 0,
-    weapons: 0,
-    core: 0,
-    discipline: 0,
-    mastery: 0,
-    prepare: 0,
-  },
-  private: {
-    queue: {
-      armors: [],
-      blessings: [],
-      enchantments: [],
-      maneuvers: [],
-      weapons: [],
-    },
-    savedStats: blankStats(),
-  },
-});
+import { makePlayer, makeCtx } from "../../../_tests/testUtils.ts";
 
 describe("gossamer effect", () => {
   it("grants evasion bonus based on caster's plating to the target", () => {
@@ -85,20 +11,11 @@ describe("gossamer effect", () => {
     caster.stats.mastery.plating = 40;
     const target = makePlayer("target");
 
-    const ctx: ActionCtx = {
+    const ctx = makeCtx({
       characters: { caster, target },
       sourceId: "caster",
       targetIds: ["target"],
-      maneuver: {} as ManeuverType,
-      speed: 0,
-      speedElapsed: 0,
-      messages: { headline: "", steps: [] },
-      toHit: 0,
-      accuracy: 0,
-      instance: new Map(),
-      heal: 0,
-      round: 0,
-    };
+    });
 
     const result = applyEffect(ctx, "caster", ["target"], "gossamer");
 
@@ -114,20 +31,11 @@ describe("gossamer effect", () => {
     caster.stats.mastery.plating = 20;
     const target = makePlayer("target");
 
-    let ctx: ActionCtx = {
+    let ctx = makeCtx({
       characters: { caster, target },
       sourceId: "caster",
       targetIds: ["target"],
-      maneuver: {} as ManeuverType,
-      speed: 0,
-      speedElapsed: 0,
-      messages: { headline: "", steps: [] },
-      toHit: 0,
-      accuracy: 0,
-      instance: new Map(),
-      heal: 0,
-      round: 0,
-    };
+    });
 
     // First application: 10 + (20 * 0.25) = 15 evasion
     ctx = applyEffect(ctx, "caster", ["target"], "gossamer");
@@ -147,20 +55,11 @@ describe("gossamer effect", () => {
     caster.stats.mastery.plating = 100; // 100% -> 25 bonus
     const target = makePlayer("target");
 
-    const ctx: ActionCtx = {
+    const ctx = makeCtx({
       characters: { caster, target },
       sourceId: "caster",
       targetIds: ["target"],
-      maneuver: {} as ManeuverType,
-      speed: 0,
-      speedElapsed: 0,
-      messages: { headline: "", steps: [] },
-      toHit: 0,
-      accuracy: 0,
-      instance: new Map(),
-      heal: 0,
-      round: 0,
-    };
+    });
 
     const result = applyEffect(ctx, "caster", ["target"], "gossamer");
 
@@ -173,20 +72,11 @@ describe("gossamer effect", () => {
     caster.stats.mastery.plating = 40;
     const target = makePlayer("target");
 
-    let ctx: ActionCtx = {
+    let ctx = makeCtx({
       characters: { caster, target },
       sourceId: "caster",
       targetIds: ["target"],
-      maneuver: {} as ManeuverType,
-      speed: 0,
-      speedElapsed: 0,
-      messages: { headline: "", steps: [] },
-      toHit: 0,
-      accuracy: 0,
-      instance: new Map(),
-      heal: 0,
-      round: 0,
-    };
+    });
 
     ctx = applyEffect(ctx, "caster", ["target"], "gossamer");
     expect(ctx.characters.target.stats.discipline.dodge).toBe(20);
@@ -202,20 +92,11 @@ describe("gossamer effect", () => {
     caster.stats.mastery.plating = 20; // 15 evasion per application
     const target = makePlayer("target");
 
-    let ctx: ActionCtx = {
+    let ctx = makeCtx({
       characters: { caster, target },
       sourceId: "caster",
       targetIds: ["target"],
-      maneuver: {} as ManeuverType,
-      speed: 0,
-      speedElapsed: 0,
-      messages: { headline: "", steps: [] },
-      toHit: 0,
-      accuracy: 0,
-      instance: new Map(),
-      heal: 0,
-      round: 0,
-    };
+    });
 
     // Apply gossamer twice (escalates onto one stack)
     ctx = applyEffect(ctx, "caster", ["target"], "gossamer");
@@ -236,20 +117,11 @@ describe("gossamer effect", () => {
     caster.stats.mastery.plating = 0;
     const target = makePlayer("target");
 
-    const ctx: ActionCtx = {
+    const ctx = makeCtx({
       characters: { caster, target },
       sourceId: "caster",
       targetIds: ["target"],
-      maneuver: {} as ManeuverType,
-      speed: 0,
-      speedElapsed: 0,
-      messages: { headline: "", steps: [] },
-      toHit: 0,
-      accuracy: 0,
-      instance: new Map(),
-      heal: 0,
-      round: 0,
-    };
+    });
 
     const result = applyEffect(ctx, "caster", ["target"], "gossamer");
 
@@ -263,20 +135,11 @@ describe("gossamer effect", () => {
     const ally1 = makePlayer("ally1");
     const ally2 = makePlayer("ally2");
 
-    const ctx: ActionCtx = {
+    const ctx = makeCtx({
       characters: { caster, ally1, ally2 },
       sourceId: "caster",
       targetIds: ["ally1", "ally2"],
-      maneuver: {} as ManeuverType,
-      speed: 0,
-      speedElapsed: 0,
-      messages: { headline: "", steps: [] },
-      toHit: 0,
-      accuracy: 0,
-      instance: new Map(),
-      heal: 0,
-      round: 0,
-    };
+    });
 
     const result = applyEffect(ctx, "caster", ["ally1", "ally2"], "gossamer");
 
@@ -289,20 +152,11 @@ describe("gossamer effect", () => {
     caster.stats.mastery.plating = 40; // Initial plating
     const target = makePlayer("target");
 
-    let ctx: ActionCtx = {
+    let ctx = makeCtx({
       characters: { caster, target },
       sourceId: "caster",
       targetIds: ["target"],
-      maneuver: {} as ManeuverType,
-      speed: 0,
-      speedElapsed: 0,
-      messages: { headline: "", steps: [] },
-      toHit: 0,
-      accuracy: 0,
-      instance: new Map(),
-      heal: 0,
-      round: 0,
-    };
+    });
 
     // Apply gossamer: evasion = 10 + (40 * 0.25) = 20
     ctx = applyEffect(ctx, "caster", ["target"], "gossamer");

@@ -4,6 +4,7 @@ import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
 import { applyDamage, handleAttack } from "./damage.ts";
 import { calcEvasion, handleMitigation } from "./mitigation.ts";
+import { applyHeal, handleHeal } from "./heal.ts";
 import { expendSpeed, restoreSpeed } from "./speed.ts";
 import { sendGame } from "../meta/gameManagement.ts";
 import { Victor } from "../../types/game.ts";
@@ -21,17 +22,26 @@ import { applyEffect, removeEffects } from "./effect.ts";
 import { processBurnDamage } from "./burn.ts";
 import { processBleedDamage } from "./bleed.ts";
 import { handleSideEffects } from "./sideEffects.ts";
+import {
+  StepType,
+  TargetMethodType,
+} from "../../types/equipables/maneuvers.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
   targetIds: string[];
 };
 
-const assignTargets = (ctx: ActionCtx, turnProps: TurnProps) => {
+const assignTargets = (
+  ctx: ActionCtx,
+  turnProps: TurnProps,
+  targetMethodOverride?: TargetMethodType,
+) => {
   const { sourceTeam, targetIds } = turnProps;
   const { characters, maneuver } = ctx;
+  const targetMethod = targetMethodOverride ?? maneuver.targetMethod;
 
-  switch (maneuver.targetMethod) {
+  switch (targetMethod) {
     case "select":
       return targetIds;
     case "self":
@@ -48,8 +58,12 @@ const assignTargets = (ctx: ActionCtx, turnProps: TurnProps) => {
   }
 };
 
-const resetCtxStep = (ctx: ActionCtx, turnProps: TurnProps): ActionCtx => {
-  const targetIds = assignTargets(ctx, turnProps);
+const resetCtxStep = (
+  ctx: ActionCtx,
+  turnProps: TurnProps,
+  step: StepType,
+): ActionCtx => {
+  const targetIds = assignTargets(ctx, turnProps, step.targetOverride);
   const instance = new Map(
     targetIds.map((targetId) => [
       targetId,
@@ -110,6 +124,7 @@ export function handleTurn(
       instance: new Map(),
       heal: 0,
       round: game.battle.round,
+      previousResults: [],
     };
 
     /* Pre-action */
@@ -133,7 +148,14 @@ export function handleTurn(
     /* Action */
     if (!isDead) {
       maneuver?.steps.forEach((step) => {
-        ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
+        ctx = resetCtxStep(
+          ctx,
+          { sourceTeam, targetIds: turn.targetIds },
+          step,
+        );
+        // TODO: validate targetIds against maneuver.targetMethod/maxTargets
+        //  (e.g. enforce 1-4 selections for "select") once server-side
+        //  target validation is introduced.
 
         /* Process hits */
         if (step.type === "hit") {
@@ -148,7 +170,13 @@ export function handleTurn(
           ctx = applyDamage(ctx);
         } else if (step.type === "heal") {
           /* Process healing */
-          ctx = { ...ctx };
+          ctx = handleHeal(ctx, step);
+          if (step.healFn) {
+            ctx = step.healFn(ctx);
+          }
+          ctx = handleSideEffects(ctx, "heal", step);
+          ctx = handleSideEffects(ctx, "heal-received", step);
+          ctx = applyHeal(ctx);
         } else if (step.type === "effect") {
           /* Process effects */
           ctx = applyEffect(
@@ -159,6 +187,16 @@ export function handleTurn(
             step,
           );
         }
+
+        /* Snapshot this step's outcome so later steps in the same maneuver
+           can reference it (e.g. a heal step leeching off a prior hit). */
+        ctx = {
+          ...ctx,
+          previousResults: [
+            ...ctx.previousResults,
+            { step, targetIds: ctx.targetIds, instance: ctx.instance },
+          ],
+        };
       });
     }
 
