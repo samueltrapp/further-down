@@ -8,23 +8,23 @@ export type StatsType = {
     maxSpeed: number;
   };
   discipline: {
-    martial: number; // Physical damage
-    mystic: number; // Magical damage
-    defense: number; // Physical mitigation
-    resistance: number; // Magical mitigation
-    precision: number; // Physical chance to hit
-    control: number; // Magical chance to hit
-    dodge: number; // Physical chance to dodge
-    negation: number; // Magical chance to dodge
+    martial: number; // Physical damage scaling (bladed, blunt)
+    mystic: number; // Magical damage scaling (elemental, psychic)
+    defense: number; // Bladed and blunt mitigation
+    resistance: number; // Elemental and psychic mitigation
+    precision: number; // Bladed and blunt accuracy
+    control: number; // Elemental and psychic accuracy
+    dodge: number; // Bladed and blunt evasion
+    negation: number; // Elemental and psychic evasion
   };
   mastery: {
     bladed: number;
     blunt: number;
     elemental: number;
     psychic: number;
-    plating: number;
-    padding: number;
-    dampening: number;
-    warding: number;
+    plating: number; // Bladed damage mitigation
+    padding: number; // Blunt damage mitigation
+    dampening: number; // Elemental damage mitigation
+    warding: number; // Psychic damage mitigation
   };
 };

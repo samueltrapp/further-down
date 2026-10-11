@@ -119,7 +119,7 @@ export function submitPrepare(
 
     /* Now that every player has locked in their equipment (and turn order
        reflects final speed stats), take an enemy's first turn if applicable. */
-    if (finished) {
+    if (finished && game.battle?.isFresh) {
       checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
     }
   }

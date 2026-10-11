@@ -42,10 +42,10 @@ function getModifiedMitigation(
   } = affinities;
 
   switch (damageType) {
-    case "blunt":
-      return dfAff * stats.discipline.defense + pltAff * stats.mastery.padding;
     case "bladed":
-      return dfAff * stats.discipline.defense + pddAff * stats.mastery.plating;
+      return dfAff * stats.discipline.defense + pltAff * stats.mastery.plating;
+    case "blunt":
+      return dfAff * stats.discipline.defense + pddAff * stats.mastery.padding;
     case "elemental":
       return (
         rsAff * stats.discipline.resistance + dmpAff * stats.mastery.dampening

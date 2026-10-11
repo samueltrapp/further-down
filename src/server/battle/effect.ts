@@ -37,6 +37,7 @@ export const applyEffect = (
             value,
             duration,
             owner: sourceId,
+            lastSpeedElapsed: ctx.speedElapsed,
           },
         ],
       };
@@ -53,6 +54,7 @@ export const applyEffect = (
           value,
           duration,
           owner: sourceId,
+          lastSpeedElapsed: ctx.speedElapsed,
         });
       }
       // Increase effect magnitude
@@ -68,6 +70,7 @@ export const applyEffect = (
           value,
           duration,
           owner: sourceId,
+          lastSpeedElapsed: ctx.speedElapsed,
         });
       }
       // Add new effect instance
@@ -76,6 +79,7 @@ export const applyEffect = (
         value,
         duration,
         owner: sourceId,
+        lastSpeedElapsed: ctx.speedElapsed,
       });
     }
   });

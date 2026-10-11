@@ -62,7 +62,7 @@ export const checkNextTurn = (
 export const checkRoundEnd = (ctx: ActionCtx) => {
   const { characters } = ctx;
   return Object.values(characters).every(
-    (character) => character.stats.core.speed <= 0,
+    (character) => character.isDead || character.stats.core.speed <= 0,
   );
 };
 
