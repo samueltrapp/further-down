@@ -15,8 +15,7 @@ const onTrigger = (ctx: ActionCtx, selection: string): ActionCtx => {
 
 export const tallShadowEnch: EnchantmentType = {
   name: "tall shadow",
-  description:
-    "When an attack misses you, gain a shadow stack that increases your EVA by 5. Stacks persist until the end of battle.",
+  description: "Gain dodge whenever you evade an attack.",
   socketType: "armor",
   trigger: "defend",
   selection: "self",

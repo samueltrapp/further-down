@@ -1,7 +1,8 @@
 import { EffectType } from "../../../../types/equipables/effects.ts";
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
 
-const EVASION_PER_STACK = 8;
+const FLAT_DODGE_PER_STACK = 8;
+const SCALING_DODGE_PER_STACK = 0.1;
 
 const applyFn = (
   ctx: ActionCtx,
@@ -14,7 +15,9 @@ const applyFn = (
   const targetInstance = instance.get(targetId);
   let gained = 0;
   if (targetInstance?.evaded) {
-    gained = EVASION_PER_STACK;
+    gained =
+      FLAT_DODGE_PER_STACK +
+      target.stats.mastery.plating * SCALING_DODGE_PER_STACK;
     target.stats.discipline.dodge += gained;
   }
   return { ctx, value: gained };
@@ -35,8 +38,7 @@ const tallShadow: EffectType = {
   type: "favor",
   durationType: "rounds",
   stackType: "escalate",
-  tooltip:
-    "Gain evasion every time an attack misses you. Lasts until end of battle.",
+  tooltip: "Gain evasion every time an attack misses you.",
   onApply: applyFn,
   onRemove: removeFn,
 };

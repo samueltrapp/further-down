@@ -49,7 +49,7 @@ const getSelectionIds = (
 
   switch (selection) {
     case "self":
-      return [ctx.sourceId];
+      return [referenceId];
     case "targets":
       return ctx.targetIds;
     case "all-allies":

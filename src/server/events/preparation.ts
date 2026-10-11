@@ -6,6 +6,7 @@ import { LobbyStatus } from "../../types/game.ts";
 import { sendGame } from "../meta/gameManagement.ts";
 import { WeaponName } from "../../types/equipables/weapons.ts";
 import { ArmorName } from "../../types/equipables/armors.ts";
+import { BlessingName } from "../../types/equipables/blessings.ts";
 import { armorMap } from "../../shared/definitions/armors/sets.ts";
 import { deriveArmorStats } from "../utils/stats.ts";
 import { resolveTurnOrder } from "../utils/turnOrder.ts";
@@ -28,10 +29,18 @@ export function submitPrepare(
     const character = { ...game.characters[characterId] } as PlayerType;
     if (character?.team !== "player") return;
 
-    /* Guard against a client sending more than the allowed cap or blessings outside the loadout. */
-    const validBlessings = blessings
-      .filter((name) => character.loadout.blessings.includes(name))
-      .slice(0, 3);
+    /* Guard against a client sending more than the allowed cap or blessings outside the loadout.
+       Consume matching entries from a copy to ensure each equipped copy is owned. */
+    const remainingBlessings = [...character.loadout.blessings];
+    const validBlessings: BlessingName[] = [];
+    for (const name of blessings) {
+      const index = remainingBlessings.indexOf(name);
+      if (index !== -1) {
+        remainingBlessings.splice(index, 1);
+        validBlessings.push(name);
+        if (validBlessings.length >= 3) break;
+      }
+    }
 
     /* Consume copies of the socket maps to correctly handle duplicate enchantment names. */
     const remainingWeapon: Record<string, EnchantmentName[]> =

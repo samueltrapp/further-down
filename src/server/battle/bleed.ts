@@ -32,10 +32,10 @@ export const processBleedDamage = (ctx: ActionCtx): ActionCtx => {
     const scalingDamage = effectDef.scalingDamage ?? 0;
 
     state.stacks.forEach((stack) => {
-      const ownerPadding =
-        ctx.characters[stack.owner]?.stats.mastery.padding ?? 0;
+      const ownerBladed =
+        ctx.characters[stack.owner]?.stats.mastery.bladed ?? 0;
       const damagePerTick =
-        (flatDamage + ownerPadding * scalingDamage) * stack.value;
+        (flatDamage + ownerBladed * scalingDamage) * stack.value;
       const actualDamage = limitToZero(trunc(damagePerTick) - mitigation);
 
       target.stats.core.life = limitToZero(

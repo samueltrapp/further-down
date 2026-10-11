@@ -14,6 +14,7 @@ import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
 import { BlessingName } from "../../types/equipables/blessings.ts";
+import { checkNextTurn } from "../battle/core.ts";
 
 export function submitName(
   connection: ConnectionType,
@@ -58,6 +59,9 @@ export function takeReward(
         ) as ArmorName[];
       } else if (rewardType === "blessings") {
         character.loadout.blessings.push(rewardName as BlessingName);
+        character.private.queue.blessings = randomizeCollection(
+          reducedQueue as BlessingName[],
+        ) as BlessingName[];
       } else if (rewardType === "enchantments") {
         character.loadout.enchantments.push({
           name: rewardName as EnchantmentName,
@@ -136,7 +140,7 @@ export function finishSkilling(
       battle = setBlankBattle(characters);
     }
 
-    /* Skip preparation if all player characters already have prepare cleared. */
+    /* Skip preparation if all player characters are already prepared. */
     const allPrepared = Object.values(characters).every(
       (char) =>
         char.team !== "player" || (char as PlayerType).pending.prepare === 0,
@@ -159,8 +163,8 @@ export function finishSkilling(
     connection.meta.games.set(gameId, newGameState);
     sendGame(connection, gameId);
 
-    // if (votedToAdvance && allPrepared) {
-    //   checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
-    // }
+    if (votedToAdvance && allPrepared) {
+      checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
+    }
   }
 }

@@ -10,8 +10,9 @@ import { sendGame } from "../meta/gameManagement.ts";
 import { Victor } from "../../types/game.ts";
 import {
   applyDeath,
+  checkBattleEnd,
   checkNextTurn,
-  checkProgressStatus,
+  checkRoundEnd,
   finishTurn,
   switchWeapon,
 } from "./core.ts";
@@ -206,11 +207,11 @@ export function handleTurn(
     ctx = applyDeath(ctx);
     game.battle.speedElapsed += ctx.speed;
 
-    const { isRoundEnd, victor } = checkProgressStatus(ctx);
-
     /* End of turn */
     ctx = handleSideEffects(ctx, "turn-end");
     ctx = removeEffects(ctx, "turns");
+
+    const isRoundEnd = checkRoundEnd(ctx);
 
     /* End of round */
     if (isRoundEnd) {
@@ -221,6 +222,8 @@ export function handleTurn(
     }
 
     ctx = applyDeath(ctx);
+
+    const victor = checkBattleEnd(ctx);
 
     /* End of battle */
     if (victor !== Victor.NONE) {
