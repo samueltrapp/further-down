@@ -45,7 +45,7 @@ const Selection = [
   "all-enemies",
   "random-ally",
   "random-enemy",
-];
+] as const;
 export type Selection = (typeof Selection)[number];
 
 export type EnchantmentType = {
