@@ -3,8 +3,9 @@ import { ArmorType } from "../../../../types/equipables/armors.ts";
 export const tunic: ArmorType = {
   name: "tunic",
   team: "player",
-  constitution: 5,
-  protection: 3,
+  block: 3,
+  finesse: 7,
+  protection: 4,
   affinities: {
     defense: 0.9,
     resistance: 1.7,
@@ -14,7 +15,7 @@ export const tunic: ArmorType = {
     warding: 1.7,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "Medium magical armor",
 };

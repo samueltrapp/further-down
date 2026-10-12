@@ -2,15 +2,17 @@ import { EnemyTurnType, PlayerTurnType } from "../../types/events/turn.ts";
 import { ConnectionType } from "../../types/server.ts";
 import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { ActionCtx } from "../../types/events/actionCtx.ts";
-import { applyDamage, calcDamage } from "./damage.ts";
-import { calcMitigation } from "./mitigation.ts";
+import { applyDamage, handleAttack } from "./damage.ts";
+import { calcEvasion, handleMitigation } from "./mitigation.ts";
+import { applyHeal, handleHeal } from "./heal.ts";
 import { expendSpeed, restoreSpeed } from "./speed.ts";
 import { sendGame } from "../meta/gameManagement.ts";
 import { Victor } from "../../types/game.ts";
 import {
   applyDeath,
+  checkBattleEnd,
   checkNextTurn,
-  checkProgressStatus,
+  checkRoundEnd,
   finishTurn,
   switchWeapon,
 } from "./core.ts";
@@ -18,18 +20,30 @@ import { toCaps } from "../../client/utils/formatting.ts";
 import { TeamType } from "../../types/individual/characters.ts";
 import { randEntry, validTargets } from "../../shared/utils.ts";
 import { applyEffect, removeEffects } from "./effect.ts";
-import { handleEnchantments } from "./enchantments.ts";
+import { processBurnDamage } from "./burn.ts";
+import { processBleedDamage } from "./bleed.ts";
+import { handleSideEffects } from "./sideEffects.ts";
+import {
+  StepType,
+  TargetMethodType,
+} from "../../types/equipables/maneuvers.ts";
+import { validateTurn } from "./turnValidator.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
   targetIds: string[];
 };
 
-const assignTargets = (ctx: ActionCtx, turnProps: TurnProps) => {
+const assignTargets = (
+  ctx: ActionCtx,
+  turnProps: TurnProps,
+  targetMethodOverride?: TargetMethodType,
+) => {
   const { sourceTeam, targetIds } = turnProps;
   const { characters, maneuver } = ctx;
+  const targetMethod = targetMethodOverride ?? maneuver.targetMethod;
 
-  switch (maneuver.targetMethod) {
+  switch (targetMethod) {
     case "select":
       return targetIds;
     case "self":
@@ -46,13 +60,25 @@ const assignTargets = (ctx: ActionCtx, turnProps: TurnProps) => {
   }
 };
 
-const resetCtxStep = (ctx: ActionCtx, turnProps: TurnProps): ActionCtx => {
+const resetCtxStep = (
+  ctx: ActionCtx,
+  turnProps: TurnProps,
+  step: StepType,
+): ActionCtx => {
+  const targetIds = assignTargets(ctx, turnProps, step.targetOverride);
+  const instance = new Map(
+    targetIds.map((targetId) => [
+      targetId,
+      { damage: 0, mitigation: 0, heal: 0, evaded: false },
+    ]),
+  );
+
   return {
     ...ctx,
-    targetIds: assignTargets(ctx, turnProps),
+    targetIds,
     toHit: 0,
     accuracy: 0,
-    instance: new Map(),
+    instance,
     heal: 0,
   };
 };
@@ -74,6 +100,14 @@ export function handleTurn(
   turn: PlayerTurnType | EnemyTurnType,
 ) {
   const game = connection.meta.games.get(turn.gameId);
+
+  // Validate turn before processing
+  const validationError = validateTurn(connection, turn, game);
+  if (validationError) {
+    connection.socket.emit("error", { message: validationError });
+    return;
+  }
+
   if (game && game.characters) {
     const source = game.characters[turn.sourceId];
     const isPlayerTurn = turn.team === "player";
@@ -85,6 +119,7 @@ export function handleTurn(
 
     const sourceTeam = turn.team;
     const weapon = sourceTeam === "player" ? turn.weapon : "";
+    const isBattleStart = game.battle.isFresh;
 
     let ctx: ActionCtx = {
       characters: game.characters,
@@ -92,11 +127,14 @@ export function handleTurn(
       maneuver: maneuver,
       targetIds: [],
       speed: maneuver.speedCost,
+      speedElapsed: game.battle.speedElapsed,
       messages: turnLog(source.name, maneuver.name, weapon),
       toHit: 0,
       accuracy: 0,
       instance: new Map(),
       heal: 0,
+      round: game.battle.round,
+      previousResults: [],
     };
 
     /* Pre-action */
@@ -104,52 +142,98 @@ export function handleTurn(
       ctx = switchWeapon(ctx, turn.weapon);
     }
 
+    /* Battle-start and round-start side effects only trigger on the very first turn of a fresh battle. */
+    if (isBattleStart) {
+      ctx = handleSideEffects(ctx, "battle-start");
+      ctx = handleSideEffects(ctx, "round-start");
+    }
+
+    /* Turn-start blessings and enchantments, apply burn damage */
+    ctx = handleSideEffects(ctx, "turn-start");
+    ctx = processBurnDamage(ctx);
+    ctx = applyDeath(ctx);
+
+    const isDead = ctx.characters[ctx.sourceId]?.isDead;
+
     /* Action */
-    maneuver?.steps.forEach((step) => {
-      ctx = resetCtxStep(ctx, { sourceTeam, targetIds: turn.targetIds });
+    if (!isDead) {
+      maneuver?.steps.forEach((step) => {
+        ctx = resetCtxStep(
+          ctx,
+          { sourceTeam, targetIds: turn.targetIds },
+          step,
+        );
 
-      /* Process hits */
-      if (step.type === "hit") {
-        ctx = calcDamage(ctx, step);
-        if (step.hitFn) {
-          ctx = step.hitFn(ctx);
+        /* Process hits */
+        if (step.type === "hit") {
+          ctx = handleAttack(ctx, step);
+          if (step.hitFn) {
+            ctx = step.hitFn(ctx);
+          }
+          ctx = calcEvasion(step, ctx);
+          ctx = handleSideEffects(ctx, "attack", step);
+          ctx = handleMitigation(ctx, step);
+          ctx = handleSideEffects(ctx, "defend", step);
+          ctx = applyDamage(ctx);
+        } else if (step.type === "heal") {
+          /* Process healing */
+          ctx = handleHeal(ctx, step);
+          if (step.healFn) {
+            ctx = step.healFn(ctx);
+          }
+          ctx = handleSideEffects(ctx, "heal", step);
+          ctx = handleSideEffects(ctx, "heal-received", step);
+          ctx = applyHeal(ctx);
+        } else if (step.type === "effect") {
+          /* Process effects */
+          ctx = applyEffect(
+            ctx,
+            ctx.sourceId,
+            ctx.targetIds,
+            step.effect,
+            step,
+          );
         }
-        ctx = handleEnchantments(ctx, "attack", step);
-        ctx = calcMitigation(step, ctx);
-        ctx = handleEnchantments(ctx, "defend", step);
-        ctx = applyDamage(ctx);
-      } else if (step.type === "heal") {
 
-      /* Process healing */
-        ctx = { ...ctx };
-      } else if (step.type === "effect") {
-
-      /* Process effects */
-        ctx = applyEffect(ctx, step);
-      }
-    });
+        /* Snapshot this step's outcome so later steps in the same maneuver
+           can reference it (e.g. a heal step leeching off a prior hit). */
+        ctx = {
+          ...ctx,
+          previousResults: [
+            ...ctx.previousResults,
+            { step, targetIds: ctx.targetIds, instance: ctx.instance },
+          ],
+        };
+      });
+    }
 
     /* Post-action */
     ctx = expendSpeed(ctx);
+    ctx = processBleedDamage(ctx);
     ctx = applyDeath(ctx);
-
-    const { isRoundEnd, victor } = checkProgressStatus(ctx);
+    game.battle.speedElapsed += ctx.speed;
 
     /* End of turn */
-    ctx = handleEnchantments(ctx, "turn-end");
-    ctx = removeEffects(ctx, "turn");
+    ctx = handleSideEffects(ctx, "turn-end");
+    ctx = removeEffects(ctx, "turns");
+
+    const isRoundEnd = checkRoundEnd(ctx);
 
     /* End of round */
     if (isRoundEnd) {
-      ctx = handleEnchantments(ctx, "round-end");
-      ctx = removeEffects(ctx, "round");
+      ctx = handleSideEffects(ctx, "round-end");
+      ctx = removeEffects(ctx, "rounds");
       ctx = restoreSpeed(ctx);
-      ctx = handleEnchantments(ctx, "round-start");
+      ctx = handleSideEffects(ctx, "round-start");
     }
+
+    ctx = applyDeath(ctx);
+
+    const victor = checkBattleEnd(ctx);
 
     /* End of battle */
     if (victor !== Victor.NONE) {
-      ctx = handleEnchantments(ctx, "battle-end");
+      ctx = handleSideEffects(ctx, "battle-end");
       ctx = removeEffects(ctx, "battle");
     }
 

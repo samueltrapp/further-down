@@ -1,48 +1,43 @@
 import { EffectType } from "../../../../types/equipables/effects.ts";
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
-import { StepType } from "../../../../types/equipables/maneuvers.ts";
 
-const applyFn = (ctx: ActionCtx, ids: string[], step: StepType | undefined) => {
-  if (step?.type === "hit" && step.damageType !== "bladed") {
-    return ctx;
-  }
-
-  const id = ids[0];
+const applyFn = (ctx: ActionCtx, sourceId: string) => {
   const { characters } = ctx;
 
   let hit = false;
   for (const instance of ctx.instance) {
-    if (!instance[1].evaded) {
+    const instanceDtl = instance[1];
+    if (!instanceDtl.evaded) {
       hit = true;
       break;
     }
   }
 
   if (hit) {
-    characters[id].stats.mastery.bladed += 1;
+    characters[sourceId].stats.mastery.bladed += 1;
   }
 
-  return ctx;
+  return { ctx, value: hit ? 1 : 0 };
 };
 
-const removeFn = (ctx: ActionCtx, ids: string[]) => {
+const removeFn = (
+  ctx: ActionCtx,
+  sourceId: string,
+  _targetId: string,
+  value: number,
+) => {
   const { characters } = ctx;
-  ids.forEach((id) => {
-    const stacks = characters[id].effects["sharpen the blade"] || 0;
-    characters[id].effects["sharpen the blade"] = 0;
-    characters[id].stats.mastery.bladed -= stacks;
-  });
+  /* Reverses the recorded bladed gain directly, instead of recalculating it. */
+  characters[sourceId].stats.mastery.bladed -= value;
 
   return ctx;
 };
 
 const sharpenTheBlade: EffectType = {
   type: "favor",
-  duration: "round",
-  stackable: true,
-  tooltip:
-    "Gain 1 BLD every time you hit with a BLD maneuver. Lasts until end of round.",
-  owner: "",
+  durationType: "rounds",
+  stackType: "escalate",
+  tooltip: "Gain 1 BLD every time you hit. Lasts until end of round.",
   onApply: applyFn,
   onRemove: removeFn,
 };

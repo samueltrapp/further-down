@@ -9,14 +9,24 @@ import pummel from "./collection/pummel.ts";
 import ache from "./collection/ache.ts";
 import { pass } from "./collection/pass.ts";
 import { headbutt } from "./collection/headbutt.ts";
+import combustion from "./collection/combustion.ts";
+import lacerate from "./collection/lacerate.ts";
+import { gossamer } from "./collection/gossamer.ts";
+import { soothe } from "./collection/soothe.ts";
+import siphon from "./collection/siphon.ts";
 
 const maneuvers: [ManeuverName, ManeuverType][] = [
   ["ache", ache],
   ["bonk", bonk],
+  ["combustion", combustion],
   ["deluge", deluge],
+  ["gossamer", gossamer],
   ["headbutt", headbutt],
+  ["lacerate", lacerate],
   ["pummel", pummel],
   ["quicksilver", quicksilver],
+  ["siphon", siphon],
+  ["soothe", soothe],
   ["pass", pass],
 ];
 

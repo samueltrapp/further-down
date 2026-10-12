@@ -12,8 +12,9 @@ import { WeaponName } from "../../types/equipables/weapons.ts";
 import { ArmorName } from "../../types/equipables/armors.ts";
 import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/maneuvers.ts";
-import { checkNextTurn } from "../battle/core.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
+import { BlessingName } from "../../types/equipables/blessings.ts";
+import { checkNextTurn } from "../battle/core.ts";
 
 export function submitName(
   connection: ConnectionType,
@@ -56,6 +57,11 @@ export function takeReward(
         character.private.queue.armors = randomizeCollection(
           reducedQueue as ArmorName[],
         ) as ArmorName[];
+      } else if (rewardType === "blessings") {
+        character.loadout.blessings.push(rewardName as BlessingName);
+        character.private.queue.blessings = randomizeCollection(
+          reducedQueue as BlessingName[],
+        ) as BlessingName[];
       } else if (rewardType === "enchantments") {
         character.loadout.enchantments.push({
           name: rewardName as EnchantmentName,
@@ -75,17 +81,11 @@ export function takeReward(
           reducedQueue as WeaponName[],
         ) as WeaponName[];
       }
-      character.pending[rewardType] = character.pending[rewardType] - 1;
+      character.pending[rewardType]--;
 
       /* Update game */
-      const newGameState = {
-        ...game,
-        characters: {
-          ...game.characters,
-          [characterId]: character,
-        },
-      };
-      connection.meta.games.set(gameId, newGameState);
+      game.characters[characterId] = character;
+      connection.meta.games.set(gameId, game);
       sendGame(connection, gameId);
     }
   }
@@ -140,7 +140,7 @@ export function finishSkilling(
       battle = setBlankBattle(characters);
     }
 
-    /* Skip preparation if all player characters already have prepare cleared. */
+    /* Skip preparation if all player characters are already prepared. */
     const allPrepared = Object.values(characters).every(
       (char) =>
         char.team !== "player" || (char as PlayerType).pending.prepare === 0,
@@ -163,7 +163,8 @@ export function finishSkilling(
     connection.meta.games.set(gameId, newGameState);
     sendGame(connection, gameId);
 
-    /* Immediately go if an enemy has the first turn */
-    checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
+    if (votedToAdvance && allPrepared) {
+      checkNextTurn(connection, gameId, 5000); // TODO: Better delayed start
+    }
   }
 }

@@ -14,7 +14,7 @@ export const hammer: WeaponType = {
     psychic: 1.4,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "Hammer description",
 };

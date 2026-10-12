@@ -3,8 +3,9 @@ import { ArmorType } from "../../../../types/equipables/armors.ts";
 export const platemail: ArmorType = {
   name: "platemail",
   team: "player",
-  constitution: 5,
-  protection: 4,
+  block: 5,
+  finesse: 3,
+  protection: 7,
   affinities: {
     defense: 2.4,
     resistance: 0.3,
@@ -14,7 +15,7 @@ export const platemail: ArmorType = {
     warding: 0.4,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "Heavy physical armor",
 };

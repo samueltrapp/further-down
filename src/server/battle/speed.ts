@@ -3,17 +3,11 @@ import { ActionCtx } from "../../types/events/actionCtx.ts";
 export const expendSpeed = (ctx: ActionCtx): ActionCtx => {
   const { characters, sourceId } = ctx;
   const source = characters[sourceId];
-
-  if (!source) {
-    return ctx;
-  }
+  if (!source) return ctx;
 
   source.stats.core.speed -= ctx.speed;
   ctx.characters[sourceId] = source;
-  return {
-    ...ctx,
-    characters,
-  };
+  return ctx;
 };
 
 export const restoreSpeed = (ctx: ActionCtx) => {
@@ -23,8 +17,5 @@ export const restoreSpeed = (ctx: ActionCtx) => {
     character.stats.core.speed += character.stats.core.maxSpeed;
   }
 
-  return {
-    ...ctx,
-    characters,
-  };
+  return ctx;
 };

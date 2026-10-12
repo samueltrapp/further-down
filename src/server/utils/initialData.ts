@@ -10,15 +10,15 @@ import { EnchantmentName } from "../../types/equipables/enchantments.ts";
 import { ManeuverName } from "../../types/equipables/maneuvers.ts";
 import { WeaponName } from "../../types/equipables/weapons.ts";
 import { StatsType } from "../../types/individual/stats.ts";
+import { blessingCollection } from "../../shared/definitions/blessings/sets.ts";
+import { BlessingName } from "../../types/equipables/blessings.ts";
 
 const baseStats: StatsType = {
   core: {
     vitality: 20,
-    protection: 5,
     life: 100,
     maxLife: 100,
     initiative: 20,
-    finesse: 1,
     speed: 20,
     maxSpeed: 20,
   },
@@ -27,9 +27,9 @@ const baseStats: StatsType = {
     mystic: 5,
     defense: 2,
     resistance: 2,
-    accuracy: 0,
+    precision: 0,
     control: 0,
-    evasion: 0,
+    dodge: 0,
     negation: 0,
   },
   mastery: {
@@ -95,11 +95,13 @@ const blankCharacters = (userSpread: string[]) => {
       lastTurn: 0,
       equipped: {
         weapon: null,
+        blessings: [],
         armor: null,
         enchantments: [],
       },
       loadout: {
         armors: [],
+        blessings: [],
         enchantments: [],
         maneuvers: [],
         weapons: [],
@@ -107,6 +109,7 @@ const blankCharacters = (userSpread: string[]) => {
       private: {
         queue: {
           armors: randomizeCollection(playerArmorCollection) as ArmorName[],
+          blessings: randomizeCollection(blessingCollection) as BlessingName[],
           enchantments: randomizeCollection(
             enchantmentCollection,
           ) as EnchantmentName[],
@@ -117,13 +120,14 @@ const blankCharacters = (userSpread: string[]) => {
       },
       stats: baseStats,
       pending: {
-        armors: 2,
+        armors: 1,
+        blessings: 1,
         enchantments: 1,
-        maneuvers: 1,
+        maneuvers: 2,
         weapons: 2,
-        core: 0,
-        discipline: 0,
-        mastery: 0,
+        core: 2,
+        discipline: 8,
+        mastery: 8,
         prepare: 1,
       },
       team: "player",
@@ -136,17 +140,19 @@ const blankCharacters = (userSpread: string[]) => {
 const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
   "0aY7sxjZ": {
     id: "0aY7sxjZ",
-    name: "Character",
+    name: "Character1",
     userId: userId,
     effects: {},
     lastTurn: 0,
     equipped: {
       weapon: "periapt",
+      blessings: [],
       armor: "robe",
       enchantments: ["red fang"],
     },
     loadout: {
       armors: ["leather", "robe"],
+      blessings: [],
       enchantments: [
         {
           name: "red fang",
@@ -159,18 +165,17 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     private: {
       queue: {
         armors: ["tunic", "platemail"],
+        blessings: ["eternal flame"],
         enchantments: ["tall shadow", "sharpen the blade"],
-        maneuvers: ["pummel", "headbutt", "deluge", "ache"],
+        maneuvers: ["combustion", "headbutt", "deluge", "ache"],
         weapons: ["hammer", "scepter"],
       },
       savedStats: {
         core: {
           vitality: 20,
-          protection: 5,
           life: 100,
           maxLife: 100,
           initiative: 20,
-          finesse: 1,
           speed: 20,
           maxSpeed: 20,
         },
@@ -179,9 +184,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
           mystic: 5,
           defense: 2,
           resistance: 2,
-          accuracy: 0,
+          precision: 0,
           control: 0,
-          evasion: 0,
+          dodge: 0,
           negation: 0,
         },
         mastery: {
@@ -199,11 +204,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     stats: {
       core: {
         vitality: 20,
-        protection: 5,
         life: 100,
         maxLife: 100,
         initiative: 20,
-        finesse: 1,
         speed: 20,
         maxSpeed: 20,
       },
@@ -212,9 +215,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
         mystic: 5,
         defense: 2,
         resistance: 2,
-        accuracy: 0,
+        precision: 0,
         control: 0,
-        evasion: 0,
+        dodge: 0,
         negation: 0,
       },
       mastery: {
@@ -230,6 +233,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     },
     pending: {
       armors: 0,
+      blessings: 0,
       enchantments: 0,
       maneuvers: 0,
       weapons: 0,
@@ -243,17 +247,19 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
   },
   D6DzT5a8: {
     id: "D6DzT5a8",
-    name: "Character",
+    name: "Character2",
     userId: userId,
     effects: {},
     lastTurn: 0,
     equipped: {
       weapon: "scepter",
+      blessings: [],
       armor: "leather",
       enchantments: ["red fang"],
     },
     loadout: {
       armors: ["platemail", "leather"],
+      blessings: [],
       enchantments: [
         {
           name: "red fang",
@@ -266,6 +272,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     private: {
       queue: {
         armors: ["tunic", "robe"],
+        blessings: ["eternal flame"],
         enchantments: ["sharpen the blade", "tall shadow"],
         maneuvers: ["headbutt", "pummel", "deluge", "ache"],
         weapons: ["cutlass", "hammer"],
@@ -273,11 +280,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
       savedStats: {
         core: {
           vitality: 20,
-          protection: 5,
           life: 100,
           maxLife: 100,
           initiative: 20,
-          finesse: 1,
           speed: 20,
           maxSpeed: 20,
         },
@@ -286,9 +291,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
           mystic: 5,
           defense: 2,
           resistance: 2,
-          accuracy: 0,
+          precision: 0,
           control: 0,
-          evasion: 0,
+          dodge: 0,
           negation: 0,
         },
         mastery: {
@@ -306,11 +311,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     stats: {
       core: {
         vitality: 20,
-        protection: 5,
         life: 100,
         maxLife: 100,
         initiative: 20,
-        finesse: 1,
         speed: 20,
         maxSpeed: 20,
       },
@@ -319,9 +322,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
         mystic: 5,
         defense: 2,
         resistance: 2,
-        accuracy: 0,
+        precision: 0,
         control: 0,
-        evasion: 0,
+        dodge: 0,
         negation: 0,
       },
       mastery: {
@@ -337,6 +340,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     },
     pending: {
       armors: 0,
+      blessings: 0,
       enchantments: 0,
       maneuvers: 0,
       weapons: 0,
@@ -350,17 +354,19 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
   },
   lKTPjmtP: {
     id: "lKTPjmtP",
-    name: "Character",
+    name: "Character3",
     userId: userId,
     effects: {},
     lastTurn: 0,
     equipped: {
       weapon: "periapt",
+      blessings: [],
       armor: "platemail",
       enchantments: [],
     },
     loadout: {
       armors: ["tunic", "platemail"],
+      blessings: [],
       enchantments: [
         {
           name: "red fang",
@@ -373,6 +379,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     private: {
       queue: {
         armors: ["leather", "robe"],
+        blessings: ["eternal flame"],
         enchantments: ["sharpen the blade", "tall shadow"],
         maneuvers: ["ache", "deluge", "quicksilver", "pummel"],
         weapons: ["scepter", "cutlass"],
@@ -380,11 +387,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
       savedStats: {
         core: {
           vitality: 20,
-          protection: 5,
           life: 100,
           maxLife: 100,
           initiative: 20,
-          finesse: 1,
           speed: 20,
           maxSpeed: 20,
         },
@@ -393,9 +398,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
           mystic: 5,
           defense: 2,
           resistance: 2,
-          accuracy: 0,
+          precision: 0,
           control: 0,
-          evasion: 0,
+          dodge: 0,
           negation: 0,
         },
         mastery: {
@@ -413,11 +418,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     stats: {
       core: {
         vitality: 20,
-        protection: 5,
         life: 100,
         maxLife: 100,
         initiative: 20,
-        finesse: 1,
         speed: 20,
         maxSpeed: 20,
       },
@@ -426,9 +429,9 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
         mystic: 5,
         defense: 2,
         resistance: 2,
-        accuracy: 0,
+        precision: 0,
         control: 0,
-        evasion: 0,
+        dodge: 0,
         negation: 0,
       },
       mastery: {
@@ -444,6 +447,7 @@ const prefabSinglePlayer = (userId: string): Record<string, PlayerType> => ({
     },
     pending: {
       armors: 0,
+      blessings: 0,
       enchantments: 0,
       maneuvers: 0,
       weapons: 0,

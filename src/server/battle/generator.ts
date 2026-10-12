@@ -11,6 +11,7 @@ import { EnemyType } from "../../types/individual/characters.ts";
 
 export const setBlankBattle = (characters: CharactersType): BattleType => ({
   grade: BattleGrade.MODERATE,
+  isFresh: true,
   messages: [],
   round: 1,
   speedElapsed: 0,
