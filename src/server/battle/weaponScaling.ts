@@ -1,14 +1,14 @@
 import { DamageType } from "../../types/equipables/maneuvers.ts";
 import { WeaponType } from "../../types/equipables/weapons.ts";
 import { StatsType } from "../../types/individual/stats.ts";
-import { randNum } from "../../shared/utils.ts";
 
 /**
  * Shared weapon-based value scaling, used by both damage and healing
  * calculations so any step that draws its power from the equipped weapon
  * (dealing damage, restoring life, etc.) scales identically.
  */
-const createSpread = (spread: number) => randNum(spread * 2) - spread;
+const createSpread = (spread: number) =>
+  Math.round(Math.random() * spread * 2) - spread;
 
 export function getBaseWeaponValue(weapon: WeaponType) {
   return weapon.power + createSpread(weapon.spread);

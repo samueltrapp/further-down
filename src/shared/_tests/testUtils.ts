@@ -121,8 +121,8 @@ export const makePlayer = (
       armors: [],
       blessings: [],
       enchantments: [],
-      maneuvers: [],
-      weapons: [],
+      maneuvers: ["headbutt"],
+      weapons: ["cutlass"],
     },
     stats: blankStats(),
     effects: {},
@@ -209,7 +209,7 @@ export const makeEnemy = (
       armors: [],
       blessings: [],
       enchantments: [],
-      maneuvers: [],
+      maneuvers: ["bonk", "pass"],
       weapons: [],
     },
     stats: blankStats(),
@@ -273,7 +273,7 @@ export const makeGame = (
     messages: [],
     round: 1,
     speedElapsed: 0,
-    turnOrder: [],
+    turnOrder: [attacker.id],
     victor: Victor.NONE,
   },
   characters: { [attacker.id]: attacker, [target.id]: target },
@@ -292,19 +292,31 @@ export const makeGame = (
  * Provides a mock socket.io connection with a games map.
  *
  * @param game - The game object to attach to the connection
+ * @param userId - Optional userId to mock in socket.rooms (for player turn validation)
  * @returns A mock ConnectionType object
  *
  * @example
- * const connection = makeConnection(game);
+ * const connection = makeConnection(game, "player-1");
  * handleTurn(connection, turn);
  */
-export const makeConnection = (game: GameType): ConnectionType => {
+export const makeConnection = (
+  game: GameType,
+  userId?: string,
+): ConnectionType => {
   const games = new Map<string, GameType>();
   games.set("game-1", game);
+
+  const rooms = new Set<string>(["game-1"]);
+  if (userId) {
+    rooms.add(userId);
+  }
 
   return {
     meta: { games },
     io: { to: () => ({ emit: () => {} }) } as never,
-    socket: {} as never,
+    socket: {
+      rooms,
+      emit: () => {},
+    } as never,
   };
 };

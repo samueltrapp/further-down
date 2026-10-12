@@ -99,9 +99,9 @@ describe("calcMitigation", () => {
     });
 
     const result = calcMitigation(ctx, "blunt");
-    // leather: block 4, defense affinity 1.8, plating affinity 0.6 (used for blunt->padding)
-    // mitigation = 4 + 1.8*10 + 0.6*10 = 28
-    expect(result.instance.get("target")?.mitigation).toBe(28);
+    // leather: block 4, defense affinity 1.8, plating affinity 0.9 (used for blunt->padding)
+    // mitigation = 4 + 1.8*10 + 0.9*10 = 28
+    expect(result.instance.get("target")?.mitigation).toBe(31);
   });
 
   it("accumulates onto existing mitigation instead of overwriting it", () => {

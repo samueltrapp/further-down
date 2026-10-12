@@ -27,6 +27,7 @@ import {
   StepType,
   TargetMethodType,
 } from "../../types/equipables/maneuvers.ts";
+import { validateTurn } from "./turnValidator.ts";
 
 type TurnProps = {
   sourceTeam: TeamType;
@@ -99,6 +100,14 @@ export function handleTurn(
   turn: PlayerTurnType | EnemyTurnType,
 ) {
   const game = connection.meta.games.get(turn.gameId);
+
+  // Validate turn before processing
+  const validationError = validateTurn(connection, turn, game);
+  if (validationError) {
+    connection.socket.emit("error", { message: validationError });
+    return;
+  }
+
   if (game && game.characters) {
     const source = game.characters[turn.sourceId];
     const isPlayerTurn = turn.team === "player";
@@ -154,9 +163,6 @@ export function handleTurn(
           { sourceTeam, targetIds: turn.targetIds },
           step,
         );
-        // TODO: validate targetIds against maneuver.targetMethod/maxTargets
-        //  (e.g. enforce 1-4 selections for "select") once server-side
-        //  target validation is introduced.
 
         /* Process hits */
         if (step.type === "hit") {

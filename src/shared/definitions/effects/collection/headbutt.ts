@@ -6,7 +6,7 @@ import {
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
 
 const FIXED_DDG_REDUCTION = 20;
-const SCALING_DDG_REDUCTION = 1;
+const SCALING_DDG_REDUCTION = 2;
 
 /* Reduces the target's evasion, scaled by the attacker's blunt mastery
    at the time of application. */
@@ -35,7 +35,7 @@ const headbutt: EffectType = {
   type: "burden",
   durationType: "rounds",
   stackType: "escalate",
-  tooltip: "Reduces EVA by 20 + 1.0[DF]",
+  tooltip: "Reduces EVA by 20 + 2.0[BLT]",
   onApply: applyFn,
   onRemove: removeFn,
 };
