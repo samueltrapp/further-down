@@ -58,7 +58,14 @@ export function takeReward(
           reducedQueue as ArmorName[],
         ) as ArmorName[];
       } else if (rewardType === "blessings") {
-        character.loadout.blessings.push(rewardName as BlessingName);
+        const blessing = rewardName as BlessingName;
+        if (
+          character.pending.blessings <= 0 ||
+          !character.private.queue.blessings.includes(blessing)
+        ) {
+          return;
+        }
+        character.loadout.blessings.push(blessing);
         character.private.queue.blessings = randomizeCollection(
           reducedQueue as BlessingName[],
         ) as BlessingName[];
