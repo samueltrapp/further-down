@@ -14,7 +14,7 @@ export const fungalAppendage: WeaponType = {
     psychic: 0.8,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "Cutlass description",
 };

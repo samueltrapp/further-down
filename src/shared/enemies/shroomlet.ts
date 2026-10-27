@@ -22,11 +22,9 @@ const shroomlet = (id: string, index: number): EnemyType => ({
   stats: {
     core: {
       vitality: 0,
-      protection: 0,
       life: 400,
       maxLife: 400,
       initiative: 0,
-      finesse: 0,
       speed: 20,
       maxSpeed: 20,
     },
@@ -35,9 +33,9 @@ const shroomlet = (id: string, index: number): EnemyType => ({
       mystic: 5,
       defense: 1,
       resistance: 3,
-      accuracy: 0,
+      precision: 0,
       control: 0,
-      evasion: 0,
+      dodge: 0,
       negation: 0,
     },
     mastery: {
@@ -53,11 +51,13 @@ const shroomlet = (id: string, index: number): EnemyType => ({
   },
   equipped: {
     weapon: "fungal appendage",
+    blessings: [],
     armor: "porous body",
     enchantments: [],
   },
   loadout: {
     armors: ["porous body"],
+    blessings: [],
     enchantments: [],
     maneuvers: ["bonk"],
     weapons: ["fungal appendage"],

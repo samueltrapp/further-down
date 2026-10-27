@@ -23,7 +23,7 @@ export type WeaponType = {
   power: number;
   spread: number;
   affinities: OffensiveAffinitiesType;
-  level: number;
+  tier: number;
   rarity: number;
   socketSize: number;
   description: string;

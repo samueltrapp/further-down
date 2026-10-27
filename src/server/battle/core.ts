@@ -41,7 +41,7 @@ export const switchWeapon = (ctx: ActionCtx, weapon: WeaponName) => {
 export const checkNextTurn = (
   connection: ConnectionType,
   gameId: string,
-  loadDelay?: number,
+  loadDelay: number = 0,
 ) => {
   const game = connection.meta.games.get(gameId);
   if (game) {
@@ -52,32 +52,36 @@ export const checkNextTurn = (
       if (isEnemyTurn && character) {
         setTimeout(
           () => decideEnemyTurn(connection, gameId, game, character.id),
-          loadDelay || 0,
+          loadDelay,
         );
       }
     }
   }
 };
 
-export const checkProgressStatus = (ctx: ActionCtx) => {
+export const checkRoundEnd = (ctx: ActionCtx) => {
+  const { characters } = ctx;
+  return Object.values(characters).every(
+    (character) => character.isDead || character.stats.core.speed <= 0,
+  );
+};
+
+export const checkBattleEnd = (ctx: ActionCtx) => {
   const { characters } = ctx;
 
   /* Check end of turn statuses */
-  let isRoundEnd = true,
-    areEnemiesDead = true,
+  let areEnemiesDead = true,
     arePlayersDead = true;
+
   for (const characterId in characters) {
     const character = characters[characterId];
 
-    /* End early if all statuses are already known */
-    if (
-      (!isRoundEnd && !areEnemiesDead && !arePlayersDead) ||
-      character.isDead
-    ) {
-      continue;
+    /* End early if both statuses are already known */
+    if (!areEnemiesDead && !arePlayersDead) {
+      break;
     }
-    if (character.stats.core.speed > 0) {
-      isRoundEnd = false;
+    if (character.isDead) {
+      continue;
     }
     if (character.team === "enemy") {
       areEnemiesDead = false;
@@ -87,20 +91,13 @@ export const checkProgressStatus = (ctx: ActionCtx) => {
     }
   }
 
-  const victor = (() => {
-    if (areEnemiesDead && !arePlayersDead) {
-      return Victor.PLAYER;
-    } else if (arePlayersDead) {
-      return Victor.ENEMY;
-    } else {
-      return Victor.NONE;
-    }
-  })();
-
-  return {
-    isRoundEnd,
-    victor,
-  };
+  if (areEnemiesDead && !arePlayersDead) {
+    return Victor.PLAYER;
+  } else if (arePlayersDead) {
+    return Victor.ENEMY;
+  } else {
+    return Victor.NONE;
+  }
 };
 
 /* Apply changes at end of turn */
@@ -130,6 +127,7 @@ export const finishTurn = (
     ...game,
     battle: {
       ...(game.battle as BattleType),
+      isFresh: false,
       messages: separatedMessages,
       round: resolveRoundCount(game.battle.round, isRoundEnd),
       turnOrder: resolveTurnOrder(game.characters),

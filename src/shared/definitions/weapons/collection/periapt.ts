@@ -14,7 +14,7 @@ export const periapt: WeaponType = {
     psychic: 1.9,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "Periapt description",
 };

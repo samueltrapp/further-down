@@ -1,37 +1,44 @@
 import { EffectType } from "../../../../types/equipables/effects.ts";
 import { ActionCtx } from "../../../../types/events/actionCtx.ts";
 
-const EVASION_PER_STACK = 5;
+const FLAT_DODGE_PER_STACK = 8;
+const SCALING_DODGE_PER_STACK = 0.1;
 
-const applyFn = (ctx: ActionCtx, ids: string[]): ActionCtx => {
+const applyFn = (
+  ctx: ActionCtx,
+  _source: string,
+  targetId: string,
+): { ctx: ActionCtx; value: number } => {
   const { characters, instance } = ctx;
-  ids.forEach((id) => {
-    const targetInstance = instance.get(id);
-    // Only add evasion if the attack actually missed
-    if (targetInstance?.evaded) {
-      const stacks = characters[id].effects["tall shadow"] || 0;
-      characters[id].stats.discipline.evasion += stacks * EVASION_PER_STACK;
-    }
-  });
-  return ctx;
+  const target = characters[targetId];
+
+  const targetInstance = instance.get(targetId);
+  let gained = 0;
+  if (targetInstance?.evaded) {
+    gained =
+      FLAT_DODGE_PER_STACK +
+      target.stats.mastery.plating * SCALING_DODGE_PER_STACK;
+    target.stats.discipline.dodge += gained;
+  }
+  return { ctx, value: gained };
 };
 
-const removeFn = (ctx: ActionCtx, ids: string[]): ActionCtx => {
+const removeFn = (
+  ctx: ActionCtx,
+  _sourceId: string,
+  targetId: string,
+  value: number,
+): ActionCtx => {
   const { characters } = ctx;
-  ids.forEach((id) => {
-    const stacks = characters[id].effects["tall shadow"] || 0;
-    characters[id].stats.discipline.evasion -= stacks * EVASION_PER_STACK;
-  });
+  characters[targetId].stats.discipline.dodge -= value;
   return ctx;
 };
 
 const tallShadow: EffectType = {
   type: "favor",
-  duration: "battle",
-  stackable: true,
-  tooltip:
-    "Gain evasion every time an attack misses you. Lasts until end of battle.",
-  owner: "",
+  durationType: "rounds",
+  stackType: "escalate",
+  tooltip: "Gain evasion every time an attack misses you.",
   onApply: applyFn,
   onRemove: removeFn,
 };

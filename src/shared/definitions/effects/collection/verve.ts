@@ -2,11 +2,10 @@ import { EffectType } from "../../../../types/equipables/effects.ts";
 
 const verve: EffectType = {
   type: "favor",
-  duration: "battle",
-  stackable: true,
+  durationType: "battle",
+  stackType: "independent",
   tooltip: "",
-  owner: "",
-  onApply: (ctx) => ctx,
+  onApply: (ctx) => ({ ctx, value: 1 }),
   onRemove: (ctx) => ctx,
 };
 

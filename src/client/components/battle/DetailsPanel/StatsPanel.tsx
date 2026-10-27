@@ -27,6 +27,10 @@ export default function StatsPanel({
         <div>Defense: {stats.discipline.defense}</div>
         <div>Mystic: {stats.discipline.mystic}</div>
         <div>Resistance: {stats.discipline.resistance}</div>
+        <div>Precision: {stats.discipline.precision}</div>
+        <div>Dodge: {stats.discipline.dodge}</div>
+        <div>Control: {stats.discipline.control}</div>
+        <div>Negation: {stats.discipline.negation}</div>
       </div>
       <h3 className="fs3">Mastery</h3>
       <div className="stat-category">

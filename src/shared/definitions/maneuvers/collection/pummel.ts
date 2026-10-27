@@ -3,17 +3,17 @@ import { ManeuverType } from "../../../../types/equipables/maneuvers.ts";
 const pummel: ManeuverType = {
   name: "pummel",
   team: "player",
-  description: "Pummel description",
-  speedCost: 8,
+  description: "A single strong but unsteady blow.",
+  speedCost: 6,
   perspective: "other",
   targetMethod: "select",
   maxTargets: 1,
   steps: [
     {
       type: "hit",
-      accuracy: 50,
+      accuracy: 60,
       damageType: "blunt",
-      strength: 2,
+      strength: 1.25,
     },
   ],
   tags: ["attack", "blunt", "single", "pure", "burden"],

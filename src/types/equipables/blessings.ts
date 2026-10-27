@@ -1,9 +1,8 @@
-export type BlessingName = "angelblade" | "flow" | "pacifist" | "predation";
+import { EnchantmentType } from "./enchantments.ts";
 
-export type TimingType = "before" | "after";
+const BlessingName = ["eternal flame", "tempest"] as const;
+export type BlessingName = (typeof BlessingName)[number];
 
-export type BlessingType = {
+export type BlessingType = Omit<EnchantmentType, "name" | "socketType"> & {
   name: BlessingName;
-  description: string;
-  timing: TimingType;
 };

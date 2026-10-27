@@ -3,8 +3,9 @@ import { ArmorType } from "../../../../types/equipables/armors.ts";
 export const robe: ArmorType = {
   name: "robe",
   team: "player",
-  constitution: 5,
-  protection: 1,
+  block: 1,
+  finesse: 8,
+  protection: 2,
   affinities: {
     defense: 0.4,
     resistance: 2.1,
@@ -14,7 +15,7 @@ export const robe: ArmorType = {
     warding: 0.8,
   },
   socketSize: 2,
-  level: 1,
+  tier: 1,
   rarity: 0,
   description: "Light magical armor",
 };

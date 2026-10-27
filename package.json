@@ -9,6 +9,8 @@
     "dev": "concurrently \"vite\" \"node --loader ts-node/esm --watch src/server/index.ts\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "preview": "vite preview",
     "prepare": "husky install"
   },
