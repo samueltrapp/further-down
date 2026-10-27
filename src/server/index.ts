@@ -52,6 +52,7 @@ io.on("connection", (socket) => {
       const game = meta.games.get(gameId);
       const characterInGame = game?.lobby.users.some((user) => user === userId);
       if (characterInGame) {
+        connection.socket.data.userId = userId;
         sendGame(connection, gameId);
       }
     },
@@ -80,9 +81,13 @@ io.on("connection", (socket) => {
   );
 
   // Battle events
-  socket.on("action:player", (turn: PlayerTurnType) =>
-    handleTurn(connection, turn),
-  );
+  socket.on("action:player", (turn: PlayerTurnType) => {
+    if (turn.team !== "player") {
+      socket.emit("error", { message: "Invalid turn" });
+      return;
+    }
+    handleTurn(connection, turn);
+  });
 });
 
 server.on("error", (e) => {
