@@ -7,6 +7,7 @@ import { finishSkilling } from "../events/rewards.ts";
 
 export function createGame(connection: ConnectionType, userId: string) {
   const newGameId = randomId();
+  connection.socket.data.userId = userId;
   connection.socket.join(newGameId);
   connection.meta.games.set(newGameId, initializeLobby(newGameId, userId));
   sendGame(connection, newGameId);
@@ -17,6 +18,7 @@ export function joinGame(
   { gameId, userId }: JoinDataType,
 ) {
   const game = connection.meta.games.get(gameId);
+  connection.socket.data.userId = userId;
   connection.socket.join(userId);
   const joinResponse = existingLobby(connection.io, game, userId);
   if (joinResponse) {

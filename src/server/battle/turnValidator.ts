@@ -3,6 +3,7 @@ import { ConnectionType } from "../../types/server.ts";
 import { maneuverMap } from "../../shared/definitions/maneuvers/sets.ts";
 import { PlayerType } from "../../types/individual/characters.ts";
 import { validTargets } from "../../shared/utils.ts";
+import { LobbyStatus, Victor } from "../../types/game.ts";
 
 /**
  * Validates a turn submission against game state and constraints.
@@ -13,7 +14,13 @@ export const validateTurn = (
   turn: PlayerTurnType | EnemyTurnType,
   game: ReturnType<typeof connection.meta.games.get>,
 ): string | undefined => {
-  if (!game || !game.characters || !game.battle) {
+  if (
+    !game ||
+    !game.characters ||
+    !game.battle ||
+    game.lobby.status !== LobbyStatus.BATTLE ||
+    game.battle.victor !== Victor.NONE
+  ) {
     return "Invalid turn";
   }
 
@@ -46,10 +53,8 @@ export const validateTurn = (
   if (turn.team === "player") {
     const playerSource = source as PlayerType;
 
-    // Extract userId from socket rooms (player joins both gameId and userId rooms)
-    const userId = Array.from(connection.socket.rooms).find(
-      (room) => room !== turn.gameId,
-    );
+    // Get userId from socket.data (stored explicitly to avoid room ID conflicts)
+    const userId = connection.socket.data.userId;
 
     // Verify player owns this character
     if (playerSource.userId !== userId) {
