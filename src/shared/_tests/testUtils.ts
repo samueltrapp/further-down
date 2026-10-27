@@ -315,6 +315,7 @@ export const makeConnection = (
     meta: { games },
     io: { to: () => ({ emit: () => {} }) } as never,
     socket: {
+      data: { userId },
       rooms,
       emit: () => {},
     } as never,
